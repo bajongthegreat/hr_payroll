@@ -35,6 +35,9 @@ class DatabaseSeeder extends Seeder {
 		$this->call('PhilhealthsTableSeeder');
 		
 		// $this->call('Work_assignmentsTableSeeder');
+		$this->call('Sss_loansTableSeeder');
+		$this->call('RequirementsTableSeeder');
+		$this->call('StageprocessesTableSeeder');
 	}
 
 

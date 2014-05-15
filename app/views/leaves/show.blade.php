@@ -1,70 +1,5 @@
 @extends('layout.master')
 
-@section('styles')
-
-	
-
-	.reason {
-		margin-top: 15px;
-	}
-
-	.reason .header {
-		font-weight: bold;
-	}
-
-	.reason .body {
-		margin-top: 8px;
-		background: #EEE;
-		padding: 5px 8px;
-    	 border-radius: 3px;
-
-	}
-
-	#approvalInfo-container {
-
-		position: absolute;
-		top: 250px;
-		left: 80%;
-	}
-
-	#rejectInfo-container {
-
-		position: absolute;
-		top: 288px;
-		left: 80%;
-	}
-
-
-
-	@media (max-width: 700px) {
-		
-
-	 	#approvalInfo-container, #rejectInfo-container {
-	 	 left: 70%;
-		}
-
-		#approvalInfo-container {
-			top: 315px;
-
-		}
-
-		#rejectInfo-container {
-			top: 355px;
-		}
-    }
-
-	 @media (max-width: 600px) {
-		
-
-	 	#approvalInfo-container, #rejectInfo-container {
-	 	 margin: 15px 0;
-	 	 position: static;
-	 	 display: block;
-
-		}
-    }
-@stop
-
 <?php 
 	$leave = $leave[0];
 ?>
@@ -128,7 +63,7 @@
 
 
 
-<table class="table table-bordered" style="margin-top: 25px;">
+<table class="table table-striped" style="margin-top: 25px;">
 
 <thead>
 	<th width="35%">Nature of Leave</th>

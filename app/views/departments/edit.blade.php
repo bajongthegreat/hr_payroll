@@ -3,9 +3,10 @@
 
 @section('content')
 
+<div class="content-center">
 
 <div class="page-header">
-<h1>Add Department  <a  href="{{ action('DepartmentsController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a>
+<h1>Edit Department  <a  href="{{ action('DepartmentsController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a>
 </h1>
 </div>
 
@@ -69,6 +70,7 @@
 
 </div>
 
+</div> <!-- Content Center End -->
 @stop
 
 @section('scripts')

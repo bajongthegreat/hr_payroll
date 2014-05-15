@@ -1,6 +1,7 @@
-<?php
+<?php 
 
-class Department extends Eloquent {
+
+class Department extends \Eloquent {
 
 	protected $table = 'departments';
 	protected $guarded = array();
@@ -9,6 +10,6 @@ class Department extends Eloquent {
 
 	public function company()
 	{
-		return $this->belongsTo('company');
+		return $this->belongsTo('Company');
 	}
 }

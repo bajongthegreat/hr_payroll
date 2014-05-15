@@ -3,6 +3,7 @@
 
 @section('content')
 
+<div class="content-center">
 
 <div class="page-header">
 <h1>Add Position  <a  href="{{ action('PositionsController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a>
@@ -74,6 +75,8 @@
 
 </div>
 
+</div>
+
 @stop
 
 @section('scripts')
@@ -81,44 +84,32 @@
 $('.form-container').hide();
 
 $(function() {
+	var departmentsURL = '{{ action("DepartmentsController@departmentsByCompany") }}';
+	
+
 	formContainer = $('.form-container');
-	// Get the hash
-    var hash = location.hash;
+
+	// Check if employee hash is present
+    // Then perform an ajax search
+    if (hrApp.hasHash()) {
+        formContainer.fadeIn(250);
+        isCompanySelected( $('#company_id').val());
+     }
+
 
 	
-    // Split hash value into value pairs in a variable
-	hashValue = hash.split('#',2);
-
-	if (hashValue.length == 2) {
-
-		formContainer.fadeIn(250);
-		isCompanySelected( $('#company_id').val());
-	}
-	
-
 	// Company Selection
 	$('#company_id').change(function() {
-		var selected = $(this).val();
+		var selected = $(this).val(),
+		    element = 'department';
 
 		isCompanySelected(selected);
 
-		$.ajax({
-			type: 'GET',
-			url: '{{ action("DepartmentsController@departmentsByCompany") }}',
-			data: { company_id: selected, output: 'json', select: 'true' },
-			success: function(data) {
-				
-				var options = "";
-
-				$.each(data, function(key, value) {
-					options += '<option value="' + key + '">' + value + '</option>';
-				});
-				
-				 $('#department').html(options);
-			}
-		});
+		hrApp.getSelectOptions(departmentsURL, selected, element);
 		
 	});
+
+	
 
 
 	// Department Selection

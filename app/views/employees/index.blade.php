@@ -6,7 +6,6 @@
 
 
 <div>
-
      
      <div class="container-fluid">
 
@@ -19,6 +18,19 @@
               <li><a href="#">Terminations</a></li>
               <li><a href="#">Assignments</a></li>
               <li><a href="{{ action('LeavesController@index') }}">Leaves</a></li>
+
+              <li> 
+                   <div class="filter-collection well">
+          
+                    <div class="filter-title" style="font-size: 16px; font-weight: bold;"> Filter by:</div>
+                    <div class="filter-content"> 
+
+                        @include('employees.partial.filterby')
+                       
+                    </div> <!-- Filter content -->
+                    
+                  </div>
+            </li>
             </ul>
             
           </div>
@@ -28,23 +40,41 @@
 
 
 
-  <div class="table-container col-sm-11" style="">
+  <div class="table-container col-sm-11">
 
 
   <h2 class="page-header"> Employee list</h2>
 
-<p>Search term: <i><u><% query %></u></i></p>
+  @include('partials.breadcrumbs')
+
+  @if (Input::has('src'))
+  <p>Search term: <span class="label label-default">{{Input::get('src') }}</span></p>
+  @endif
+
+  
 
 
   <div class="search-container col-md-4 pull-right">
+   {{ Form::open(['method' => 'GET', 'action' => 'EmployeesController@index'])}}
+   <?php  $request_param = Input::except('_token', '_method', 'src'); ?>
 
-  <input class="form-control " name="src" placeholder="Search an employee..." id="search" ng-model="query">
+  <input class="form-control " name="src" placeholder="Search an employee..." id="search" ng-model="query" value="{{Input::get('src')}}">
+  
+  <!-- Retain query strings even while searching -->
+   @foreach($request_param as $key => $value)
+      {{Form::hidden($key, $value)}}
+   @endforeach
+
+  {{ Form::close()}}
+
 
   </div>
 
   <div class="header-buttons pull-left">
   <a href="{{ action('EmployeesController@create')}}" class="btn btn-success"><span class="glyphicon glyphicon-new-window"></span> Create new Employee</a>
    <a  href="{{ action('EmployeesController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-refresh"></span >  Refresh</a>
+   
+ 
 
   </div>
 
@@ -55,7 +85,8 @@
   		<th >ID </th>
   		<th > Name </th>
   		<th>Position</th>
-  		<th>Status</th>
+      <th>Membership status</th>
+  		<th>Employment status</th>
   	</thead>
 
   
@@ -68,10 +99,11 @@
 
              <tr class="" >
 
-                <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}"> <?php echo $employee->employee_work_id . '</td>'; ?>
+                <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}" > <?php echo $employee->employee_work_id . '</td>'; ?>
                 <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}"> <?php echo   ucfirst($employee->lastname) . ', ' . $employee->firstname . '</td>'; ?>
-                <td> <?php echo  $employee->position['name'] . '</td>'; ?>
-                <td> <?php echo  $employee->employment_status . '</td>'; ?>
+                <td> <?php echo  ucfirst($employee->position['name']) . '</td>'; ?>
+                <td> <?php echo  ucfirst($employee->membership_status) . '</td>'; ?>
+                <td> <?php echo ucfirst( $employee->employment_status) . '</td>'; ?>
                 <td> <a class="btn btn-small btn-default editButton" href="{{ action('EmployeesController@edit', $employee->employee_work_id ) }}"> <span class="glyphicon glyphicon-edit"></span> Edit</a> <a class="btn btn-small btn-default deleteButton" href="#" data-employee_id="{{ $employee->employee_work_id}}"> <span class="glyphicon glyphicon-remove"></span> Delete</a> </td>
 
                </tr>
@@ -86,13 +118,17 @@
   	</tbody>
   </table>
 
+@if (count($employees) == 0)
+
+  <div  align="center" class="alert alert-warning"> No Employees found.</div>
+
+@endif
+
   <?php 
 
-  if (Input::get('search') == '') {
-      echo $employees->links(); 
-    } else {
-      echo $employees->appends(['search' => Input::get('search') ] )->links(); 
-    }
+
+      echo $employees->appends(['src' => Input::get('src'), 'filterby' => Input::get('filterby')] )->links(); 
+    
 
    // echo $users->appends(array('sort' => 'votes'))->links();
   ?>
@@ -112,6 +148,9 @@
 @section('scripts')
 
 <script>
+
+
+
 
 (function() {
   // For clickable <tr> table rows

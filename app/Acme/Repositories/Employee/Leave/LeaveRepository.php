@@ -3,6 +3,7 @@
 use Leave;
 use Employee;
 
+//  Doesn't follow standard repo interface
 class LeaveRepository implements LeavableInterface {
 
 	/**

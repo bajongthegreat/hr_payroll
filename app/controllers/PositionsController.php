@@ -1,6 +1,23 @@
 <?php
+use Acme\Repositories\Company\Position\PositionRepositoryInterface;
 
 class PositionsController extends BaseController {
+		
+	protected $positions;
+	 /**
+     * Instantiate a new UserController instance.
+     */
+    public function __construct(PositionRepositoryInterface $positions)
+    {
+    	// For Cross Site Request Forgery protection
+        $this->beforeFilter('csrf', array('on' => 'post'));
+
+   
+        // UsersRepository Dependency
+        $this->positions = $positions;
+                                                                                                                                  
+        
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -11,7 +28,8 @@ class PositionsController extends BaseController {
 	{
 
 		// Get all positions and order by rank
-		$positions = Position::with('department')->orderBy('rank')->get();
+		$positions = $this->positions->getAllWith(['department'])->orderBy('rank')->get();
+
 
 		if (Request::get('output') == 'json') {
 			return Response::json($positions);
@@ -27,18 +45,7 @@ class PositionsController extends BaseController {
 	 */
 	public function create()
 	{
-		$departments = Department::lists('name','id');
-
-		$selection_array = ['Please select item'];
-		$companies_db  = Company::lists('name','id');
-
-		$companies = array_merge($selection_array, $companies_db);
-
-
-
-
-
-        return View::make('positions.create', compact(['departments','companies']));
+        return View::make('positions.create');
 	}
 
 	/**
@@ -48,9 +55,14 @@ class PositionsController extends BaseController {
 	 */
 	public function store()
 	{
-		$position = Input::only('name', 'department_id');
+		$data = Input::only('name', 'department_id');
 
-		$position =  Position::create($position);
+			Event::listen('illuminate.query', function ($sql, $bindings, $times) {
+			echo '<h3 class="page-header">Database Query</h3>';
+				var_dump($sql);
+		});
+
+		$position =  $this->positions->create($data);
 		
 
 		if ($position){
@@ -77,10 +89,16 @@ class PositionsController extends BaseController {
 	 */
 	public function edit($id)
 	{
-		$position = Position::findOrFail($id);
-		$departments = $departments = Department::lists('name','id');
+		$position = $this->positions->find($id)->get();
 
-        return View::make('positions.edit', compact(['position','departments']));
+
+		if (!isset($position[0])) {
+			return Redirect::action('PositionsController@index');
+		}
+
+		$position = $position[0];
+
+        return View::make('positions.edit', compact(['position']));
 	}
 
 	/**
@@ -94,11 +112,7 @@ class PositionsController extends BaseController {
 
 		$position = Input::only('name','department_id');
 
-		
-
-
-
-		$position = Position::where('id', '=', $id)->update($position);
+		$position = $this->positions->update($id, $position);
 
 		if ($position){
 			return Redirect::route('positions.index');
@@ -113,11 +127,31 @@ class PositionsController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		$position = Position::where('id', '=', $id)->delete();
+		$position = $this->positions->delete($id);
 
 		if ($position){
 			return Redirect::route('positions.index');
 		}
+	}
+
+	public function positionsByDepartment() {
+
+			$department_id = (int) Input::get('id');
+
+			$positions =  $this->positions->find($department_id, 'department_id')->lists('name','id') ;
+
+			if (count($positions) == 0 && $department_id == 0) {
+				$positions += ['No positions available'];
+			} else {
+				$positions += ['Select position'];
+			}
+
+			
+
+
+
+			if ($positions) return Response::json($positions);
+			else return Response::json([]);
 	}
 
 }

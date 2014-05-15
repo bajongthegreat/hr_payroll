@@ -11,23 +11,21 @@
 Users List
 </h3>
 
-<div class="pull-left">
+<div class="search-container col-md-4 pull-right">
 
-<div class="link-divider">
-	<a href="{{ action('UsersController@create')}}" class="btn btn-success"><span class="glyphicon glyphicon-new-window"></span> Create new User</a>
-</div> 
-
-<div class="link-divider">
-	 <a  href="{{ action('UsersController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-refresh"></span >  Refresh</a>
-</div>
-
-</div>
-
-<div class="pull-right">
-	{{ Form::open(array('action' => array('UsersController@index'), 'method' => 'GET' )) }}
+  {{ Form::open(array('action' => array('UsersController@index'), 'method' => 'GET' )) }}
 		{{ Form::text('src',Input::old('src'),  array('class' => 'form-control', 'placeholder' => 'Search a user...')) }}
 	{{ Form::close() }}
-</div>
+
+  </div>
+
+  <div class="header-buttons pull-left">
+  <a href="{{ action('UsersController@create')}}" class="btn btn-success"><span class="glyphicon glyphicon-new-window"></span> Create new Employee</a>
+   <a  href="{{ action('UsersController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-refresh"></span >  Refresh</a>
+
+  </div>
+
+
 
 <!-- Usage as a class -->
 <div class="clearfix">&nbsp;</div>

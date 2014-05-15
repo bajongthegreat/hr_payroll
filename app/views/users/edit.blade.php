@@ -2,6 +2,8 @@
 
 @section('content')
 
+<div class="content-center">
+
 <h3 class="page-header">
 	Update {{ $user->username}}'s Information 
 </h3>
@@ -69,4 +71,6 @@
   @include('partials.errors')
 
 </form>
+
+</div>
 @stop

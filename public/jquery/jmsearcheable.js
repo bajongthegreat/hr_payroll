@@ -50,7 +50,7 @@
 			$.ajax({
 				url: settings.url,
 				type: 'GET',
-				data: { searchTerm: self.val(), output: 'json' },
+				data: { src: self.val(), output: 'json' },
 				beforeSend: function () {
 
 					// Show/Hide result container

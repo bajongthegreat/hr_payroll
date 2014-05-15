@@ -16,7 +16,6 @@ class AuthController extends BaseController {
 
 	public function index() {
 
-
 		return  (!Auth::check() ) ? View::make('users.login') : Redirect::to('dashboard');
 	}
 
@@ -32,7 +31,7 @@ class AuthController extends BaseController {
 
 
 		$validation = Validator::make($user, ['user' => 'required',
-				                                  'password' => 'required']);
+				                              'password' => 'required']);
 
 		if ($validation->fails() )
 		{
@@ -63,7 +62,7 @@ class AuthController extends BaseController {
 			Session::put('email', $email);
 			
 						
-			return Redirect::to('dashboard');
+			return Redirect::intended();
 		}
 		else
 		{

@@ -22,10 +22,11 @@
 
 <table class="table table-hover">
 	<thead>
-		<th>ID</th>
-		<th>Department</th>
-		<th>Company</th>
-		<th>Status</th>
+		<th width="10%">ID</th>
+		<th width="30%">Department</th>
+		<th width="30%">Company</th>
+		<th width="25%">Status</th>
+		<th width="10%"></th>
 	</thead>
 
 
@@ -36,7 +37,9 @@
 				<td> {{ $department->id }}</td>
 				<td> {{ ucfirst($department->name) }}</td>
 
-				<td> <?php echo isset($department->company->name) ? ucfirst($department->company->name) : "None"; ?></td>
+				 <td> <?php  
+						echo isset($department->company->name) ? ucfirst($department->company->name) : "None";
+				 ?></td>
 				<td> <span class="label label-<?php echo ($department->status == 'active') ? 'success' : 'warning' ?>"> {{ ucfirst($department->status) }}</span></td>
 			<td align="center"> <a href="{{ route('departments.edit', $department->id) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Edit</a></td>
 				<td align="center">{{ Form::open(['action' => array('DepartmentsController@destroy', $department->id), 'method' => 'DELETE']) }} <button  type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span> Delete</button></form></td>

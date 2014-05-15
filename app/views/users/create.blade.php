@@ -5,6 +5,7 @@
 
 @section('content')
 
+<div class="content-center">
 <h3 class="page-header">
 Create user
 </h3>
@@ -49,4 +50,6 @@ Create user
 @include('partials.errors')
 
 </form>
+
+</div>
 @stop

@@ -53,18 +53,22 @@ abstract class Validator {
 		// Then, replace the value of that array key in the update rules set in User Validator
 		// and add a code to only validate unique if the id is not equal to the specified ID in the first parameter.
 
+
+
 		if (!is_null($id))
 		{
 			if (isset($options['current_key']))
 			{
+
 				static::$update_rules[$options['current_key']] = static::$update_rules[$options['current_key']] . ',' .$options['current_key'] .',' . $id;
+				// dd( static::$update_rules[$options['current_key']]);
 			}
 
 			// Remove from array
 			unset($options['current_key']);
 		}
 
-		return $validation = $this->validate($input, static::$update_rules, $options);
+		return $validation = $this->validate($input, static::$update_rules);
 
 	}
 

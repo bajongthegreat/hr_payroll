@@ -8,7 +8,12 @@ class Employee extends Eloquent {
 
 	public function position()
 	{
-		return $this->hasOne('Position','id');
+		return $this->belongsTo('Position');
+	}
+
+	public function company() 
+	{
+		return $this->belongsTo('Company');
 	}
 
 	

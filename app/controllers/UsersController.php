@@ -74,10 +74,10 @@ class UsersController extends BaseController {
 
 		if (strlen($src) > 0) {	
 			 // Work more with pagination, were getting close
-			 $users = $this->users->search(['email','username','status'], $src , ['paginate' => ['limit' => 10],  'sort' => ['by' => $sort_by, 'type' => $sort_type] ] );
+			$users = $this->users->relativeSearch($src, NULL, ['email','username', 'status'])->paginate($limit);
 		}
 		else {
-			$users = $this->users->paginate(NULL, $limit, array('orderBy' => $sort_by, 'orderType' => $sort_type));
+			$users = $this->users->all(['*'], ['paginate' => $limit]);
 		}
 
 
@@ -134,7 +134,8 @@ class UsersController extends BaseController {
 	public function show($id)
 	{
 		// Find the user
-		$user = $this->users->find($id);
+		$user = $this->users->find($id)->first();
+
 
         return View::make('users.show', compact('user'));
 	}

@@ -27,7 +27,7 @@ class CreateMembersTable extends Migration {
 			$table->integer('position_id')->unsigned();
 		
 
-			$table->string('employee_work_id', 50)->unique();
+			$table->string('employee_work_id', 50)->unique()->nullable();
 
 			$table->string('lastname', 50);
 			$table->string('firstname', 50);
@@ -40,7 +40,7 @@ class CreateMembersTable extends Migration {
 
 			
 
-			$table->date('date_hired');
+			$table->date('date_hired')->nullable();
 			$table->string('pagibig_id');
 		    $table->string('sss_id');
 		    $table->string('philhealth_id');

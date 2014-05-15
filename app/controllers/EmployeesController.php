@@ -5,20 +5,27 @@ use Acme\Repositories\Employee\EmployeeRepositoryInterface;
 // Use a Validation Service
 use Acme\Services\Validation\EmployeeValidator as jValidator;
 
+
+
 class EmployeesController extends BaseController {
 
+	// Employee Dependency
 	protected $employees;
+
+	// Employee Validator Dependency
 	protected $validator;
 
-	protected $employment_status = [  '1' => 'Active',
-				                      '2' => 'Inactive',
-				                      '3' => 'Resigned',
-				                      '4' => 'Retired',
-				                      '5' => 'Applicant' ];
+	protected $limit = 10;
 
-	protected $membership_status = [ '1' => 'Associate',
-	                                 '2' => 'Regular'];
 
+	protected $fields_to_use_on_search = ['firstname','lastname','middlename','employee_work_id'];
+	protected $fields_to_use_on_listings = ['firstname','lastname','middlename','employee_work_id','position_id','employment_status','membership_status'];
+
+
+	protected $custom_message = ['messages' => ['sss_id.regex' => 'SSS ID must have a format of XX-XXXXXXX-X (2-7-1)' ,
+			                                    'philhealth_id.regex' => 'Philhealth ID must have a format of XX-XXXXXXXXX-X (2-9-1)',
+			                                    'position_id.required_select' => 'Please select work assignment.',
+			                                    'gender.required_select' => 'Please select gender.'] ];
 
 	public function __construct(EmployeeRepositoryInterface $employees, jValidator $validator)
     {
@@ -48,48 +55,99 @@ class EmployeesController extends BaseController {
 	 */
 	public function index($str = NULL)
 	{	
-		$page = Input::get('page',1);
 
-
-		// Event::listen('illuminate.query', function ($sql, $bindings, $times) {
-		// 	echo '<h3 class="page-header">Database Query</h3>';
-		// 		var_dump($sql);
-		// });
+		$filter_params = json_decode(urldecode(Input::get('filterby')));
 
 		// Number of results to get
-		$limit  = (Input::has('limit')) ? Input::get('limit') : NULL;
-
+		$limit  = (Input::has('limit')) ? Input::get('limit') : $this->limit;
 		
 
+		// Checks if an array key "src" exists in $_POST variable
+		if (Input::has('src')) {
 
-		// Checks if an array key "searchTerm" exists in $_POST variable
-		if (Input::has('searchTerm')) {
+			$src = Input::get('src');
 
-			// Is it absolute or relative type of search
-			$type = (Input::has('stype')) ? Input::get('stype') : 'relative';
+			// Relative searching, using LIKE in SQL queries
+			if ( Input::get('stype') != 'absolute') 
+			{
+				$employees = $this->relativeDataSearch($src, $filter_params, $this->fields_to_use_on_search);
+			} 
 
-			$searchTerm = Input::get('searchTerm');
-			
-			$employees = $this->employees->find($searchTerm, ['limit' => $limit,'type' => $type]);
-			
-		} else {
+			// Absolute Searching, used specific field
+			else 
+			{
+				$employees = $this->absoluteDataSearch('employee_work_id', $src, $filter_params, $limit);
+			}
+		
+						
+		} 
 
-			if (!is_null($limit) && $limit == 1) $employees = [];
-			else $employees =  $this->employees->all(['limit' => 5, 'page' => $page]);
+		// No seaching was made
+		else {
+
+			$employees =  $this->getAllEmployeeData($filter_params);
 		}
 
 
+		// Cast data to json
 		if (Request::get('output') == 'json') {
-			return Response::json($employees);
+			return Response::json($employees->get());
 		}
 
 
-
-
+		// Final processing
+		$employees = $employees->paginate($limit, $this->fields_to_use_on_listings);
 
 
       	return View::make('employees.index', compact('employees'));
 		
+	}
+
+	function addFilterFieldsToDB($query, $params) {
+
+		foreach ($params as $key => $value) {
+					if (is_array($value) && count($value) > 1) {
+						$query->whereIn($key, $value);	
+					
+					} else {
+						$query->where($key, '=', $value[0]);
+					}
+					
+					}
+	}
+
+	function relativeDataSearch($src, $filter_params, $db_field_to_use) {
+
+		return $this->employees->findLike($src, $db_field_to_use , ['position'] )->where('membership_status', '!=', 'applicant')->where(function($query) use ($filter_params) {
+				
+				if (isset($filter_params)) {
+					$this->addFilterFieldsToDB($query, $filter_params);
+				}
+				
+				});
+	}
+
+
+	function absoluteDataSearch($field, $src, $filter_params, $limit) {
+		return $this->employees->find($src, $field)->take($limit)->where('membership_status', '!=', 'applicant')->where(function($query) use ($filter_params) {
+				
+				if (isset($filter_params)) {
+					$this->addFilterFieldsToDB($query, $filter_params);
+				}
+
+				});
+	}
+
+	function getAllEmployeeData($filter_params) {
+		return $this->employees->getAllWith(['position'])->where('membership_status', '!=', 'applicant')->where(function($query) use ($filter_params) {
+				
+				if (isset($filter_params)) {
+					$this->addFilterFieldsToDB($query, $filter_params);
+				}
+
+			
+				
+			});
 	}
 
 	/**
@@ -99,34 +157,8 @@ class EmployeesController extends BaseController {
 	 */
 	public function create()
 	{
-		$positions = Position::lists('name','id');
-
-
-		$companies = Company::lists('name','id');
 		
-		// Insert a -1 choice
-		array_unshift($companies,'Please select a company');
-
-		$employment_status = $this->employment_status;
-
-		// Insert a -1 choice
-		// array_unshift($employment_status,'Please select Employment Status');
-		
-
-		// Hide ['Retired', 'Resigned']
-		for ($i=2; $i<=4; $i++) {
-			unset($employment_status[$i]);
-		}
-
-
-		$membership_status = $this->membership_status;
-
-
-
-
-
-
-        return View::make('employees.create', compact(['positions', 'companies','employment_status','membership_status']) );
+        return View::make('employees.create');
 	}
 
 	/**
@@ -136,27 +168,19 @@ class EmployeesController extends BaseController {
 	 */
 	public function store()
 	{
-		$user_data = Input::all();
-
-		// dd($user_data);
-	
-		$custom_message = ['messages' => ['sss_id.regex' => 'SSS ID must have a format of XX-XXXXXXX-X (2-7-1)' ,
-		                                  'philhealth_id.regex' => 'Philhealth ID must have a format of XX-XXXXXXXXX-X (2-9-1)'] ];
+		$user_data = Input::except('_method','_token','department_id');
 
 		// Validate Inputs
-		if (!$this->validator->validate($user_data, NULL, $custom_message)) {
+		if (!$this->validator->validate($user_data, NULL, $this->custom_message)) {
+
 			return Redirect::back()->withInput()->withErrors($this->validator->errors());
 		}
 
-
-
-
 		// Generate the ID of employee
-		$employee_work_id = (isset($user_data['employee_work_id']) && strlen($user_data['employee_work_id']) > 0) ? $user_data['employee_work_id'] : $this->employees->generate_work_id('2317'); 
+		$user_data['employee_work_id'] = (isset($user_data['employee_work_id']) && strlen($user_data['employee_work_id']) > 0) ? $user_data['employee_work_id'] : $this->employees->generate_work_id('2317'); 
 
 		// Register employee	
-		$employee = $this->employees->register( $user_data , ['fields' => ['employee_work_id' => $employee_work_id] ]);
-
+		$employee = $this->employees->create( $user_data );
 
 		return Redirect::route('employees.index');
 	}
@@ -169,22 +193,22 @@ class EmployeesController extends BaseController {
 	 */
 	public function show($id)
 	{
+		$employee_work_id = $id;
+		
 		// Use Employee Work ID or table ID for retrieving data
 		$employee = $this->checkID($id, '-', 'employee_work_id');
 
 		if (!$employee) return Redirect::action('EmployeesController@index');
 
 
-		$employment_status = $this->employment_status;
-		$membership_status = $this->membership_status;
-
+		// Figure out how to remove it to this controller but still using it on the view
 		$company = Company::where('id','=', $employee->company_id)->pluck('name');
 
-		
+		// dd($employee);
 
 		if (!$employee) return Redirect::to('employees');
 		
-        return View::make('employees.show', compact(['employee', 'employment_status', 'membership_status','company']));
+        return View::make('employees.show', compact(['employee','company', 'employee_work_id']));
 	}
 
 	/**
@@ -195,21 +219,16 @@ class EmployeesController extends BaseController {
 	 */
 	public function edit($id)
 	{
-
+		$employee_work_id = $id;
 		// Use Employee Work ID or table ID for retrieving data
 		$employee = $this->checkID($id, '-', 'employee_work_id');
 
-
-		$positions = Position::lists('name','id');
-
-		$employment_status = $this->employment_status;
-		$membership_status = $this->membership_status;
-		$companies = Company::lists('name','id');
-		
-
 		if (!$employee) return Redirect::to('employees');
 
-        return View::make('employees.edit', compact(['employee', 'companies','membership_status', 'employment_status','positions']));
+		// Figure out how to remove it to this controller but still using it on the view
+		$company = Company::where('id','=', $employee->company_id)->pluck('name');
+
+        return View::make('employees.show', compact(['employee', 'employee_work_id', 'company']));
 	}
 
 	/**
@@ -220,26 +239,35 @@ class EmployeesController extends BaseController {
 	 */
 	public function update($id)
 	{
-		$user_data = Input::except('_method','_token');
+		$user_data = Input::except('_method','_token','department_id');
+
+
+		$user_data['ppe_issuance'] = Input::has('ppe_issuance') ? $user_data['ppe_issuance'] : 0;
+		$user_data['with_r1a'] = Input::has('with_r1a') ? $user_data['with_r1a'] : 0;
+		$user_data['annual_pe'] = Input::has('annual_pe') ? $user_data['with_r1a'] : 0;
 
 		
+		 // Warning: Validating for existing id is not yet implemented
+		$id_check = $this->employees->find(Input::get('employee_work_id'), 'employee_work_id')->where('employee_work_id','!=', $id)->lists('employee_work_id');
+		
 
-		$custom_message = ['messages' => ['sss_id.regex' => 'SSS ID must have a format of XX-XXXXXXX-X (2-7-1)' ,
-		                                  'philhealth_id.regex' => 'Philhealth ID must have a format of XX-XXXXXXXXX-X (2-9-1)'],
-		                   ];
 
 		// Validate Inputs
-		if (!$this->validator->isValidForUpdate( $user_data['employee_work_id'] , $user_data, $custom_message)) {
-			return Redirect::back()->withInput()->withErrors($this->validator->errors());
+		if (!$this->validator->isValidForUpdate( $id , $user_data, $this->custom_message)) {
+			return Redirect::route('employees.edit', [$id,'#errors'])->withInput()->withErrors($this->validator->errors());
+		} else {
+			
+			// It has the same ID
+			if (count($id_check) == 1 ) {
+				return Redirect::route('employees.edit', [$id,'#errors'])->withInput()->withErrors(['ID already existed.']);
+			}
 		}
-
-
-
+		
 		// Update employee	
-		$employee = $this->employees->updateProfile($user_data['employee_work_id'], $user_data);
+		$employee = $this->employees->find($id, 'employee_work_id')->update($user_data);
 
 
-		return Redirect::route('employees.index');
+		return Redirect::route('employees.show', $id);
 	}
 
 	/**
@@ -255,14 +283,12 @@ class EmployeesController extends BaseController {
 		if (Request::ajax())
 		{
 			$id = Input::get('employee_work_id');
-			// $employee = Employee::where('employee_work_id','=', $id)->delete();
-			$employee = $this->employees->terminate($id, false, 'employee_work_id');
 
-
+			$employee = $this->employees->find($id, 'employee_work_id')->delete($id);
 
 		    return Response::json($employee);
 		} else {
-			$employee = $this->employees->terminate($id);
+			$employee = $this->employees->find($id)->delete();
 		}
 		
 		return Redirect::route('employees.index');
@@ -281,16 +307,13 @@ class EmployeesController extends BaseController {
 
 		// Separator is present inside the ID i.e [2965-1029]
 		if (strpos($id, $separator) != false) {
-			$employee = $this->employees->getProfile($id, $column);
+			$employee = $this->employees->find($id, $column)->get();
 		} else {
-			$employee = $this->employees->getProfile($id);
+			$employee = $this->employees->find($id)->get();
 		}
 
 
-
-
-
-		return $employee;
+		return (isset($employee[0])) ? $employee[0] : false; 
 	}
 
 	

@@ -1,133 +1,200 @@
-// (function ($) {
+var myApp = function(mainURL) {
+    
+    this.mainURL = mainURL;
 
-// 	$.fn.jTable = function ( options ) {
+    this.ucfirst = function (string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    this.hasHash = function () {
+        // Get the hash
+        var hash = location.hash;
 
-// 		// Table defaults
-// 		var defaults = {
-// 			url: "#",
-// 			type: 'GET',
-// 			data: {},
-// 			allowedFields: [],
-// 			outputContainer: '#tbody'
-// 		};
+      // Split hash value into value pairs in a variable
+        hashValue = hash.split('=', 2);
 
-// 		var settings = $.extend( {}, defaults, options );
+        // If it is a pair value, get ths
+        if (hashValue.length == 2) { 
+            return true;
+        }
+        return false;
+    }
+    this.getHash = function(hashName) {
+    
+      // Get the hash
+        var hash = location.hash;
 
+      // Split hash value into value pairs in a variable
+        hashValue = hash.split('=', 2);
 
+        // If it is a pair value, get ths
+        if (hashValue.length == 2) {
 
-// 		console.log('jTable initalized');
+            if ('#' + hashName == hashValue[0]) {
+                return hashValue[1];
+            }
+            
+            return false;
+        }
+    };
 
+    this.personName = function (obj, type) {
+        if (type == 'lastname_first') {
+            return this.fullNameStartLastname(obj['firstname'], obj['lastname'], obj['middlename']);   
+        } 
 
-// 		$.ajax({
-// 			type: settings.type,
-// 			url: settings.url,
-// 			data: settings.data,
-// 			success: function(obj) {
-// 				console.log('success!' + obj.data);
+        return this.fullname(obj['firstname'], obj['lastname'], obj['middlename']);
+           
+    };
 
-// 				var output = "";
+    this.fullname = function (firstname, lastname, middlename) {
+        return firstname + " " + middlename + " " + lastname;
+    };
 
-// 				// Loop through each value inside the specified object
-// 				$.each(obj, function(key, value) {
+    this.fullNameStartLastname = function (firstname, lastname, middlename) {
+        return lastname + ", " + firstname + " " + middlename[0] + ".";
+    };
 
+    this.dateToString = function(date) {
+        var month = date.getMonth(),
+            year = date.getFullYear(),
+            day = date.getDate();
 
-// 					// If the value is also an object, loop through that object again
-// 					// to get the data we need
-// 					// Since laravel pagination generates another object
-// 					$.each(value, function(insideK, insideV) {
+       
+    };
 
-// 							console.log(insideV);
-						
-					
-// 					});
+    this.getSelectOptions = function (URL, id, element, selectedID){
+        $.ajax({
+            type: 'GET',
+            url: URL,
+            data: { id: id, output: 'json', select: 'true' },
+            success: function(data) {
+               
+               console.log(data);
 
-// 				});
+                var options = "";
 
-// 				$(settings.outputContainer).html(output);
-// 			}
+                $.each(data, function(key, value) {
+                         
+                         if (selectedID == key) {
+                             options += '<option value="' + key + '" selected>' + value + '</option>';
+                         } else {
+                             options += '<option value="' + key + '">' + value + '</option>';
+                         }
+                        
+                    
+                   
+                });
+                        
+                 $('#' + element).html(options).trigger('change');
+            }
+        });
+    }
 
-// 		});
+    this.getCheckBox = function(URL, id, element, name, selectedID, formClass) {
+        $.ajax({
+            type: 'GET',
+            url: URL,
+            data: { id: id, output: 'json', select: 'true' },
+            success: function(data) {
+                // console.log(data);
+                var options = "";
 
-
-
-		
-// 	};
-
-// })(jQuery);
-
-
-
-(function( $ ) {
-
-
-
-
-	// Hide the Search result div
-	$('#main_search_result').hide();
-
-	// Trigger AJAX request while triggering any keyboard key
-	$('#header_search').keyup(function (e) {
-
-		var searchKey = $(this).val();
-		
-		// Triggered Enter
-		if (e.which == 13) {}
-	
-	// Show and Hide Results DIV	
-	if (searchKey.length > 0) {
-		$('#main_search_result').fadeIn('fast');
-	} else {
-		$('#main_search_result').fadeOut('fast');
-	}
-
-	console.log(employeeLink);
-	
-
-	$.ajax({
-		type: 'GET',
-		url: employeeLink,
-		data: { searchTerm: searchKey, output: 'json'},
-		beforeSend: function() {
-			$('#main_search_result').html('Searching for ' + searchKey + '..');
-		},
-		success: function (data) {
-
-
-			if (data.length > 0) {
-
-				// Search Item container
-				var display = '';
-
-				for (var i = data.length - 1; i >= 0; i--) {
-					display += ' <div class="searchResultItem"><a href="' + employeeLink  +  data[i]['employee_work_id'] +'">' + data[i]['employee_work_id'] + ' - ' +  data[i]['lastname'] +  '</a></div>';
-				};
-
-				setTimeout( function() {
-					$('#main_search_result').html(display);
-				}, 250);
-				
-			} else {
-				$('#main_search_result').html('No employees found.');
-			}
-
-	
-		} // End of Success Request
-
-	}); // End of AJAX request
-
-	
-	
-	
-		// console.log('searching.. ' + searchKey.length  + e.which );
-
-	}); // --> End of Key-up event
+                $.each(data, function(key, value) {
 
 
-	  // For clickable <tr> table rows
-	  $(".clickableRow").click(function() {
-	  	console.log('wa');
-            window.document.location = $(this).attr("href");
-      });
+
+                        options += '<div class="form-group">';
+                             options += '<label for="' + value +'" class="col-sm-2">' + value + '</label>';
+                        
+                        options += '<div class="col-sm-1">';
+
+                        if (selectedID != null) {
+
+                            checked = false;
+
+                            for (var i = selectedID.length - 1; i >= 0; i--) {
+
+                               if (selectedID[i] == key) {
+                                    checked = true;
+                               }
+                            };
+
+                             if (checked === true) {
+                                 options += '<input type="checkbox" data-parent="'+ id +'" class="' + formClass +'" name="'+ name +'" value="' + key + '" checked>';
+                             } else {
+                                 options += '<input type="checkbox" data-parent="'+ id +'" class="' + formClass +'" name="'+ name +'" value="' + key + '">';
+                             }
 
 
-})(jQuery);
+                        }
+                        else {
+                             options += '<input type="checkbox" data-parent="'+ id +'" class="' + formClass +'" name="'+ name +'" value="' + key + '">';
+                        }
+                         
+                       
+                        
+                        options += '</div></div>';
+                   
+                });
+                    console.log(options);
+                 $('#' + element).html(options).trigger('change');
+            }
+        });
+    }
+
+
+};
+
+
+$(document).ready(function() {
+
+
+
+   $('#_applicants_date_hired, #_applicants_birthdate, #birthdate').datetimepicker({
+                    pickTime: false
+    });
+
+var __timeout =undefined;
+
+$('.filter-item').on('click', function(e) {
+
+  var category = $(this).data('category');
+  var fieldvalue = $(this).data('fieldvalue');
+  var parent = $(this).closest('ul');
+  var selection_limit = parent.data('limit');
+  
+  // Prevent from redirecting multiple times
+  if (typeof __timeout != undefined) {
+    clearTimeout(__timeout);
+  }
+
+    // get checkbox within category, check length
+    var len = parent.find(":checkbox:checked").length;
+
+    var collection = {};
+
+    // Loop through each list with a class of "filter-list"
+    $('.filter-list').each(function(obj, key, value) {
+
+      var inside_collection =[];
+
+        // Find all checked checkboxes and push its value into a temporary array
+       $(this).find('li :checkbox:checked').each(function(i,key,value){
+            inside_collection.push ($(this).data('fieldvalue'));
+       });
+
+       if (inside_collection.length > 0) {
+        collection[$(this).data('category')] = inside_collection;
+       }
+       
+    });
+
+    // Refresh the page with the new filterby param in the url
+    __timeout = setTimeout(function() {
+      window.location.href = encodeURI("?" + "filterby=" + JSON.stringify(collection));
+    }, 3500)
+
+});
+
+});

@@ -3,7 +3,7 @@
 
 
 @section('content')
-
+<div class="content-center">
 
 <div class="page-header">
 <h1>Application for Leave <a  href="{{ action('LeavesController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a>
@@ -11,99 +11,13 @@
 </div>
 
 
-<div class="panel panel-default">
-		  <div class="panel-heading">
-		    <h3 class="panel-title"><h4>Search Employee</h4></h3>
-		  </div>
-		  <div class="panel-body">
+<!-- Employee Search Panel -->
+@include('partials.employee_search_panel')
 
-	
-<div class="container">
-
-
-
-	<div class="row">
-
-			<div class="form-group">
-						
-				{{ Form::label('employee_work_id', 'Employee ID: ', array('class' => 'col-sm-2')) }}
-
-				<div class="col-sm-4">
-					{{ Form::text(NULL, Input::old('employee_work_id'), array('class' => 'form-control', 'id' => 'employee_work_id') ) }}
-					
-				</div>  <span id="id_load" class="col-md-2"></span>
-
-			</div>
-
-
-
-	
-
-	</div> <!-- Container -->
-</div>  <!-- Panel Body -->
-
-
-	</div> <!-- End of Panel -->
-
-
-
-
-	
-
-</div>
-
-
-<div class="panel panel-default" id="employee_information">
-		  <div class="panel-heading">
-		    <h3 class="panel-title"><h4>Employee Information</h4></h3>
-		  </div>
-		  <div class="panel-body">
-
-	
-<div class="container">
-
-
-
-	<div class="row">
-
-			<div class="form-group">
-						
-				{{ Form::label('name', 'Name: ', array('class' => 'col-sm-2')) }}
-
-				<div class="col-sm-10">
-					<p id="employee_name">Name</p>
-				</div> 
-
-			</div>
-
-			<div class="form-group">
-						
-				{{ Form::label('date_hired', 'Date Hired: ', array('class' => 'col-sm-2')) }}
-
-				<div class="col-sm-8">
-					<p id="date_hired">Hired Date</p>
-				</div>  
-
-			</div>
-
-
-
-	
-
-	</div> <!-- Container -->
-</div>  <!-- Panel Body -->
-
-
-	</div> <!-- End of Panel -->
-
-
-
-
-	
-
-</div>
-
+<!-- Error container -->
 @include('partials.errors')
+
+
 {{ Form::open(array('action' => 'LeavesController@store', 'class'=> 'form-horizontal', 'role' => 'form', 'id' => 'storeForm')) }}
 
 	<div id="leave_information" class="panel panel-default">
@@ -162,30 +76,13 @@
 
 	<div id="result"></div>
 	
+	<!-- Buttons -->
+	@include('partials.form_buttons')
 
-	<div class="container" id="buttons">
-
-	<div class="container">
-		<div class="form-group">
-		 <div class="form-group pull-left">
-	     	{{ Form::submit('Apply', array('class' => 'btn btn-primary ', 'id'=> 'submit')) }}
-	      	 {{ Form::reset('Clear', array('class' => 'btn btn-default', 'id' => 'clear' )) }} 
-	      </div>
-	    
-		</div>
-		
-		{{ Form::close() }}
+{{ Form::close() }}
 
 
-	</div>
-
-		
-
-
-	</div>  <!-- Container -->
-
-
-
+</div> <!-- Content Center End -->
 @stop
 
 
@@ -195,46 +92,11 @@
 
             $(function () {
 
-            	$('#employee_information, #leave_information').hide();
-
-            	// Get the hash
-            	 var hash = location.hash;
-
-            	 // Split hash value into value pairs in a variable
-				  hashValue = hash.split('=', 2);
-
-				  // If it is a pair value, get ths
-				  if (hashValue.length == 2) {
-				  	ajaxSearchEmployee(hashValue[1]);
-				  	$('#employee_work_id').val(hashValue[1]);
-				  }
-
-				   
-				  $('#submit').on('submit', function(e) {
-				  		$('#work_id').val( $('#employee_work_id').val() );
-				  });
-
-           		$('#employee_work_id').keyup(function(e) {
-           			e.preventDefault();
-
-           			var id = $(this).val();
-
-
-
-           			if (e.which == 13) {
-           				$('#work_id').val(id);
-           				window.location = '#employee=' + id;
-           				ajaxSearchEmployee(id)
-           			}
-
-           		});
-            	
-                $('#start_date, #end_date, #file_date').datetimepicker({
+            	$('#start_date, #end_date, #file_date').datetimepicker({
                     pickTime: false
                 });
 
-
-                  $("#start_date").on("dp.change",function (e) {
+                $("#start_date").on("dp.change",function (e) {
 	               $('#end_date').data("DateTimePicker").setMinDate(e.date);
 	            });
 	            $("#end_date").on("dp.change",function (e) {
@@ -242,58 +104,111 @@
 	            });
 
 
-	            function ajaxSearchEmployee(id) {
+	            // ----------- AJAX transaction below -------------------
+
+            	$('#employee_information, #leave_information').hide();
+
+
+            	// Check if employee hash is present
+            	// Then perform an ajax search
+            	if (hrApp.hasHash()) {
+            		ajaxSearchEmployee(hrApp.getHash('employee'), '#leave_information, #employee_information, #buttons', 'employee_loader');
+					$('#employee_work_id').val(hrApp.getHash('employee'));
+            	}
+            	
+    
+
+				// Perform an AJAX search after an "Enter" key is fired
+           		$('#employee_work_id').keyup(function(e) {
+           			e.preventDefault();
+
+           			var id = $(this).val();
+
+           			// Enter key
+           			if (e.which == 13) {
+           				$('#work_id').val(id);
+           				window.location = '#employee=' + id;
+           				ajaxSearchEmployee(id, '#leave_information, #employee_information, #buttons', 'employee_loader');
+           			}
+
+           		});
+            	
+               
+                  
+
+
+	            function ajaxSearchEmployee(id, pannels, loader) {
 	            	console.log('function up');
+	            	
 	            	$.ajax({
            					type: 'GET',
 							url: employeeLink,
-							data: { searchTerm: id, output: 'json', limit: '1', stype: 'absolute'},
+							data: { src: id, output: 'json', limit: '1', stype: 'absolute'},
 							beforeSend: function() {
 								$(this).addClass('has-warning');
-								$('#id_load').html("<img src='" + mainLink + "img/loading.gif' class=\"loading\"> 	");
+								$('#employee_loader').html("<img src='" + mainLink + "img/loading.gif' class=\"loading\"> 	");
 
 							},
 							success: function(data) {
 
 
-
 								// Remove Loading Image
-								$('#id_load').html("");
+								$('#' + loader).empty();
 
 								if (data.length == 1) {
 
+									var employeeName = hrApp.personName(data[0], "lastname_first"),
+									     date_hired = moment(data[0].date_hired).format("dddd, MMMM Do YYYY");
 
-									var employeeName = data[0].firstname + ' ' + data[0].middlename + ' ' + data[0].lastname;
-									// Show leave form
-									$('#leave_information, #employee_information, #buttons').fadeIn(250);
-
+									// Show all specified panels
+									togglePanels(pannels, 'show');
 									
+
 									$('#employee_name').html("" + employeeName);
-									$('#date_hired').html(data[0].date_hired);
+									$('#date_hired').html(date_hired);
 									$('#employee_id').val(data[0].id);
 
 
 									
 								} else {
 									
-									$('#employee_name').html('');
-									$('#date_hired').html('');
-									$('#employee_id').val('');
+									// Remove all values to fields
+									emptyFields();
 
-									$('#leave_information, #employee_information, #buttons').fadeOut(250);
-									$('#id_load').html("No data found.");
+									// Hide all specified panels
+									togglePanels(pannels, 'hide');
+
+									$('#' + loader).html('<span class="label label-warning">No data found</span>');
 									
 
 								}
 								
-
-
-
-
 								
 							}
            				});
+	            } // End of AJAX
+
+
+	            // Toggles all Bootstrap Panels
+	            function togglePanels(elements, type) {
+	            	if (type == 'show') {
+	            		console.log('showin')
+	            		$(elements).fadeIn(250);
+	            	}
+	            	else 
+	            	{
+	            		$(elements).fadeOut(250);
+	            	}
 	            }
+
+	            // Resets all values in fields
+	            function emptyFields() {
+	            	$('#employee_name').empty();
+					$('#date_hired').empty();
+					$('#employee_id').val('');
+	            }
+
+
 
 
 

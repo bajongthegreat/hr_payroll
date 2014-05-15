@@ -1,6 +1,31 @@
 <?php
 
+use Acme\Repositories\Company\Department\DepartmentRepositoryInterface;
+
+// What I just did:
+//  Removed coupling with Company ID inside the departments table
+
+// Expected effects:
+// Departments with references to the company id would have trouble in giving output thus ends up giving an exception.
+// Affected areas: departments.index, create, update 
+
 class DepartmentsController extends BaseController {
+	
+	protected $departments;
+	 /**
+     * Instantiate a new UserController instance.
+     */
+    public function __construct(DepartmentRepositoryInterface $departments)
+    {
+    	// For Cross Site Request Forgery protection
+        $this->beforeFilter('csrf', array('on' => 'post'));
+
+   
+        // UsersRepository Dependency
+        $this->departments = $departments;
+                                                                                                                                  
+        
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -9,9 +34,9 @@ class DepartmentsController extends BaseController {
 	 */
 	public function index()
 	{
-
-		$departments = Department::with('company')->get();
 		
+		
+		$departments = $this->departments->all();
 
 		if (Request::get('output') == 'json') {
 			return Response::json($departments);
@@ -30,10 +55,7 @@ class DepartmentsController extends BaseController {
 	 */
 	public function create()
 	{
-
-		$companies = Company::lists('name','id');
-
-        return View::make('departments.create', compact('companies'));
+        return View::make('departments.create');
 	}
 
 	/**
@@ -56,7 +78,7 @@ class DepartmentsController extends BaseController {
 			return Redirect::back()->withErrors($validator)->withInput();
 		} else {
 			
-			$department =  Department::create($new_department);
+			$department =  $this->departments->create($new_department);
 
 			if ($department){
 				return Redirect::route('departments.index');
@@ -87,12 +109,10 @@ class DepartmentsController extends BaseController {
 	 */
 	public function edit($id)
 	{
-		$department = Department::findOrFail($id);
-
-		$companies = Company::lists('name','id');
+		$department = $this->departments->find($id)->get()[0];
 
 		
-        return View::make('departments.edit', compact(['department', 'companies']));
+        return View::make('departments.edit', compact(['department']));
 	}
 
 	/**
@@ -110,7 +130,7 @@ class DepartmentsController extends BaseController {
 
 
 
-		$department = Department::where('id', '=', $id)->update($new_department);
+		$department = $this->departments->update($id, $new_department);
 
 		if ($department){
 			return Redirect::route('departments.index');
@@ -125,7 +145,7 @@ class DepartmentsController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		$department =  Department::where('id', '=', $id)->delete();
+		$department = $this->departments->delete($id);
 
 		if ($department){
 			return Redirect::route('departments.index');
@@ -135,9 +155,12 @@ class DepartmentsController extends BaseController {
 
 	public function departmentsByCompany() {
 
-			$company_id = (int) Input::get('company_id');
+			$company_id = (int) Input::get('id');
+			
+			$departments =  $this->departments->find($company_id, 'company_id')->lists('name','id') ;
+			
 
-			$departments = Department::where('company_id','=', $company_id)->lists('name','id');
+			$departments += (count($departments) == 0) ? ['No departments available'] :['Select department'];
 
 			if ($departments) return Response::json($departments);
 			else return Response::json([]);

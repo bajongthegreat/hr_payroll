@@ -89,3 +89,53 @@ require app_path().'/filters.php';
 */
 
 Event::subscribe('Acme\Handlers\UserEventHandler');
+
+/*
+|--------------------------------------------------------------------------
+| Requires all View composer
+|--------------------------------------------------------------------------
+|
+*/
+
+require app_path().'/composers.php';
+require app_path().'/Acme/Extension/Validation/CustomValidator.php';
+require app_path().'/Acme/Extension/Validation/CustomValidatorResolver.php';
+
+
+function dateDiff($start, $end, $output_type) {
+
+		$result = "";
+		$ts1 = strtotime($start);
+		$ts2 = strtotime($end);
+
+
+
+		$seconds_diff = $ts2 - $ts1;
+
+		switch ($output_type) {
+			case 'months':
+				$result = round($seconds_diff/2419200,0);
+				break;
+			case 'days':
+				$result = round($seconds_diff/86400,0);
+			break;
+
+			case 'weeks':
+			$result = round($seconds_diff/604800,0);
+			break;
+
+			case 'year':
+			$result = round($seconds_diff/31536000,0);
+			break;
+			
+			default:
+				$result = $seconds_diff;
+				break;
+		}
+
+		if ($result == 0 ) $result =1 ;
+		
+
+		return $result;
+	}
+

@@ -3,6 +3,7 @@
 
 @section('content')
 
+<div class="content-center">
 
 <div class="page-header">
 <h1>Add Department  <a  href="{{ action('DepartmentsController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a>
@@ -61,6 +62,7 @@
 
 </div>
 
+</div> <!-- Content Center End -->
 @stop
 
 @section('scripts')

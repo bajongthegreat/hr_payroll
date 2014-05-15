@@ -135,9 +135,9 @@ class LeavesController extends BaseController {
 		$helper = $this->helper;
 		
 		// This was accessed with leaves route directly
-		if (is_null($id_sec)) {
+		if (is_null($id_sec) && isset($id)) {
 			
-			
+		
 			$leave = $this->leaves->find($id);
 
 
@@ -151,9 +151,11 @@ class LeavesController extends BaseController {
 
 		}
 
+		if (count($leave) == 1) {
+			return View::make('leaves.show', compact(['leave', 'helper']));
+		}
 
-
-        return View::make('leaves.show', compact(['leave', 'helper']));
+        return Redirect::action('LeavesController@index')->with('message', ['error' => 'Failed to show the requested leave data.']);
 	}
 
 	/**

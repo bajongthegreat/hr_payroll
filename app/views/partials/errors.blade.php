@@ -1,6 +1,6 @@
 
 @if (count($errors) > 0) 
-<div class="container ">
+
   <div id="errors" class="alert alert-danger">
 
 
@@ -20,6 +20,7 @@
     @endif
     </ul>
   </div>
+
  @endif
 
 

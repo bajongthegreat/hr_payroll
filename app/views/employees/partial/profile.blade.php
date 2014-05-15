@@ -1,9 +1,12 @@
 
 
 <div class="panel panel-default">
-		  <div class="panel-heading"><a  href="{{ action('EmployeesController@edit', $employee->employee_work_id) }}" class="pull-right btn btn-default " ><span class="glyphicon glyphicon-edit"></span >  Edit</a><h4>Personal Information 
+		  <div class="panel-heading"><a  href="{{ action('EmployeesController@edit', $employee->employee_work_id) }}" class="pull-right btn btn-default " ><span class="glyphicon glyphicon-edit"></span >  Edit</a>
+		  	<h4><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          Personal Information
+        </a>
 </h4></div>
-		  <div class="panel-body">
+		  <div  id="collapseOne" class="panel-body panel-collapse collapse in">
 		    <div class="row">
 
 				<div class="form-group">
@@ -11,7 +14,7 @@
 					{{ Form::label('firstname', 'First Name ', array('class' => 'col-sm-4')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->firstname }}</p>
+						<p class="form-control-static">{{ ucfirst($employee->firstname) }}</p>
 					</div>
 
 				</div>
@@ -24,7 +27,7 @@
 					{{ Form::label('middlename', 'Middle Name ', array('class' => 'col-sm-4')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->middlename }}</p>
+						<p class="form-control-static">{{ ucfirst($employee->middlename) }}</p>
 					</div>
 
 				</div>
@@ -37,7 +40,25 @@
 					{{ Form::label('lastname', 'Last Name ', array('class' => 'col-sm-4')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->lastname }}</p>
+						<p class="form-control-static">{{ ucfirst($employee->lastname) }}</p>
+					</div>
+
+				</div>
+		</div>
+		<hr>
+		<div class="row">
+
+				<div class="form-group">
+							
+					{{ Form::label('birthdate', 'Birth date ', array('class' => 'col-sm-4')) }}
+
+					<div class="col-sm-4">
+						<p class="form-control-static">
+							<?php 
+							$date = new DateTime($employee->birthdate);
+							echo $date->format('F jS  Y');
+							?>
+						</p>
 					</div>
 
 				</div>
@@ -47,14 +68,16 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('birthdate', 'Birth date ', array('class' => 'col-sm-4')) }}
+					{{ Form::label('birthplace', 'Birth Place ', array('class' => 'col-sm-4')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->birthdate }}</p>
+						<p class="form-control-static">{{ ucfirst( $employee->birthplace) }}</p>
 					</div>
 
 				</div>
 		</div>
+
+		<hr>
 
 		<div class="row">
 
@@ -63,7 +86,7 @@
 					{{ Form::label('marital_status', 'Marital Status ', array('class' => 'col-sm-4')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->marital_status }}</p>
+						<p class="form-control-static">{{ ucfirst( $employee->marital_status) }}</p>
 					</div>
 
 				</div>
@@ -76,7 +99,7 @@
 					{{ Form::label('gender', 'Gender', array('class' => 'col-sm-4')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->gender }}</p>
+						<p class="form-control-static">{{ ucfirst($employee->gender) }}</p>
 					</div>
 
 				</div>
@@ -102,7 +125,12 @@
 					{{ Form::label('date_hired', 'Date Hired', array('class' => 'col-sm-4')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->date_hired }}</p>
+						<p class="form-control-static">
+							<?php 
+							$date = new DateTime($employee->date_hired);
+							echo $date->format('F jS  Y');
+							?>
+						</p>
 					</div>
 
 				</div>
@@ -114,9 +142,50 @@
 
 		<div class="panel panel-default">
 		  <div class="panel-heading">
-		    <h3 class="panel-title"><h4>Identifications</h4></h3>
+		    <h3 class="panel-title"><h4><a data-toggle="collapse" data-parent="#accordion" href="#parentsinfo">
+          Parent's Information
+        </a></h4></h3>
 		  </div>
-		  <div class="panel-body">
+		  <div id="parentsinfo" class="panel-body panel-collapse collapse in">
+
+		  	<div class="row">
+
+				<div class="form-group">
+							
+					{{ Form::label('mothers_name', 'Mother\'s Name', array('class' => 'col-sm-4')) }}
+
+					<div class="col-sm-4">
+						<p class="form-control-static">{{ $employee->mothers_name }}   </div>
+					</div>
+
+				</div>
+
+
+
+		<div class="row">
+
+				<div class="form-group">
+							
+					{{ Form::label('fathers_name', 'Father\'s Name', array('class' => 'col-sm-4', 'required')) }}
+
+					<div class="col-sm-4">
+						<p class="form-control-static">{{ $employee->fathers_name }}   </div>
+					</div>
+
+				</div>
+
+				
+
+		  </div>  <!-- End of Body -->
+		</div> <!-- End of Panel -->
+
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+		    <h3 class="panel-title"><h4><a data-toggle="collapse" data-parent="#accordion" href="#identification">
+          Identifications
+        </a></h4></h3>
+		  </div>
+		  <div id="identification" class="panel-body panel-collapse collapse in">
 		    <div class="row">
 
 						<div class="form-group">
@@ -190,9 +259,11 @@
 
 		<div class="panel panel-default">
 		  <div class="panel-heading">
-		    <h3 class="panel-title"><h4>Work Information</h4></h3>
+		    <h3 class="panel-title"><h4><a data-toggle="collapse" data-parent="#accordion" href="#workinfo">
+          Work Information
+        </a></h4></h3>
 		  </div>
-		  <div class="panel-body">
+		  <div id="workinfo" class="panel-body panel-collapse collapse in">
 
 		  	<div class="row">
 
@@ -207,6 +278,22 @@
 
 						</div>
 				</div> <!-- End of Row -->
+
+				<div class="row">
+
+						<div class="form-group">
+									
+							{{ Form::label('sss_id', 'Salary', array('class' => 'col-sm-4')) }}
+
+							<div class="col-sm-4">
+								<p class="form-control-static">  {{ (isset($employee->salary) ) ? 'PHP ' . number_format( $employee->salary, 2) : '<span class="label label-default">Not specified</span>'}}  </div>
+
+							
+
+						</div>
+				</div> <!-- End of Row -->
+
+				<hr>	<!-- Seperator -->
 
 		    <div class="row">
 
@@ -250,6 +337,8 @@
 						</div>
 				</div> <!-- End of Row -->
 
+				<hr>	<!-- Seperator -->
+
 				<div class="row">
 
 						<div class="form-group">
@@ -257,7 +346,7 @@
 							{{ Form::label('membership_status', 'Membership Status', array('class' => 'col-sm-4')) }}
 
 							<div class="col-sm-4">
-								<p class="form-control-static"> <?php echo !isset($membership_status[$employee->membership_status]) ? '<span> <i>Not specified</i> </span>' : $membership_status[$employee->membership_status];  ?> </div>
+								<p class="form-control-static"> <?php echo ($employee->membership_status == "associate") ? '<span class="label label-default">' . ucfirst($employee->membership_status) . '</span>' : '<span class="label label-success">' . ucfirst($employee->membership_status) . '</span>';  ?> </div>
 
 							
 
@@ -271,7 +360,7 @@
 							{{ Form::label('employment_status', 'Employment Status', array('class' => 'col-sm-4')) }}
 
 							<div class="col-sm-4">
-								<p class="form-control-static"> {{ $employment_status[$employee->employment_status]}}   </div>
+								<p class="form-control-static"> {{ ucfirst($employee->employment_status)}}   </div>
 
 							
 

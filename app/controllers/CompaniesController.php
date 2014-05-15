@@ -1,6 +1,14 @@
 <?php
 
+use Acme\Repositories\Company\CompanyRepositoryInterface;
+
 class CompaniesController extends BaseController {
+
+	protected $companies;
+
+	public function __construct(CompanyRepositoryInterface $companies) {
+		$this->companies = $companies;
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -9,7 +17,10 @@ class CompaniesController extends BaseController {
 	 */
 	public function index()
 	{
-        return View::make('companies.index');
+
+		$companies = $this->companies->all();
+
+        return View::make('companies.index', compact('companies'));
 	}
 
 	/**
@@ -29,7 +40,11 @@ class CompaniesController extends BaseController {
 	 */
 	public function store()
 	{
-		//
+		$company_data = Input::only('name','address');
+
+		$company = $this->companies->create($company_data);
+		
+		return Redirect::action('CompaniesController@index');
 	}
 
 	/**
@@ -40,7 +55,10 @@ class CompaniesController extends BaseController {
 	 */
 	public function show($id)
 	{
-        return View::make('companies.show');
+		$company = $this->companies->find($id)->get();
+
+
+        return View::make('companies.show', compact('company'));
 	}
 
 	/**
@@ -51,7 +69,14 @@ class CompaniesController extends BaseController {
 	 */
 	public function edit($id)
 	{
-        return View::make('companies.edit');
+		$company = $this->companies->find($id)->get();
+
+		if ($company) $company = $company[0];
+		else {
+			return Redirect::action('CompaniesController@index')->with('message', ['error' => 'No company with such ID.']);
+		}
+
+        return View::make('companies.edit', compact('company'));
 	}
 
 	/**
@@ -63,6 +88,11 @@ class CompaniesController extends BaseController {
 	public function update($id)
 	{
 		//
+		$company_data = Input::only('name','address');
+
+		$company = $this->companies->find($id)->update($company_data);
+
+		return Redirect::action('CompaniesController@index'); 
 	}
 
 	/**
@@ -73,7 +103,9 @@ class CompaniesController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		$company = $this->companies->find($id)->delete();
+
+		return Redirect::action('CompaniesController@index');
 	}
 
 }

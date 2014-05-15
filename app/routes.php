@@ -11,30 +11,96 @@
 |
 */
 
+
+
+
 Route::get('/', ['as' => 'main',function()
 {
+
+
+	// $v = Validator::make(['em' => 0], array(
+ //    'em' => 'required_select',
+	// 	));
+
+	// if ($v->fails())
+	// {
+	//     // The given data did not pass validation
+	//     echo 'failed';
+
+	//     var_dump($v->messages());
+	// }
+
+	$privilege = DB::table('users_roles_privileges')->where('role_id','=',2)->get(['_create','_edit','_delete','_view']);
+
+	if (count($privilege) == 1) {
+		var_dump($privilege);
+	}
+
+
 	return View::make('index');
 }]);
 
+
+
+
 Route::get('/demo', function()
 {
+	$objPHPExcel = new PHPExcel();
+	$filename = "C:\Tibud\sssloan december.xls";
+	$objPHPExcel = PHPExcel_IOFactory::load("C:\Tibud\New data\chunk.xlsx");
+	// $excelReader = PHPExcel_IOFactory::createReaderForFile($filename);
 
-	return '<br><br>demo';
+
+	// $fields = [];
+
+	// for ($i=4; $i < 50 ; $i++) { 
+
+	// 	$row = $objPHPExcel->getActiveSheet()->getRowIterator($i)->current();
+
+	// 	$cellIterator = $row->getCellIterator();
+	// 	// $cellIterator->setIterateOnlyExistingCells(false);
+
+
+	// 	foreach ($cellIterator as $cell) {
+		  
+
+	// 	    if ($i==4) {
+	// 	    	$fields[] = $cell->getValue();
+	// 	    } else {
+	// 	    	 $values[$i][] =  $cell->getValue() . " ";
+	// 	    }
+
+
+	// 	}
+
+	// }
+
+	
+
+	// echo '<table><thead>';
+	// foreach ($fields as  $value) {
+	// 	echo '<th>' . $value . '</th>';
+	// }
+
+	// echo '<thead>';
+
+	// foreach ($values as $key => $value) {
+	// 	echo '<tr>';
+	// 	foreach ($value as $v) {
+				
+	// 			echo '<td>' . $v . '</td>';
+				
+	// 	}
+	// 	echo '</tr>';
+	// }
+
+	return '';
 });
 
 
 
 
-// Route::get('dashboard', array('as' => 'dashboard', function()
-// {
-// 	return View::make('hello');
-
-
-// }) );
-
-
-
-
+// Login Route
 Route::get('login', 'AuthController@index' );
 Route::post('login/auth', 'AuthController@login' );
 Route::get('logout', 'AuthController@logout' ); 
@@ -54,6 +120,7 @@ Route::group(array('before' => 'auth'), function()
 	Route::resource('departments', 'DepartmentsController');
 
 	// Position Controller
+	Route::get('positions/positionsByDepartment', 'PositionsController@positionsByDepartment');
 	Route::resource('positions', 'PositionsController');
 
 
@@ -68,12 +135,40 @@ Route::group(array('before' => 'auth'), function()
 	Route::get('employees/getposition', 'EmployeesController@getPosition');
 	Route::post('promote', 'EmployeesController@promote');
 
-		// User controller
+	Route::post('employees/photo', 'EmployeesPhotoController@upload');
+
+
+	// Applicants
+	Route::post('applicants/requirements', 'ApplicantsController@requirements');
+	Route::get('applicants/jsonApplicantInfo', 'ApplicantsController@jsonApplicantInfo');
+	Route::patch('applicants/jsonApplicant', 'ApplicantsController@jsonUpdateApplicant');
+	 Route::resource('applicants', 'ApplicantsController');
+
+	// User controller
    Route::resource('users', 'UsersController');
    
    // Employee Controller
    Route::resource('employees', 'EmployeesController');
-   // Route::resource('employees.leaves', 'LeavesController');
+
+   	Route::post('leaves/approve', 'LeavesController@approve');
+	Route::post('leaves/reject', 'LeavesController@reject');
+	Route::resource('leaves', 'LeavesController');
+
+
+	Route::resource('philhealths', 'PhilhealthsController');
+
+	Route::resource('companies', 'CompaniesController');
+
+	Route::resource('work_assignments', 'WorkAssignmentsController');
+
+	Route::resource('sss_loans', 'SSS_loansController');
+
+	Route::resource('requirements', 'RequirementsController');
+
+	Route::resource('stageprocesses', 'StageProcessesController');
+
+	Route::resource('holidays', 'HolidaysController');
+
 });
 
 
@@ -90,13 +185,6 @@ App::missing(function($exception)
 
 
 
-Route::post('leaves/approve', 'LeavesController@approve');
-Route::post('leaves/reject', 'LeavesController@reject');
-Route::resource('leaves', 'LeavesController');
 
 
-Route::resource('philhealths', 'PhilhealthsController');
 
-Route::resource('companies', 'CompaniesController');
-
-Route::resource('work_assignments', 'WorkAssignmentsController');

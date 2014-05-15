@@ -1,6 +1,5 @@
-<?php
-
-class Position extends Eloquent {
+<?php 
+class Position extends \Eloquent {
 	protected $guarded = array();
 
 	public static $rules = array();
@@ -11,4 +10,6 @@ class Position extends Eloquent {
 	{
 		return $this->belongsTo('department');
 	}
+
+	
 }
