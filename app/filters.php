@@ -81,3 +81,20 @@ Route::filter('csrf', function()
 		// return Redirect::back()->with('errors', array('Fill the details again...'));
 	}
 });
+
+
+/*
+|--------------------------------------------------------------------------
+| Role Checker
+|--------------------------------------------------------------------------
+|
+| The "guest" filter is the counterpart of the authentication filters as
+| it simply checks that the current user is not logged in. A redirect
+| response will be issued if they are, which you may freely change.
+|
+*/
+
+Route::filter('role_check', function()
+{
+	return Auth::user()->role_id;
+});

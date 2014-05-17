@@ -3,7 +3,9 @@
 @section('content')
 <style>
 
-	
+	a {
+		text-decoration: none !important;
+	}
 
 	.portrait-holder {
 		
@@ -150,59 +152,7 @@
 
 	<div class="member-info-holder col-md-8", #holder>
 
-		<div class="panel panel-warning">
-		  <div class="panel-heading">
-		    <h3 class="panel-title">Requirements Overview</h3>
-		  </div>
-		  <div class="panel-body">
-		   
-<?php 
-
-	$employee_requirement_helper = new Acme\Helpers\EmployeeRequirementHelper();
-
-?>
-
-		  	<strong>Interview</strong>
-		    <ul class="list-group" style="list-style: none;">
-		      @foreach ($requirements as $requirement)
-			       @if ($requirement->StageProcess->stage_process == 'Interview')
-			         <?php 
-			         	$type = 'pass';
-
-			         	if (!$employee_requirement_helper->isRequirementPassed($requirement->id,$applicant->id)) {
-			         		$icon = '<a href="#"  class="_applicant_show_requirement"><span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
-			         	} else {
-			         		$type = 'remove';
-			         		$icon = '<a href="#" class="_applicant_show_requirement"><span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span></a>';
-			         	}
-			         ?>
-					 <li data-type="{{ $type }}" data-document="{{ ucfirst($requirement->document) }}" data-applicant_id="{{$applicant->id }}" data-requirement_id="{{ $requirement->id }}"> {{$icon}} {{ ucfirst($requirement->document) . " (" . (ucfirst($requirement->document_type)) . ")" }} </li>		      
-				   @endif
-		      @endforeach
-
-		      <strong>Orientation</strong>
-		    <ul class="list-group" style="list-style: none;">
-		      @foreach ($requirements as $requirement)
-		      		<?php 
-			         	$type = 'pass';
-
-			         	if (!$employee_requirement_helper->isRequirementPassed($requirement->id,$applicant->id)) {
-			         		$icon = '<a href="#" class="_applicant_show_requirement"><span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
-			         	} else {
-			         		$type = 'remove';
-			         		$icon = '<a href="#" class="_applicant_show_requirement"><span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span></a>';
-			         	}
-			         ?>
-			       @if ($requirement->StageProcess->stage_process == 'Orientation')
-					  <li data-type="{{ $type }}" data-document="{{ ucfirst($requirement->document) }}" data-applicant_id="{{$applicant->id }}" data-requirement_id="{{ $requirement->id }}"> {{$icon}} {{ ucfirst($requirement->document) . " (" . (ucfirst($requirement->document_type)) . ")" }} </li>		      	      
-				   @endif
-		      @endforeach
-			 
-
-
-
-		  </div>
-		</div>
+		@include('partials.requirements')
 
 
 		@include('applicants.partial.profile')

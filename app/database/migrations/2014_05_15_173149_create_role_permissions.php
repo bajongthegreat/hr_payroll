@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateUsersRolesPrivileges extends Migration {
+class CreateRolePermissions extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,17 +12,13 @@ class CreateUsersRolesPrivileges extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('users_roles_privileges', function(Blueprint $table)
+		Schema::create('roles_permissions', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('role_id')->index();
+			$table->integer('role_id')->unsigned()->index();
 			$table->string('uri_segment', 50);
-			$table->integer('_create');
-			$table->integer('_edit');
-			$table->integer('_view');
-			$table->integer('_delete');
+			$table->string('action_permitted', 25);
 			$table->timestamps();
-
 		});
 	}
 
@@ -34,7 +30,7 @@ class CreateUsersRolesPrivileges extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('users_roles_privileges');
+		Schema::drop('roles_permissions');
 	}
 
 }

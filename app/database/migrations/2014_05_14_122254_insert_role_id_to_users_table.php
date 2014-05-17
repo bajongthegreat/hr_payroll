@@ -15,7 +15,6 @@ class InsertRoleIdToUsersTable extends Migration {
 		Schema::table('users', function(Blueprint $table)
 		{
 			$table->integer('role_id')->index();
-			
 		});
 	}
 

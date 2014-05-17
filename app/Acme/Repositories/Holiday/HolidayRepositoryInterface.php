@@ -3,7 +3,7 @@
 use Acme\Repositories\RepositoryInterface;
 
 interface HolidayRepositoryInterface extends RepositoryInterface {
-
+	public function byYear($year);
 }
 
 

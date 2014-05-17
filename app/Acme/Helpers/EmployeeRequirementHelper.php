@@ -27,4 +27,8 @@ class EmployeeRequirementHelper {
 		// return 'demp';
 	}
 
+	public function areAllRequirementsPassed() {
+		return $this->employee_requirement->find($requirement_id, 'requirement_id');
+	}
+
 }

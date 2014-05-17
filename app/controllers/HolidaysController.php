@@ -30,7 +30,15 @@ class HolidaysController extends BaseController {
 	 */
 	public function index()
 	{
-		$holidays = $this->holidays->all();
+		$year = Input::get('year');
+
+		if ($year) {
+			$holidays = $this->holidays->byYear($year)->get();
+		} else {
+			$holidays = $this->holidays->all();
+		}
+
+		
 
 		return View::make('holidays.index', compact('holidays'));
 	}
@@ -54,7 +62,7 @@ class HolidaysController extends BaseController {
 	 */
 	public function store()
 	{
-		$data = Input::only('holiday_start','holiday_end','remarks','type','name');
+		$data = Input::only('holiday_date','remarks','type','name');
 
 		if ($this->holidays->create($data))  {
 			$status = "success";

@@ -17,15 +17,18 @@
   <a href="{{ action('HolidaysController@create')}}" class="btn btn-success"><span class="glyphicon glyphicon-new-window"></span> Add Holiday</a>
    <a  href="{{ action('HolidaysController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-refresh"></span >  Refresh</a>
 
-  </div>
 
+  </div>
+	
+
+  	<!--  Filter by year -->
+	<div class="header-buttons 	"><span  class="col-md-2"> <select class="form-control"><option>2014</option> </select> </span></div>
 
 <table class="table table-hover">
 	<thead>
 		<th>Name</th>
 		<th>Type</th>
 		<th>Date</th>
-		<th>Day(s)</th>
 		<th>Remarks</th>
 	</thead>
 
@@ -36,8 +39,7 @@
 
 				<td> {{ $holiday->name }}</td>
 				<td>{{ ucfirst($holiday->type) }}</td>
-				<td> {{ ucfirst($holiday->holiday_start) }}</td>
-				<td> {{ dateDiff($holiday->holiday_start, $holiday->holiday_end, 'days') }}</td>
+				<td> {{ ucfirst($holiday->holiday_date) }}</td>
 				<td>{{ $holiday->remarks }}</td>
 			
 				

@@ -2,6 +2,25 @@
 
 class BaseController extends Controller {
 
+
+
+	protected $accessControl;
+	protected $byPassRoles = [0, 1];
+		 /**
+	     * Instantiate a newController instance.
+	     */
+	    public function __construct()
+	    {
+	    	// For Cross Site Request Forgery protection
+	        $this->beforeFilter('csrf', array('on' => 'post'));
+	
+	   
+	        // UsersRepository Dependency
+	        $this->accessControl = App::make('AccessControl');
+	                                                                                                                                  
+	        
+	    }
+	
 	/**
 	 * Setup the layout used by the controller.
 	 *
@@ -35,6 +54,17 @@ class BaseController extends Controller {
 	  $paginated = Paginator::make($results->items, $results->totalItems, $perPage);
 
 	  return $paginated;
+	}
+
+	public function notAccessible() {
+		return Response::view('layout.not_accessible', array(), 404);
+	}
+
+	public function checkAccess($uri, $action, $bypass = array() ) {
+		// Check access control
+		if ( !$this->accessControl->hasAccess($uri, $action, $bypass) ) {
+				return Response::view('layout.not_accessible', array(), 404);	
+		}
 	}
 
 	

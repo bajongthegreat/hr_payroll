@@ -29,7 +29,7 @@
 @section('scripts')
 <script>
 
-            	$('#holiday_start, #holiday_end').datetimepicker({
+            	$('#holiday_date').datetimepicker({
                     pickTime: false
                 });
 

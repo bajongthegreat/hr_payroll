@@ -6,6 +6,7 @@ class BackendServiceProvider extends ServiceProvider
 {
 	public function register()
 	{
+		
 		// Bind the UserRepositoryInterface into the class UserRepository
 		$this->app->bind(
 			'Acme\Repositories\User\UserRepositoryInterface',
@@ -79,6 +80,20 @@ class BackendServiceProvider extends ServiceProvider
 			'Acme\Repositories\Holiday\HolidayRepositoryInterface',
 		    'Acme\Repositories\Holiday\HolidayRepository'
 		);
+
+		// Bind the CompanyInterface into the class CompanyRepository
+		$this->app->bind(
+			'Acme\Repositories\User\Role\RolesRepositoryInterface',
+		    'Acme\Repositories\User\Role\RolesRepository'
+		);
+
+		// Bind the CompanyInterface into the class CompanyRepository
+		$this->app->bind(
+			'Acme\Repositories\User\RolesPermission\RolesPermissionRepositoryInterface',
+		    'Acme\Repositories\User\RolesPermission\RolesPermissionRepository'
+		);
+
+		
 
 
 				

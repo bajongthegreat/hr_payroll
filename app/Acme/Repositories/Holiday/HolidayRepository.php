@@ -2,6 +2,7 @@
 
 use Acme\Repositories\Holiday\Holiday;
 use Acme\Repositories\RepositoryAbstract;
+use DB;
 
 class HolidayRepository extends RepositoryAbstract implements HolidayRepositoryInterface {
 	
@@ -18,4 +19,11 @@ class HolidayRepository extends RepositoryAbstract implements HolidayRepositoryI
 	    $this->model = $model;
 	 }
 
+	 public function byYear($year) {
+	 	return $this->model->where(DB::raw('YEAR(holiday_date)'), '=', $year);	
+	 }
+
+	 public function byType($type) {
+	 	return $this->model->find($type, 'type');
+	 }
 }

@@ -71,7 +71,9 @@
   </div>
 
   <div class="header-buttons pull-left">
+    @if ($accessControl->hasAccess($uri, 'create', $GLOBALS['_byPassRole']))
   <a href="{{ action('EmployeesController@create')}}" class="btn btn-success"><span class="glyphicon glyphicon-new-window"></span> Create new Employee</a>
+    @endif
    <a  href="{{ action('EmployeesController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-refresh"></span >  Refresh</a>
    
  
@@ -104,8 +106,14 @@
                 <td> <?php echo  ucfirst($employee->position['name']) . '</td>'; ?>
                 <td> <?php echo  ucfirst($employee->membership_status) . '</td>'; ?>
                 <td> <?php echo ucfirst( $employee->employment_status) . '</td>'; ?>
-                <td> <a class="btn btn-small btn-default editButton" href="{{ action('EmployeesController@edit', $employee->employee_work_id ) }}"> <span class="glyphicon glyphicon-edit"></span> Edit</a> <a class="btn btn-small btn-default deleteButton" href="#" data-employee_id="{{ $employee->employee_work_id}}"> <span class="glyphicon glyphicon-remove"></span> Delete</a> </td>
+                <td> 
+                   @if ($accessControl->hasAccess($uri, 'edit', $GLOBALS['_byPassRole']))
+                  <a class="btn btn-small btn-default editButton" href="{{ action('EmployeesController@edit', $employee->employee_work_id ) }}"> <span class="glyphicon glyphicon-edit"></span> Edit</a> 
+                   @endif
 
+                    @if ($accessControl->hasAccess($uri, 'delete', $GLOBALS['_byPassRole']))
+                  <a class="btn btn-small btn-default deleteButton" href="#" data-employee_id="{{ $employee->employee_work_id}}"> <span class="glyphicon glyphicon-remove"></span> Delete</a> </td>
+                    @endif
                </tr>
             <?php endforeach; ?>
        
@@ -126,11 +134,8 @@
 
   <?php 
 
-
       echo $employees->appends(['src' => Input::get('src'), 'filterby' => Input::get('filterby')] )->links(); 
     
-
-   // echo $users->appends(array('sort' => 'votes'))->links();
   ?>
 
 

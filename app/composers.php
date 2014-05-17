@@ -24,3 +24,5 @@ View::composer([	'stageProcesses.create'], 'Acme\Composers\StageProcessComposer@
 // Indexes
 View::composer(['employees.index', 'applicants.index'], 'Acme\Composers\CompanyComposer@raw');
 View::composer(['employees.index', 'applicants.index'], 'Acme\Composers\PositionComposer@raw');
+
+// View::composer(['employees.index'],'Acme\Composers\AccessControlComposer');

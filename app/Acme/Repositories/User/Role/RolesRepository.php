@@ -18,4 +18,6 @@ class RolesRepository extends RepositoryAbstract implements RolesRepositoryInter
 	    $this->model = $model;
 	 }
 
+	
+
 }

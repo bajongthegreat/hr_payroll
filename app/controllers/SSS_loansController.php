@@ -60,7 +60,7 @@ class SSS_loansController extends BaseController {
 		$id = Input::get('work_id');
 
 
-		$sss_loan_data = Input::only('sss_id','date_issued','loan_amount', 'salary_deduction_start', 'monthly_amortization','duration_in_months','employee_id');
+		$sss_loan_data = Input::only('sss_id','date_issued','loan_amount', 'salary_deduction_date', 'monthly_amortization','duration_in_months','employee_id');
 		$hash_segment = '#employee=' . $id;
 
 		// Validate Inputs
@@ -107,7 +107,7 @@ class SSS_loansController extends BaseController {
 	 */
 	public function update($id)
 	{
-		$sss_loan_data = Input::only('sss_id','date_issued','loan_amount', 'salary_deduction_start', 'monthly_amortization','duration_in_months');
+		$sss_loan_data = Input::only('sss_id','date_issued','loan_amount', 'salary_deduction_date', 'monthly_amortization','duration_in_months');
 
 		$this->sss_loans->find($id)->update($sss_loan_data);
 

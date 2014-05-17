@@ -17,7 +17,7 @@ class EmployeeRequirementRepository  implements EmployeeRequirementRepositoryInt
 	}
 
 	// Fetches all data
-	public function all($fields = ['*']){
+	public function all($fields = ['*'], $options = array() ){
 		return DB::table($this->table);
 	}
 

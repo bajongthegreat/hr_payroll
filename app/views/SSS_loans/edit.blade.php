@@ -42,7 +42,8 @@
 				{{ Form::label('sss_id', 'SSS ID: ', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-3">
-					{{ Form::text('sss_id', Input::old('sss_id'), array('class' => 'form-control', 'required') ) }}
+					<p> {{ $loan->sss_id }}</p>
+					{{ Form::hidden('sss_id', Input::old('sss_id'))  }}
 				</div>
 				
 			</div>
@@ -69,10 +70,10 @@
 
 				<div class="form-group">
 						
-				{{ Form::label('salary_deduction_start', 'Start of Salary Deduction: ', array('class' => 'col-sm-2')) }}
+				{{ Form::label('salary_deduction_date', 'Start of Salary Deduction: ', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-2">
-					{{ Form::text('salary_deduction_start', Input::old('salary_deduction_start'), array('class' => 'form-control', 'data-format' => "YYYY-MM-DD") ) }}
+					{{ Form::text('salary_deduction_date', Input::old('salary_deduction_start'), array('class' => 'form-control', 'data-format' => "YYYY-MM-DD") ) }}
 				</div>
 				
 			</div>
@@ -133,7 +134,7 @@
 
             $(function () {
 
-            	$('#salary_deduction_start, #date_issued').datetimepicker({
+            	$('#salary_deduction_date, #date_issued').datetimepicker({
                     pickTime: false
                 });
 

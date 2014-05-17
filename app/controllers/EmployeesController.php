@@ -29,6 +29,7 @@ class EmployeesController extends BaseController {
 
 	public function __construct(EmployeeRepositoryInterface $employees, jValidator $validator)
     {
+    	parent::__construct();
         $this->beforeFilter('csrf', array('on' => 'post'));
 
       
@@ -55,6 +56,11 @@ class EmployeesController extends BaseController {
 	 */
 	public function index($str = NULL)
 	{	
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 
 		$filter_params = json_decode(urldecode(Input::get('filterby')));
 
@@ -100,7 +106,8 @@ class EmployeesController extends BaseController {
 
 
       	return View::make('employees.index', compact('employees'));
-		
+      
+	
 	}
 
 	function addFilterFieldsToDB($query, $params) {
@@ -157,7 +164,11 @@ class EmployeesController extends BaseController {
 	 */
 	public function create()
 	{
-		
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees', 'create', $this->byPassRoles) ) {
+				return $this->notAccessible();	
+		}
+
         return View::make('employees.create');
 	}
 
@@ -168,6 +179,12 @@ class EmployeesController extends BaseController {
 	 */
 	public function store()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees', 'create', $this->byPassRoles) ) {
+				return $this->notAccessible();	
+		}
+
+
 		$user_data = Input::except('_method','_token','department_id');
 
 		// Validate Inputs
@@ -193,6 +210,11 @@ class EmployeesController extends BaseController {
 	 */
 	public function show($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$employee_work_id = $id;
 		
 		// Use Employee Work ID or table ID for retrieving data
@@ -219,6 +241,11 @@ class EmployeesController extends BaseController {
 	 */
 	public function edit($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees', 'edit', [0, 1]) ) {
+				return  $this->notAccessible();		
+		}
+
 		$employee_work_id = $id;
 		// Use Employee Work ID or table ID for retrieving data
 		$employee = $this->checkID($id, '-', 'employee_work_id');

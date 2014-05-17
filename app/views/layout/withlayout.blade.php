@@ -1,8 +1,15 @@
+
 <!DOCTYPE html>
 <html>
   <head>
     <title>Tibud Cooperative HR and Payroll @yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <style type="text/css">
+    
+  
+    </style>
+
     <!-- Bootstrap -->
     <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">
 
@@ -19,6 +26,7 @@
     <![endif]-->
 
     <style type="text/css">
+
     @yield('styles')
     </style>
 
@@ -142,7 +150,7 @@
           <div class="content" ng-view>
 
              
-
+            
           		@yield('content')
 
  

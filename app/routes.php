@@ -1,5 +1,19 @@
 <?php
 
+App::singleton('AccessControl', function()  { 
+			return  new AccessControl(Auth::user()->id, Auth::user()->role_id);
+}); 
+
+
+if (Auth::check() ) {
+	
+	$acessControl = App::make('AccessControl');
+	View::share('accessControl', $acessControl);
+	View::share('uri', Input::segment(1));
+}
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -12,7 +26,7 @@
 */
 
 
-
+// =============== Experimental ===================
 
 Route::get('/', ['as' => 'main',function()
 {
@@ -30,11 +44,11 @@ Route::get('/', ['as' => 'main',function()
 	//     var_dump($v->messages());
 	// }
 
-	$privilege = DB::table('users_roles_privileges')->where('role_id','=',2)->get(['_create','_edit','_delete','_view']);
+	// $privilege = DB::table('users_roles_privileges')->where('role_id','=',2)->get(['_create','_edit','_delete','_view']);
 
-	if (count($privilege) == 1) {
-		var_dump($privilege);
-	}
+	// if (count($privilege) == 1) {
+	// 	var_dump($privilege);
+	// }
 
 
 	return View::make('index');
@@ -100,14 +114,14 @@ Route::get('/demo', function()
 
 
 
-// Login Route
+// ============= Authentication ==================
 Route::get('login', 'AuthController@index' );
 Route::post('login/auth', 'AuthController@login' );
 Route::get('logout', 'AuthController@logout' ); 
 
 
 
-// Routes that needs login
+// ============ File Maintenance =================
 Route::group(array('before' => 'auth'), function()
 {
 
@@ -127,14 +141,30 @@ Route::group(array('before' => 'auth'), function()
 	Route::resource('sss', 'SSSController');
 	Route::resource('philhealth', 'PhilhealthsController');
 
-	Route::get('basic-files', function() {
-		return View::make('basic-files.index');
-	});
 
+	// User controller
+   Route::resource('users', 'UsersController');
+   
+	Route::resource('philhealths', 'PhilhealthsController');
+
+	Route::resource('companies', 'CompaniesController');
+
+	Route::resource('work_assignments', 'WorkAssignmentsController');
+
+	Route::resource('requirements', 'RequirementsController');
+
+	Route::resource('stageprocesses', 'StageProcessesController');
+	
+});
+
+// =========== HR Module ================
+Route::group(array('before' => ['auth']), function()
+{
+	// Employee Controller
+    Route::resource('employees', 'EmployeesController');
 	Route::get('employees/promote', 'EmployeesController@promoteview');
 	Route::get('employees/getposition', 'EmployeesController@getPosition');
 	Route::post('promote', 'EmployeesController@promote');
-
 	Route::post('employees/photo', 'EmployeesPhotoController@upload');
 
 
@@ -142,33 +172,35 @@ Route::group(array('before' => 'auth'), function()
 	Route::post('applicants/requirements', 'ApplicantsController@requirements');
 	Route::get('applicants/jsonApplicantInfo', 'ApplicantsController@jsonApplicantInfo');
 	Route::patch('applicants/jsonApplicant', 'ApplicantsController@jsonUpdateApplicant');
-	 Route::resource('applicants', 'ApplicantsController');
+	Route::resource('applicants', 'ApplicantsController');
 
-	// User controller
-   Route::resource('users', 'UsersController');
-   
-   // Employee Controller
-   Route::resource('employees', 'EmployeesController');
+
 
    	Route::post('leaves/approve', 'LeavesController@approve');
 	Route::post('leaves/reject', 'LeavesController@reject');
 	Route::resource('leaves', 'LeavesController');
 
 
-	Route::resource('philhealths', 'PhilhealthsController');
-
-	Route::resource('companies', 'CompaniesController');
-
-	Route::resource('work_assignments', 'WorkAssignmentsController');
-
 	Route::resource('sss_loans', 'SSS_loansController');
-
-	Route::resource('requirements', 'RequirementsController');
-
-	Route::resource('stageprocesses', 'StageProcessesController');
-
 	Route::resource('holidays', 'HolidaysController');
 
+
+	// ============== Timekeeping Module ==============
+	// Route::resource('timekeeping', 'TimekeepingsController'); Not yet required
+});
+
+
+
+// ============= Payroll Module =============
+Route::group(array('before' => 'auth'), function()
+{
+	Route::resource('pay_period', 'PayPeriodsController');
+});
+
+// =========== Settings =====================
+Route::group(array('before' => 'auth'), function()
+{
+	Route::resource('settings/roles', 'RolesController');
 });
 
 
@@ -179,7 +211,7 @@ Route::group(array('before' => 'auth'), function()
 // this allows angular to route them
 App::missing(function($exception)
 {
-	return View::make('404');
+	return Response::view('layout.missing_page', array(), 404);
 });
 
 

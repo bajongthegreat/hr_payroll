@@ -20,12 +20,14 @@
 
 
 				</div>
+				@if ($accessControl->hasAccess($uri, 'edit', $GLOBALS['_byPassRole']))
 				<span ><a href="#"><span id="label-photo" class="label label-info">Click to change</span></a></span>
 				<div style="margin-left: 50px; margin-top: 10px">
 					{{ Form::open(['action' => 'EmployeesPhotoController@upload', 'enctype' => 'multipart/formdata']) }}
 					<input type="file" name="profilepic" id="profile_pic_input" multiple="multiple" class="hidden">
 					{{ Form::close() }}
 			</div>
+				@endif
 			
 		</div>
 
@@ -76,6 +78,7 @@
 	</div>
 
 	<div class="separator"></div>
+	@include('partials.modal')
 
 	<div class="member-info-holder col-md-8", #holder>
 
@@ -86,6 +89,8 @@
 			{{Form::close()}}
 
 		@else
+			@include('partials.requirements')
+
 			@include('employees.partial.profile')
 		@endif
 

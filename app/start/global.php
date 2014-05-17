@@ -101,6 +101,7 @@ require app_path().'/composers.php';
 require app_path().'/Acme/Extension/Validation/CustomValidator.php';
 require app_path().'/Acme/Extension/Validation/CustomValidatorResolver.php';
 
+$GLOBALS['_byPassRole'] = [0,1];
 
 function dateDiff($start, $end, $output_type) {
 

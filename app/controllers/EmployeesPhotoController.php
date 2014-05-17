@@ -56,6 +56,9 @@ class EmployeesPhotoController extends BaseController {
 
             $id = Input::get($field);
 
+
+
+            // Update Employee
             $this->employees->find($id, $field)->update(['image' => $uploaded_location]);
 
            return Response::json(['file_loc' => $url . '/' .$uploaded_location, 'status' => $status]);

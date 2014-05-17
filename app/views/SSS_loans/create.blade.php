@@ -38,7 +38,8 @@
 				{{ Form::label('sss_id', 'SSS ID: ', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-3">
-					{{ Form::text('sss_id', Input::old('sss_id'), array('class' => 'form-control', 'required') ) }}
+					<p class="sss_id"></p>
+					<input type="hidden" class="sss_id" name="sss_id" value="{{ Input::old('sss_id') }}">
 				</div>
 				
 			</div>
@@ -65,10 +66,10 @@
 
 				<div class="form-group">
 						
-				{{ Form::label('salary_deduction_start', 'Start of Salary Deduction: ', array('class' => 'col-sm-2')) }}
+				{{ Form::label('salary_deduction_date', 'Start of Salary Deduction: ', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-2">
-					{{ Form::text('salary_deduction_start', Input::old('salary_deduction_start'), array('class' => 'form-control', 'data-format' => "YYYY-MM-DD") ) }}
+					{{ Form::text('salary_deduction_date', Input::old('salary_deduction_date'), array('class' => 'form-control', 'data-format' => "YYYY-MM-DD") ) }}
 				</div>
 				
 			</div>
@@ -129,7 +130,7 @@
 
             $(function () {
 
-            	$('#salary_deduction_start, #date_issued').datetimepicker({
+            	$('#salary_deduction_date, #date_issued').datetimepicker({
                     pickTime: false
                 });
 
@@ -185,7 +186,7 @@
 	            	$.ajax({
            					type: 'GET',
 							url: employeeLink,
-							data: { searchTerm: id, output: 'json', limit: '1', stype: 'absolute'},
+							data: { src: id, output: 'json', limit: '1', stype: 'absolute'},
 							beforeSend: function() {
 								$(this).addClass('has-warning');
 								$('#' + loader).html("<img src='" + mainLink + "img/loading.gif' class=\"loading\"> 	");
@@ -200,8 +201,11 @@
 								if (data.length == 1) {
 
 									var employeeName = hrApp.personName(data[0], "lastname_first"),
-									     date_hired = moment(data[0].date_hired).format("dddd, MMMM Do YYYY");
+									     date_hired = moment(data[0].date_hired).format("dddd, MMMM Do YYYY"),
+									     sss_id = data[0].sss_id;
 
+
+									     	console.log(data);
 									// Show all specified panels
 									togglePanels(pannels, 'show');
 									
@@ -209,7 +213,8 @@
 									$('#employee_name').html("" + employeeName);
 									$('#date_hired').html(date_hired);
 									$('#employee_id').val(data[0].id);
-
+									$('.sss_id').html(sss_id);
+									$('.sss_id').val(sss_id);
 
 									
 								} else {

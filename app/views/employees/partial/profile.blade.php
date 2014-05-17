@@ -1,7 +1,10 @@
 
 
 <div class="panel panel-default">
-		  <div class="panel-heading"><a  href="{{ action('EmployeesController@edit', $employee->employee_work_id) }}" class="pull-right btn btn-default " ><span class="glyphicon glyphicon-edit"></span >  Edit</a>
+		  <div class="panel-heading">
+		  	@if ($accessControl->hasAccess($uri, 'edit', $GLOBALS['_byPassRole']))
+		  	<a  href="{{ action('EmployeesController@edit', $employee->employee_work_id) }}" class="pull-right btn btn-default " ><span class="glyphicon glyphicon-edit"></span >  Edit</a>
+		  	@endif
 		  	<h4><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
           Personal Information
         </a>
