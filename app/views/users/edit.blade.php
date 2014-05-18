@@ -59,7 +59,14 @@
 		 <div class="col-sm-10">
 		{{ Form::select('status', array('Active' => "Active", 'Disabled' => 'Disabled', 'Suspended'=> 'Suspended') ,  NULL, array('class' => 'form-control', 'placeholder' => 'Re-type your new password.')) }}
 		 </div>
-	</div>
+		</div>
+
+		<div class="form-group">
+		{{ Form::label('role_id', 'User Role', array('class'=>"col-sm-2 control-label") ) }}
+		 <div class="col-sm-10">
+		{{ Form::select('role_id', $roles ,  NULL, array('class' => 'form-control')) }}
+		 </div>
+		</div>
 
 	<div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">

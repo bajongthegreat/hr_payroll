@@ -20,8 +20,10 @@
 
 <table class="table table-hover">
 	<thead>
-		<th width="15%">Role</th>
-		<th></th>
+		<th width="10%">ID </th>
+		<th>Role</th>
+		<th width="10%" class="text-center">Edit</th>
+		<th width="10%" class="text-center">Delete</th>
 	</thead>
 
 
@@ -31,11 +33,11 @@
 		@foreach($roles as $role)
 
 		
-			<tr >
-
+			<tr>
+				<td> {{ $role->id }}</td>
 				<td> {{ $role->name }}</td>
 				<td align="center"> <a href="{{ action('RolesController@edit', $role->id) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Edit</a></td>
-				<td align="center">{{ Form::open(['action' => array('RolesController@destroy', $role->id), 'method' => 'DELETE']) }} <button  type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span> Delete</button></form></td>
+				<td align="center"><a href="#" data-id="{{ $role->id }}" data-url="{{ action('RolesController@destroy', $role->id)  }}" class="btn btn-default btn-sm _deleteItem"><span class="glyphicon glyphicon-remove"></span> Delete</a></td>
 			
 			</tr>
 

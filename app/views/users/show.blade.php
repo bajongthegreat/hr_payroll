@@ -3,7 +3,6 @@
 
 
 @section('content')
-
 <h3 class="page-header">User account details</h3>
 
 	<!-- Usage as a class -->
@@ -67,9 +66,25 @@
 
 	</tr>
 
+	<tr> 
+		<td width="20%">Role</td>
+		<td>{{  $accessControl->getRoleName($user->role_id) }}</td>
+
+	</tr>
+
+
+
 	
 
 </table>
+
+
+	@foreach($accessControl->pagesWithAccess() as $uri_segment => $permission)
+		<div class="alert alert-info">
+			You have access to <strong>{{ $uri_segment }}</strong> with an ability to <strong>{{ str_replace('|', ',', $permission)}}</strong>.
+		</div>
+	@endforeach	
+
 
 
 <div class="pull-right">

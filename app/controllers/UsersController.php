@@ -148,7 +148,7 @@ class UsersController extends BaseController {
 	 */
 	public function edit($id)
 	{
-		$user = $this->users->find($id);
+		$user = $this->users->find($id)->get()->first();
  
 		// Unset the password
 		$user->password = "";
@@ -166,6 +166,7 @@ class UsersController extends BaseController {
 	public function update($id)
 	{
 		$user_post = Input::only('password','email','password_confirmation','status');
+		$user_data = Input::only('password','email','status', 'role_id');
 		$change_password = (strlen($user_post['password']) > 0) ? true : false;
 
 		// Custom Validation message
@@ -181,7 +182,7 @@ class UsersController extends BaseController {
 		}	
 
 		// Update the user
-		$this->users->update($id, $user_post, array('change_password' => $change_password));
+		$this->users->update($id, $user_data, array('change_password' => $change_password));
 		
 		// Trigger an update method
 		Event::fire('user.update');

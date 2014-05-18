@@ -1,6 +1,7 @@
 <?php namespace Acme\Repositories\User;
 
 use User;
+use Role;
 use Acme\Repositories\RepositoryAbstract;
 
 class UserRepository extends RepositoryAbstract implements UserRepositoryInterface {

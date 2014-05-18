@@ -3,9 +3,7 @@
 @section('content')
 <style>
 
-	a {
-		text-decoration: none !important;
-	}
+
 
 	.portrait-holder {
 		

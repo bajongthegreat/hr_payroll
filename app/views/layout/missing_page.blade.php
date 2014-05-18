@@ -2,7 +2,7 @@
 
 @section('content')
 
- <h2 class="page-header text-center">Page not found</h2>
+ <h2 class="page-header text-center"></h2>
 
  <div class="container">
 

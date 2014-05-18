@@ -197,4 +197,40 @@ $('.filter-item').on('click', function(e) {
 
 });
 
+
+// Delete collection
+$('._deleteItem').on('click', function(e) {
+  
+      // Prevent from going back to top when clicking the button
+      e.preventDefault();
+
+      var deleteButton = $(this);
+
+      // Get the data attribute with a key "employee_id"
+      var id = deleteButton.data('employee_id'),
+          link = deleteButton.data('url');
+
+      // Contact server to delete the employee
+      $.ajax({
+        type: 'DELETE',
+        url: link,
+        data: { id: id },
+        success: function(data) {
+        
+          if (data == "1") {
+            deleteButton.closest('tr').fadeOut(255)
+          }
+        }
+      });
+      
+    
+});
+
+
+
+// ============= Roles ===================
+
+
+
+
 });

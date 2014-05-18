@@ -143,7 +143,13 @@ class RolesController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-		//
+		$role = $this->roles->find($id)->get()->first();
+
+		if (!$role) return Redirect::action('RolesController@index')->with('error', ['No role found with that ID.']);
+		$permissions = json_encode($role->permissions()->lists('action_permitted', 'uri_segment'));
+		$old_roles = json_encode($role->permissions()->lists('uri_segment', 'id'));
+
+		return View::make('roles.edit', compact('role', 'permissions', 'old_roles'));
 	}
 
 	/**
@@ -155,7 +161,80 @@ class RolesController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		$errors = [];
+
+		// --------- Data Gathering --------------
+
+		$role = Input::get('name');
+		$roles_data = (array) json_decode(Input::get('rolesData'));
+		$deleted_uri = json_decode(Input::get('deletedURI'));
+
+
+		// --------- Validation Area -------------
+
+
+		if (is_null($roles_data)) {
+			$errors[] = 'Role data not set';
+		}
+
+
+		if (count($errors) > 0) return Redirect::back()->with('errors', $errors)->withInput();
+
+
+		if (!$this->validator->isValidforUpdate($id, ['name' => $role])) {
+			return Redirect::back()->withInput()->withErrors($this->validator->errors());
+		}
+
+
+		// --------- Database Layer --------------- [ Not should be, extract to repo please..]
+
+		DB::transaction(function() use ($role, $roles_data, $id, $deleted_uri) {
+
+				// Update role name
+				try {
+						$roleDB = $this->roles->find($id)->update(['name' => $role]);
+					} catch (Exception $e) {
+						DB::rollback();	
+					}				
+
+				foreach($roles_data as $key => $value) {
+
+					
+					// Delete all URI on the specified JSON object
+					if (count($deleted_uri) > 0) {
+						foreach ($deleted_uri as $uri) {
+							
+							try {
+								DB::table('roles_permissions')->where('role_id', '=', $id )
+							                                  ->where('uri_segment', '=', $uri)->delete();
+							} catch (Exception $e) {
+								DB::rollback();	
+							}
+
+							
+						}
+					} 
+
+					// Add newly added uri to this role
+					if (is_array($value)) {
+
+						try {
+							DB::table('roles_permissions')->insert(['role_id' => $id,
+												                    'uri_segment' => $key,
+												                    'action_permitted' => implode('|', $value)]);
+						} catch (Exception $e) {
+							DB::rollback();	
+						}
+						
+					}	
+
+			
+				
+				}
+			
+		});
+
+		return Redirect::action('RolesController@edit', $id);
 	}
 
 	/**
@@ -167,7 +246,7 @@ class RolesController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		return $this->roles->find($id)->delete();
 	}
 
 }

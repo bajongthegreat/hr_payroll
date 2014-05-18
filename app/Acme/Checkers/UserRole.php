@@ -4,10 +4,16 @@ class AccessControl {
 
 	protected $user_id;
 	protected $role_id;
+	protected $permissionsRepository;
+	protected $rolesRepository;
 
 	public function __construct($user_id, $role_id) {
 		$this->user_id = $user_id;
 		$this->role_id  = $role_id;
+
+		$this->permissionsRepository = $this->resolvePermissionRepository();
+		$this->rolesRepository = $this->resolveRolesRepository();
+
 	}
 
 	// Check if user can do this action
@@ -19,9 +25,8 @@ class AccessControl {
 		}
 
 		// Get Role Permissions
-		$permissionsRepository = $this->resolvePermissionRepository();
-
-		$permission = $permissionsRepository->find($this->role_id, 'role_id')->get(['uri_segment','action_permitted']);
+		
+		$permission = $this->permissionsRepository->find($this->role_id, 'role_id')->get(['uri_segment','action_permitted']);
 
 		// Check if the role exists
 		foreach ($permission->toArray() as $key => $value) {
@@ -41,7 +46,22 @@ class AccessControl {
 		return App::make('Acme\Repositories\User\RolesPermission\RolesPermissionRepositoryInterface');
 	}
 
+	public function resolveRolesRepository() {
+		return App::make('Acme\Repositories\User\Role\RolesRepositoryInterface');
+	}
+
+	public function pagesWithAccess() {
+
 	
+		
+		return $this->permissionsRepository->find($this->role_id, 'role_id')->lists('action_permitted', 'uri_segment');
+
+	}
+
+	public function getRoleName($role_id) {
+		$output = $this->rolesRepository->find($this->role_id)->pluck('name');
+		return ($output) ? $output : NULL;
+	}
 
 	public function dump() {
 		dd('You found me!');

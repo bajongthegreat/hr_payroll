@@ -213,5 +213,6 @@
 
     <!-- HR Payroll components -->
      <script src="{{ asset('jquery/hr_applicants.js') }}"></script>
+     @yield('later_scripts')
   </body>
 </html>
