@@ -12,7 +12,7 @@ class BaseController extends Controller {
 	    public function __construct()
 	    {
 	    	// For Cross Site Request Forgery protection
-	        $this->beforeFilter('csrf', array('on' => 'post'));
+	        // $this->beforeFilter('csrf', array('on' => 'post'));
 	
 	   
 	        // UsersRepository Dependency

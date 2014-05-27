@@ -138,8 +138,16 @@ label {
 
 /* Bootstrap Extension */
 
+
+.smooth-panel-edges {
+  margin: 10px 5px;
+}
 .center-text-vertical {
   margin-top: 5px;
+}
+
+.very-small-space {
+  margin-left: 10px;
 }
 
 .form-field-error .bottom {
@@ -376,7 +384,11 @@ label {
 
 }
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
+
+  .very-small-space{
+    margin-left:0;
+  }
     .pull-right, .pull-left {
       display: block;
       float: none !important;
@@ -406,6 +418,7 @@ label {
   .table-container {
     margin-left: 5px important;
   }
+
 
 }
 

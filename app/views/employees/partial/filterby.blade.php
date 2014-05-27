@@ -1,6 +1,8 @@
 
 <?php 
   $filter_params = (array) json_decode(urldecode(Input::get('filterby')));
+
+
   $membership_status = ['associate' => 'Casual', 'regular' => 'Regular'];
 ?>
 <div class="panel-group" id="accordion">
@@ -33,6 +35,10 @@
                             </div>
                           </div>
                         </div>
+
+
+                                <!-- Check if company exists -->
+                                @if (isset($filter_params['company_id']))
                         <div class="panel panel-default">
                           <div class="panel-heading">
                             <h4 class="panel-title">
@@ -44,24 +50,57 @@
                           <div id="collapseTwo" class="panel-collapse collapse in">
                             <div class="panel-body">
                             <ul class="list-group filter-list" style="font-size: 12px; font-weight: bold; list-style:none;" data-category="position_id" data-limit="5">
-                                   @foreach($positions as $position)
 
-                                   @if (isset($filter_params['position_id']))
-                                        @if (in_array($position->id, $filter_params['position_id']))
-                                           <li><input type="checkbox" data-fieldvalue="{{ $position->id }}"  class="filter-item" checked> {{ $position->name}}  </li>
-                                        @else 
-                                          <li><input type="checkbox" data-fieldvalue="{{ $position->id }}"  class="filter-item"> {{ $position->name}}  </li>
-                                        @endif
-                                  @else
-                                   <li><input type="checkbox" data-fieldvalue="{{ $position->id }}"  class="filter-item"> {{ $position->name}}  </li>
+
+                                  <!-- Loop through each department -->
+                                  @foreach( $departments as $department )
+
+                                  @if ($department->status == 'inactive') 
+                                    <?php  continue; ?>
                                   @endif
 
+                                    <!-- Check if that department belongs to the company -->
+                                    @if(in_array($department->company_id, $filter_params['company_id']))
+
+                                      <li class="text-center"> <div class="panel panel-default">
+  <div class="panel-body">
+    {{ $department->name}}
+  </div>
+</div></li>
+<hr>
+                                             @foreach($positions as $position)
+
+                                                @if ($department->id == $position->department_id)
+
+                                                      @if (isset($filter_params['position_id']))
+                                                          @if (in_array($position->id, $filter_params['position_id']))
+                                                             <li><input type="checkbox" data-fieldvalue="{{ $position->id }}"  class="filter-item" checked> {{ $position->name}}  </li>
+                                                          @else 
+                                                            <li><input type="checkbox" data-fieldvalue="{{ $position->id }}"  class="filter-item"> {{ $position->name}}  </li>
+                                                          @endif
+                                                    @else
+                                                     <li><input type="checkbox" data-fieldvalue="{{ $position->id }}"  class="filter-item"> {{ $position->name}}  </li>
+                                                    @endif
+                                               
+                                                @endif
+
+                                                     
+
+                                            @endforeach
+                                            <hr>
+                                      @endif
+
+
                                   @endforeach
+                          
+                         
+
                                </ul>
                              </div>
                           </div>
                         </div>
 
+                              @endif
 
                         <div class="panel panel-default">
                           <div class="panel-heading">

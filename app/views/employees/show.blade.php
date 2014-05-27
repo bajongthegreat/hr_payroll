@@ -50,13 +50,14 @@
 				<div class="profile-label"> <b>ID: </b> <?php echo (isset($employee->employee_work_id)) ? $employee->employee_work_id : 'Not specified'; ?></div>
 				<div class="profile-label"> <b>Company: </b> <?php echo (isset($company)) ? $company : 'Not specified'; ?></div>
 				<div class="list-group">
-				  <a href="#" class="list-group-item active">
+				  <a href="?v=profile" class="list-group-item active">
 				   <span class="glyphicon glyphicon-user"></span>&nbsp;  Profile
 				  </a>
+				  <a href="?v=leaves" class="list-group-item"><span class="glyphicon glyphicon glyphicon-home"></span>&nbsp;   Leaves</a>
+				  <a href="?v=medical" class="list-group-item"><span class="glyphicon glyphicon glyphicon-briefcase"></span>&nbsp;   Medical Examination</a>
+				
 				  <a href="#" class="list-group-item"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;   Attendance</a>
-				  <a href="#" class="list-group-item"><span class="glyphicon glyphicon glyphicon-briefcase"></span>&nbsp;   Benefits</a>
 				  <a href="#" class="list-group-item"><span class="glyphicon glyphicon-star"></span>&nbsp;   Promotions</a>
-				  <a href="#" class="list-group-item"><span class="glyphicon glyphicon glyphicon-home"></span>&nbsp;   Leaves</a>
 				  <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;   Loans</a>
 				</div>
 			</div>
@@ -86,12 +87,17 @@
 		{{ Form::model($employee, array('method' => 'patch', 'action' => ['EmployeesController@update', $employee->employee_work_id])) }}
 			@include('employees.partial.employee_edit')
 			
-			{{Form::close()}}
-
 		@else
-			@include('partials.requirements')
+			<?php $v = Input::get('v'); ?>
 
-			@include('employees.partial.profile')
+			@if ($v == 'medical')
+				@include('employees.partial.medical');
+			@elseif ($v == 'leaves')
+				@include('employees.partial.leaves');
+			@else
+				@include('partials.requirements')
+				@include('employees.partial.profile')
+			@endif
 		@endif
 
 		

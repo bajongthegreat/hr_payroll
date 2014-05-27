@@ -102,7 +102,11 @@ $('#_applicants_company_id').change(function() {
 
 
 // Exists on: Applicants.show
-    $('._applicant_show_requirement').on('click', function() {
+    $('._applicant_show_requirement').on('click', function(e) {
+
+
+        e.stopPropagation();
+
          var requirement_id = $(this).closest('li').data('requirement_id'),
             applicant_id = $(this).closest('li').data('applicant_id'),
             ptype = $(this).closest('li').data('type'),
@@ -117,7 +121,8 @@ $('#_applicants_company_id').change(function() {
         // When clicking "Accept", perform an AJAX request
         $('#modal_save').on('click', function (e) {
           // do something...
-
+            
+      e.stopPropagation();
               var defaultClass = '<span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span>',
                    unavailableClass  ='<a href="#" class="_applicant_show_requirement"><span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
 

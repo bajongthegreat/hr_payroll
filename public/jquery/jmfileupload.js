@@ -27,8 +27,8 @@
             url: '?a=upload',
             customData: {},
             errorContainer: '.upload-error',
-            reponseContainer: '.upload-done',
-            imageContainer: '.image'
+            responseContainer: '.upload-done',
+            imageContainer: '.image',
 
         };
 
@@ -95,8 +95,13 @@
             xhr.onload = function () {
              var result = xhr.response;
 
+             if (!result) {
+                $(options.errorContainer).html('Failed to process uploaded file.');
+             }
              // Parse as JSON result
              result = JSON.parse(result);
+
+             $(options.responseContainer).val(result.file_path).change();
 
              $(options.imageContainer).attr("src", result.file_loc );
 
@@ -119,7 +124,8 @@
 
             // Terminate event if doesnt match the required file types
             if (validate(fileType) === false) {
-                $(options.upload-error).html('File does not pass to the required file type.');
+                console.log(fileType);
+                $(options.errorContainer).html('File does not pass from the required file types.');
                 return false;
             }
 

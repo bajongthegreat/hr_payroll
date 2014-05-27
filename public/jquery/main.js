@@ -147,11 +147,45 @@ var myApp = function(mainURL) {
 };
 
 
+// Custom Javascript functions
+var __in_array = function(type, allowedTypes) {
+                var found = false;
+
+                for (var i = allowedTypes.length - 1; i >= 0; i--) {
+                    if (allowedTypes[i] == type) {
+                        found = true;
+                    }
+                };
+
+                return found;
+            }
+
+var __indexOf = function(needle) {
+    if(typeof Array.prototype.indexOf === 'function') {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function(needle) {
+            var i = -1, index = -1;
+
+            for(i = 0; i < this.length; i++) {
+                if(this[i] === needle) {
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
+        };
+    }
+
+    return indexOf.call(this, needle);
+};
+
 $(document).ready(function() {
 
 
 
-   $('#_applicants_date_hired, #_applicants_birthdate, #birthdate').datetimepicker({
+   $('#_applicants_date_hired, #_applicants_birthdate, #birthdate, #date_conducted').datetimepicker({
                     pickTime: false
     });
 

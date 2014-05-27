@@ -4,7 +4,11 @@
 View::composer(['positions.create','positions.edit', 'employees.create', 'employees.show', 'employees.edit', 'departments.create','departments.edit', 'applicants.create','applicants.edit'], 'Acme\Composers\CompanyComposer');
 
 // Load $departments variable into this views
-View::composer(['positions.create','positions.edit', 'employees.create', 'employees.edit'], 'Acme\Composers\DepartmentComposer');
+View::composer(['positions.create','positions.edit', 'employees.create', 'employees.edit'	], 'Acme\Composers\DepartmentComposer');
+
+// Load $departments variable into this views
+View::composer(['employees.index'], 'Acme\Composers\DepartmentComposer@all');
+
 
 // Employee Composer
 View::composer(['employees.edit', 'employees.show', 'applicants.create','applicants.edit', 'employees.index', 'applicants.index'], 'Acme\Composers\EmployeeComposer@employee_status');
@@ -25,6 +29,14 @@ View::composer([	'stageProcesses.create'], 'Acme\Composers\StageProcessComposer@
 View::composer(['employees.index', 'applicants.index'], 'Acme\Composers\CompanyComposer@raw');
 View::composer(['employees.index', 'applicants.index'], 'Acme\Composers\PositionComposer@raw');
 
-View::composer(['users.edit'], 'Acme\Composers\RolesComposer');
 
+
+View::composer(['users.edit'], 'Acme\Composers\RolesComposer');
+View::composer(['employees.partial.medical'], 'Acme\Composers\MedicalExaminationsComposer');
+View::composer(['employees.medical_examination.partials.single_add', 'employees.medical_examination.partials.bulk_add'], 'Acme\Composers\MedicalExaminationsComposer@medical_establishments');
+View::composer(['employees.medical_examination.partials.single_add'], 'Acme\Composers\MedicalExaminationsComposer@medical_findings');
+View::composer(['employees.medical_examination.partials.single_add'], 'Acme\Composers\MedicalExaminationsComposer@recommendations');
 // View::composer(['employees.index'],'Acme\Composers\AccessControlComposer');
+
+
+View::composer(['employees.partial.leaves'], 'Acme\Composers\LeavesComposer@leavesObject');

@@ -2,7 +2,6 @@
 
 	
 
-
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 		    <h3 class="panel-title"><h4>Requirements Checklist</h4></h3>

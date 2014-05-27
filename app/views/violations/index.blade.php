@@ -1,0 +1,1 @@
+C:\xampp\htdocs\vagrant\app/views/violations/index.blade.php

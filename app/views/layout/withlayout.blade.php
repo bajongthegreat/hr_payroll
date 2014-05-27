@@ -211,6 +211,10 @@
     @yield('scripts')
 
 
+    @yield('sub_scripts')
+
+    @yield('sub_scripts_1')
+
     <!-- HR Payroll components -->
      <script src="{{ asset('jquery/hr_applicants.js') }}"></script>
      @yield('later_scripts')

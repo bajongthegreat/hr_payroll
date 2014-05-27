@@ -66,8 +66,8 @@
 			</div>
 
 			{{ Form::hidden('status', 'Pending')}}
-
-
+			<?php $ref = (Input::has('ref')) ? Input::get('ref') : "";  ?>
+			{{ Form::hidden('ref', $ref) }}
 		  </div> <!-- Panel Body -->
 
 

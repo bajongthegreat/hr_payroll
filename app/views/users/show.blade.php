@@ -81,7 +81,7 @@
 
 	@foreach($accessControl->pagesWithAccess() as $uri_segment => $permission)
 		<div class="alert alert-info">
-			You have access to <strong>{{ $uri_segment }}</strong> with an ability to <strong>{{ str_replace('|', ',', $permission)}}</strong>.
+			<span class="glyphicon glyphicon-info"></span>You have access to <strong>{{ $uri_segment }}</strong> with an ability to <strong>{{ str_replace('|', ',', $permission)}}</strong>.
 		</div>
 	@endforeach	
 

@@ -19,4 +19,7 @@ class DepartmentComposer {
 		$view->with('departments', $this->departments->all(['name','id']));
 	}
 
+	public function all($view) {
+		$view->with('departments', $this->departments->all());	
+	}
 }

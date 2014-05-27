@@ -93,9 +93,22 @@ class BackendServiceProvider extends ServiceProvider
 		    'Acme\Repositories\User\RolesPermission\RolesPermissionRepository'
 		);
 
+		// Bind the CompanyInterface into the class CompanyRepository
+		$this->app->bind(
+			'Acme\Repositories\Employee\MedicalExamination\EmployeePhysicalExaminationRepositoryInterface',
+		    'Acme\Repositories\Employee\MedicalExamination\EmployeePhysicalExaminationRepository'
+		);		
+
+		// Bind the CompanyInterface into the class CompanyRepository
+		$this->app->bind(
+			'Acme\Repositories\Employee\MedicalEstablishment\MedicalEstablishmentRepositoryInterface',
+		    'Acme\Repositories\Employee\MedicalEstablishment\MedicalEstablishmentRepository'
+		);		
 		
-
-
-				
+		// Bind the CompanyInterface into the class CompanyRepository
+		$this->app->bind(
+			'Acme\Repositories\Employee\MedicalExamination\Disease\DiseaseRepositoryInterface',
+		    'Acme\Repositories\Employee\MedicalExamination\Disease\DiseaseRepository'
+		);		
 	}
 }

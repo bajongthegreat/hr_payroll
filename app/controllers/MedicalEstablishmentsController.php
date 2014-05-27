@@ -1,0 +1,144 @@
+<?php
+use Acme\Repositories\Employee\MedicalEstablishment\MedicalEstablishmentRepositoryInterface;
+
+// Use a Validation Service
+use Acme\Services\Validation\MedicalEstablishmentValidator as jValidator;
+
+class MedicalEstablishmentsController extends \BaseController {
+
+
+	protected $medical_establishments;
+	protected $validator;
+		 /**
+	     * Instantiate a newController instance.
+	     */
+	    public function __construct(MedicalEstablishmentRepositoryInterface $medical_establishments, jValidator $validator)
+	    {
+	    	// For Cross Site Request Forgery protection
+	        $this->beforeFilter('csrf', array('on' => 'post'));
+	
+	   
+	        // UsersRepository Dependency
+	        $this->medical_establishments = $medical_establishments;
+	                                                                                                                                  
+	        $this->validator = $validator;
+	    }
+	
+
+	/**
+	 * Display a listing of the resource.
+	 * GET /medicalestablishments
+	 *
+	 * @return Response
+	 */
+	public function index()
+	{
+		$medical_establishments = $this->medical_establishments->all();
+
+		return View::make('medical_establishments.index', compact('medical_establishments'));
+	}
+
+	/**
+	 * Show the form for creating a new resource.
+	 * GET /medicalestablishments/create
+	 *
+	 * @return Response
+	 */
+	public function create()
+	{
+		return View::make('medical_establishments.create');
+	}
+
+	/**
+	 * Store a newly created resource in storage.
+	 * POST /medicalestablishments
+	 *
+	 * @return Response
+	 */
+	public function store()
+	{
+		$post_data = Input::only('name','address', 'telephone_number', 'email');
+
+
+		// Validate Inputs
+		if (!$this->validator->validate($post_data, NULL)) {
+			return Redirect::back()->withInput()->withErrors($this->validator->errors());
+		}
+
+		if ($this->medical_establishments->create($post_data)) {
+			return Redirect::action('MedicalEstablishmentsController@index');
+		} else {
+			return Redirect::back()->withInput()->withErrors(['There was a problem while processing your request. Please try again.']);
+		} 
+	}
+
+	/**
+	 * Display the specified resource.
+	 * GET /medicalestablishments/{id}
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function show($id)
+	{
+		//
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 * GET /medicalestablishments/{id}/edit
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit($id)
+	{
+		$medical_establishment = $this->medical_establishments->find($id)->get()->first();
+
+		if (!$medical_establishment) {
+			return Redirect::action('MedicalEstablishmentsController@index')->with('errors', ['Cannot find the establishment.']);		
+		}
+
+		return View::make('medical_establishments.edit', compact('medical_establishment'));
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 * PUT /medicalestablishments/{id}
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function update($id)
+	{
+		
+		$post_data = Input::only('name','address', 'telephone_number', 'email');
+
+
+		// Validate Inputs
+		if (!$this->validator->validate($post_data, NULL)) {
+			return Redirect::back()->withInput()->withErrors($this->validator->errors());
+		}
+
+		if ($this->medical_establishments->find($id)->update($post_data)) {
+			return Redirect::action('MedicalEstablishmentsController@index');
+		} else {
+			return Redirect::back()->withInput()->withErrors(['There was a problem while processing your request. Please try again.']);
+		} 
+
+
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 * DELETE /medicalestablishments/{id}
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function destroy($id)
+	{
+		return $this->medical_establishments->find($id)->delete();
+	}
+
+}

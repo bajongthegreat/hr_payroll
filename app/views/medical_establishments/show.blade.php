@@ -1,0 +1,1 @@
+C:\xampp\htdocs\vagrant\app/views/medical_establishments/show.blade.php

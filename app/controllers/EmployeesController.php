@@ -67,7 +67,6 @@ class EmployeesController extends BaseController {
 		// Number of results to get
 		$limit  = (Input::has('limit')) ? Input::get('limit') : $this->limit;
 		
-
 		// Checks if an array key "src" exists in $_POST variable
 		if (Input::has('src')) {
 
@@ -109,6 +108,7 @@ class EmployeesController extends BaseController {
       
 	
 	}
+
 
 	function addFilterFieldsToDB($query, $params) {
 

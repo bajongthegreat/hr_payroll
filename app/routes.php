@@ -5,8 +5,7 @@ App::singleton('AccessControl', function()  {
 }); 
 
 
-if (Auth::check() ) {
-	
+if (Auth::check() ) {	
 	$acessControl = App::make('AccessControl');
 	View::share('accessControl', $acessControl);
 	View::share('uri', Input::segment(1));
@@ -33,7 +32,7 @@ if (Auth::check() ) {
 Route::get('/', ['as' => 'main',function()
 {
 
-
+	return Redirect::to('employees');
 	// $v = Validator::make(['em' => 0], array(
  //    'em' => 'required_select',
 	// 	));
@@ -59,56 +58,41 @@ Route::get('/', ['as' => 'main',function()
 
 
 
+
 Route::get('/demo', function()
 {
-	$objPHPExcel = new PHPExcel();
-	$filename = "C:\Tibud\sssloan december.xls";
-	$objPHPExcel = PHPExcel_IOFactory::load("C:\Tibud\New data\chunk.xlsx");
-	// $excelReader = PHPExcel_IOFactory::createReaderForFile($filename);
+	// $objPHPExcel = new PHPExcel();
+	// $filename = "C:\Tibud\sssloan december.xls";
+	// $objPHPExcel = PHPExcel_IOFactory::load("C:\Tibud\New data\chunk.xlsx");
+	// // $excelReader = PHPExcel_IOFactory::createReaderForFile($filename);
 
 
-	// $fields = [];
 
-	// for ($i=4; $i < 50 ; $i++) { 
+	$jExcel = App::make('Acme\Extension\jExcel');
 
-	// 	$row = $objPHPExcel->getActiveSheet()->getRowIterator($i)->current();
-
-	// 	$cellIterator = $row->getCellIterator();
-	// 	// $cellIterator->setIterateOnlyExistingCells(false);
+	$jExcel->loadFile("C:\Tibud\New data\chunk.xlsx");
 
 
-	// 	foreach ($cellIterator as $cell) {
-		  
-
-	// 	    if ($i==4) {
-	// 	    	$fields[] = $cell->getValue();
-	// 	    } else {
-	// 	    	 $values[$i][] =  $cell->getValue() . " ";
-	// 	    }
+	$jExcel->getFieldAndValues();
 
 
-	// 	}
 
-	// }
+	$employees = App::make('Acme\Repositories\Employee\EmployeeRepositoryInterface');
 
-	
+	Event::listen('illuminate.query', function ($sql, $bindings, $times) {
+			echo '<h3 class="page-header">Database Query</h3>';
+				var_dump($sql);
+		});
 
-	// echo '<table><thead>';
-	// foreach ($fields as  $value) {
-	// 	echo '<th>' . $value . '</th>';
-	// }
+	// dd( $jExcel->convertValuesAndFieldsToDBArray(true) );
 
-	// echo '<thead>';
+		try {
+			$data = $jExcel->convertValuesAndFieldsToDBArray(true);
 
-	// foreach ($values as $key => $value) {
-	// 	echo '<tr>';
-	// 	foreach ($value as $v) {
-				
-	// 			echo '<td>' . $v . '</td>';
-				
-	// 	}
-	// 	echo '</tr>';
-	// }
+			// DB::table('employees')->insert($data);
+		} catch (Exception $e) {
+			echo $e->getMessage();
+		}	
 
 	return '';
 });
@@ -127,6 +111,8 @@ Route::get('logout', 'AuthController@logout' );
 Route::group(array('before' => 'auth'), function()
 {
 
+   // ========= GETTING SYNCHRONOUS DATA ==========
+	Route::get('syncdata', 'SyncController@index');
 
    // Philhealth Controller
 	Route::resource('hdmf', 'HDMFController');
@@ -162,6 +148,19 @@ Route::group(array('before' => 'auth'), function()
 // =========== HR Module ================
 Route::group(array('before' => ['auth']), function()
 {
+	// ==================== Violation ================================
+	Route::resource('violations', 'ViolationsController');	
+	
+	// ==================== Medical Establishments  ==================
+	Route::resource('employees/medical_examinations/establishments', 'MedicalEstablishmentsController');	
+		
+	// ==================== Medical Establishments  ==================
+	Route::resource('employees/medical_examinations/diseases', 'DiseasesController');	
+	
+
+	// ============== Annual Medical Examination Module ==============
+	Route::resource('employees/medical_examinations', 'EmployeesMedicalExaminationsController');
+
 	// Employee Controller
     Route::resource('employees', 'EmployeesController');
 	Route::get('employees/promote', 'EmployeesController@promoteview');
@@ -204,6 +203,15 @@ Route::group(array('before' => 'auth'), function()
 {
 	Route::resource('settings/roles', 'RolesController');
 });
+
+// =========== AUX =====================
+Route::group(array('before' => 'auth'), function()
+{
+	Route::get('/import', 'ImportsController@create');
+	Route::post('/import/upload', 'ImportsController@upload');
+	Route::post('/import/start', 'ImportsController@start');
+});
+
 
 
 // =============================================

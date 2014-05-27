@@ -71,9 +71,11 @@ class LeavesController extends BaseController {
 	public function store()
 	{
 
-		$leave_data = Input::except('_token', 'work_id');
+		$leave_data = Input::except('_token', 'work_id', 'ref');
 
 		$id = Input::get('work_id');
+
+		// dd($id);/
 
 
 		$hash_segment = '#employee=' . $id;
@@ -87,6 +89,14 @@ class LeavesController extends BaseController {
 
 		// Store leave data into the database
 		$leave = $this->leaves->file($leave_data);
+
+
+		// Check if the process has a reference page
+		if (Input::has('ref')) {
+			if (Input::get('ref') == 'profile') {
+				return Redirect::action('EmployeesController@show', $id);
+			}
+		}
 
 
 		return Redirect::action('LeavesController@index');;
