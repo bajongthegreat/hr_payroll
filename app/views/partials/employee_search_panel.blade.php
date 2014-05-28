@@ -13,7 +13,7 @@
 
 			<div class="form-group">
 						
-				{{ Form::label('employee_work_id', 'Employee ID: ', array('class' => 'col-sm-2')) }}
+				{{ Form::label('employee_work_id', 'Employee', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-4">
 					<?php 
@@ -29,9 +29,12 @@
 					}
 				
 					 ?>
-					{{ Form::text($name, $value, array('class' => 'form-control', 'id' => 'employee_work_id', $disabled) ) }}
-					
-				</div> 
+					{{ Form::text($name, $value, array('class' => 'form-control', 'id' => 'employee_work_id', $disabled, 'autocomplete' => 'off', 'placeholder' => 'Enter Employee ID or name') ) }}
+
+					<div class="resultContainer"></div>
+				</div>
+
+
 				 <div id="employee_loader" class="col-md-2 text-center" style="margin-top: 5px;"></div>
 
 			</div>
@@ -69,7 +72,7 @@
 
 			<div class="form-group">
 						
-				{{ Form::label('name', 'Name: ', array('class' => 'col-sm-2')) }}
+				{{ Form::label('name', 'Name', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-10">
 					<p id="employee_name">{{ isset($employee_name) ? $employee_name : "-----------"}}</p>
@@ -79,9 +82,9 @@
 
 			<div class="form-group">
 						
-				{{ Form::label('date_hired', 'Date Hired: ', array('class' => 'col-sm-2')) }}
+				{{ Form::label('date_hired', 'Date Hired', array('class' => 'col-sm-2 text-right')) }}
 
-				<div class="col-sm-8">
+				<div class="col-sm-10">
 					<p id="date_hired">{{ isset($date_hired) ? $date_hired : "-----------"}}</p>
 				</div>  
 
@@ -89,6 +92,16 @@
 
 
 
+			<div class="form-group">
+						
+				{{ Form::label('position', 'Position', array('class' => 'col-sm-2 text-right')) }}
+
+				<div class="col-sm-8">
+					<p id="position">{{ isset($position) ? $position : "-----------"}}</p>
+				</div>  
+
+			</div>
+</div>
 	
 
 	</div> <!-- Container -->

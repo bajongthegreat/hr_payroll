@@ -150,7 +150,10 @@ Route::group(array('before' => ['auth']), function()
 {
 	// ==================== Violation ================================
 	Route::resource('violations', 'ViolationsController');	
-	
+
+	// ==================== Disciplinary Actions =====================
+	Route::resource('employees/disciplinary_actions', 'DisciplinaryActionsController');	
+
 	// ==================== Medical Establishments  ==================
 	Route::resource('employees/medical_examinations/establishments', 'MedicalEstablishmentsController');	
 		

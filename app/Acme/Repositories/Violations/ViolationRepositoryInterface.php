@@ -1,4 +1,4 @@
-<?php namespace Acme\Repositories\Violation;
+<?php namespace Acme\Repositories\Violations;
 
 use Acme\Repositories\RepositoryInterface;
 

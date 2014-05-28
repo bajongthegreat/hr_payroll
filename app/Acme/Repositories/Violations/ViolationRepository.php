@@ -1,6 +1,6 @@
 <?php namespace Acme\Repositories\Violations;
 
-use Violation;
+use Acme\Repositories\Violations\Violation;
 use Acme\Repositories\RepositoryAbstract;
 
 class ViolationRepository extends RepositoryAbstract implements ViolationRepositoryInterface {

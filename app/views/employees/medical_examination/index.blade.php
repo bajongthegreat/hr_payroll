@@ -3,13 +3,7 @@
 @section('content')
 
 <style type="text/css">
-.parent{
-    text-align: center;
-}
 
-.parent div{
-    display: inline-block;
-}
 </style>
 <h2 class="page-header"> Medical Examinations</h2>
 

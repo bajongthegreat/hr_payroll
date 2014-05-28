@@ -47,6 +47,29 @@
 
   @include('partials.breadcrumbs')
 
+
+<div class="panel panel-default smooth-panel-edges" >
+      <div class="panel-body">
+      
+        <div class="parent">
+  <div class="child">
+      <a href="{{ action('EmployeesMedicalExaminationsController@index') }}" class="btn btn-default"> <span class="glyphicon glyphicon-th  "></span> Manage Medical Examinations</a>
+</div>
+
+<div class="child">
+      <a href="{{ action('LeavesController@index') }}" class="btn btn-default"> <span class="glyphicon glyphicon-dashboard"></span> Manage Leaves</a>
+</div>
+  
+
+<div class="child">
+      <a href="{{ action('LeavesController@index') }}" class="btn btn-default"> <span class="glyphicon glyphicon-dashboard"></span> Disciplinary Actions</a>
+</div>
+    </div>
+
+
+      </div>
+</div>
+
   @if (Input::has('src'))
   <p>Search term: <span class="label label-default">{{Input::get('src') }}</span></p>
   @endif

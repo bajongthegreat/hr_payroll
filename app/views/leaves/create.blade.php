@@ -3,7 +3,6 @@
 
 
 @section('content')
-<div class="content-center">
 
 <div class="page-header">
 <h1>Application for Leave <a  href="{{ action('LeavesController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a>
@@ -82,7 +81,6 @@
 {{ Form::close() }}
 
 
-</div> <!-- Content Center End -->
 @stop
 
 
@@ -95,6 +93,8 @@
             	$('#start_date, #end_date, #file_date').datetimepicker({
                     pickTime: false
                 });
+
+                $('.resultContainer').hide();
 
                 $("#start_date").on("dp.change",function (e) {
 	               $('#end_date').data("DateTimePicker").setMinDate(e.date);

@@ -5,11 +5,15 @@ Currently working on:
 
 User Roles  --> My attempt to implement RBAC in my system.
 
-TODO::
+DONE:
 -Annual Physical Examination result
-Rework employees table -- remove annual_pe
+-Violations
 
-- Violation
+TODO::
+**Code cleanup for employees
+**Rework employees table -- remove annual_pe
+**Integrate employee violations to each employee's profile.
+
 
 
 TODO:

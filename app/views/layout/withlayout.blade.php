@@ -46,7 +46,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">TIBUD</a>
+          <a class="navbar-brand" href="#"> <img src="{{ asset('img/logo.png') }}" height="24" width="30"> TIBUD</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -86,8 +86,13 @@
           <ul class="dropdown-menu">
             <li><a href="{{ action("DepartmentsController@index") }}">Department</a></li>
             <li><a href="{{ action("PositionsController@index") }}">Position</a></li>
+            <li><a href="{{ action("EmployeesMedicalExaminationsController@index") }}">Physical Examinations</a></li>
+            <li><a href="{{ action("ViolationsController@index") }}">Violations</a></li>
+            
+
             <li><a href="{{ action("ApplicantsController@index") }}">Applicant Management</a></li>
             <li><a href="{{ action("EmployeesController@index") }}">Employee Management</a></li>
+
              <li><a href="{{ action("LeavesController@index") }}">Leaves Management</a></li>
             <li><a href="#">Loans</a></li>
           </ul>
@@ -175,7 +180,11 @@
       var hrApp = new myApp(mainLink);
 
      var _globalObj = {{ json_encode(array('_token'=> csrf_token(),
-                                           '_baseURL' =>  route('main') ) ) }}
+                                           '_baseURL' =>  route('main'),
+                                           'loaderImage' => asset('img/loading.gif') 
+                                           ) 
+                                      ) 
+                      }}
 
 
 
@@ -192,6 +201,7 @@
     <script type="text/javascript" src="{{ asset('jquery/jmfileupload.js') }}"></script>
     <script src="{{ asset('jquery/jmsearcheable.js') }}"></script>
 
+     <script src="{{ asset('jquery/employeeProfileSearcher.js') }}"></script>
 
 
     <script type="text/javascript">
@@ -217,6 +227,7 @@
 
     <!-- HR Payroll components -->
      <script src="{{ asset('jquery/hr_applicants.js') }}"></script>
+
      @yield('later_scripts')
   </body>
 </html>

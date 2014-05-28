@@ -14,7 +14,7 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('firstname', 'First Name ', array('class' => 'col-sm-4')) }}
+					{{ Form::label('firstname', 'First Name ', array('class' => 'col-sm-4 text-right text-right')) }}
 
 					<div class="col-sm-4">
 						<p class="form-control-static">{{ ucfirst($employee->firstname) }}</p>
@@ -27,7 +27,7 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('middlename', 'Middle Name ', array('class' => 'col-sm-4')) }}
+					{{ Form::label('middlename', 'Middle Name ', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
 						<p class="form-control-static">{{ ucfirst($employee->middlename) }}</p>
@@ -40,7 +40,7 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('lastname', 'Last Name ', array('class' => 'col-sm-4')) }}
+					{{ Form::label('lastname', 'Last Name ', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
 						<p class="form-control-static">{{ ucfirst($employee->lastname) }}</p>
@@ -53,13 +53,13 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('birthdate', 'Birth date ', array('class' => 'col-sm-4')) }}
+					{{ Form::label('birthdate', 'Birth date ', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
 						<p class="form-control-static">
 							<?php 
 							$date = new DateTime($employee->birthdate);
-							echo $date->format('F jS  Y');
+							echo $date->format('F d Y');
 							?>
 						</p>
 					</div>
@@ -71,10 +71,10 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('birthplace', 'Birth Place ', array('class' => 'col-sm-4')) }}
+					{{ Form::label('birthplace', 'Birth Place ', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ ucfirst( $employee->birthplace) }}</p>
+						<p class="form-control-static">{{ ($employee->birthplace) ? ucfirst( $employee->birthplace) : '<span class="label label-default">Not specified</span>' }}</p>
 					</div>
 
 				</div>
@@ -86,7 +86,7 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('marital_status', 'Marital Status ', array('class' => 'col-sm-4')) }}
+					{{ Form::label('marital_status', 'Marital Status ', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
 						<p class="form-control-static">{{ ucfirst( $employee->marital_status) }}</p>
@@ -99,7 +99,7 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('gender', 'Gender', array('class' => 'col-sm-4')) }}
+					{{ Form::label('gender', 'Gender', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
 						<p class="form-control-static">{{ ucfirst($employee->gender) }}</p>
@@ -112,10 +112,10 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('address', 'Address', array('class' => 'col-sm-4')) }}
+					{{ Form::label('address', 'Address', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->address }}</p>
+						<p class="form-control-static">{{ ($employee->address ) ? $employee->address  : '<span class="label label-default">Not specified</span>' }}</p>
 					</div>
 
 				</div>
@@ -125,13 +125,13 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('date_hired', 'Date Hired', array('class' => 'col-sm-4')) }}
+					{{ Form::label('date_hired', 'Date Hired', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
 						<p class="form-control-static">
 							<?php 
 							$date = new DateTime($employee->date_hired);
-							echo $date->format('F jS  Y');
+							echo $date->format('F d  Y');
 							?>
 						</p>
 					</div>
@@ -146,7 +146,7 @@
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 		    <h3 class="panel-title"><h4><a data-toggle="collapse" data-parent="#accordion" href="#parentsinfo">
-          Parent's Information
+          In case of emergency
         </a></h4></h3>
 		  </div>
 		  <div id="parentsinfo" class="panel-body panel-collapse collapse in">
@@ -155,10 +155,10 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('mothers_name', 'Mother\'s Name', array('class' => 'col-sm-4')) }}
+					{{ Form::label('in_case_of_emergency_name', 'Name', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->mothers_name }}   </div>
+						<p class="form-control-static">{{ $employee->in_case_of_emergency_name or '<span class="label label-default">Not specified</span>' }}   </div>
 					</div>
 
 				</div>
@@ -169,10 +169,50 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('fathers_name', 'Father\'s Name', array('class' => 'col-sm-4', 'required')) }}
+					{{ Form::label('in_case_of_emergency_contact', 'Contact Number', array('class' => 'col-sm-4 text-right', 'required')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->fathers_name }}   </div>
+						<p class="form-control-static">{{ $employee->in_case_of_emergency_contact or '<span class="label label-default">Not specified</span>'}}   </div>
+					</div>
+
+				</div>
+
+				
+
+		  </div>  <!-- End of Body -->
+		</div> <!-- End of Panel -->
+
+
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+		    <h3 class="panel-title"><h4><a data-toggle="collapse" data-parent="#accordion" href="#parentsinfo">
+          Parent's Information
+        </a></h4></h3>
+		  </div>
+		  <div id="parentsinfo" class="panel-body panel-collapse collapse in">
+
+		  	<div class="row">
+
+				<div class="form-group">
+							
+					{{ Form::label('mothers_name', 'Mother\'s Name', array('class' => 'col-sm-4 text-right')) }}
+
+					<div class="col-sm-4">
+						<p class="form-control-static">{{ (strlen($employee->mothers_name) > 0) ?  $employee->mothers_name : '<span class="label label-default">Not specified</span>'}}   </div>
+					</div>
+
+				</div>
+
+
+
+		<div class="row">
+
+				<div class="form-group">
+							
+					{{ Form::label('fathers_name', 'Father\'s Name', array('class' => 'col-sm-4 text-right', 'required')) }}
+
+					<div class="col-sm-4">
+						<p class="form-control-static">{{  (strlen($employee->fathers_name) > 0) ?  $employee->fathers_name : '<span class="label label-default">Not specified</span>'}}   </div>
 					</div>
 
 				</div>
@@ -193,7 +233,7 @@
 
 						<div class="form-group">
 									
-							{{ Form::label('sss_id', 'SSS ID', array('class' => 'col-sm-4')) }}
+							{{ Form::label('sss_id', 'SSS ID', array('class' => 'col-sm-4 text-right')) }}
 
 							<div class="col-sm-4">
 								<p class="form-control-static">{{ $employee->sss_id }}   </div>
@@ -210,7 +250,7 @@
 
 						<div class="form-group">
 									
-							{{ Form::label('philhealth_id', 'Philhealth ID', array('class' => 'col-sm-4')) }}
+							{{ Form::label('philhealth_id', 'Philhealth ID', array('class' => 'col-sm-4 text-right')) }}
 
 							<div class="col-sm-4">
 								<p class="form-control-static">{{ $employee->philhealth_id }}</p>
@@ -227,7 +267,7 @@
 
 						<div class="form-group">
 									
-							{{ Form::label('pagibig_id', 'Pagibig ID', array('class' => 'col-sm-4')) }}
+							{{ Form::label('pagibig_id', 'Pagibig ID', array('class' => 'col-sm-4 text-right')) }}
 
 							<div class="col-sm-4">
 								<p class="form-control-static">{{ $employee->pagibig_id }}</p>
@@ -244,7 +284,7 @@
 
 						<div class="form-group">
 									
-							{{ Form::label('tin_number', 'TIN ID', array('class' => 'col-sm-4')) }}
+							{{ Form::label('tin_number', 'TIN ID', array('class' => 'col-sm-4 text-right')) }}
 
 							<div class="col-sm-4">
 								<p class="form-control-static">{{ $employee->tin_number }}</p>
@@ -272,7 +312,7 @@
 
 						<div class="form-group">
 									
-							{{ Form::label('sss_id', 'Work Assignment', array('class' => 'col-sm-4')) }}
+							{{ Form::label('sss_id', 'Work Assignment', array('class' => 'col-sm-4 text-right')) }}
 
 							<div class="col-sm-4">
 								<p class="form-control-static">  {{ (isset($employee->position->name) ) ? $employee->position->name : '<span class="label label-default">Not specified</span>'}}  </div>
@@ -286,7 +326,7 @@
 
 						<div class="form-group">
 									
-							{{ Form::label('sss_id', 'Salary', array('class' => 'col-sm-4')) }}
+							{{ Form::label('sss_id', 'Salary', array('class' => 'col-sm-4 text-right')) }}
 
 							<div class="col-sm-4">
 								<p class="form-control-static">  {{ (isset($employee->salary) ) ? 'PHP ' . number_format( $employee->salary, 2) : '<span class="label label-default">Not specified</span>'}}  </div>
@@ -302,7 +342,7 @@
 
 						<div class="form-group">
 									
-							{{ Form::label('sss_id', 'Annual PE', array('class' => 'col-sm-4')) }}
+							{{ Form::label('sss_id', 'Annual PE', array('class' => 'col-sm-4 text-right')) }}
 
 							<div class="col-sm-4">
 								<p class="form-control-static"> {{ ($employee->annual_pe == 1) ? '<span class="label label-success">OK</span>' : '<span class="label label-default">None</span>' }}  </div>
@@ -316,21 +356,22 @@
 
 						<div class="form-group">
 									
-							{{ Form::label('sss_id', 'P.P.E Issuance', array('class' => 'col-sm-4')) }}
+							{{ Form::label('sss_id', 'P.P.E Issuance', array('class' => 'col-sm-4 text-right')) }}
 
 							<div class="col-sm-4">
-								<p class="form-control-static"> {{ ($employee->ppe_issuance == 1) ? '<span class="label label-success">OK</span>' : '<span class="label label-default">None</span>' }}   </div>
+						
+									<p class="form-control-static"> {{ ($employee->ppe_issuance == 1) ? '<span class="label label-success">OK</span>' : '<span class="label label-default">None</span>' }}  </div>
 
 							
 
-						</div>
+							</div>
 				</div> <!-- End of Row -->
 				
 				<div class="row">
 
 						<div class="form-group">
 									
-							{{ Form::label('sss_id', 'With R-1A', array('class' => 'col-sm-4')) }}
+							{{ Form::label('sss_id', 'With R-1A', array('class' => 'col-sm-4 text-right')) }}
 
 							<div class="col-sm-4">
 								<p class="form-control-static"> {{ ($employee->with_r1a == 1) ?  '<span class="label label-success">Reported</span>' : '<span class="label label-default">None</span>' }}   </div>
@@ -346,7 +387,7 @@
 
 						<div class="form-group">
 									
-							{{ Form::label('membership_status', 'Membership Status', array('class' => 'col-sm-4')) }}
+							{{ Form::label('membership_status', 'Membership Status', array('class' => 'col-sm-4 text-right')) }}
 
 							<div class="col-sm-4">
 								<p class="form-control-static"> <?php echo ($employee->membership_status == "associate") ? '<span class="label label-default">' . ucfirst($employee->membership_status) . '</span>' : '<span class="label label-success">' . ucfirst($employee->membership_status) . '</span>';  ?> </div>
@@ -360,7 +401,7 @@
 
 						<div class="form-group">
 									
-							{{ Form::label('employment_status', 'Employment Status', array('class' => 'col-sm-4')) }}
+							{{ Form::label('employment_status', 'Employment Status', array('class' => 'col-sm-4 text-right')) }}
 
 							<div class="col-sm-4">
 								<p class="form-control-static"> {{ ucfirst($employee->employment_status)}}   </div>

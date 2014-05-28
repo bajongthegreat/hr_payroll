@@ -40,3 +40,6 @@ View::composer(['employees.medical_examination.partials.single_add'], 'Acme\Comp
 
 
 View::composer(['employees.partial.leaves'], 'Acme\Composers\LeavesComposer@leavesObject');
+View::composer(['employees.partial.violations'], 'Acme\Composers\ViolationComposer@ViolationsObject');
+
+View::composer(['disciplinary_actions.create', 'disciplinary_actions.edit'], 'Acme\Composers\ViolationComposer');

@@ -185,7 +185,7 @@ $(document).ready(function() {
 
 
 
-   $('#_applicants_date_hired, #_applicants_birthdate, #birthdate, #date_conducted').datetimepicker({
+   $('#_applicants_date_hired, #_applicants_birthdate, #birthdate, #date_conducted, .text-date').datetimepicker({
                     pickTime: false
     });
 

@@ -55,6 +55,7 @@
 				  </a>
 				  <a href="?v=leaves" class="list-group-item"><span class="glyphicon glyphicon glyphicon-home"></span>&nbsp;   Leaves</a>
 				  <a href="?v=medical" class="list-group-item"><span class="glyphicon glyphicon glyphicon-briefcase"></span>&nbsp;   Medical Examination</a>
+				  <a href="?v=violations" class="list-group-item"><span class="glyphicon glyphicon glyphicon-hand-down"></span>&nbsp;   Violations</a>
 				
 				  <a href="#" class="list-group-item"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;   Attendance</a>
 				  <a href="#" class="list-group-item"><span class="glyphicon glyphicon-star"></span>&nbsp;   Promotions</a>
@@ -94,28 +95,17 @@
 				@include('employees.partial.medical');
 			@elseif ($v == 'leaves')
 				@include('employees.partial.leaves');
+			@elseif($v =='violations')
+				@include('employees.partial.violations');
 			@else
 				@include('partials.requirements')
 				@include('employees.partial.profile')
 			@endif
 		@endif
 
-		
-
-	
-
-				
-
-			
-
 		</div>  <!-- End of Personal Information -->
 
 		@include('partials.errors')
-
-
-
-
-
 
 @stop
 

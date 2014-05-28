@@ -109,6 +109,20 @@ class BackendServiceProvider extends ServiceProvider
 		$this->app->bind(
 			'Acme\Repositories\Employee\MedicalExamination\Disease\DiseaseRepositoryInterface',
 		    'Acme\Repositories\Employee\MedicalExamination\Disease\DiseaseRepository'
-		);		
+		);	
+
+
+		// Bind the CompanyInterface into the class CompanyRepository
+		$this->app->bind(
+			'Acme\Repositories\Violations\ViolationRepositoryInterface',
+		    'Acme\Repositories\Violations\ViolationRepository'
+		);	
+
+		// Bind the CompanyInterface into the class CompanyRepository
+		$this->app->bind(
+			'Acme\Repositories\Employee\DisciplinaryAction\DisciplinaryActionRepositoryInterface',
+		    'Acme\Repositories\Employee\DisciplinaryAction\DisciplinaryActionRepository'
+		);	
+
 	}
 }
