@@ -12,11 +12,14 @@ use Acme\Repositories\Company\Department\DepartmentRepositoryInterface;
 class DepartmentsController extends BaseController {
 	
 	protected $departments;
+	protected $db_field_to_use = ['name', 'status'];
 	 /**
      * Instantiate a new UserController instance.
      */
     public function __construct(DepartmentRepositoryInterface $departments)
     {
+
+    	parent::__construct();
     	// For Cross Site Request Forgery protection
         $this->beforeFilter('csrf', array('on' => 'post'));
 
@@ -34,16 +37,31 @@ class DepartmentsController extends BaseController {
 	 */
 	public function index()
 	{
-		
-		
-		$departments = $this->departments->all();
+		// Check access control
+		if ( !$this->accessControl->hasAccess('departments', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
+		if (Request::has('src')) {
+			$src = Input::get('src');
+			$departments = DB::table('departments')
+			                 ->OrWhere('departments.name', 'LIKE', "%$src%")
+			                 ->OrWhere('departments.status', 'LIKE', "%$src%")
+			                 ->OrWhere('companies.name', 'LIKE', "%$src%")
+			                 ->join('companies', 'companies.id', '=', 'departments.company_id')
+			                 ->select('companies.name as company', 'departments.id', 'departments.name', 'departments.status');
+
+		} else {
+					$departments = $this->departments->getAllWith([]);
+
+		}
 
 		if (Request::get('output') == 'json') {
 			return Response::json($departments);
-		} 
-		
+		}
 
 
+			$departments = $departments->paginate(10);
 
         return View::make('departments.index', compact('departments'));
 	}
@@ -55,6 +73,11 @@ class DepartmentsController extends BaseController {
 	 */
 	public function create()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('departments', 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
         return View::make('departments.create');
 	}
 
@@ -66,6 +89,11 @@ class DepartmentsController extends BaseController {
 	public function store()
 	{
 		
+		// Check access control
+		if ( !$this->accessControl->hasAccess('departments', 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$new_department = Input::only('name','company_id');
 
 		$new_department['status'] = 'active';
@@ -98,6 +126,11 @@ class DepartmentsController extends BaseController {
 	 */
 	public function show($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('departments', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
         return View::make('departments.show');
 	}
 
@@ -109,6 +142,12 @@ class DepartmentsController extends BaseController {
 	 */
 	public function edit($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('departments', 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$department = $this->departments->find($id)->get()[0];
 
 		
@@ -123,6 +162,11 @@ class DepartmentsController extends BaseController {
 	 */
 	public function update($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('departments', 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$new_department = array();
 		$new_department = Input::only('name','status','company_id');
 
@@ -145,6 +189,11 @@ class DepartmentsController extends BaseController {
 	 */
 	public function destroy($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('departments', 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$department = $this->departments->delete($id);
 
 		if ($department){

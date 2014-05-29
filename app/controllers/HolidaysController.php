@@ -6,11 +6,15 @@ class HolidaysController extends BaseController {
 
 
 	protected $holidays;
+	protected $db_fields_to_use = ['name', 'type', 'remarks'];
+	protected $default_uri = 'holidays';
 		 /**
 	     * Instantiate a newController instance.
 	     */
 	    public function __construct(HolidayRepositoryInterface $holidays)
 	    {
+	    	parent::__construct();
+
 	    	// For Cross Site Request Forgery protection
 	        $this->beforeFilter('csrf', array('on' => 'post'));
 	
@@ -30,14 +34,34 @@ class HolidaysController extends BaseController {
 	 */
 	public function index()
 	{
-		$year = Input::get('year');
 
-		if ($year) {
-			$holidays = $this->holidays->byYear($year)->get();
-		} else {
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
+		$year = Input::get('year');
+		
+
+
+
+
+		if (Input::has('src')) {
+			$src = Input::get('src');
+
+			$holidays =  $this->holidays->findLike($src, $this->db_fields_to_use)->get();
+
+		} 
+
+
+			if ($year) {
+				$holidays = $this->holidays->byYear($year)->get();
+			} else {
 			$holidays = $this->holidays->all();
 		}
 
+
+		
 		
 
 		return View::make('holidays.index', compact('holidays'));
@@ -51,6 +75,12 @@ class HolidaysController extends BaseController {
 	 */
 	public function create()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		return View::make('holidays.create');
 	}
 
@@ -62,6 +92,12 @@ class HolidaysController extends BaseController {
 	 */
 	public function store()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$data = Input::only('holiday_date','remarks','type','name');
 
 		if ($this->holidays->create($data))  {
@@ -81,6 +117,12 @@ class HolidaysController extends BaseController {
 	 */
 	public function show($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		return View::make('holidays.show');
 	}
 
@@ -93,6 +135,12 @@ class HolidaysController extends BaseController {
 	 */
 	public function edit($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$holiday = $this->holidays->find($id)->get();
 
 		if (count($holiday) == 1) {
@@ -110,7 +158,13 @@ class HolidaysController extends BaseController {
 	 */
 	public function update($id)
 	{
-		$new_holiday_data = Input::only('holiday_start','holiday_end','remarks','type','name');
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
+		$new_holiday_data = Input::only('holiday_date','remarks','type','name');
 
 		if ($this->holidays->find($id)->update($new_holiday_data)) {
 			$status = 'success';
@@ -131,7 +185,12 @@ class HolidaysController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+		return $this->holidays->find($id)->delete();
 	}
 
 }

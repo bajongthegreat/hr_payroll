@@ -29,9 +29,9 @@
 
 
   <div class="search-container col-md-4 pull-right">
-
-  <input class="form-control " name="src" placeholder="Search for medical records." id="search" ng-model="query">
-
+   {{ Form::open(['action' => 'EmployeesMedicalExaminationsController@index', 'method' => 'GET']) }}
+  <input class="form-control " name="src" placeholder="Search for medical records." id="search" ng-model="query" value="{{Input::get('src')}}">
+ {{ Form::close() }}
 
   </div>
 
@@ -68,4 +68,9 @@
 
 	</tbody>
 </table>
+	
+		<?php $collection = $physical_examinations; ?>
+		@include('partials.pagination_links')
+
+
 @stop

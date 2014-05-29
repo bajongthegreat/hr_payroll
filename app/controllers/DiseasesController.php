@@ -10,12 +10,15 @@ class DiseasesController extends \BaseController {
 
 	protected $diseases;
 	protected $validator;
-
+	protected $default_uri = 'employees/medical_examinations/diseases';
 		 /**
 	     * Instantiate a newController instance.
 	     */
 	    public function __construct(DiseaseRepositoryInterface $diseases, jValidator $validator)
 	    {
+
+	    	parent::__construct();
+
 	    	// For Cross Site Request Forgery protection
 	        $this->beforeFilter('csrf', array('on' => 'post'));
 	
@@ -39,6 +42,11 @@ class DiseasesController extends \BaseController {
 	 */
 	public function index()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$diseases = $this->diseases->all();
 
 		return View::make('diseases.index', compact('diseases'));
@@ -53,7 +61,10 @@ class DiseasesController extends \BaseController {
 	public function create()
 	{
 
-
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 
 		return View::make('diseases.create');
 	}
@@ -66,6 +77,11 @@ class DiseasesController extends \BaseController {
 	 */
 	public function store()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 		
 		$post_data = Input::only('name');
 
@@ -103,6 +119,11 @@ class DiseasesController extends \BaseController {
 	 */
 	public function edit($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$disease = $this->diseases->find($id)->get()->first();
 
 		if (!$disease) {
@@ -122,6 +143,11 @@ class DiseasesController extends \BaseController {
 	public function update($id)
 	{
 		
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$post_data = Input::only('name');
 
 
@@ -146,6 +172,12 @@ class DiseasesController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		return $this->diseases->find($id)->delete();
 	}
 

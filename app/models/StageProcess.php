@@ -8,4 +8,8 @@ class StageProcess extends Eloquent {
 	public static $rules = array(
 		'stage_process' => 'required'
 	);
+
+	public function parent() {
+		return $this->hasOne('StageProcess', 'id');
+	}
 }

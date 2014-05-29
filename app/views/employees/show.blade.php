@@ -2,6 +2,9 @@
 
 @section('content')
 
+
+			<?php $v = Input::get('v'); ?>
+
 <div class="container-fluid">
 
 
@@ -37,11 +40,7 @@
 				<div class="menu">
 
 					<!-- Progress bar for Image upload -->
-					<div class="progress ">
-					  <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-					    0
-					  </div>
-					</div>
+					@include('partials.progressbar')
 
 				</div>
 
@@ -50,17 +49,11 @@
 				<div class="profile-label"> <b>ID: </b> <?php echo (isset($employee->employee_work_id)) ? $employee->employee_work_id : 'Not specified'; ?></div>
 				<div class="profile-label"> <b>Company: </b> <?php echo (isset($company)) ? $company : 'Not specified'; ?></div>
 				<div class="list-group">
-				  <a href="?v=profile" class="list-group-item active">
-				   <span class="glyphicon glyphicon-user"></span>&nbsp;  Profile
-				  </a>
-				  <a href="?v=leaves" class="list-group-item"><span class="glyphicon glyphicon glyphicon-home"></span>&nbsp;   Leaves</a>
-				  <a href="?v=medical" class="list-group-item"><span class="glyphicon glyphicon glyphicon-briefcase"></span>&nbsp;   Medical Examination</a>
-				  <a href="?v=violations" class="list-group-item"><span class="glyphicon glyphicon glyphicon-hand-down"></span>&nbsp;   Violations</a>
-				
-				  <a href="#" class="list-group-item"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;   Attendance</a>
-				  <a href="#" class="list-group-item"><span class="glyphicon glyphicon-star"></span>&nbsp;   Promotions</a>
-				  <a href="#" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span>&nbsp;   Loans</a>
+
+				   <!-- Shortcut for other route records -->
+					@include('employees.partial.showlinks')  
 				</div>
+
 			</div>
 			<div class="pull-left">
  <a  href="{{ action('EmployeesController@index') }}" class="btn btn-default " style="margin-top: 15px"><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a>
@@ -84,24 +77,8 @@
 
 	<div class="member-info-holder col-md-8", #holder>
 
-		@if (Request::segment(3) == 'edit') 
-		{{ Form::model($employee, array('method' => 'patch', 'action' => ['EmployeesController@update', $employee->employee_work_id])) }}
-			@include('employees.partial.employee_edit')
-			
-		@else
-			<?php $v = Input::get('v'); ?>
-
-			@if ($v == 'medical')
-				@include('employees.partial.medical');
-			@elseif ($v == 'leaves')
-				@include('employees.partial.leaves');
-			@elseif($v =='violations')
-				@include('employees.partial.violations');
-			@else
-				@include('partials.requirements')
-				@include('employees.partial.profile')
-			@endif
-		@endif
+			<!-- Profile content manager -->
+			@include('employees.partial.profile_content_manager')
 
 		</div>  <!-- End of Personal Information -->
 

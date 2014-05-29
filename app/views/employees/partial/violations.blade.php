@@ -6,8 +6,8 @@
 		  </div>
 
 		  <?php 
-		  	$violations = $violations->find($employee->id, 'employee_id');
-		  	
+		  	$violations = $violations->findViolation($employee->id, 'employee_id');
+	
 		  ?>
 			  <div class="panel panel-default smooth-panel-edges">
 			  <div class="panel-body">
@@ -15,14 +15,22 @@
 			    <table class="table table-striped">
 				  	<thead>
 				  		
-				  		<th>Start date</th>
-				  		<th>End date</th>
-				  		<th>Duration</th>
-				  		<th>Status</th>
+				  		<th>Violation Code</th>
+				  		<th>Penalty</th>
+				  		<th>Date Violated</th>
+				  		<th>Effectivity Date</th>
 				  	</thead>
 
 				  	<tbody>
 
+				  		@foreach($violations as $violation)
+				  			<tr>
+				  				<td> {{ $violation->violation_code }}</td>
+				  				<td> {{ ucfirst($violation->violation_penalty) }}</td>
+				  				<td> {{ $violation->violation_date }}</td>
+				  				<td> {{ $violation->violation_effectivity_date or '<span class="label label-default">N/A</span>' }} </td>
+				  			</tr>
+				  		@endforeach
 				 
 				  		
 				  	</tbody>
@@ -34,14 +42,14 @@
 
 		  @if (count($violations) == 0)
 		  
-		  	<div class="alert alert-warning text-center smooth-panel-edges">No leave records found.</div>
+		  	<div class="alert alert-warning text-center smooth-panel-edges">No Violation records found.</div>
 
 		  @endif
 
 		  <div class="panel panel-default smooth-panel-edges" >
 		  <div class="panel-body">
-		    <a href="{{ action('LeavesController@create') }}?ref=profile#employee={{$employee->employee_work_id}}" class="btn btn-primary pull-left">Add record</a>
-		    <a href="{{ action('LeavesController@index') }}" class="btn btn-default pull-right">Go to Leaves</a>
+		    <a href="{{ action('DisciplinaryActionsController@create') }}?ref=profile#employee={{$employee->employee_work_id}}" class="btn btn-primary pull-left">Add record</a>
+		    <a href="{{ action('DisciplinaryActionsController@index') }}" class="btn btn-default pull-right">Go to Disciplinary Actions </a>
 		  </div>
 		</div>
 				

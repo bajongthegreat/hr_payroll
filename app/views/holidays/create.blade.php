@@ -6,7 +6,7 @@
 <div class="content-center">
 
 <div class="page-header">
-<h1>Add Holiday  <a  href="{{ action('DepartmentsController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a>
+<h1>Add Holiday  <a  href="{{ action('HolidaysController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a>
 </h1>
 </div>
 

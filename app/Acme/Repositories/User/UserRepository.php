@@ -19,16 +19,16 @@ class UserRepository extends RepositoryAbstract implements UserRepositoryInterfa
 	    $this->model = $model;
 	 }
 
-	 public function relativeSearch($src, $filter_params, $db_field_to_use) {
+	 // public function relativeSearch($src, $filter_params, $db_field_to_use) {
 	 	
-	 	return $this->findLike($src, $db_field_to_use , [] )->where(function($query) use ($filter_params) {
+	 // 		return $this->findLike($src, $db_field_to_use , [] )->where(function($query) use ($filter_params) {
 
-				if (isset($filter_params)) {
-					$this->addFilterFieldsToDB($query, $filter_params);
-				}
+		// 		if (isset($filter_params)) {
+		// 			$this->addFilterFieldsToDB($query, $filter_params);
+		// 		}
 			
-			});
-	 }
+		// 	});
+	 // }
 
 		
 

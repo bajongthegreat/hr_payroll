@@ -10,12 +10,15 @@ class RolesController extends \BaseController {
 
 	protected $roles;
 	protected $validator;
+	protected $default_uri='settings/roles';
 
 		 /**
 	     * Instantiate a newController instance.
 	     */
 	    public function __construct(RolesRepositoryInterface $roles, jValidator $validator)
 	    {
+	    	parent::__construct();
+	    	
 	    	// For Cross Site Request Forgery protection
 	        $this->beforeFilter('csrf', array('on' => 'post'));
 	
@@ -36,6 +39,11 @@ class RolesController extends \BaseController {
 	 */
 	public function index()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$roles = $this->roles->all();
 
 		return View::make('roles.index', compact('roles'));
@@ -49,6 +57,11 @@ class RolesController extends \BaseController {
 	 */
 	public function create()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		return View::make('roles.create');
 	}
 
@@ -60,6 +73,11 @@ class RolesController extends \BaseController {
 	 */
 	public function store()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$errors = [];
 
 		// --------- Data Gathering --------------
@@ -131,7 +149,10 @@ class RolesController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 	}
 
 	/**
@@ -143,6 +164,11 @@ class RolesController extends \BaseController {
 	 */
 	public function edit($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$role = $this->roles->find($id)->get()->first();
 
 		if (!$role) return Redirect::action('RolesController@index')->with('error', ['No role found with that ID.']);
@@ -161,6 +187,11 @@ class RolesController extends \BaseController {
 	 */
 	public function update($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$errors = [];
 
 		// --------- Data Gathering --------------
@@ -246,6 +277,11 @@ class RolesController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		return $this->roles->find($id)->delete();
 	}
 

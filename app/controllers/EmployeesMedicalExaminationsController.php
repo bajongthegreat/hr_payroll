@@ -8,11 +8,15 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 
 	protected $physical_examinations;
 	protected $employees;
+
+	protected $default_uri = 'employees/medical_examinations';
 		 /**
 	     * Instantiate a newController instance.
 	     */
 	    public function __construct(EmployeeRepositoryInterface $employees, EmployeePhysicalExaminationRepositoryInterface $physical_examinations)
 	    {
+	    	parent::__construct();
+
 	    	// For Cross Site Request Forgery protection
 	        $this->beforeFilter('csrf', array('on' => 'post'));
 	
@@ -32,11 +36,27 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 	 */
 	public function index()
 	{
-		$physical_examinations = $this->physical_examinations->getAllExaminationDataWithEmployee();
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 
-		// $physical_examinations = Paginator::make($physical_examinations->toArray(), $totalItems, $perPage);
-		// dd($physical_examinations);
+		if (Input::has('src')) {
+			$src = Input::get('src');
 
+			$physical_examinations = $this->physical_examinations->findAllExaminationsWithEmployee($src);
+		} else {
+			$physical_examinations = $this->physical_examinations->getAllExaminationDataWithEmployee();
+	
+		}
+		
+
+		if (Input::get('output') == 'json') {
+			return Response::json($physical_examinations);
+		}
+
+		$physical_examinations = $physical_examinations->paginate(10);
+		
 		return View::make('employees.medical_examination.index', compact('physical_examinations'));
 	}
 
@@ -48,6 +68,11 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 	 */
 	public function create()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 		return View::make('employees.medical_examination.create');	
 	}
 
@@ -187,6 +212,12 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 	}
 	public function store()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		if ( Request::ajax() )
 		{
 			return $this->SaveBulk();
@@ -208,6 +239,12 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 	 */
 	public function show($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		View::make('employees.medical_examination.show');
 	}
 
@@ -220,6 +257,12 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 	 */
 	public function edit($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		View::make('employees.medical_examination.edit');
 	}
 
@@ -232,6 +275,12 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 	 */
 	public function update($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		if (Request::ajax() ) {
 
 			if (Input::has('_refer') && Input::get('_refer') == 'employee_profile') {
@@ -261,7 +310,11 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 	}
 
 }

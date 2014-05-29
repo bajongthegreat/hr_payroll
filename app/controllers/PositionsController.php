@@ -4,11 +4,15 @@ use Acme\Repositories\Company\Position\PositionRepositoryInterface;
 class PositionsController extends BaseController {
 		
 	protected $positions;
+	protected $default_uri = 'positions';
+
 	 /**
      * Instantiate a new UserController instance.
      */
     public function __construct(PositionRepositoryInterface $positions)
     {
+    	parent::__construct();
+
     	// For Cross Site Request Forgery protection
         $this->beforeFilter('csrf', array('on' => 'post'));
 
@@ -27,14 +31,30 @@ class PositionsController extends BaseController {
 	public function index()
 	{
 
-		// Get all positions and order by rank
-		$positions = $this->positions->getAllWith(['department'])->orderBy('rank')->get();
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 
+		if (Request::has('src') ) {
+			$src= Input::get('src');
+			$positions = DB::table('positions')
+			                  ->OrWhere('positions.name', 'LIKE', "%$src%")
+			                  ->OrWhere('departments.name', 'LIKE', "%$src%")
+			                  ->join('departments', 'departments.id', '=' ,'positions.department_id')
+			                  ->select('positions.name', 'positions.id', 'departments.name as department');
+
+		} else {
+
+			// Get all positions and order by rank
+			$positions = $this->positions->getAllWith(['department'])->orderBy('rank');
+		}
 
 		if (Request::get('output') == 'json') {
 			return Response::json($positions);
 		}
 
+			$positions = $positions->paginate(10);
         return View::make('positions.index', compact('positions'));
 	}
 
@@ -45,6 +65,12 @@ class PositionsController extends BaseController {
 	 */
 	public function create()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
         return View::make('positions.create');
 	}
 
@@ -55,6 +81,12 @@ class PositionsController extends BaseController {
 	 */
 	public function store()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$data = Input::only('name', 'department_id');
 
 			Event::listen('illuminate.query', function ($sql, $bindings, $times) {
@@ -78,6 +110,12 @@ class PositionsController extends BaseController {
 	 */
 	public function show($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
         return View::make('positions.show');
 	}
 
@@ -89,6 +127,13 @@ class PositionsController extends BaseController {
 	 */
 	public function edit($id)
 	{
+
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$position = $this->positions->find($id)->get();
 
 
@@ -110,6 +155,11 @@ class PositionsController extends BaseController {
 	public function update($id)
 	{
 
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$position = Input::only('name','department_id');
 
 		$position = $this->positions->update($id, $position);
@@ -127,6 +177,12 @@ class PositionsController extends BaseController {
 	 */
 	public function destroy($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$position = $this->positions->delete($id);
 
 		if ($position){

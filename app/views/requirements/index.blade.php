@@ -11,8 +11,11 @@
 
   <div class="search-container col-md-4 pull-right">
 
-  <input class="form-control " name="src" placeholder="Search stage process..." id="search" ng-model="query">
+  	  {{ Form::open(['method' => 'GET', 'action' => 'RequirementsController@index']) }}
 
+	  <input class="form-control " name="src" placeholder="Search stage process..." id="search" ng-model="query" value="{{ Input::get('src') }}">
+
+	  {{ Form::close() }}
   </div>
 
   <div class="header-buttons pull-left">
@@ -40,7 +43,7 @@
 			<tr>
 				<td width="25%">{{$requirement->document}}</td>
 				<td width="25%">{{$requirement->document_type}}</td>
-				<td width="25%">{{$requirement->stage_process_id}}</td>
+				<td width="25%">{{ isset($requirement->stageProcess->stage_process) ? $requirement->stageProcess->stage_process : 'No stage process' }}</td>
 
 				<td align="center" width="2%"> <a href="{{ route('requirements.edit', $requirement->id) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Edit</a></td>
 				<td align="center" width="5%">{{ Form::open(['action' => array('RequirementsController@destroy', $requirement->id), 'method' => 'DELETE']) }} <button  type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span> Delete</button></form></td>
@@ -56,5 +59,10 @@
 	<div  align="center" class="alert alert-warning"> No Requirements found.</div>
 </div>
 @endif
+
+
+		<?php $collection = $requirements; ?>
+		@include('partials.pagination_links')
+
 
 </div>

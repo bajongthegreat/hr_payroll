@@ -74,7 +74,7 @@ class UsersController extends BaseController {
 
 		if (strlen($src) > 0) {	
 			 // Work more with pagination, were getting close
-			$users = $this->users->relativeSearch($src, NULL, ['email','username', 'status'])->paginate($limit);
+			// $users = $this->users->relativeSearch($src, NULL, ['email','username', 'status'])->paginate($limit);
 		}
 		else {
 			$users = $this->users->all(['*'], ['paginate' => $limit]);

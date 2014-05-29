@@ -22,22 +22,29 @@
 		  	<strong>{{ $stage }}</strong>
 		    <ul class="list-group" style="list-style: none;">
 		      @foreach ($requirements as $requirement)
-			       @if ($requirement->StageProcess->stage_process == $stage)
-			         <?php 
 
-			         	$type = 'pass';
-			         	$requirement_class = ($canEdit) ? '_applicant_show_requirement' : "";
-			         	if (!$employee_requirement_helper->isRequirementPassed($requirement->id, $id)) {
-			         		$button = ($canEdit) ? '<span class="label label-info">Submit</span>' : "";
-			         		$icon = '<a href="#"  class="' . $requirement_class . '"> '  .$button . ' <span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
-			         	} else {
-			         		$type = 'remove';
-			         		$button = ($canEdit) ? '<span class="label label-default">Redo</span>' : "";
-			         		$icon = '<a href="#" class="' . $requirement_class .'"> ' . $button .' <span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span></a>';
-			         	}
-			         ?>
-					 <li data-type="{{ $type }}" data-document="{{ ucfirst($requirement->document) }}" data-applicant_id="{{ $id }}" data-requirement_id="{{ $requirement->id }}"> {{$icon}} {{ ucfirst($requirement->document) . " (" . (ucfirst($requirement->document_type)) . ")" }} </li>		      
-				   @endif
+		      		@if (!isset($requirement->StageProcess->stage_process)) 
+		      			<?php continue; ?>
+		      		@else 
+		      			@if ($requirement->StageProcess->stage_process == $stage)
+					         <?php 
+
+					         	$type = 'pass';
+					         	$requirement_class = ($canEdit) ? '_applicant_show_requirement' : "";
+					         	if (!$employee_requirement_helper->isRequirementPassed($requirement->id, $id)) {
+					         		$button = ($canEdit) ? '<span class="label label-info">Submit</span>' : "";
+					         		$icon = '<a href="#"  class="' . $requirement_class . '"> '  .$button . ' <span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
+					         	} else {
+					         		$type = 'remove';
+					         		$button = ($canEdit) ? '<span class="label label-default">Redo</span>' : "";
+					         		$icon = '<a href="#" class="' . $requirement_class .'"> ' . $button .' <span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span></a>';
+					         	}
+					         ?>
+							 <li data-type="{{ $type }}" data-document="{{ ucfirst($requirement->document) }}" data-applicant_id="{{ $id }}" data-requirement_id="{{ $requirement->id }}"> {{$icon}} {{ ucfirst($requirement->document) . " (" . (ucfirst($requirement->document_type)) . ")" }} </li>		      
+						   @endif
+		      		@endif
+
+			       
 		      @endforeach
 
 		      <hr>

@@ -9,11 +9,16 @@ class ViolationsController extends \BaseController {
 
 	protected $violations;
 	protected $validator;
+
+	protected $db_fields_to_use = ['code','description','penalty'];
+	protected $default_uri = 'violations';
 		 /**
 	     * Instantiate a newController instance.
 	     */
 	    public function __construct(ViolationRepositoryInterface $violations, jValidator $validator)
 	    {
+	    	parent::__construct();
+
 	    	// For Cross Site Request Forgery protection
 	        $this->beforeFilter('csrf', array('on' => 'post'));
 	
@@ -34,8 +39,12 @@ class ViolationsController extends \BaseController {
 	 * @return Response
 	 */
 	public function index()
-	{
-		$violations = $this->violations->all();
+	{	
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 
 		// Search
 		if (Input::has('src')) {
@@ -47,12 +56,21 @@ class ViolationsController extends \BaseController {
 				$field = Input::get('field');
 
 				$violations = $this->violations->find($src, $field)->get()->first();
+			} else {
+				$violations = $this->violations->findLike($src, $this->db_fields_to_use);
 			}
+		} else {
+
+			$violations = $this->violations->getAllWith([]);
+
 		}
 
 		if (Input::has('output')) {
 			if (Input::get('output') == 'json') return Response::json($violations);
 		}
+
+		
+		$violations = $violations->paginate(10);
 
 		return View::make('violations.index', compact('violations'));
 	}
@@ -65,6 +83,12 @@ class ViolationsController extends \BaseController {
 	 */
 	public function create()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		return View::make('violations.create');
 	}
 
@@ -76,6 +100,12 @@ class ViolationsController extends \BaseController {
 	 */
 	public function store()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$post_data = Input::only('code','description', 'penalty');
 
 		// Validate Inputs
@@ -100,7 +130,11 @@ class ViolationsController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 	}
 
 	/**
@@ -112,6 +146,12 @@ class ViolationsController extends \BaseController {
 	 */
 	public function edit($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$violation = $this->violations->find($id)->get()->first();
 
 		if (!$violation) return Redirect::action('ViolationsController@index')->with('error', ['Violation not found.']);
@@ -129,6 +169,11 @@ class ViolationsController extends \BaseController {
 	public function update($id)
 	{
 		
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$post_data = Input::only('code','description', 'penalty');
 
 		// Validate Inputs
@@ -153,7 +198,13 @@ class ViolationsController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
+		return $this->violations->find($id)->delete();
 	}
 
 }

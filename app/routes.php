@@ -9,6 +9,7 @@ if (Auth::check() ) {
 	$acessControl = App::make('AccessControl');
 	View::share('accessControl', $acessControl);
 	View::share('uri', Input::segment(1));
+	View::share('page_limit', 10);
 }
 
 

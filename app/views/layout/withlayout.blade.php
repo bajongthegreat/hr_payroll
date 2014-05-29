@@ -4,7 +4,7 @@
   <head>
     <title>Tibud Cooperative HR and Payroll @yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="shortcut icon" href="<?php echo URL::to('img/favicon.ico'); ?>">
      <style type="text/css">
     
   
@@ -68,11 +68,8 @@
 
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> Basic Files <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="{{ action("CompaniesController@index") }}"><span class="glyphicon glyphicon-user"></span>  Companies</a></li>
-            <li><a href="{{ action("HolidaysController@index") }}"><span class="glyphicon glyphicon-calendar"></span>  Holidays</a></li>
              <li><a href="{{ action("UsersController@index") }}"><span class="glyphicon glyphicon-user"></span>  Users</a></li>
-             <li><a href="{{ action("StageProcessesController@index") }}">Stage Process</a></li>
-            <li><a href="{{ action("RequirementsController@index") }}">Requirements</a></li>
+ 
             <li><a href="{{ action("SSSController@index") }}">SSS Contribution table</a></li>
             <li><a href="{{ action("PhilhealthsController@index") }}">Phihealth Contribution table</a></li>
             <li><a href="{{ action("HDMFController@index") }}">HDMF Contribution table</a></li>
@@ -84,8 +81,14 @@
 
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-dashboard"></span> HR <b class="caret"></b></a>
           <ul class="dropdown-menu">
+            <li><a href="{{ action("CompaniesController@index") }}"><span class="glyphicon glyphicon-user"></span>  Companies</a></li>
+
             <li><a href="{{ action("DepartmentsController@index") }}">Department</a></li>
             <li><a href="{{ action("PositionsController@index") }}">Position</a></li>
+            <li><a href="{{ action("HolidaysController@index") }}"><span class="glyphicon glyphicon-calendar"></span>  Holidays</a></li>
+                        <li><a href="{{ action("StageProcessesController@index") }}">Stage Process</a></li>
+            <li><a href="{{ action("RequirementsController@index") }}">Requirements</a></li>
+
             <li><a href="{{ action("EmployeesMedicalExaminationsController@index") }}">Physical Examinations</a></li>
             <li><a href="{{ action("ViolationsController@index") }}">Violations</a></li>
             
@@ -135,8 +138,8 @@
           </ul>
 
 
- <form class="navbar-form navbar-right" role="search">
-            <input type="text" class="form-control" placeholder="Quick Lookup..." id="header_search">
+ <form class="navbar-form navbar-right" role="search" autocomplete="off">
+            <input type="text" class="form-control" placeholder="Quick Lookup..." id="header_search" on>
            <div id="main_search_result" >.</div>
 
           </form>

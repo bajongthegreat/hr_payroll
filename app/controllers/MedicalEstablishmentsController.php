@@ -9,11 +9,14 @@ class MedicalEstablishmentsController extends \BaseController {
 
 	protected $medical_establishments;
 	protected $validator;
+	protected $default_uri = 'employees/medical_examinations/establishments';
 		 /**
 	     * Instantiate a newController instance.
 	     */
 	    public function __construct(MedicalEstablishmentRepositoryInterface $medical_establishments, jValidator $validator)
 	    {
+	    	parent::__construct();
+	    	
 	    	// For Cross Site Request Forgery protection
 	        $this->beforeFilter('csrf', array('on' => 'post'));
 	
@@ -33,6 +36,12 @@ class MedicalEstablishmentsController extends \BaseController {
 	 */
 	public function index()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$medical_establishments = $this->medical_establishments->all();
 
 		return View::make('medical_establishments.index', compact('medical_establishments'));
@@ -46,6 +55,11 @@ class MedicalEstablishmentsController extends \BaseController {
 	 */
 	public function create()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		return View::make('medical_establishments.create');
 	}
 
@@ -57,6 +71,11 @@ class MedicalEstablishmentsController extends \BaseController {
 	 */
 	public function store()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$post_data = Input::only('name','address', 'telephone_number', 'email');
 
 
@@ -81,7 +100,10 @@ class MedicalEstablishmentsController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 	}
 
 	/**
@@ -93,6 +115,11 @@ class MedicalEstablishmentsController extends \BaseController {
 	 */
 	public function edit($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$medical_establishment = $this->medical_establishments->find($id)->get()->first();
 
 		if (!$medical_establishment) {
@@ -111,7 +138,11 @@ class MedicalEstablishmentsController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$post_data = Input::only('name','address', 'telephone_number', 'email');
 
 
@@ -138,6 +169,11 @@ class MedicalEstablishmentsController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		return $this->medical_establishments->find($id)->delete();
 	}
 

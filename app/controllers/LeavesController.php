@@ -15,9 +15,11 @@ class LeavesController extends BaseController {
 
 	// Helper class for leaves
 	private $helper;
+	protected $default_uri = "leaves";
 
 	public function __construct(LeavableInterface 	$leaves, jValidator $validator) {
 		
+		parent::__construct();
 		// Leave repository dependency
 		$this->leaves = $leaves;
 
@@ -35,6 +37,12 @@ class LeavesController extends BaseController {
 	 */
 	public function index($id = NULL)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$helper = $this->helper;
 
 		$leave_type = $this->leave_type;
@@ -60,6 +68,12 @@ class LeavesController extends BaseController {
 	 */
 	public function create()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
         return View::make('leaves.create');
 	}
 
@@ -71,6 +85,10 @@ class LeavesController extends BaseController {
 	public function store()
 	{
 
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 		$leave_data = Input::except('_token', 'work_id', 'ref');
 
 		$id = Input::get('work_id');
@@ -104,6 +122,13 @@ class LeavesController extends BaseController {
 
 
 	public function approve() {
+
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$id = (int) Input::get('id');
 		$data = Input::except('id','_token');
 
@@ -120,6 +145,12 @@ class LeavesController extends BaseController {
 	}
 
 	public function reject() {
+
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 
 		$id = (int) Input::get('id');
 		$data = Input::except('id','_token');
@@ -142,6 +173,12 @@ class LeavesController extends BaseController {
 	 */
 	public function show($id, $id_sec=NULL)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$helper = $this->helper;
 		
 		// This was accessed with leaves route directly
@@ -177,6 +214,11 @@ class LeavesController extends BaseController {
 	public function edit($id)
 	{
 
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$leave = $this->leaves->find($id);
 
 		if (isset($leave[0])) {
@@ -195,6 +237,13 @@ class LeavesController extends BaseController {
 	 */
 	public function update($id)
 	{
+
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$id = (int) Input::get('id');
 		$data = Input::except('id','_token','_method');
 
@@ -214,7 +263,10 @@ class LeavesController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 	}
 
 }

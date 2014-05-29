@@ -5,8 +5,10 @@ use Acme\Repositories\Company\CompanyRepositoryInterface;
 class CompaniesController extends BaseController {
 
 	protected $companies;
+	protected $db_field_to_use = ['name', 'address'];
 
 	public function __construct(CompanyRepositoryInterface $companies) {
+		parent::__construct();
 		$this->companies = $companies;
 	}
 
@@ -17,9 +19,28 @@ class CompaniesController extends BaseController {
 	 */
 	public function index()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('companies', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 
-		$companies = $this->companies->all();
+		if (Request::has('src')) {
+			$src = Input::get('src');
+			$companies = $this->companies->findLike($src, $this->db_field_to_use);
+			
+		} else {
+					$companies = $this->companies->getAllWith([]);
 
+		}
+
+
+
+		if (Request::get('output') == 'json') {
+			return Response::json($companies);
+		}
+
+
+			$companies = $companies->paginate(10);
         return View::make('companies.index', compact('companies'));
 	}
 
@@ -30,6 +51,11 @@ class CompaniesController extends BaseController {
 	 */
 	public function create()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('companies', 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
         return View::make('companies.create');
 	}
 
@@ -40,6 +66,12 @@ class CompaniesController extends BaseController {
 	 */
 	public function store()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('companies', 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$company_data = Input::only('name','address');
 
 		$company = $this->companies->create($company_data);
@@ -55,6 +87,12 @@ class CompaniesController extends BaseController {
 	 */
 	public function show($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('companies', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$company = $this->companies->find($id)->get();
 
 
@@ -69,6 +107,12 @@ class CompaniesController extends BaseController {
 	 */
 	public function edit($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('companies', 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$company = $this->companies->find($id)->get();
 
 		if ($company) $company = $company[0];
@@ -87,7 +131,12 @@ class CompaniesController extends BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		
+		// Check access control
+		if ( !$this->accessControl->hasAccess('companies', 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$company_data = Input::only('name','address');
 
 		$company = $this->companies->find($id)->update($company_data);
@@ -103,6 +152,11 @@ class CompaniesController extends BaseController {
 	 */
 	public function destroy($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('companies', 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$company = $this->companies->find($id)->delete();
 
 		return Redirect::action('CompaniesController@index');

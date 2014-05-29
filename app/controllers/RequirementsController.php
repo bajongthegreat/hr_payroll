@@ -7,12 +7,17 @@ class RequirementsController extends BaseController {
 
 	protected $requirements;
 	protected $validator;
+	protected $db_fields_to_use = ['document','document_type'];
+	protected $default_uri = 'requirements';
 
 		 /**
 	     * Instantiate a newController instance.
 	     */
 	    public function __construct(RequirementRepositoryInterface $requirements, jValidator $validator)
 	    {
+
+	    	parent::__construct();
+
 	    	// For Cross Site Request Forgery protection
 	        $this->beforeFilter('csrf', array('on' => 'post'));
 	
@@ -32,7 +37,21 @@ class RequirementsController extends BaseController {
 	 */
 	public function index()
 	{
-		$requirements = $this->requirements->all();
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
+		if (Request::has('src')) {
+			$src = Input::get('src');
+
+			$requirements = $this->requirements->findLike($src, $this->db_fields_to_use);
+		} else {
+
+			$requirements = $this->requirements->getAllWith(['stageProcess']);
+		
+		}
 
 		if (Request::get('output') == 'json') {
 
@@ -53,6 +72,8 @@ class RequirementsController extends BaseController {
 			return Response::json($requirements);
 		}
 
+		$requirements = $requirements->paginate(10);
+
         return View::make('requirements.index', compact('requirements'));
 	}
 
@@ -67,6 +88,11 @@ class RequirementsController extends BaseController {
 	 */
 	public function create()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
         return View::make('requirements.create');
 	}
 
@@ -77,7 +103,11 @@ class RequirementsController extends BaseController {
 	 */
 	public function store()
 	{	
-		
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$input = Input::all();
 		
 		// Validate Inputs
@@ -104,6 +134,11 @@ class RequirementsController extends BaseController {
 	 */
 	public function show($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$requirements = $this->requirements->find($id)->get();
 
         return View::make('requirements.show', compact('requirements'));
@@ -117,6 +152,11 @@ class RequirementsController extends BaseController {
 	 */
 	public function edit($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$requirement = $this->requirements->find($id)->get()[0];
 
 
@@ -132,6 +172,11 @@ class RequirementsController extends BaseController {
 	 */
 	public function update($id)
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$input = Input::except('_method','_token');
 
 		// Validate Inputs
@@ -160,7 +205,12 @@ class RequirementsController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		$RequirementsController = $this->requirements->find($id)->get(); 
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
+		$RequirementsController = $this->requirements->find($id)->delete(); 
 		return Redirect::action("RequirementsController@index");
 	}
 

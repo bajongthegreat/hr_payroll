@@ -3,9 +3,19 @@
 class ImportsController extends \BaseController {
 
 	protected $allowedTables = ['employees'];
+	protected $default_uri = 'import';
+
+	public function __construct() {
+	    	parent::__construct();
+	}
 
 	// Upload the excel file
 	public function upload() {
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 		
 		 if (Input::hasFile('file')) 
       	  { 
@@ -33,6 +43,12 @@ class ImportsController extends \BaseController {
 
 	// Start importation process
 	public function start() {
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		// var_dump(Input::get('file') );
 
 		var_dump(Input::all());
@@ -86,6 +102,10 @@ class ImportsController extends \BaseController {
 	}
 
 	public function create() {
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 		return View::make('imports.create');
 	}
 

@@ -44,7 +44,7 @@
 			
 				
 			<td align="center"> <a href="{{ route('holidays.edit', $holiday->id) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Edit</a></td>
-				<td align="center">{{ Form::open(['action' => array('HolidaysController@destroy', $holiday->id), 'method' => 'DELETE']) }} <button  type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span> Delete</button></form></td>
+				<td align="center"><a href="#" data-id="{{ $holiday->id }}" data-url="{{ action('HolidaysController@destroy', $holiday->id)  }}" class="btn btn-default btn-sm _deleteItem"><span class="glyphicon glyphicon-remove"></span> Delete</a></td>
 			
 			</tr>
 

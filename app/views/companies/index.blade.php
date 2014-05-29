@@ -7,10 +7,9 @@
 
 
   <div class="search-container col-md-4 pull-right">
-
-  <input class="form-control " name="src" placeholder="Search company..." id="search" ng-model="query">
-
-
+   	 {{ Form::open(['method' => 'GET', 'action' => 'CompaniesController@index'])}}
+		 <input class="form-control " name="src" placeholder="Search company..." id="search" ng-model="query" value="{{Input::get('src')}}">
+	  {{ Form::close()}}
   </div>
 
   <div class="header-buttons pull-left">
@@ -44,5 +43,9 @@
 		@endforeach
 	</tbody>
 </table>
+
+
+		<?php $collection = $companies; ?>
+		@include('partials.pagination_links')
 
 @stop

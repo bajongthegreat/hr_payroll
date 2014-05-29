@@ -53,7 +53,7 @@ abstract class RepositoryAbstract {
 		return $this->model->whereIn($field, $collection);
 	}
 
-	public function findLike($value, $fields = array(), $with ) {
+	public function findLike($value, $fields = array(), $with = [] ) {
 		if (count($fields) == 0) return false;
 		
 		// No relationship
@@ -119,6 +119,17 @@ abstract class RepositoryAbstract {
 					}
 					
 					}
+	}
+
+	function relativeSearch($src, $filter_params = NULL, $db_field_to_use, $with=['']) {
+
+		return $this->model->findLike($src, $db_field_to_use , $with )->where(function($query) use ($filter_params) {
+				
+				if (isset($filter_params) && $filter_params != NULL) {
+					$this->addFilterFieldsToDB($query, $filter_params);
+				}
+				
+				});
 	}
 
 }

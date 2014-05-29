@@ -8,8 +8,9 @@
 
   <div class="search-container col-md-4 pull-right">
 
-  <input class="form-control " name="src" placeholder="Search department..." id="search" ng-model="query">
-
+   {{ Form::open(['method' => 'GET', 'action' => 'DepartmentsController@index'])}}
+  <input class="form-control " name="src" placeholder="Search department..." id="search" ng-model="query" value="{{ Input::get('src') }}">
+ 	{{ Form::close() }}
 
   </div>
 
@@ -38,7 +39,13 @@
 				<td> {{ ucfirst($department->name) }}</td>
 
 				 <td> <?php  
-						echo isset($department->company->name) ? ucfirst($department->company->name) : "None";
+				 
+				 		if (isset($department->company)) {
+				 			echo isset($department->company) ? ucfirst($department->company) : "None";
+				 		} else {
+				 			echo isset($department->company->name) ? ucfirst($department->company->name) : "None";	
+				 		}
+						
 				 ?></td>
 				<td> <span class="label label-<?php echo ($department->status == 'active') ? 'success' : 'warning' ?>"> {{ ucfirst($department->status) }}</span></td>
 			<td align="center"> <a href="{{ route('departments.edit', $department->id) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Edit</a></td>
@@ -50,4 +57,7 @@
 	</tbody>
 </table>
 
+
+		<?php $collection = $departments; ?>
+		@include('partials.pagination_links')
 @stop

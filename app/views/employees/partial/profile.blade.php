@@ -1,5 +1,4 @@
 
-
 <div class="panel panel-default">
 		  <div class="panel-heading">
 		  	@if ($accessControl->hasAccess($uri, 'edit', $GLOBALS['_byPassRole']))
@@ -186,7 +185,7 @@
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 		    <h3 class="panel-title"><h4><a data-toggle="collapse" data-parent="#accordion" href="#parentsinfo">
-          Parent's Information
+          Family Information
         </a></h4></h3>
 		  </div>
 		  <div id="parentsinfo" class="panel-body panel-collapse collapse in">
@@ -217,8 +216,31 @@
 
 				</div>
 
-				
+		@if (strtolower($employee->marital_status) != 'single')		
+		<div class="row">
 
+				<div class="form-group">
+							
+					{{ Form::label('spouse_name', 'Spouse Name', array('class' => 'col-sm-4 text-right', 'required')) }}
+
+					<div class="col-sm-4">
+						<p class="form-control-static">{{  (strlen($employee->spouse_name) > 0) ?  $employee->spouse_name : '<span class="label label-default">Not specified</span>'}}   </div>
+					</div>
+
+				</div>				
+		@endif
+
+		<div class="row">
+
+				<div class="form-group">
+							
+					{{ Form::label('children_count', 'Number of Children', array('class' => 'col-sm-4 text-right', 'required')) }}
+
+					<div class="col-sm-4">
+						<p class="form-control-static">{{  (strlen($employee->children_count) > 0) ?  $employee->children_count : '<span class="label label-default">No child</span>'}}   </div>
+					</div>
+
+				</div>		
 		  </div>  <!-- End of Body -->
 		</div> <!-- End of Panel -->
 

@@ -6,9 +6,11 @@
 <h2 class="page-header"> Position list</h2>
 
 <div class="search-container col-md-4 pull-right">
+  
 
-  <input class="form-control " name="src" placeholder="Search an employee..." id="search" ng-model="query">
-
+   {{ Form::open(['method' => 'GET', 'action' => 'PositionsController@index'])}}
+  <input class="form-control " name="src" placeholder="Search an employee..." id="search" ng-model="query" value="{{ Input::get('src') }}">
+   {{ Form::close() }}
   </div>
 
   <div class="header-buttons pull-left">
@@ -41,6 +43,8 @@
 				<td>
 					@if (isset($position->department->name))
 						{{ ucfirst($position->department->name) }}
+					@elseif (isset($position->department))
+						{{ ucfirst($position->department) }}
 					@endif
 				</td>
 				
@@ -53,6 +57,10 @@
 		@endforeach
 	</tbody>
 </table>
+
+
+		<?php $collection = $positions; ?>
+		@include('partials.pagination_links')
 
 
 @stop

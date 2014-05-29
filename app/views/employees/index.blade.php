@@ -62,7 +62,7 @@
   
 
 <div class="child">
-      <a href="{{ action('LeavesController@index') }}" class="btn btn-default"> <span class="glyphicon glyphicon-dashboard"></span> Disciplinary Actions</a>
+      <a href="{{ action('DisciplinaryActionsController@index') }}" class="btn btn-default"> <span class="glyphicon glyphicon-dashboard"></span> Disciplinary Actions</a>
 </div>
     </div>
 

@@ -14,6 +14,9 @@ class DisciplinaryActionsController extends \BaseController {
 	     */
 	    public function __construct(DisciplinaryActionRepositoryInterface $disciplinaryactions ,jValidator $validator)
 	    {
+
+	    	parent::__construct();
+
 	    	// For Cross Site Request Forgery protection
 	        $this->beforeFilter('csrf', array('on' => 'post'));
 	
@@ -33,6 +36,12 @@ class DisciplinaryActionsController extends \BaseController {
 	 */
 	public function index()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees/disciplinary_actions', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$employee_violators = $this->disciplinaryactions->getAllWithJoins();
 		
 		return View::make('disciplinary_actions.index', compact('employee_violators'));
@@ -46,6 +55,12 @@ class DisciplinaryActionsController extends \BaseController {
 	 */
 	public function create()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees/disciplinary_actions', 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		return View::make('disciplinary_actions.create');
 	}
 
@@ -57,6 +72,12 @@ class DisciplinaryActionsController extends \BaseController {
 	 */
 	public function store()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees/disciplinary_actions', 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$post_data = Input::only('violation_id', 'violation_date','violation_effectivity_date','employee_id');
 
 		// Validate Inputs
@@ -83,6 +104,12 @@ class DisciplinaryActionsController extends \BaseController {
 	 */
 	public function show($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees/disciplinary_actions', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		return Redirect::action('DisciplinaryActionsController@edit', $id);
 	}
 
@@ -95,6 +122,12 @@ class DisciplinaryActionsController extends \BaseController {
 	 */
 	public function edit($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees/disciplinary_actions', 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$employee_violation =  $this->disciplinaryactions->find($id)->get()->first();
 
 		if (!$employee_violation) Redirect::action('DisciplinaryActionsController@index')->with('message', 'Employee Violation not found.');
@@ -111,6 +144,13 @@ class DisciplinaryActionsController extends \BaseController {
 	 */
 	public function update($id)
 	{
+
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees/disciplinary_actions', 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$post_data = Input::only('violation_id', 'violation_date','violation_effectivity_date','employee_id');
 
 		if ($post_data['violation_effectivity_date'] == '') unset($post_data['violation_effectivity_date']);
@@ -138,6 +178,11 @@ class DisciplinaryActionsController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('employees/disciplinary_actions', 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 		return $this->disciplinaryactions->find($id)->delete();
 	}
 

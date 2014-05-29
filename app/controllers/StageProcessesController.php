@@ -12,6 +12,7 @@ class StageProcessesController extends BaseController {
 	 * @var StageProcess
 	 */
 	protected $stageProcess;
+	protected $default_uri = 'stageprocesses';
 
 	/**
 	 * StageProcess Validator
@@ -20,10 +21,13 @@ class StageProcessesController extends BaseController {
 	 */
 	protected $validator;
 
+	protected $db_table_to_use = ['stage_process'];
 
 
 	public function __construct(StageProcessRepositoryInterface $stageProcess, jValidator $validator)
 	{
+		parent::__construct();
+
 		$this->stageProcess = $stageProcess;
 		$this->validator = $validator;
 	}
@@ -35,7 +39,21 @@ class StageProcessesController extends BaseController {
 	 */
 	public function index()
 	{
-		$cstage_processes = $this->stageProcess->all();
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
+		if (Input::has('src')) {
+			$src = Input::get('src');
+
+			$cstage_processes = $this->stageProcess->findLike($src, $this->db_table_to_use);
+		} else {
+
+				$cstage_processes = $this->stageProcess->getAllWith([]);
+		
+		}
 
 		if (Request::get('output') == 'json') {
 
@@ -46,7 +64,10 @@ class StageProcessesController extends BaseController {
 			return Response::json($cstage_processes);
 		}
 
-		return View::make('stageProcesses.index', compact('cstage_processes'));
+		$spObj = $this->stageProcess;
+		$cstage_processes = $cstage_processes->paginate(10);
+
+		return View::make('stageProcesses.index', compact('cstage_processes', 'spObj'));
 	}
 
 	/**
@@ -57,6 +78,10 @@ class StageProcessesController extends BaseController {
 	public function create()
 	{
 
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 		return View::make('stageProcesses.create', compact('stage_processes'));
 	}
 
@@ -67,6 +92,12 @@ class StageProcessesController extends BaseController {
 	 */
 	public function store()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$input = Input::all();
 
 
@@ -92,6 +123,12 @@ class StageProcessesController extends BaseController {
 	 */
 	public function show($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$stageProcess = $this->stageProcess->find($id);
 
 		return View::make('stageProcesses.show', compact('stageProcess'));
@@ -105,6 +142,12 @@ class StageProcessesController extends BaseController {
 	 */
 	public function edit($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$stage_process  = $this->stageProcess->find($id)->get()[0];
 
 		if (is_null($stage_process))
@@ -125,6 +168,12 @@ class StageProcessesController extends BaseController {
 	 */
 	public function update($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$input = Input::except('_token','_method');
 		$validation = Validator::make($input, StageProcess::$rules);
 
@@ -150,6 +199,12 @@ class StageProcessesController extends BaseController {
 	 */
 	public function destroy($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$this->stageProcess->find($id)->delete();
 
 		return Redirect::route('stageprocesses.index');
