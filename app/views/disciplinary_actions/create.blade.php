@@ -53,6 +53,25 @@
 	</div>
 @stop
 
+@section('scripts')
+<script>
+	
+		// Settings for Employee search
+		
+           	var __employee="";
+           	var __panelsToToggle = ['#dpc_information', '#employee_information', '#buttons'];
+           	var __fieldsToEmpty = [];
+           	var __buttonsToHide = [];
+           	var __dbFieldsToUse = [];
+
+
+
+           	var __rowsToDisplay = 10;
+           	var resultContainer = $('.resultContainer');
+           	var hiddenID = $('.hiddenID');
+
+</script>
+@stop
 
 @section('later_scripts')
 <script type="text/javascript" src="{{ asset('jquery/hr_disciplinary_actions.js') }}"></script>

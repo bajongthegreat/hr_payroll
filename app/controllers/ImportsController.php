@@ -77,21 +77,21 @@ class ImportsController extends \BaseController {
 		$jExcel->getFieldAndValues();
 		
 
-		// Save to database
-		DB::transaction(function() use($jExcel) {
-			try {
+		// // Save to database
+		// DB::transaction(function() use($jExcel) {
+		// 	try {
 				$data = $jExcel->convertValuesAndFieldsToDBArray(true);
 
-				
-				// print json_encode($data);
+		// 		var_dump($data);				
+		// 		// print json_encode($data);
 				DB::table('employees')->insert($data);
-			} catch (Exception $e) {
-				// echo $e->getMessage();
+		// 	} catch (Exception $e) {
+		// 		// echo $e->getMessage();
 
-				$error = "Failed to process data.";
-				DB::rollback();
-			}	
-		});
+		// 		$error = "Failed to process data.";
+		// 		DB::rollback();
+		// 	}	
+		// });
 
 		
 			

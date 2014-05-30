@@ -67,7 +67,7 @@
 	</tr>
 
 	<tr> 
-		<td width="20%">Role</td>
+		<td width="20%"><strong>Role</strong></td>
 		<td>{{  $accessControl->getRoleName($user->role_id) }}</td>
 
 	</tr>
@@ -79,7 +79,7 @@
 </table>
 
 
-	@foreach($accessControl->pagesWithAccess() as $uri_segment => $permission)
+	@foreach($accessControl->pagesWithAccess($user->role_id) as $uri_segment => $permission)
 		<div class="alert alert-info">
 			<span class="glyphicon glyphicon-info"></span>You have access to <strong>{{ $uri_segment }}</strong> with an ability to <strong>{{ str_replace('|', ',', $permission)}}</strong>.
 		</div>

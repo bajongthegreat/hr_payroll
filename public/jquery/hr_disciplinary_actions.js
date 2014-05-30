@@ -1,24 +1,5 @@
 
-		(function(){
-
 			$('.resultContainer').hide();
-
-            		// Required: Hash
-            		//           Employee Profile Information
-            		//           Employee ID textfield event handler for searching  
-            		// 			 Loader
-
-           	var __employee="";
-           	var __panelsToToggle = ['#dpc_information', '#employee_information', '#buttons'];
-           	var __fieldsToEmpty = [];
-           	var __buttonsToHide = [];
-           	var __dbFieldsToUse = [];
-
-
-
-           	var __rowsToDisplay = 10;
-           	var resultContainer = $('.resultContainer');
-           	var hiddenID = $('.hiddenID');
 
 			// Check if employee hash is present
            	// Then perform an ajax search
@@ -35,7 +16,7 @@
             _togglePanels(__panelsToToggle, 'hide');
 
             // Will search for employee profile
-            function _searchEmployee(searchValue) {
+            function _searchEmployee(searchValue, element) {
             	console.log('searching...');
 
             	$.ajax({
@@ -49,14 +30,17 @@
 
             			// Hide loader
             			$('#employee_loader').html('');
+                              $('.employee_loader').html('');
 
             			var name;
             			var id;
             			var searchItem = "";
 
+
+                                    console.log('Length of data found:' + data.length);
+
             			// More than 1 result
             			if (data.length > 1) {
-            				console.log('Length of data found:' + data.length);
             				
             				if (data.length < __rowsToDisplay) {
             					__rowsToDisplay = data.length;
@@ -67,17 +51,23 @@
             					name = hrApp.personName(data[i]);
             					id = data[i].employee_work_id;
 
-            					searchItem += '<div class="resultItem" data-employee_id="' + id +'"><a href="?reload=true&id=' +id+'#employee=' + id +'"> <span class="label label-default">'+ id +'</span>  '+  name +'  </div></a>';
+            					searchItem += '<div class="resultItem" data-employee_name="' + name +'" data-employee_id="' + id +'"><a href="?reload=true&employee_id=' + id +'#employee=' + id +'"> <span class="label label-default">'+ id +'</span>  '+  name +'  </div></a>';
             				}
 
-            				resultContainer.html(searchItem);
-            				resultContainer.show();
-            				_togglePanels(__panelsToToggle, 'hide');
+                                    if (element) {
+                                          $('.resultContainer').remove();
+                                          element.after('<div class="resultContainer" style="width: 330px;">' +searchItem +'</div>');
+                                    } else {
+                                          resultContainer.html(searchItem);
+                                          resultContainer.show();
+                                          _togglePanels(__panelsToToggle, 'hide');
+      
+                                    }
 
+            				
             			} else if (data.length == 1) {
 
-
-           				
+                                     
             				resultContainer.fadeOut(250);
             				realID = data[0].id;			
             				id = data[0].employee_work_id;
@@ -86,22 +76,39 @@
             				date_hired = data[0].date_hired;
             				position = data[0].position.name;
 
-            				// Redirect to save data even from unexpected page refresh
-           					window.location = '#employee=' + id;
-           				
+                                    if (element) {
+                                     $('.resultContainer').remove();
+                                     $('.resultName').remove();
+                                          element.val(id);
+                                          element.after('<span class="resultName">' + name +'</span>');
+                                    } else {
+                                          // Redirect to save data even from unexpected page refresh
+                                                window.location = '#employee=' + id;
+                                          
 
-            				$('#employee_name').html(name);
-            				$('#date_hired').html(date_hired);
-            				$('#position').html(position);
+                                                $('#employee_name').html(name);
+                                                $('#date_hired').html(date_hired);
+                                                $('#position').html(position);
+                                                
+                                                // Set ID
+                                                hiddenID.val(realID);
+                                                
+                                                // Toggle Panels
+                                                _togglePanels(__panelsToToggle, 'show');
+                                                // console.log();      
+                                    }
             				
-            				// Set ID
-            				hiddenID.val(realID);
-            				
-            				// Toggle Panels
-            				_togglePanels(__panelsToToggle, 'show');
-            				// console.log();
             			} else {
-            				resultContainer.hide();
+
+
+                                    if (element) {
+                                     $('.resultContainer').html('<span class="text-center">No data found</span>');
+                                   
+                                    } else {
+                                          resultContainer.hide();
+                                          
+                                    }
+
             				$('#employee_loader').html('<span class="label label-danger">No data found</span>');
             			}
 
@@ -141,7 +148,11 @@
            			}
             });
 
-		})();
+
+
+
+
+
 
 
 		//  Display description on select

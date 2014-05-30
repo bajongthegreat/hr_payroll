@@ -14,10 +14,10 @@
 				
 				<div>
 
-
+				<a href="{{ isset($employee->image) ? asset($employee->image): 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png' }}" {{ isset($employee->image) ? 'data-lightbox="Profile Picture"' : '' }}>
 				<img src="{{ isset($employee->image) ? asset($employee->image): 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png' }}"  
 				width="234" height="234" alt="..." class="img-thumbnail employee-img" style="height: 234px; width: 274px;"
-				id="picture_holder">
+				id="picture_holder"></a>
 
 				<!-- <canvas id="canvas" width="274" class="img-thumbnail" height="234" class="hidden"> -->
 

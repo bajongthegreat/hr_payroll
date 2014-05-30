@@ -83,8 +83,14 @@
 							
 					{{ Form::label('birthdate', 'Birth date ', array('class' => 'col-sm-4 text-right')) }}
 
-					<div class='input-group date col-sm-4' id='birthdate'>
-				 	{{ Form::text('birthdate', Input::old('birthdate'), array('class' => 'form-control date', 'data-format' => "YYYY-MM-DD", 'required') ) }}
+					<div class='input-group date col-sm-4' id='birthdate' data-date-format="YYYY-MM-DD">
+
+					
+					  	<?php // Temporary fix for Bootstrap 3.0 datetime picker 
+					  		$birthdate =  ($employee->birthdate == '0000-00-00' || $employee->birthdate == '' ) ? "" : $employee->birthdate; 
+					  	?>
+
+				 	{{ Form::text('birthdate', $birthdate , array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD", 'required') ) }}
                     <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
                     </span>
                 </div>
@@ -99,7 +105,7 @@
 					{{ Form::label('birthplace', 'Birthplace', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::textarea('birthplace', Input::old('birthplace'), array('class' => 'form-control', 'required') ) }}
+						{{ Form::textarea('birthplace', Input::old('birthplace'), array('class' => 'form-control') ) }}
 					</div>
 
 				</div>
@@ -154,7 +160,7 @@
 
 		<div class="panel panel-info	">
 		  <div class="panel-heading">
-		    <h3 class="panel-title"><h4>Parents Information</h4></h3>
+		    <h3 class="panel-title"><h4>In case of emergency contact</h4></h3>
 		  </div>
 		  <div class="panel-body">
 
@@ -166,7 +172,7 @@
 					{{ Form::label('in_case_of_emergency_name', 'Name', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('in_case_of_emergency_name', Input::old('in_case_of_emergency_name'), array('class' => 'form-control', 'required') ) }}
+						{{ Form::text('in_case_of_emergency_name', Input::old('in_case_of_emergency_name'), array('class' => 'form-control', 'required', 'placeholder' => 'Whose to contact') ) }}
 					</div>
 
 				</div>
@@ -183,7 +189,7 @@
 					{{ Form::label('in_case_of_emergency_contact', 'Contact Number', array('class' => 'col-sm-4 text-right', 'required')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('in_case_of_emergency_contact', Input::old('in_case_of_emergency_contact'), array('class' => 'form-control', 'required') ) }}
+						{{ Form::text('in_case_of_emergency_contact', Input::old('in_case_of_emergency_contact'), array('class' => 'form-control', 'required', 'placeholder' => 'Enter phone number') ) }}
 					</div>
 
 				</div>
@@ -206,7 +212,7 @@
 					{{ Form::label('mothers_name', 'Mother\'s Name', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('mothers_name', Input::old('mothers_name'), array('class' => 'form-control', 'required') ) }}
+						{{ Form::text('mothers_name', Input::old('mothers_name'), array('class' => 'form-control', 'required', 'placeholder' => 'Enter mother\'s fullname') ) }}
 					</div>
 
 				</div>
@@ -221,7 +227,7 @@
 					{{ Form::label('fathers_name', 'Father\'s Name', array('class' => 'col-sm-4 text-right', 'required')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('fathers_name', Input::old('fathers_name'), array('class' => 'form-control', 'required') ) }}
+						{{ Form::text('fathers_name', Input::old('fathers_name'), array('class' => 'form-control', 'required', 'placeholder' => 'Enter father\'s fullname ') ) }}
 					</div>
 
 				</div>
@@ -455,9 +461,13 @@
 							
 					{{ Form::label('date_hired', 'Date Hired', array('class' => 'col-sm-4 text-right')) }}
 
-					  <div class='input-group date col-sm-4' id='date_hired'>
-
-				 	{{ Form::text('date_hired', Input::old('date_hired'), array('class' => 'form-control date', 'data-format' => "YYYY-MM-DD") ) }}
+					  <div class='input-group date col-sm-4' id='date_hired' data-date-format="YYYY-MM-DD">
+					  
+					  	<?php // Temporary fix for Bootstrap 3.0 datetime picker 
+					  		$date_hired =  ($employee->date_hired == '0000-00-00' || $employee->date_hired == '' ) ? "" : $employee->date_hired; 
+					  	?>
+				 	
+				 	{{ Form::text('date_hired', $date_hired , array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD") ) }}
                     <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
                     </span>
                 	</div>

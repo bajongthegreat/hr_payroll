@@ -50,16 +50,21 @@ class AccessControl {
 		return App::make('Acme\Repositories\User\Role\RolesRepositoryInterface');
 	}
 
-	public function pagesWithAccess() {
+	public function pagesWithAccess($id = NULL) {
 
-	
+		$id = (is_null($id)) ? $this->role_id : $id;
 		
-		return $this->permissionsRepository->find($this->role_id, 'role_id')->lists('action_permitted', 'uri_segment');
+		return $this->permissionsRepository->find($id, 'role_id')->lists('action_permitted', 'uri_segment');
 
 	}
 
-	public function getRoleName($role_id) {
-		$output = $this->rolesRepository->find($this->role_id)->pluck('name');
+	public function getRoleName($role_id = NULL) {
+
+		$id = (is_null($role_id)) ? $this->role_id : $role_id;
+
+		if ($id == 0) $output = 'Super User';
+		else $output = $this->rolesRepository->find($id)->pluck('name');
+		
 		return ($output) ? $output : NULL;
 	}
 

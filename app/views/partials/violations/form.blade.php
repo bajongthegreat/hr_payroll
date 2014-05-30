@@ -5,7 +5,7 @@
 					{{ Form::label('code', 'Violation Code', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('code', Input::old('code'), array('class' => 'form-control', 'required') ) }}
+						{{ Form::text('code', Input::old('code'), array('class' => 'form-control', 'required') ) }} 
 					</div>
 
 				</div>

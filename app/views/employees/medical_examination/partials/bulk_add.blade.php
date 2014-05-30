@@ -13,7 +13,7 @@
 					<div class="col-sm-4">
 						{{ Form::select('medical_establishment', $medical_establishments ,Input::old('medical_establishment'), array('class' => 'form-control', 'required') ) }}
 					</div>
-
+					<div class="col-sm-1" ><a href=" {{ action('MedicalEstablishmentsController@create') }}?ref={{ base64_encode(URL::current() . '?add_type=bulk' ) }}" class="btn btn-info"> <span class="glyphicon glyphicon-share"></span> Add </a></div>
 					<div class="col-sm-1" style="padding-top: 5px;">Add rows</div>
 					<div class="col-sm-1" style="margin-right: 10px; ">{{ Form::text('rowcount', NULL, ['class' => 'rowCount form-control', 'style' => 'width: 100px']) }}</div>
 					<div class="col-sm-1">   <a class="addRow btn btn-primary">Go</a> </div> 
@@ -25,8 +25,8 @@
 					{{ Form::label('date_conducted', 'Date Conducted', array('class' => 'col-sm-2')) }}
 
 					<div class="col-sm-4">
-						<div class='input-group date ' id='birthdate'>
-							{{ Form::text('date_conducted', Input::old('date_conducted'), array('class' => 'form-control date', 'required', 'data-format' => 'YYYY-MM-DD', 'required', 'id' => 'date_conducted') ) }}
+						<div class='input-group date ' id='birthdate' data-date-format="YYYY-MM-DD">
+							{{ Form::text('date_conducted', Input::old('date_conducted'), array('class' => 'form-control date', 'required', 'data-date-format' => 'YYYY-MM-DD', 'required', 'id' => 'date_conducted') ) }}
 				 	
                     <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
                     </span>
@@ -125,6 +125,15 @@
 	</div>
 
 @section('scripts')
+<script>
+	
+var __panelsToToggle  = [];
+var __rowsToDisplay  = 10;
+var resultContainer = $('.resultContainer');
+
+</script>
+<script type="text/javascript" src="{{ asset('jquery/hr_disciplinary_actions.js') }}"></script>
+
 <script>
 
 	(function() {
@@ -408,6 +417,10 @@
 		            	} else {
 		            		var element = document.createElement('input');
 		            		element.type = "text";
+
+		            		if (elementName[i] == 'employee_work_id'){
+		            			element.className = element.className + 'searcheable';
+		            		}
 			            	
 		            	}
 		            	element.name = elementName[i];
@@ -439,6 +452,36 @@
 		});
 
 		addRow('medical_examination_information_table_body',5);
+		
+
+		$(document).on('keyup', '.searcheable', function(){
+			
+			if ($(this).val().length > 1) {
+				_searchEmployee($(this).val(), $(this));		
+			} else {
+				$('.resultContainer').remove();	
+			}
+		});
+
+
+		$(document).on('click', '.resultItem a', function(e) {
+			
+			var id = $(this).parent().data('employee_id'),
+			    input = $(this).parent().parent().siblings('input');
+			$('.resultName').remove();
+             
+            
+            
+			input.val(id)
+
+			input.after('<span class="resultName">' + name +'</span>');
+			$('.resultContainer').remove();
+			e.preventDefault();
+		});
+
+		// $(document).on('blur', '.searcheable', function() {
+		// 	$('.resultContainer').remove();
+		// });
 		
 	})()
 </script>

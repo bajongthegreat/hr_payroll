@@ -154,13 +154,14 @@
   <div  align="center" class="alert alert-warning"> No Employees found.</div>
 
 @endif
-
+  
   <?php 
 
       echo $employees->appends(['src' => Input::get('src'), 'filterby' => Input::get('filterby')] )->links(); 
     
   ?>
 
+  <div> <strong>Total records found</strong>: {{ $employees->getTotal() }}</div>
 
   </div>
 

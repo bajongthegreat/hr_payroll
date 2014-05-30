@@ -89,6 +89,7 @@ class ViolationsController extends \BaseController {
 				return  $this->notAccessible();		
 		}
 
+
 		return View::make('violations.create');
 	}
 
@@ -114,7 +115,10 @@ class ViolationsController extends \BaseController {
 		}
 
 		if ($this->violations->create($post_data)) {
-			return Redirect::action('ViolationsController@index')->with('message', ['Added New Violation']);
+			if (Input::has('ref')) {
+				$url = base64_decode(Input::get('ref'));
+				return Redirect::to($url);
+			} else  return Redirect::action('ViolationsController@index')->with('message', ['Added New Violation']);
 		}
 
 		 return Redirect::action('ViolationsController@create')->withInputs()->with('error', ['Something went wrong while processing your data. Please try again.']);

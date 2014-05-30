@@ -85,7 +85,12 @@ class MedicalEstablishmentsController extends \BaseController {
 		}
 
 		if ($this->medical_establishments->create($post_data)) {
-			return Redirect::action('MedicalEstablishmentsController@index');
+			if (Input::has('ref')) {
+				$url = base64_decode(Input::get('ref'));
+				
+				return Redirect::to($url);
+			} else return Redirect::action('MedicalEstablishmentsController@index');
+		
 		} else {
 			return Redirect::back()->withInput()->withErrors(['There was a problem while processing your request. Please try again.']);
 		} 

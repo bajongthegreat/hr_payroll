@@ -27,6 +27,9 @@
 				 </div>  <!-- End of Body -->
 		</div> <!-- End of Panel -->
 
+		@if (Input::has('ref'))
+			{{ Form::hidden('ref', Input::get('ref')) }}
+		@endif
 
 		<!-- Form Buttons -->
 		<div class="container" id="buttons">

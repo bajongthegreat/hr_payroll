@@ -1,13 +1,13 @@
 
 
-				<div class="form-group">
+				<div class="form-group" id="__violation">
 							
 					{{ Form::label('violation', 'Violation Code', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
 						{{ Form::select('violation_id', $violations, Input::old('name'), array('class' => 'form-control', 'required', 'id' => 'violation_id') ) }}
 					</div>
-
+					<div class="col-sm-1">  <a href="{{ action('ViolationsController@create') }}?ref={{ base64_encode(URL::current() . '#employee=' . Input::get('employee_id') ) }}" class="btn btn-primary"> Add violation</a> </div>
 				</div>
 
 

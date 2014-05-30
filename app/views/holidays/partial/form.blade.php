@@ -15,7 +15,7 @@
 				{{ Form::label('holiday_date', 'Date: ', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-3">
-					{{ Form::text('holiday_date', Input::old('holiday_date'), array('class' => 'form-control date', 'data-format' => "YYYY-MM-DD") ) }}
+					{{ Form::text('holiday_date', Input::old('holiday_date'), array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD") ) }}
 				</div>
 				
 			</div>

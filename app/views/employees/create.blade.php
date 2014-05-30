@@ -116,9 +116,11 @@
                 	  }
                 });
 
-                $('#date_hired, #birthdate').datetimepicker({
+                $('#date_hired').datetimepicker({
                     pickTime: false
                 });
+
+
 
 
 		 $('#department_id').change(function(e, old) {

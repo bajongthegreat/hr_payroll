@@ -44,7 +44,7 @@
 				{{ Form::label('start_date', 'Start date:', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-4">
-					{{ Form::text('start_date', Input::old('start_date'), array('class' => 'form-control date', 'data-format' => "YYYY-MM-DD") ) }}
+					{{ Form::text('start_date', Input::old('start_date'), array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD") ) }}
 				</div>
 			</div>
 
@@ -52,7 +52,7 @@
 				{{ Form::label('end_date', 'End date:', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-4">
-					{{ Form::text('end_date', Input::old('end_date'), array('class' => 'form-control date', 'data-format' => "YYYY-MM-DD") ) }}
+					{{ Form::text('end_date', Input::old('end_date'), array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD") ) }}
 				</div>
 			</div>
 
@@ -88,8 +88,6 @@
 
 <script type="text/javascript">
 
-            $(function () {
-
             	$('#start_date, #end_date, #file_date').datetimepicker({
                     pickTime: false
                 });
@@ -104,125 +102,23 @@
 	            });
 
 
-	            // ----------- AJAX transaction below -------------------
-
-            	$('#employee_information, #leave_information').hide();
-
-
-            	// Check if employee hash is present
-            	// Then perform an ajax search
-            	if (hrApp.hasHash()) {
-            		ajaxSearchEmployee(hrApp.getHash('employee'), '#leave_information, #employee_information, #buttons', 'employee_loader');
-					$('#employee_work_id').val(hrApp.getHash('employee'));
-            	}
-            	
-    
-
-				// Perform an AJAX search after an "Enter" key is fired
-           		$('#employee_work_id').keyup(function(e) {
-           			e.preventDefault();
-
-           			var id = $(this).val();
-
-           			// Enter key
-           			if (e.which == 13) {
-           				$('#work_id').val(id);
-           				window.location = '#employee=' + id;
-           				ajaxSearchEmployee(id, '#leave_information, #employee_information, #buttons', 'employee_loader');
-           			}
-
-           		});
-            	
-               
-                  
-
-
-	            function ajaxSearchEmployee(id, pannels, loader) {
-	            	console.log('function up');
-	            	
-	            	$.ajax({
-           					type: 'GET',
-							url: employeeLink,
-							data: { src: id, output: 'json', limit: '1', stype: 'absolute'},
-							beforeSend: function() {
-								$(this).addClass('has-warning');
-								$('#employee_loader').html("<img src='" + mainLink + "img/loading.gif' class=\"loading\"> 	");
-
-							},
-							success: function(data) {
-
-
-								// Remove Loading Image
-								$('#' + loader).empty();
-
-								if (data.length == 1) {
-
-									var employeeName = hrApp.personName(data[0], "lastname_first"),
-									     date_hired = moment(data[0].date_hired).format("dddd, MMMM Do YYYY");
-
-									// Show all specified panels
-									togglePanels(pannels, 'show');
-									
-
-									$('#employee_name').html("" + employeeName);
-									$('#date_hired').html(date_hired);
-									$('#employee_id').val(data[0].id);
-
-
-									
-								} else {
-									
-									// Remove all values to fields
-									emptyFields();
-
-									// Hide all specified panels
-									togglePanels(pannels, 'hide');
-
-									$('#' + loader).html('<span class="label label-warning">No data found</span>');
-									
-
-								}
-								
-								
-							}
-           				});
-	            } // End of AJAX
-
-
-	            // Toggles all Bootstrap Panels
-	            function togglePanels(elements, type) {
-	            	if (type == 'show') {
-	            		console.log('showin')
-	            		$(elements).fadeIn(250);
-	            	}
-	            	else 
-	            	{
-	            		$(elements).fadeOut(250);
-	            	}
-	            }
-
-	            // Resets all values in fields
-	            function emptyFields() {
-	            	$('#employee_name').empty();
-					$('#date_hired').empty();
-					$('#employee_id').val('');
-	            }
+           	var __employee="";
+           	var __panelsToToggle = ['#leave_information', '#employee_information', '#buttons'];
+           	var __fieldsToEmpty = [];
+           	var __buttonsToHide = [];
+           	var __dbFieldsToUse = [];
 
 
 
-
-
-
-	           
-
-
-            });
-
-
-
-
-
-            moment().fromNow();
+           	var __rowsToDisplay = 10;
+           	var resultContainer = $('.resultContainer');
+           	var hiddenID = $('#employee_id');
         </script>
+
+@stop
+
+
+@section('later_scripts')
+<script type="text/javascript" src="{{ asset('jquery/hr_disciplinary_actions.js') }}"></script>
 
 @stop

@@ -58,7 +58,7 @@
 						<p class="form-control-static">
 							<?php 
 							$date = new DateTime($employee->birthdate);
-							echo $date->format('F d Y');
+							echo $date->format('F d Y') . ' (' . $employee->birthdate .') ';
 							?>
 						</p>
 					</div>
@@ -130,7 +130,7 @@
 						<p class="form-control-static">
 							<?php 
 							$date = new DateTime($employee->date_hired);
-							echo $date->format('F d  Y');
+							echo $date->format('F d  Y') . ' (' . $employee->date_hired .')';
 							?>
 						</p>
 					</div>

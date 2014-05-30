@@ -83,8 +83,8 @@
 					<div class="form-group">
 				{{ Form::label('birthdate', 'Birthdate', array('class' => 'col-sm-2 text-right')) }}
 
-				 <div class='input-group date col-sm-4' id='birthdate'>
-				 	{{ Form::text('birthdate', Input::old('birthdate'), array('class' => 'form-control date', 'data-format' => "YYYY-MM-DD", 'required') ) }}
+				 <div class='input-group date col-sm-4' id='birthdate' data-date-format="YYYY-MM-DD">
+				 	{{ Form::text('birthdate', Input::old('birthdate'), array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD", 'required') ) }}
                     <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
                     </span>
                 </div>
@@ -422,9 +422,9 @@
 			 <div class="form-group">
 
 			 	{{ Form::label('date_hired', 'Date Hired:', array('class' => 'col-sm-2 text-right')) }}
-                <div class='input-group date col-sm-4' id='date_hired'>
+                <div class='input-group date col-sm-4' id='date_hired' data-date-format="YYYY-MM-DD">
 
-				 	{{ Form::text('date_hired', Input::old('date_hired'), array('class' => 'form-control date', 'data-format' => "YYYY-MM-DD") ) }}
+				 	{{ Form::text('date_hired', Input::old('date_hired'), array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD") ) }}
                     <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
                     </span>
                 </div>

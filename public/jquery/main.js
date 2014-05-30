@@ -182,7 +182,7 @@ var __indexOf = function(needle) {
 };
 
 $(document).ready(function() {
-
+  
 
 
    $('#_applicants_date_hired, #_applicants_birthdate, #birthdate, #date_conducted, .text-date').datetimepicker({

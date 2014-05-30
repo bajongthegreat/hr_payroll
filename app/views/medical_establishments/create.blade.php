@@ -23,7 +23,10 @@
 
 				  	<!--  Medical Establishment creation form -->
 				  	@include('partials.medical_establishments.form')
-				 
+				 	
+				 	@if (Input::has('ref'))
+				 		{{ Form::hidden('ref', Input::get('ref')) }}
+				 	@endif
 				 </div>  <!-- End of Body -->
 		</div> <!-- End of Panel -->
 
