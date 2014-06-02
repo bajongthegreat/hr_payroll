@@ -126,7 +126,7 @@
 
                 <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}" > <?php echo $employee->employee_work_id . '</td>'; ?>
                 <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}"> <?php echo   ucfirst($employee->lastname) . ', ' . $employee->firstname . '</td>'; ?>
-                <td> <?php echo  ucfirst($employee->position['name']) . '</td>'; ?>
+                <td> <?php echo  ($employee->position_id == 0 || (!isset($employee->position['name']) )) ? '<span class="label label-default">Not assigned</span>' : ucfirst($employee->position['name']) . '</td>'; ?>
                 <td> <?php echo  ucfirst($employee->membership_status) . '</td>'; ?>
                 <td> <?php echo ucfirst( $employee->employment_status) . '</td>'; ?>
                 <td> 

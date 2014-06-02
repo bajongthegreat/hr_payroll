@@ -41,10 +41,16 @@ class DisciplinaryActionsController extends \BaseController {
 		if ( !$this->accessControl->hasAccess('employees/disciplinary_actions', 'view', $this->byPassRoles) ) {
 				return  $this->notAccessible();		
 		}
+		if (Input::has('src')) {
+			$src= Input::get('src');
 
-		$employee_violators = $this->disciplinaryactions->getAllWithJoins();
+			$employee_violators = $this->disciplinaryactions->findWIthJoins($src);
+		} else {
+			$employee_violators = $this->disciplinaryactions->getAllWithJoins();	
+		}
+		$disciplinaryactions = $this->disciplinaryactions;
 		
-		return View::make('disciplinary_actions.index', compact('employee_violators'));
+		return View::make('disciplinary_actions.index', compact('employee_violators', 'disciplinaryactions'));
 	}
 
 	/**

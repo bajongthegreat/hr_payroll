@@ -49,7 +49,7 @@ class CreateMembersTable extends Migration {
 			$table->softDeletes();
 			$table->timestamps();
 
-			$table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade')->onUpdate('cascade');
+			// $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade')->onUpdate('cascade');
 		});
 	}
 

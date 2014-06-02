@@ -87,17 +87,21 @@ class EmployeesController extends BaseController {
 						
 		} 
 
+
 		// No seaching was made
 		else {
 
 			$employees =  $this->getAllEmployeeData($filter_params);
 		}
 
+		// dd($employees);
 
 		// Cast data to json
 		if (Request::get('output') == 'json') {
 			return Response::json($employees->get());
 		}
+
+		
 
 
 		// Final processing
@@ -123,13 +127,19 @@ class EmployeesController extends BaseController {
 					}
 	}
 
-	function relativeDataSearch($src, $filter_params, $db_field_to_use) {
+	function relativeDataSearch($src, $filter_params, $db_field_to_use, $concat=[]) {
 
-		return $this->employees->findLike($src, $db_field_to_use , ['position'] )->where('membership_status', '!=', 'applicant')->where(function($query) use ($filter_params) {
+		return $this->employees->findLike($src, $db_field_to_use , ['position'], ['firstname','lastname'] )
+		->where('membership_status', '!=', 'applicant')->where(function($query) use ($filter_params, $src) {
 				
+		
+
 				if (isset($filter_params)) {
 					$this->addFilterFieldsToDB($query, $filter_params);
 				}
+					
+
+
 				
 				});
 	}

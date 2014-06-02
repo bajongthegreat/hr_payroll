@@ -19,8 +19,15 @@
 		  <table class="table table-striped">
 		  	<thead>
 		  		<th class="text-center">Violation Code</th>
-		  		<th class="text-center" width="40%">Violation Description</th>
-		  		<th class="text-center">Penalty</th>
+		  		<th class="text-center" width="30%">Violation Description</th>
+		  		<th class="text-center">1st offense</th>
+		  		<th class="text-center">2nd offense</th>
+		  		<th class="text-center">3rd offense</th>
+				<th class="text-center">4th offense</th>
+				<th class="text-center">5th offense</th>
+
+
+
 		  	</thead>
 
 		  	<tbody>
@@ -28,7 +35,11 @@
 		  			<tr>
 		  				<td class="text-center">  {{$violation->code}} </td>
 		  				<td> {{$violation->description}} </td>
-		  				<td class="text-center"> {{$violation->penalty}} </td>
+		  				<td class="text-center"> {{$violation->first_offense}} </td>
+		  				<td> {{$violation->second_offense or '<span class="label label-default">N/A</span>'}} </td>
+		  				<td> {{$violation->third_offense or '<span class="label label-default">N/A</span>'}} </td>
+		  				<td> {{$violation->fourth_offense or '<span class="label label-default">N/A</span>'}} </td>
+		  				<td> {{$violation->fifth_offense or '<span class="label label-default">N/A</span>'}} </td>
 		  				<td> <a href=" {{ action('ViolationsController@edit', $violation->id) }}" class="btn btn-default"> <span class="glyphicon glyphicon-edit"></span> Edit</a> </td>
 		  			</tr>
 		  		@endforeach

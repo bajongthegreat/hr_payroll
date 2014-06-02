@@ -26,6 +26,8 @@ class ViolationComposer {
 		$view->with('violations', $this->violations);
 	}
 
-
+	public function ViolationsObject2($view) {
+		$view->with('v_obj', $this->violations);
+	}
 
 }

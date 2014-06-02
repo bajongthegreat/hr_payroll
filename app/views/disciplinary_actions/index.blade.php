@@ -21,7 +21,33 @@
 	
 	  </div>
 
+<?php
+	function wordifyWithSuffix($number) {
+		$suffix = "";
+		switch ($number) {
+			case 1:
+				$suffix = 'first';
+				break;
 
+			case 2:
+				$suffix = 'second';
+			break;
+
+			case 3:
+				$suffix = 'third';
+				break;
+
+			case 4:
+				$suffix = "fourth";
+				break;
+			case 5:
+				$suffix = 'fifth';
+				break;
+		}
+
+		return $suffix;
+	}
+?>
 	  <table class="table table-striped">
 	  		<thead>
 	  			<th>Employee Name</th>
@@ -33,11 +59,14 @@
 	  			<th>Effective Suspension date</th>
 	  			<th>Violation Code</th>
 	  			<th>Penalty</th>
+
 	  		</thead>
 
 	  		<tbody>
 	  			@foreach ($employee_violators as $violator)
 	  				<tr>
+	  					<?php $number_violated = $disciplinaryactions->getOffensesCount($violator->employee_id, $violator->violation_id); ?>
+	  					
 	  					<td> {{ $violator->lastname }}, {{ $violator->firstname }} {{ ucfirst($violator->middlename[0]) . '.'}}</td>
 	  					<td>{{ $violator->company }}</td>
 	  					<td> {{ $violator->department }}</td>
@@ -45,7 +74,9 @@
 	  					<td> {{ $violator->violation_date }}</td>
 	  					<td> {{ (is_null($violator->violation_effectivity_date)) ? 'N/A' : $violator->violation_effectivity_date }}</td>
 	  					<td> {{ $violator->violation_code }}</td>
-	  					<td> {{ $violator->violation_penalty}}</td>
+
+	  					<td> {{ $violations->find($violator->violation_id, 'id')->pluck(wordifyWithSuffix($number_violated) . '_offense') }}</td>
+	  					
 	  					<td> <a href="{{ action('DisciplinaryActionsController@edit', $violator->id) }}#employee={{ $violator->employee_work_id }}" class="btn btn-default"> <span class="glyphicon glyphicon-edit" ></span> Edit</a></td>
 	  				</tr>
 	  			@endforeach

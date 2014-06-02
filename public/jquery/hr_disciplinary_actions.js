@@ -74,8 +74,14 @@
 
             				name = hrApp.personName(data[0]);
             				date_hired = data[0].date_hired;
-            				position = data[0].position.name;
 
+                                    if (data.hasOwnProperty('position') ) {
+                                          position = data[0].position.name;
+      
+                                    } else {
+                                          position = 'Unassigned';
+                                    }
+            				
                                     if (element) {
                                      $('.resultContainer').remove();
                                      $('.resultName').remove();

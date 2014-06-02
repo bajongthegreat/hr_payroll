@@ -30,7 +30,7 @@
 					{{ Form::label('violation_date', 'Date of Violation', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('violation_date', Input::old('violation_date'), array('class' => 'form-control text-date', 'required', 'data-format' => 'YYYY-MM-DD') ) }}
+						{{ Form::text('violation_date', Input::old('violation_date'), array('class' => 'form-control text-date', 'required', 'data-date-format' => 'YYYY-MM-DD') ) }}
 					</div>
 
 				</div>
@@ -41,7 +41,7 @@
 					{{ Form::label('violation_effectivity_date', 'Effectivity Date', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('violation_effectivity_date', Input::old('violation_effectivity_date'), array('class' => 'form-control text-date'	, 'data-format' => 'YYYY-MM-DD' ) ) }}
+						{{ Form::text('violation_effectivity_date', Input::old('violation_effectivity_date'), array('class' => 'form-control text-date'	, 'data-date-format' => 'YYYY-MM-DD' ) ) }}
 					</div>
 
 				</div>

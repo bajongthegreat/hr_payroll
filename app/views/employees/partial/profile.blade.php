@@ -54,11 +54,18 @@
 							
 					{{ Form::label('birthdate', 'Birth date ', array('class' => 'col-sm-4 text-right')) }}
 
-					<div class="col-sm-4">
+					<div class="col-sm-6">
 						<p class="form-control-static">
 							<?php 
+
 							$date = new DateTime($employee->birthdate);
-							echo $date->format('F d Y') . ' (' . $employee->birthdate .') ';
+
+							$datetime1 = date_create($employee->birthdate);
+						    $datetime2 = date_create(date('Y-m-d'));
+						    
+						    $interval = date_diff($datetime1, $datetime2);
+						   
+							echo $date->format('F d, Y') . ' (' . $interval->format('%y') .' years old) ';
 							?>
 						</p>
 					</div>
@@ -88,7 +95,7 @@
 					{{ Form::label('marital_status', 'Marital Status ', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ ucfirst( $employee->marital_status) }}</p>
+						<p class="form-control-static">{{ ($employee->marital_status != "" && $employee->marital_status) ? ucfirst($employee->marital_status) : '<span class="label label-default">Not specified</span>' }}</p>
 					</div>
 
 				</div>
@@ -101,7 +108,7 @@
 					{{ Form::label('gender', 'Gender', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ ucfirst($employee->gender) }}</p>
+						<p class="form-control-static">{{ ($employee->gender && $employee->gender != "") ? ucfirst($employee->gender) : '<span class="label label-default">Not specified</span>' }}</p>
 					</div>
 
 				</div>
@@ -126,11 +133,23 @@
 							
 					{{ Form::label('date_hired', 'Date Hired', array('class' => 'col-sm-4 text-right')) }}
 
-					<div class="col-sm-4">
+					<div class="col-sm-6">
 						<p class="form-control-static">
 							<?php 
-							$date = new DateTime($employee->date_hired);
-							echo $date->format('F d  Y') . ' (' . $employee->date_hired .')';
+
+							if ($employee->date_hired && $employee->date_hired != "0000-00-00" && $employee->date_hired != "") {
+								$date = new DateTime($employee->date_hired);
+
+								$datetime1 = date_create($employee->date_hired);
+							    $datetime2 = date_create(date('Y-m-d'));
+							    
+							    $interval = date_diff($datetime1, $datetime2);
+							   
+
+								echo $date->format('F d,  Y') . ' (' . $interval->format('%y') .' years in service)';								
+							} else {
+								echo '<span class="label label-default">Not specified</span>';
+							}
 							?>
 						</p>
 					</div>

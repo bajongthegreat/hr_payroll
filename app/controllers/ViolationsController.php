@@ -107,7 +107,7 @@ class ViolationsController extends \BaseController {
 				return  $this->notAccessible();		
 		}
 
-		$post_data = Input::only('code','description', 'penalty');
+		$post_data = Input::only('code','description', 'first_offense','second_offense','third_offense', 'fourth_offense', 'fifth_offense');
 
 		// Validate Inputs
 		if (!$this->validator->validate($post_data, NULL)) {

@@ -1,5 +1,6 @@
 <?php namespace Acme\Repositories\Employee;
 
+
 use Employee;
 use Acme\Repositories\RepositoryAbstract;
 
@@ -57,6 +58,8 @@ class EmployeeRepository extends RepositoryAbstract implements EmployeeRepositor
 
 		return $id;
 	}
+
+	
 
 	public function getAllRequirements($id, $db_field="employee_id") {
 		return \DB::table($this->pivot_table)->where($db_field, '=', $id )->lists('requirement_id');

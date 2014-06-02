@@ -16,7 +16,6 @@
 				  	<thead>
 				  		
 				  		<th>Violation Code</th>
-				  		<th>Penalty</th>
 				  		<th>Date Violated</th>
 				  		<th>Effectivity Date</th>
 				  	</thead>
@@ -25,8 +24,7 @@
 
 				  		@foreach($violations as $violation)
 				  			<tr>
-				  				<td> {{ $violation->violation_code }}</td>
-				  				<td> {{ ucfirst($violation->violation_penalty) }}</td>
+				  				<td> {{ $violation->violation_code }}</td>	
 				  				<td> {{ $violation->violation_date }}</td>
 				  				<td> {{ $violation->violation_effectivity_date or '<span class="label label-default">N/A</span>' }} </td>
 				  			</tr>

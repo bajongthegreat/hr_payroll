@@ -4,6 +4,9 @@
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Cell;
+use PHPExcel_Settings;
+use PHPExcel_CachedObjectStorageFactory;
+
 
 class jExcel {
 
@@ -20,6 +23,11 @@ class jExcel {
 	}
 
 	public function loadFile($file) {
+		
+		$cacheMethod = PHPExcel_CachedObjectStorageFactory:: cache_to_phpTemp;
+		$cacheSettings = array( ' memoryCacheSize ' => '8MB');
+		PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+		
 		return $this->excelFile =  PHPExcel_IOFactory::load($file);
 	}
 
@@ -87,7 +95,7 @@ class jExcel {
 
 					$temp[$key][$this->fields[$k]] =  $value[$k];			
 			}
-			
+
 		}
 
 		return $temp;
@@ -98,6 +106,12 @@ class jExcel {
 	}
 	public function getValues() {
 		return $this->values;
+	}
+
+	public function throwGarbage() {
+
+		 $this->excelFile->disconnectWorksheets(); 
+   		 unset($this->excelFile);
 	}
 
 }

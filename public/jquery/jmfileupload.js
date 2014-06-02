@@ -26,6 +26,7 @@
             type: 'POST',
             url: '?a=upload',
             customData: {},
+            infoContainer: '.upload-info',
             errorContainer: '.upload-error',
             responseContainer: '.upload-done',
             imageContainer: '.image',
@@ -57,6 +58,8 @@
 
             // Show progressbar
             $(options.progressbarContainer).show();
+
+            $(options.infoContainer).append('<div> <strong>[3]</strong> Uploading file... </div>');
 
              var xhr = new XMLHttpRequest();
                 
@@ -98,6 +101,9 @@
              if (!result) {
                 $(options.errorContainer).html('Failed to process uploaded file.');
              }
+
+             $(options.infoContainer).append('<div> <strong>[4]</strong> Fetched uploaded file data. </div>');
+
              // Parse as JSON result
              result = JSON.parse(result);
 
@@ -122,6 +128,7 @@
 
             var formData = new FormData();
 
+            $(options.infoContainer).html('<div><strong>[1]</strong> Validating file...</div>');
             // Terminate event if doesnt match the required file types
             if (validate(fileType) === false) {
                 console.log(fileType);
@@ -132,6 +139,8 @@
             // Reset progress bar values
              $(options.progressbar).css('width', 0+'%').html(0 + "%");
 
+
+            $(options.infoContainer).append('<strong>[2]</strong> Assigning variables...');
             // Append file to Formdata
             formData.append('file',file);
             
@@ -139,6 +148,7 @@
             $.each(options.customData, function(key,value) {
                 formData.append(key, value);
             });
+
 
 
             // Make an AJAX request with the formData

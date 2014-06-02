@@ -53,12 +53,19 @@ abstract class RepositoryAbstract {
 		return $this->model->whereIn($field, $collection);
 	}
 
-	public function findLike($value, $fields = array(), $with = [] ) {
+	public function findLike($value, $fields = array(), $with = [], $concat=[] ) {
 		if (count($fields) == 0) return false;
 		
 		// No relationship
 		if (count($with) == 0) {
-			return  $this->model->where(function($query) use ($fields, $value) {
+			return  $this->model->where(function($query) use ($fields, $value, $concat) {
+
+							// Add support for concatenation
+							if (count($concat) > 0) {
+								$field_to_concatenate = implode('," ", ', $concat);
+								$query->orWhere( \DB::raw('CONCAT('.$field_to_concatenate.')'), 'LIKE', "%$value%");
+
+							}
 		      				
 		      				foreach ($fields as $field) {
 		      					 $query->orWhere($field, 'LIKE', "%$value%");
@@ -71,7 +78,15 @@ abstract class RepositoryAbstract {
 		else {
 
 
-			return  $this->model->with($with)->where(function($query) use ($fields, $value) {
+			return  $this->model->with($with)->where(function($query) use ($fields, $value, $concat) {
+
+							// Add support for concatenation
+							if (count($concat) > 0) {
+								$field_to_concatenate = implode('," ", ', $concat);
+								$query->orWhere( \DB::raw('CONCAT('.$field_to_concatenate.')'), 'LIKE', "%$value%");
+
+							}
+
 		      				
 		      				foreach ($fields as $field) {
 		      					 $query->orWhere($field, 'LIKE', "%$value%");

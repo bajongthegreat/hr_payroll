@@ -35,7 +35,7 @@
 	  			<td>{{ $medical_establishment->name }}</td>
 	  			<td> {{ ($medical_establishment->telephone_number == '') ? 'N/A' : $medical_establishment->telephone_number }} </td>
 	  			<td> {{ ($medical_establishment->email == '') ? 'N/A' : $medical_establishment->email }} </td>
-	  			<td><a href="{{ action('MedicalEstablishmentsController@edit', $medical_establishment->id) }}"><span class="label label-default">Edit</span></a> <a href="#" data-id="{{ $medical_establishment->id }}" data-url="{{ action('MedicalEstablishmentsController@destroy', $medical_establishment->id)  }}" class="label label-default btn-sm _deleteItem"><span class="glyphicon glyphicon-remove"></span> Delete</a></td>
+	  			<td><a href="{{ action('MedicalEstablishmentsController@edit', $medical_establishment->id) }}" class="btn btn-default"><span class="glyphicon glyphicon-edit">  Edit</span></a> <a href="#" data-id="{{ $medical_establishment->id }}" data-url="{{ action('MedicalEstablishmentsController@destroy', $medical_establishment->id)  }}" class="btn btn-default  _deleteItem"><span class="glyphicon glyphicon-remove"></span> Delete</a></td>
 	
 	  		</tr>
 
