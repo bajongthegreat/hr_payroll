@@ -10,6 +10,8 @@ class UserRepository extends RepositoryAbstract implements UserRepositoryInterfa
    		* @var Model
   	    */
 	  protected $model;
+	  protected $order_by = 'username';
+	protected $order_type = 'asc';
 	 
 	  /**
 	   * Constructor
@@ -19,16 +21,86 @@ class UserRepository extends RepositoryAbstract implements UserRepositoryInterfa
 	    $this->model = $model;
 	 }
 
-	 // public function relativeSearch($src, $filter_params, $db_field_to_use) {
-	 	
-	 // 		return $this->findLike($src, $db_field_to_use , [] )->where(function($query) use ($filter_params) {
+	 	public function _search($fields, $search_term, $options=  array() )
+	{
+		$users = NULL;
 
-		// 		if (isset($filter_params)) {
-		// 			$this->addFilterFieldsToDB($query, $filter_params);
-		// 		}
+		$callback_variable = ['fields' => $fields, 
+		                      'search_term' => $search_term 
+		                       ];
+		 // Sorting                   
+		 $this->order_by = isset($options['sort']['by']) ? $options['sort']['by'] : $this->order_by; 
+		 $this->order_type = isset($options['sort']['type']) ? $options['sort']['type'] : $this->order_type;
+
+
+
+		if (is_array($fields))
+		{
 			
-		// 	});
-	 // }
+				
+				// Check if the user wants to paginate it
+				if (isset($options['paginate']))
+				{
+
+						 $this->pagination_limit = $options['paginate']['limit'];
+						
+
+						 $users= User::where(function($query) use ($callback_variable) {
+
+					  		
+					  		$search_term = $callback_variable['search_term'];
+
+
+							// Loop through each field given and compare the value found in the  DB
+					 		foreach($callback_variable['fields'] as $field)
+					 		{
+					 			  $query->orWhere($field, 'LIKE', "%$search_term%");
+
+
+					 		}
+
+			
+					 	})->orderBy($this->order_by, $this->order_type)->paginate($this->pagination_limit);
+
+						
+
+					
+
+					
+				}
+				// Return un-paginated result
+				else
+				{
+					 $users= User::orWhere(function($query) use ($callback_variable) {
+
+					  		$search_term = $callback_variable['search_term'];
+
+					 		foreach($callback_variable['fields'] as $field)
+					 		{
+					 			  $query->orWhere($field, 'LIKE', "%$search_term%");
+					 		}
+					 	})->orderBy($this->order_by, $this->order_type)->get();
+				}
+
+			 
+		}
+		else
+		{
+			throw new \Exception('Fields must be an in the form of array.');
+		}
+
+		
+
+		
+		// Check if the user wants other return types
+		if (isset($options['return_type']))
+		{
+			if ($options['return_type'] == 'json') return \Response::json($users->toArray());
+		}
+
+		return $users;
+	}
+
 
 	 public function _create($userdata, $options = array() )
 	{	

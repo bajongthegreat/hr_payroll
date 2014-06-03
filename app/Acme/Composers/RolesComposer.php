@@ -12,7 +12,7 @@ class RolesComposer {
 
 	public function compose($view) 
 	{
-		$roles =  $this->roles->all()->lists('name','id');
+		$roles =  ['Super user'] + $this->roles->all()->lists('name','id');
 		$view->with('roles', $roles);
 	}
 

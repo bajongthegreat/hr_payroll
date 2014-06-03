@@ -50,9 +50,19 @@
                           <div id="collapseTwo" class="panel-collapse collapse in">
                             <div class="panel-body">
                             <ul class="list-group filter-list" style="font-size: 12px; font-weight: bold; list-style:none;" data-category="position_id" data-limit="5">
+                              @if (isset($filter_params['position_id']))
+  
+                                @if (in_array(0, $filter_params['position_id'])) 
+                                  <li><input type="checkbox" data-fieldvalue="0"  class="filter-item" checked > Not Assigned  </li>
+                                @endif
 
-                              <li><input type="checkbox" data-fieldvalue="0"  class="filter-item" > Unassigned  </li>
-                              <hr>
+                              @else 
+                                 <li><input type="checkbox" data-fieldvalue="0"  class="filter-item" > Not Assigned  </li>
+                                                          
+  
+
+                              @endif
+                               <hr>
 
                                   <!-- Loop through each department -->
                                   @foreach( $departments as $department )

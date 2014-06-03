@@ -7,6 +7,9 @@
 ** FIXES: 1/1/14
 ** -> User creation validates if the username and email exists
 ** -> Search query with sorting and pagination capability implemented
+**
+** FIXES: 6/3/14
+** --> User Repository added old_functions _create and _update
 */
 
 
@@ -73,8 +76,7 @@ class UsersController extends BaseController {
 
 
 		if (strlen($src) > 0) {	
-			 // Work more with pagination, were getting close
-			// $users = $this->users->relativeSearch($src, NULL, ['email','username', 'status'])->paginate($limit);
+			$users = $this->users->_search(['username', 'email'], $src, ['paginate' => 10]);
 		}
 		else {
 			$users = $this->users->all(['*'], ['paginate' => $limit]);
