@@ -96,7 +96,7 @@
 				{{ Form::label('birthplace', 'Birth Place', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-4">
-					{{ Form::textarea('birthplace', Input::old('birthplace'), array('class' => 'form-control', 'required') ) }}
+					{{ Form::textarea('birthplace', Input::old('birthplace'), array('class' => 'form-control') ) }}
 				</div>
 				
 			</div>
@@ -325,29 +325,6 @@
 				</div>
 			</div>
 
-			<div class="form-group">
-
-				 <div class="col-sm-7">
-				 	<hr>	<!-- Seperator -->
-				 </div>
-			</div>
-
-			<div class="form-group">
-									
-							{{ Form::label('salary', 'Salary ', array('class' => 'col-sm-2 text-right')) }}
-
-							<div class="col-sm-4">
-								<div class="input-group">
-								  <span class="input-group-addon">PHP</span>
-								  {{ Form::text('salary', Input::old('salary'), array('class' => 'form-control', 'required') ) }}
-								  <span class="input-group-addon"></span>
-								</div>
-								
-							</div>
-
-							
-
-						</div>
 
 			<div class="form-group">
 

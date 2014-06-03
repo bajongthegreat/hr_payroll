@@ -47,28 +47,38 @@
 
   @include('partials.breadcrumbs')
 
-
+@if ($accessControl->hasAccess('employees/medical_examinations', 'view', $GLOBALS['_byPassRole']) || 
+     $accessControl->hasAccess('leaves', 'view', $GLOBALS['_byPassRole']) ||
+     $accessControl->hasAccess('employees/disciplinary_actions', 'view', $GLOBALS['_byPassRole']) )
 <div class="panel panel-default smooth-panel-edges" >
       <div class="panel-body">
       
         <div class="parent">
+    @if ($accessControl->hasAccess('employees/medical_examinations', 'view', $GLOBALS['_byPassRole']))        
   <div class="child">
       <a href="{{ action('EmployeesMedicalExaminationsController@index') }}" class="btn btn-default"> <span class="glyphicon glyphicon-th  "></span> Manage Medical Examinations</a>
 </div>
 
+  @endif
+
+ @if ($accessControl->hasAccess('leaves', 'view', $GLOBALS['_byPassRole']))
 <div class="child">
       <a href="{{ action('LeavesController@index') }}" class="btn btn-default"> <span class="glyphicon glyphicon-dashboard"></span> Manage Leaves</a>
 </div>
+@endif
   
 
+ @if ($accessControl->hasAccess('employees/disciplinary_actions', 'view', $GLOBALS['_byPassRole']))
 <div class="child">
       <a href="{{ action('DisciplinaryActionsController@index') }}" class="btn btn-default"> <span class="glyphicon glyphicon-dashboard"></span> Disciplinary Actions</a>
 </div>
+@endif
     </div>
 
 
       </div>
 </div>
+@endif
 
   @if (Input::has('src'))
   <p>Search term: <span class="label label-default">{{Input::get('src') }}</span></p>

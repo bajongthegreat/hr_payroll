@@ -134,7 +134,7 @@ class RolesController extends \BaseController {
 		});
 
 
-		// return Redirect::action('RolesController@index');
+		return Redirect::action('RolesController@index');
 
 
 

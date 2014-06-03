@@ -127,6 +127,17 @@ $("#uploadedFileLoc").change(function() {
 									++i;
 
 									$('.timer').html('<strong>Process time</strong>:  ' + i + 's');
+									if (i == 30) {
+										$('.upload-info').append('<br><div class="alert alert-info top-down-margin-5">Whoops! It seems like the file is a bit large. Please give us a moment to process it. :)</div>');
+									}
+
+									if (i == 90) {
+										$('.upload-info').append('<br><div class="alert alert-info top-down-margin-5"> It looks like the server is having a hard time processing the data. Please hold a little longer.. </div>');
+									}
+
+									if (i == 120) {
+										$('.upload-info').append('<br><div class="alert alert-info top-down-margin-5"> Patience is power. We are doing our best. We are getting there. Just do not forget to smile. :)</div>');
+									}
 
 								},1000);
 	$.ajax({
@@ -145,12 +156,17 @@ $("#uploadedFileLoc").change(function() {
 
 			window.clearInterval(processTime);
 
+			var status = "";
+			
 			$('.loader').html('').hide();
 			$('.upload-info').append('<div><br> <strong> Import complete.</strong> </div>');
 			
 			$('.upload-info').append('<br><div><strong>File: </strong> '  + data.file + '</div>')
 
 			$('.upload-info').append(data.memory_log);
+			
+			 status = (data.status) ? 'Success' : 'Failed';
+			$('.upload-info').append('<br><div><strong>DB Insert status: </strong> '  + status + '</div>') 
 			$('.upload-info').append('<br><div><strong>Total affected rows: </strong> '  + data.rows_affected + '</div>')
 
 			$('.errorContainer').hide();
@@ -160,11 +176,11 @@ $("#uploadedFileLoc").change(function() {
 			var response = data.responseText;
 
 			if (response.error.type == 'PHPExcel_Reader_Exception') {
-				$('.upload-error').html('File not found or not readable.');
-				$('.errorContainer').show();
+				$('.upload-info').append('File not found or not readable.');
+				// $('.errorContainer').show();
 			} else {
-				$('.upload-error').html(response.error.message);
-				$('.errorContainer').show();
+				$('.upload-info').append(response.error.message);
+				// $('.errorContainer').show();
 			}
 
 			// console.log(data);

@@ -56,6 +56,10 @@ label {
 
 /* Content Processing */
 
+.top-down-margin-5 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 .parent{
     text-align: center;
 }

@@ -45,7 +45,16 @@
 				</div>
 
 
-				<div class="profile-label"> <b>Name: </b> {{ ucfirst($employee->lastname) . ', '  .  ucfirst($employee->firstname) . ' ' . ucfirst($employee->middlename[0]) . '.' }}</div>
+				<?php
+
+					if ((isset($employee->lastname) && $employee->lastname !="") && (isset($employee->firstname) && $employee->firstname != "") && (isset($employee->middlename) && $employee->middlename != "") ) {
+						$fullname = ucfirst($employee->lastname) . ', '  .  ucfirst($employee->firstname) . ' ' . ucfirst($employee->middlename[0]) . '.';
+					} else {
+						$fullname = "[Incomplete]";
+					}
+				?>
+
+				<div class="profile-label"> <b>Name: </b> {{ $fullname  }}</div>
 				<div class="profile-label"> <b>ID: </b> <?php echo (isset($employee->employee_work_id)) ? $employee->employee_work_id : 'Not specified'; ?></div>
 				<div class="profile-label"> <b>Company: </b> <?php echo (isset($company)) ? $company : 'Not specified'; ?></div>
 				<div class="list-group">

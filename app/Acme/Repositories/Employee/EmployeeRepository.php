@@ -1,8 +1,22 @@
 <?php namespace Acme\Repositories\Employee;
 
+/*
+
+Delete Duplicates
+
+CREATE TABLE employees_verify AS SELECT DISTINCT  FROM employees;
+
+DELETE FROM employees;
+
+INSERT INTO employees SELECT * FROM employees_verify;
+
+DROP TABLE employees_verify;
+
+*/
 
 use Employee;
 use Acme\Repositories\RepositoryAbstract;
+use DB;
 
 class EmployeeRepository extends RepositoryAbstract implements EmployeeRepositoryInterface {
 	
@@ -19,6 +33,18 @@ class EmployeeRepository extends RepositoryAbstract implements EmployeeRepositor
 	public function __construct(Employee $model)
 	{
 	    $this->model = $model;
+	 }
+
+	 public function removeDuplicates() {
+	 	return DB::statement('
+	 		CREATE TABLE employees_verify AS SELECT DISTICT * FROM employees;
+
+	 		DELETE FROM employees;
+
+	 		INSERT INTO employees SELET * FROM employees_verify;
+
+	 		DROP TABLE employees_verify;
+	 		');
 	 }
 
 	 /** Generates unique employee ID

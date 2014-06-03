@@ -133,26 +133,30 @@
             if (validate(fileType) === false) {
                 console.log(fileType);
                 $(options.errorContainer).html('File does not pass from the required file types.');
+
+                $(options.infoContainer).append('<br><span class="glyphicon glyphicon-remove"></span> File does not pass from the required file types.');
                 return false;
+            } else {
+                // Reset progress bar values
+                 $(options.progressbar).css('width', 0+'%').html(0 + "%");
+
+
+                $(options.infoContainer).append('<strong>[2]</strong> Assigning variables...');
+                // Append file to Formdata
+                formData.append('file',file);
+                
+                // Add custom parameters to formData
+                $.each(options.customData, function(key,value) {
+                    formData.append(key, value);
+                });
+
+
+
+                // Make an AJAX request with the formData
+                sendData(formData);    
             }
 
-            // Reset progress bar values
-             $(options.progressbar).css('width', 0+'%').html(0 + "%");
-
-
-            $(options.infoContainer).append('<strong>[2]</strong> Assigning variables...');
-            // Append file to Formdata
-            formData.append('file',file);
             
-            // Add custom parameters to formData
-            $.each(options.customData, function(key,value) {
-                formData.append(key, value);
-            });
-
-
-
-            // Make an AJAX request with the formData
-            sendData(formData);
 
          });
 

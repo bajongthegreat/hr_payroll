@@ -7,6 +7,10 @@ Composer
 Git
 
 
+TODO [HR]:
+
+[DB] Educational attainment is integer -> Change to string
+
 
 
 TODO:
