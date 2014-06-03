@@ -110,7 +110,7 @@ class UsersController extends BaseController {
 		}
 
 		// Attempt to create user
-		$new_user = $this->users->create($user_data, array('fields' => ['status' => 'active'] ,
+		$new_user = $this->users->_create($user_data, array('fields' => ['status' => 'active'] ,
 			                                               'unset' => ['password_confirmation']));
 
 		// Trigger a create method
@@ -126,6 +126,7 @@ class UsersController extends BaseController {
 	}
 
 	/**
+	*  december03
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
@@ -180,9 +181,9 @@ class UsersController extends BaseController {
 		{
 			return Redirect::back()->withInput()->withErrors( $this->validator->errors()  );
 		}	
-
+			
 		// Update the user
-		$this->users->update($id, $user_data, array('change_password' => $change_password));
+		$this->users->_update($id, $user_data, array('change_password' => $change_password));
 		
 		// Trigger an update method
 		Event::fire('user.update');

@@ -57,7 +57,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'hr_pay',
 			'username'  => 'root',
-			'password'  => '',
+			'password'  => 'hrtibud',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

@@ -261,7 +261,8 @@ class ImportsController extends \BaseController {
 		return Response::json(['memory_log' => $message,
 			                  'rows_affected' => count($data),
 			                  'status' => ($status == true) ? 'success' : 'failed',
-			                  'error' => (isset($error)) ? $error : NULL ] );
+			                  'error' => (isset($error)) ? $error : NULL ,
+			                  'file' => $file] );
 	}
 
 	public function create() {

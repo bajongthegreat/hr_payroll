@@ -1,18 +1,11 @@
-Todo:
-Holidays
+Prepare for use:
 
-Currently working on:
+Requirements:
 
-User Roles  --> My attempt to implement RBAC in my system.
+XAMPP
+Composer
+Git
 
-DONE:
--Annual Physical Examination result
--Violations
-
-TODO::
-**Code cleanup for employees
-**Rework employees table -- remove annual_pe
-**Integrate employee violations to each employee's profile.
 
 
 

@@ -58,14 +58,19 @@
 						<p class="form-control-static">
 							<?php 
 
-							$date = new DateTime($employee->birthdate);
+							if ($employee->birthdate == '0000-00-00' || $employee->birthdate == '') {
+								echo '<span class="label label-default">Not specified</span>';
+							} else {
 
-							$datetime1 = date_create($employee->birthdate);
-						    $datetime2 = date_create(date('Y-m-d'));
-						    
-						    $interval = date_diff($datetime1, $datetime2);
-						   
-							echo $date->format('F d, Y') . ' (' . $interval->format('%y') .' years old) ';
+								$date = new DateTime($employee->birthdate);
+
+								$datetime1 = date_create($employee->birthdate);
+							    $datetime2 = date_create(date('Y-m-d'));
+							    
+							    $interval = date_diff($datetime1, $datetime2);
+							   
+								echo $date->format('F d, Y') . ' (' . $interval->format('%y') .' years old) ';
+							}
 							?>
 						</p>
 					</div>

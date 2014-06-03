@@ -51,6 +51,8 @@
                             <div class="panel-body">
                             <ul class="list-group filter-list" style="font-size: 12px; font-weight: bold; list-style:none;" data-category="position_id" data-limit="5">
 
+                              <li><input type="checkbox" data-fieldvalue="0"  class="filter-item" > Unassigned  </li>
+                              <hr>
 
                                   <!-- Loop through each department -->
                                   @foreach( $departments as $department )

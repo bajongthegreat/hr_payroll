@@ -5,7 +5,7 @@ class BaseController extends Controller {
 
 
 	protected $accessControl;
-	protected $byPassRoles = [];
+	protected $byPassRoles = [0,1];
 		 /**
 	     * Instantiate a newController instance.
 	     */

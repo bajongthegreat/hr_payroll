@@ -141,12 +141,14 @@ $("#uploadedFileLoc").change(function() {
 
 		},
 		success: function(data) {
-			console.log(data);
+			// console.log(data);
 
 			window.clearInterval(processTime);
 
 			$('.loader').html('').hide();
 			$('.upload-info').append('<div><br> <strong> Import complete.</strong> </div>');
+			
+			$('.upload-info').append('<br><div><strong>File: </strong> '  + data.file + '</div>')
 
 			$('.upload-info').append(data.memory_log);
 			$('.upload-info').append('<br><div><strong>Total affected rows: </strong> '  + data.rows_affected + '</div>')
@@ -155,17 +157,17 @@ $("#uploadedFileLoc").change(function() {
 		},
 		error: function(data) {
 			
-			// var response = data.responseText;
+			var response = data.responseText;
 
-			// if (response.error.type == 'PHPExcel_Reader_Exception') {
-			// 	$('.upload-error').html('File not found or not readable.');
-			// 	$('.errorContainer').show();
-			// } else {
-			// 	$('.upload-error').html(response.error.message);
-			// 	$('.errorContainer').show();
-			// }
+			if (response.error.type == 'PHPExcel_Reader_Exception') {
+				$('.upload-error').html('File not found or not readable.');
+				$('.errorContainer').show();
+			} else {
+				$('.upload-error').html(response.error.message);
+				$('.errorContainer').show();
+			}
 
-			// // console.log(data);
+			// console.log(data);
 
 		}
 	});

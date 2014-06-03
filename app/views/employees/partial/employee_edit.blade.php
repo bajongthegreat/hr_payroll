@@ -133,7 +133,22 @@
 					{{ Form::label('gender', 'Gender', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-							{{ Form::select('gender', ['0' => 'Please select gender','Male' => 'Male', 'Female' => 'Female'], Input::old('gender') , array('class' => 'form-control', 'required') ) }}
+						<?php
+							if (Input::old('gender') != "") {
+								$gender = Input::old('gender');
+							} else {
+								
+								if (isset($employee->gender) && $employee->gender != "") {
+									$gender = ucfirst(strtolower($employee->gender));
+								} else {
+									$gender = "";
+								}
+
+
+							}
+							
+						 ?>
+							{{ Form::select('gender', ['0' => 'Please select gender','Male' => 'Male', 'Female' => 'Female'], $gender , array('class' => 'form-control', 'required') ) }}
 					</div>
 
 				</div>
@@ -172,7 +187,7 @@
 					{{ Form::label('in_case_of_emergency_name', 'Name', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('in_case_of_emergency_name', Input::old('in_case_of_emergency_name'), array('class' => 'form-control', 'required', 'placeholder' => 'Whose to contact') ) }}
+						{{ Form::text('in_case_of_emergency_name', Input::old('in_case_of_emergency_name'), array('class' => 'form-control', 'placeholder' => 'Whose to contact') ) }}
 					</div>
 
 				</div>
@@ -189,7 +204,7 @@
 					{{ Form::label('in_case_of_emergency_contact', 'Contact Number', array('class' => 'col-sm-4 text-right', 'required')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('in_case_of_emergency_contact', Input::old('in_case_of_emergency_contact'), array('class' => 'form-control', 'required', 'placeholder' => 'Enter phone number') ) }}
+						{{ Form::text('in_case_of_emergency_contact', Input::old('in_case_of_emergency_contact'), array('class' => 'form-control', 'placeholder' => 'Enter phone number') ) }}
 					</div>
 
 				</div>
@@ -212,7 +227,7 @@
 					{{ Form::label('mothers_name', 'Mother\'s Name', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('mothers_name', Input::old('mothers_name'), array('class' => 'form-control', 'required', 'placeholder' => 'Enter mother\'s fullname') ) }}
+						{{ Form::text('mothers_name', Input::old('mothers_name'), array('class' => 'form-control', 'placeholder' => 'Enter mother\'s fullname') ) }}
 					</div>
 
 				</div>
@@ -227,7 +242,7 @@
 					{{ Form::label('fathers_name', 'Father\'s Name', array('class' => 'col-sm-4 text-right', 'required')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('fathers_name', Input::old('fathers_name'), array('class' => 'form-control', 'required', 'placeholder' => 'Enter father\'s fullname ') ) }}
+						{{ Form::text('fathers_name', Input::old('fathers_name'), array('class' => 'form-control', 'placeholder' => 'Enter father\'s fullname ') ) }}
 					</div>
 
 				</div>
