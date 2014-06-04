@@ -27,6 +27,7 @@
 				  				<td> {{ $violation->violation_code }}</td>	
 				  				<td> {{ $violation->violation_date }}</td>
 				  				<td> {{ $violation->violation_effectivity_date or '<span class="label label-default">N/A</span>' }} </td>
+				  				<td> <a href="{{ action('DisciplinaryActionsController@edit', $violation->id) }}?ref={{ base64_encode(URL::current() . '?v=violations') }}#employee={{ $employee->employee_work_id}}" class="btn btn-default"> <span class="glyphicon glyphicon-pencil" ></span> </a></td>
 				  			</tr>
 				  		@endforeach
 				 
@@ -46,7 +47,7 @@
 
 		  <div class="panel panel-default smooth-panel-edges" >
 		  <div class="panel-body">
-		    <a href="{{ action('DisciplinaryActionsController@create') }}?ref=profile#employee={{$employee->employee_work_id}}" class="btn btn-primary pull-left">Add record</a>
+		    <a href="{{ action('DisciplinaryActionsController@create') }}?ref={{ base64_encode(URL::current() . '?v=violations') }}#employee={{$employee->employee_work_id}}" class="btn btn-primary pull-left">Add record</a>
 		    <a href="{{ action('DisciplinaryActionsController@index') }}" class="btn btn-default pull-right">Go to Disciplinary Actions </a>
 		  </div>
 		</div>

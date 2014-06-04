@@ -14,13 +14,14 @@
 		
 		<?php $type = (Input::get('add_type') == 'bulk') ? "bulk" : "single"; ?>
 
-		{{Form::open(['action' => 'EmployeesMedicalExaminationsController@store', 'class' => 'form-horizontal', 'role' => 'form'])}}
+		{{Form::open(['action' => 'EmployeesMedicalExaminationsController@store', 'class' => 'form-horizontal', 'role' => 'form', 'autocomplete' => 'off'])}}
 		
 		@if ($type == 'single')
 			@include('employees.medical_examination.partials.single_add');
 		@else
 			@include('employees.medical_examination.partials.bulk_add');
 		@endif
+
 
 		@include('partials.errors')
 

@@ -29,7 +29,9 @@
 				 	<input type="hidden" name="employee_id" class="hiddenID">
 				 </div>  <!-- End of Body -->
 		</div> <!-- End of Panel -->
-
+		@if (Input::has('ref'))
+		{{ Form::hidden('ref', Input::get('ref'))}}
+		@endif
 
 		<!-- Form Buttons -->
 		<div class="container" id="buttons">
@@ -55,7 +57,8 @@
 
 @section('scripts')
 <script>
-	
+	           
+
 		// Settings for Employee search
 		
            	var __employee="";

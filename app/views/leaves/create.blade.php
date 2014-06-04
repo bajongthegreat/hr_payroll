@@ -44,7 +44,7 @@
 				{{ Form::label('start_date', 'Start date:', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-4">
-					{{ Form::text('start_date', Input::old('start_date'), array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD") ) }}
+					{{ Form::text('start_date', Input::old('start_date'), array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD", 'required') ) }}
 				</div>
 			</div>
 
@@ -52,7 +52,7 @@
 				{{ Form::label('end_date', 'End date:', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-4">
-					{{ Form::text('end_date', Input::old('end_date'), array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD") ) }}
+					{{ Form::text('end_date', Input::old('end_date'), array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD", 'required') ) }}
 				</div>
 			</div>
 
@@ -60,13 +60,14 @@
 				{{ Form::label('reason', 'Reason:', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-4">
-					{{ Form::textarea('reason', Input::old('reason'), array('class' => 'form-control') ) }}
+					{{ Form::textarea('reason', Input::old('reason'), array('class' => 'form-control', 'required') ) }}
 				</div>
 			</div>
 
 			{{ Form::hidden('status', 'Pending')}}
-			<?php $ref = (Input::has('ref')) ? Input::get('ref') : "";  ?>
-			{{ Form::hidden('ref', $ref) }}
+			@if (Input::has('ref'))
+				{{ Form::hidden('ref', Input::get('ref')) }}
+			@endif
 		  </div> <!-- Panel Body -->
 
 

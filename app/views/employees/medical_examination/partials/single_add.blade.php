@@ -7,6 +7,9 @@
 
 		<?php $work_id = (Input::has('work_id')) ? Input::get('work_id') : Input::old('employee_work_id');  ?>
 
+		@if (Input::has('ref'))
+			{{ Form::hidden('ref', Input::get('ref')) }}
+		@endif
 				<div class="form-group">
 							
 					{{ Form::label('employee_work_id', 'Employee ID', array('class' => 'col-sm-2 text-right')) }}
@@ -25,7 +28,7 @@
 					{{ Form::label('date_conducted', 'Date Conducted', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-2">
-						{{ Form::text('date_conducted', Input::old('date_conducted') , array('class' => 'form-control date', 'required', 'data-format' => 'YYYY-MM-DD') ) }}
+						{{ Form::text('date_conducted', Input::old('date_conducted') , array('class' => 'form-control date', 'required', 'data-date-format' => 'YYYY-MM-DD') ) }}
 					</div>
 					</div>
 

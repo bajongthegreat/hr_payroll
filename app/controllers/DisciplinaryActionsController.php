@@ -94,7 +94,10 @@ class DisciplinaryActionsController extends \BaseController {
 		if ($post_data['violation_effectivity_date'] == '') unset($post_data['violation_effectivity_date']);
 
 		if ($this->disciplinaryactions->create($post_data)) {
-			return Redirect::action('DisciplinaryActionsController@index')->with('message', ['Violator added.']);
+			if (Input::has('ref')) {
+				$url = base64_decode(Input::get('ref'));
+				return Redirect::to($url);
+			} else return Redirect::action('DisciplinaryActionsController@index')->with('message', ['Violation added.']);
 		}
 
 		 return Redirect::action('DisciplinaryActionsController@create')->withInputs()->with('error', ['Something went wrong while processing your data. Please try again.']);
@@ -168,10 +171,13 @@ class DisciplinaryActionsController extends \BaseController {
 		}
 
 		if ($this->disciplinaryactions->find($id)->update($post_data)) {
-			return Redirect::action('DisciplinaryActionsController@index')->with('message', ['Employee violation updated.']);
+			if (Input::has('ref')) {
+				$url = base64_decode(Input::get('ref'));
+				return Redirect::to($url);
+			} else return Redirect::action('DisciplinaryActionsController@index')->with('message', ['Employee violation updated.']);
 		}
 
-		 return Redirect::action('DisciplinaryActionsController@edit', $id)->withInputs()->with('error', ['Something went wrong while processing your data. Please try again.']);
+		 // return read_exif_data()irect::action('DisciplinaryActionsController@edit', $id)->withInputs()->with('error', ['Something went wrong while processing your data. Please try again.']);
 
 	}
 

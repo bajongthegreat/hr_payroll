@@ -164,6 +164,14 @@
 		//  Display description on select
 		(function(){
 
+                   $("#violation_date").on("dp.change",function (e) {
+                     $('#violation_effectivity_date').data("DateTimePicker").setMinDate(e.date);
+                  });
+                  $("#violation_effectivity_date").on("dp.change",function (e) {
+                     $('#violation_date').data("DateTimePicker").setMaxDate(e.date);
+                  });
+
+                  
 			$('#violation_decription_container').hide();
 			$('#violation_id').on('change', function() {
 				var selectValue = $(this).val();

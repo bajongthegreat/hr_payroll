@@ -63,6 +63,8 @@
 				<td> {{ ($pe->medical_findings  == NULL) ? 'None' : $pe->medical_findings 	 }}</td>
 				<td> {{ $pe->recommendations }} </td>
 				<td> {{ ($pe->remarks != "") ? $pe->remarks : "N/A"}}</td>
+				<td> <a class="btn btn-default">Edit</a> </td>
+				<td> <a class="btn btn-danger">Delete</a> </td>
 			</tr>
 		@endforeach
 

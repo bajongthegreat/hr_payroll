@@ -64,13 +64,14 @@
 
 	  		<tbody>
 	  			@foreach ($employee_violators as $violator)
+	  				
 	  				<tr>
 	  					<?php $number_violated = $disciplinaryactions->getOffensesCount($violator->employee_id, $violator->violation_id); ?>
 	  					
 	  					<td> {{ $violator->lastname }}, {{ $violator->firstname }} {{ ucfirst($violator->middlename[0]) . '.'}}</td>
 	  					<td>{{ $violator->company }}</td>
-	  					<td> {{ $violator->department }}</td>
-	  					<td> {{ $violator->position }}</td>
+	  					<td> {{ $violator->department or '<span class="label label-default">Not specified</span>' }}</td>
+	  					<td> {{ $violator->position or '<span class="label label-default">Not specified</span>'}}</td>
 	  					<td> {{ $violator->violation_date }}</td>
 	  					<td> {{ (is_null($violator->violation_effectivity_date)) ? 'N/A' : $violator->violation_effectivity_date }}</td>
 	  					<td> {{ $violator->violation_code }}</td>

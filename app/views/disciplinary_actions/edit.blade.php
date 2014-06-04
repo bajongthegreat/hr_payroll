@@ -30,7 +30,10 @@
 				 </div>  <!-- End of Body -->
 		</div> <!-- End of Panel -->
 
-
+		@if (Input::has('ref'))
+		{{ Form::hidden('ref', Input::get('ref'))}}
+		@endif
+		
 		<!-- Form Buttons -->
 		<div class="container" id="buttons">
 				<div class="form-group">
@@ -51,6 +54,25 @@
 
 		{{Form::close()}}
 	</div>
+@stop
+@section('scripts')
+<script>
+	
+		// Settings for Employee search
+		
+           	var __employee="";
+           	var __panelsToToggle = ['#dpc_information', '#employee_information', '#buttons'];
+           	var __fieldsToEmpty = [];
+           	var __buttonsToHide = [];
+           	var __dbFieldsToUse = [];
+
+
+
+           	var __rowsToDisplay = 10;
+           	var resultContainer = $('.resultContainer');
+           	var hiddenID = $('.hiddenID');
+
+</script>
 @stop
 
 

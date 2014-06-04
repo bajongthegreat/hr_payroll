@@ -33,6 +33,7 @@
 				 			<td> {{ $leave->end_date }}</td>
 				 			<td> {{ $duration}}</td>
 				 			<td> {{ $leave->status }}</td>
+				 			<td> <a href="{{ action('LeavesController@edit', $leave->id) }}?ref={{ base64_encode(URL::current() . '?v=leaves') }}#employee={{ $employee->employee_work_id}}" class="btn btn-default"> <span class="glyphicon glyphicon-pencil" ></span> </a></td>
 				 		</tr>
 
 				 	@endforeach
@@ -57,7 +58,7 @@
 
 		  <div class="panel panel-default smooth-panel-edges" >
 		  <div class="panel-body">
-		    <a href="{{ action('LeavesController@create') }}?ref=profile#employee={{$employee->employee_work_id}}" class="btn btn-primary pull-left">Add record</a>
+		    <a href="{{ action('LeavesController@create') }}?ref={{ base64_encode(URL::current() . '?v=leaves')}}#employee={{$employee->employee_work_id}}" class="btn btn-primary pull-left">Add record</a>
 		    <a href="{{ action('LeavesController@index') }}" class="btn btn-default pull-right">Go to Leaves</a>
 		  </div>
 		</div>

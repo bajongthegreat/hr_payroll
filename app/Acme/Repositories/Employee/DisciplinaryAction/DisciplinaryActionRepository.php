@@ -44,7 +44,7 @@ class DisciplinaryActionRepository extends RepositoryAbstract implements Discipl
             	    'violations.code as violation_code',
                       'violations.id as violation_id',
             	    'companies.name as company')
-            ->groupBy('violations.code')
+            ->groupBy('employees.id')
             ->get();
 	 }
 

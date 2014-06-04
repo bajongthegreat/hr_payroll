@@ -111,8 +111,11 @@ class LeavesController extends BaseController {
 
 		// Check if the process has a reference page
 		if (Input::has('ref')) {
-			if (Input::get('ref') == 'profile') {
-				return Redirect::action('EmployeesController@show', $id);
+			if (Input::get('ref')) {
+				
+				$url = base64_decode(Input::get('ref'));
+				return Redirect::to($url);
+
 			}
 		}
 
@@ -245,11 +248,21 @@ class LeavesController extends BaseController {
 		}
 
 		$id = (int) Input::get('id');
-		$data = Input::except('id','_token','_method');
+		$data = Input::except('id','_token','_method', 'ref');
 
 		$update_status = $this->leaves->update($id, $data);
 
 		if ($update_status) {
+			
+		// Check if the process has a reference page
+		if (Input::has('ref')) {
+			if (Input::get('ref')) {
+				
+				$url = base64_decode(Input::get('ref'));
+				return Redirect::to($url);
+
+			}
+		}
 			return  Redirect::action('LeavesController@show', $id);
 		}
 		

@@ -207,8 +207,14 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 					              'created_at' => date('Y-m-d h:i:s'),
 					              'updated_at'=> date('Y-m-d h:i:s')];
 					
-
-		return $this->physical_examinations->create($employee_data);
+		$this->physical_examinations->create($employee_data);
+		
+		if (Input::has('ref')) {
+			$url = base64_decode(Input::get('ref'));
+			return Redirect::to($url);
+		} else {
+			return Redirect::action('EmployeesMedicalExaminationsController@index')->with('message', 'Added new PE Examinee data.');
+		}
 	}
 	public function store()
 	{

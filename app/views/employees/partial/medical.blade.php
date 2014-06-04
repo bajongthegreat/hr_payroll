@@ -52,7 +52,7 @@
 
 		  <div class="panel panel-default smooth-panel-edges" >
 		  <div class="panel-body">
-		    <a href="{{ action('EmployeesMedicalExaminationsController@create') }}?employee_id={{ $employee_id }}&work_id={{$employee->employee_work_id}}" class="btn btn-primary pull-left">Add record</a>
+		    <a href="{{ action('EmployeesMedicalExaminationsController@create') }}?ref={{ base64_encode(URL::current() . '?v=medical')}}&employee_id={{ $employee_id }}&work_id={{$employee->employee_work_id}}" class="btn btn-primary pull-left">Add record</a>
 		    <a href="{{ action('EmployeesMedicalExaminationsController@index') }}" class="btn btn-default pull-right">Go to Medical Examinations</a>
 		  </div>
 		</div>
