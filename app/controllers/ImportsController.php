@@ -98,6 +98,7 @@ class ImportsController extends \BaseController {
 				$error = $e->getMessage();
 				$message .= '<div> <strong>Rolling back due to some problems: </strong> (' . date('H:i:s') . "): Peak memory usage: " . (memory_get_peak_usage(true) / 1024 / 1024) . " MB\r\n" . '</div>';
 			
+				var_dump($error);
 				$status = false;
 				$error = "Failed to process data.";
 				DB::rollback();
@@ -105,7 +106,6 @@ class ImportsController extends \BaseController {
 		});
 
 		// Free up memory
-		// $jExcel->disconnectWorksheets();
 		$jExcel->throwGarbage();
 
 		$message .= '<div> <strong> Garbage collection </strong> (' . date('H:i:s') . "): Peak memory usage: " . (memory_get_peak_usage(true) / 1024 / 1024) . " MB\r\n" . '</div>';
@@ -115,7 +115,7 @@ class ImportsController extends \BaseController {
 			                  'status' => ($status == true) ? 'success' : 'failed',
 			                  'error' => (isset($error)) ? $error : NULL ,
 			                  'file' => $file,
-			                  'query' => $query] );
+			                 'query' => $query] );
 	}
 
 	public function create() {

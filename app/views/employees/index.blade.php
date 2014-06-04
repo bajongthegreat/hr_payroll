@@ -116,12 +116,12 @@
 
 
   <table class="table table-hover" ng-controller="EmployeeController" id="employeeTable">
-  	<thead>
-  		<th >ID </th>
-  		<th > Name </th>
-  		<th>Position</th>
-      <th>Membership status</th>
-  		<th>Employment status</th>
+  	<thead >
+  		<th class="text-center" >ID </th>
+  		<th class="text-center" > Name </th>
+  		<th class="text-center">Position</th>
+      <th class="text-center">Membership status</th>
+  		<th class="text-center">Employment status</th>
   	</thead>
 
   
@@ -132,13 +132,13 @@
         
             <?php foreach ($employees as $employee): ?>
 
-             <tr class="" >
+             <tr class="text-center" >
 
                 <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}" > <?php echo $employee->employee_work_id . '</td>'; ?>
                 <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}"> <?php echo   ucfirst($employee->lastname) . ', ' . $employee->firstname . '</td>'; ?>
                 <td> <?php echo  ($employee->position_id == 0 || (!isset($employee->position['name']) )) ? '<span class="label label-default">Not assigned</span>' : ucfirst($employee->position['name']) . '</td>'; ?>
-                <td> <?php echo  ucfirst($employee->membership_status) . '</td>'; ?>
-                <td> <?php echo ucfirst( $employee->employment_status) . '</td>'; ?>
+                <td > <?php echo  '<span class="label label-info">' . ucfirst(strtolower($employee->membership_status)) . '</span></td>'; ?>
+                <td> <?php echo '<span class="label label-info">' . ucfirst( strtolower($employee->employment_status)) . '</span></td>'; ?>
                 <td> 
                    @if ($accessControl->hasAccess($uri, 'edit', $GLOBALS['_byPassRole']))
                   <a class="btn btn-small btn-default editButton" href="{{ action('EmployeesController@edit', $employee->employee_work_id ) }}"> <span class="glyphicon glyphicon-edit"></span> Edit</a> 

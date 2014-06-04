@@ -233,7 +233,8 @@ $('.filter-item').on('click', function(e) {
 
 
 // Delete collection
-$('._deleteItem').on('click', function(e) {
+$(document).on('click', '._deleteItem',function(e) {
+
   
       // Prevent from going back to top when clicking the button
       e.preventDefault();

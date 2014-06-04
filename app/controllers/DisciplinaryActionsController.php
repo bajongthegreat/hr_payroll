@@ -48,7 +48,17 @@ class DisciplinaryActionsController extends \BaseController {
 		} else {
 			$employee_violators = $this->disciplinaryactions->getAllWithJoins();	
 		}
+		
 		$disciplinaryactions = $this->disciplinaryactions;
+
+		if (Input::has('jq_ax')){
+
+			$employee_id = (int)  Input::get('employee_id');
+			$violation_id = (int) Input::get('violation_id');
+
+			$violations = $this->disciplinaryactions->getEmployeeViolations($employee_id, $violation_id)->get();
+			return Response::json($violations);
+		}
 		
 		return View::make('disciplinary_actions.index', compact('employee_violators', 'disciplinaryactions'));
 	}
@@ -78,7 +88,7 @@ class DisciplinaryActionsController extends \BaseController {
 	 */
 	public function store()
 	{
-
+		
 		// Check access control
 		if ( !$this->accessControl->hasAccess('employees/disciplinary_actions', 'create', $this->byPassRoles) ) {
 				return  $this->notAccessible();		
@@ -190,11 +200,14 @@ class DisciplinaryActionsController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-
 		// Check access control
 		if ( !$this->accessControl->hasAccess('employees/disciplinary_actions', 'delete', $this->byPassRoles) ) {
 				return  $this->notAccessible();		
 		}
+
+		$id = (int) Input::get('id');
+
+
 		return $this->disciplinaryactions->find($id)->delete();
 	}
 

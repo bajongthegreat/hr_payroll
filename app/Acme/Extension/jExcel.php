@@ -1,5 +1,8 @@
 <?php namespace Acme\Extension;
 
+// PHP Excel extension
+// By: James Mones
+
 // Dependencies
 use PHPExcel;
 use PHPExcel_IOFactory;

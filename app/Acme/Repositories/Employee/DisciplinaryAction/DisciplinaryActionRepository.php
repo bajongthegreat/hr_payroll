@@ -28,7 +28,14 @@ class DisciplinaryActionRepository extends RepositoryAbstract implements Discipl
                                           ->select(DB::raw('count(*) as count '))
                                           ->pluck('count');
        }
-
+       
+       public function getEmployeeViolations($employee_id, $violation_id) {
+            $table = $this->table;
+            return DB::table($this->table)->where("$table.employee_id", '=', $employee_id)
+                                          ->where("$table.violation_id", '=', $violation_id)
+                                          ->leftJoin('employees', 'employees.id', '=', "$table.employee_id")
+                                          ->select("$table.*", "employees.employee_work_id");
+       }
 	 public function getAllWithJoins() {
 	 	$table = $this->table;
 	 	return DB::table($this->table)
@@ -44,7 +51,7 @@ class DisciplinaryActionRepository extends RepositoryAbstract implements Discipl
             	    'violations.code as violation_code',
                       'violations.id as violation_id',
             	    'companies.name as company')
-            ->groupBy('employees.id')
+            ->groupBy('employees.id', 'violations.code')
             ->get();
 	 }
 
@@ -54,10 +61,12 @@ class DisciplinaryActionRepository extends RepositoryAbstract implements Discipl
             ->orWhere('employees.lastname', 'LIKE', "%$src%")
             ->orWhere('employees.firstname', 'LIKE', "%$src%")
             ->orWhere('employees.middlename', 'LIKE', "%$src%")
+            ->orWhere('violations.code', 'LIKE', "%$src%")
             ->orWhere('violations.description', 'LIKE', "%$src%")
             ->orWhere('departments.name', 'LIKE', "%$src%")
             ->orWhere('positions.name', 'LIKE', "%$src%")
             ->orWhere('companies.name', 'LIKE', "%$src%")
+            ->orWhere('violations.first_offense', 'LIKE', "%$src%")
             ->join('employees', "$table.employee_id" , '=', 'employees.id')
             ->leftJoin('positions', "employees.position_id", '=', 'positions.id')
             ->leftJoin('departments', "positions.department_id", '=', 'departments.id')
