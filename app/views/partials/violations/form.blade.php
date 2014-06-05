@@ -22,73 +22,28 @@
 
 				</div>
 
+				@for($i=1; $i <=5; $i++ )
+					@include('partials.violations_offenses.offenses')
+				@endfor
 
 
+@section('sub_scripts')
+	<script type="text/javascript">
+		$('._punishment_type').on('change', function() {
+			
+			switch($(this).val()) {
+				case 'suspended':
+					$(this).parent().parent().next().find('input[name="days_suspended"]').prop("disabled", false);
+				break;
 
-				<div class="panel panel-default">
+				default:
+					$(this).parent().parent().next().find('input[name="days_suspended"]').prop("disabled", true);
+			}
+		});
 
-					<div class="panel-heading">
-						<div class="panel-title"> Penalties</div>
-					</div>
+		$('.panel-title .close').on('click', function() {
+			
+		});
 
-					<div class="panel-body">
-						
-
-						<div class="form-group">
-							
-							{{ Form::label('first_offense', '1st Offense', array('class' => 'col-sm-2 text-right')) }}
-
-							<div class="col-sm-4">
-								{{ Form::text('first_offense', Input::old('first_offense'), array('class' => 'form-control', 'required') ) }}
-							</div>
-
-						</div>
-
-						<div class="form-group">
-							
-							{{ Form::label('second_offense', '2nd Offense', array('class' => 'col-sm-2 text-right')) }}
-
-							<div class="col-sm-4">
-								{{ Form::text('second_offense', Input::old('second_offense'), array('class' => 'form-control') ) }}
-							</div>
-
-						</div>
-
-						<div class="form-group">
-							
-							{{ Form::label('third_offense', '3rd Offense', array('class' => 'col-sm-2 text-right')) }}
-
-							<div class="col-sm-4">
-								{{ Form::text('third_offense', Input::old('third_offense'), array('class' => 'form-control') ) }}
-							</div>
-
-						</div>
-
-						<div class="form-group">
-							
-							{{ Form::label('fourth_offense', '4th Offense', array('class' => 'col-sm-2 text-right')) }}
-
-							<div class="col-sm-4">
-								{{ Form::text('fourth_offense', Input::old('fourth_offense'), array('class' => 'form-control') ) }}
-							</div>
-
-						</div>
-
-						<div class="form-group">
-							
-							{{ Form::label('fifth_offense', '5th Offense', array('class' => 'col-sm-2 text-right')) }}
-
-							<div class="col-sm-4">
-								{{ Form::text('fifth_offense', Input::old('fifth_offense'), array('class' => 'form-control') ) }}
-							</div>
-
-						</div>
-
-					</div>
-
-				</div>
-
-
-
-
-
+	</script>
+@stop

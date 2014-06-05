@@ -9,6 +9,9 @@ body {
   
 	
 }
+.__more_violations_parent {
+  cursor: pointer;
+}
 
 footer {
 	 padding: 30px 5px;

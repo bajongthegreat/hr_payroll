@@ -150,6 +150,7 @@ Route::group(array('before' => 'auth'), function()
 Route::group(array('before' => ['auth']), function()
 {
 	// ==================== Violation ================================
+	Route::resource('offenses', 'ViolationsOffensesController');	
 	Route::resource('violations', 'ViolationsController');	
 
 	// ==================== Disciplinary Actions =====================

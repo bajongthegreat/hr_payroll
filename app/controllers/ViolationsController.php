@@ -4,6 +4,7 @@ use Acme\Repositories\Violations\ViolationRepositoryInterface;
 
 use Acme\Services\Validation\ViolationsValidator as jValidator;
 
+use Carbon\Carbon;
 class ViolationsController extends \BaseController {
 
 
@@ -65,6 +66,15 @@ class ViolationsController extends \BaseController {
 
 		}
 
+		if (Input::has('jq_ax')) {
+
+			$id = (int) Input::get('id');
+
+
+			$offenses = DB::table('violations_offenses')->where('violation_id', '=', $id)->get();
+			return Response::json($offenses);
+		}
+
 		if (Input::has('output')) {
 			if (Input::get('output') == 'json') return Response::json($violations);
 		}
@@ -106,20 +116,82 @@ class ViolationsController extends \BaseController {
 		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
 				return  $this->notAccessible();		
 		}
+		$offenses_raw = Input::get('offenses');
+		$offenses = json_decode($offenses_raw);
+		
+		if ($offenses == NULL) {
+			return Redirect::back()->withInput()->with('errors', ['Offenses not specified. Please try again. If this still exists, contact the developer.']);
+		}
 
-		$post_data = Input::only('code','description', 'first_offense','second_offense','third_offense', 'fourth_offense', 'fifth_offense');
+	
+		$post_data = Input::only('code','description','offenses');
 
 		// Validate Inputs
 		if (!$this->validator->validate($post_data, NULL)) {
 			return Redirect::back()->withInput()->withErrors($this->validator->errors());
 		}
 
-		if ($this->violations->create($post_data)) {
+
+		try {
+			// Remove offenses for different process
+			unset($post_data['offenses']);
+
+			// Add violation
+			$query = $this->violations->create($post_data);
+
+
+			foreach ($offenses as $key => $value) {
+				# code...
+				$query_instance = DB::table('violations_offenses')
+												->where('violation_id', '=', $query->id)
+				                                ->where('offense_number', '=', $value->offense_number);
+
+
+				$offense_count_in_db = $query_instance->select(DB::raw('COUNT(*) as count'))
+				                                      ->pluck('count');
+
+				// Determine wether to INSERT or UPDATE
+				if ($offense_count_in_db && $offense_count_in_db > 0) {
+
+
+					if ($value->punishment_type == 'warning' && isset($value->days_of_suspension)) {
+						$value->days_of_suspension=NULL;
+					}
+
+					// UPDATE
+					$value->updated_at = Carbon::now();
+
+					$query_instance->update((array) $value);
+
+				} else {
+
+					// INSERT
+
+
+					if ($value->punishment_type == 'warning' && isset($value->days_of_suspension)) {
+						unset($value->days_of_suspension);
+					}
+
+					$value->violation_id = $query->id;
+					$value->updated_at = Carbon::now();
+					$value->created_at = Carbon::now();
+
+					$query_instance->insert( (array) $value);
+
+				}
+			}
+
 			if (Input::has('ref')) {
 				$url = base64_decode(Input::get('ref'));
 				return Redirect::to($url);
 			} else  return Redirect::action('ViolationsController@index')->with('message', ['Added New Violation']);
+	
+		} catch (Exception $e) {
+			$error = $e->getMessage();
 		}
+
+	
+	
 
 		 return Redirect::action('ViolationsController@create')->withInputs()->with('error', ['Something went wrong while processing your data. Please try again.']);
 
@@ -156,11 +228,13 @@ class ViolationsController extends \BaseController {
 				return  $this->notAccessible();		
 		}
 
-		$violation = $this->violations->find($id)->get()->first();
+		$violation = $this->violations->find($id, 'violations.id')->get()->first();
 
 		if (!$violation) return Redirect::action('ViolationsController@index')->with('error', ['Violation not found.']);
+		$offenses = DB::table('violations_offenses')->where('violation_id', '=', $violation->id)->get();
 
-		return View::make('violations.edit', compact('violation'));
+
+		return View::make('violations.edit', compact('violation', 'offenses'));
 	}
 
 	/**
@@ -178,19 +252,79 @@ class ViolationsController extends \BaseController {
 				return  $this->notAccessible();		
 		}
 
-		$post_data = Input::only('code','description', 'penalty');
+		$post_data = Input::only('code','description', 'offenses');
+
+		$offenses_raw = Input::get('offenses');
+		$offenses = json_decode($offenses_raw);
+		
+		if ($offenses == NULL) {
+			return Redirect::back()->withInput()->with('errors', ['Offenses not specified. Please try again. If this still exists, contact the developer.']);
+		}
+
 
 		// Validate Inputs
 		if (!$this->validator->validate($post_data, NULL)) {
 			return Redirect::back()->withInput()->withErrors($this->validator->errors());
 		}
 
-		if ($this->violations->find($id)->update($post_data)) {
-			return Redirect::action('ViolationsController@index')->with('message', [' Violation edited']);
+		unset($post_data['offenses']);
+		try {
+			
+
+			$violation = $this->violations->find($id)->update($post_data);
+
+
+			foreach ($offenses as $key => $value) {
+				# code...
+				$query_instance = DB::table('violations_offenses')
+												->where('violation_id', '=', $id)
+				                                ->where('offense_number', '=', $value->offense_number);
+				                    var_dump($value);	
+
+				$offense_count_in_db = $query_instance->select(DB::raw('COUNT(*) as count'))
+				                                      ->pluck('count');
+
+				// Determine wether to INSERT or UPDATE
+				if ($offense_count_in_db && $offense_count_in_db > 0) {
+
+
+					if (($value->punishment_type == 'warning' || $value->punishment_type == 'demotion' || $value->punishment_type == 'discharge' ) && isset($value->days_of_suspension)) {
+						$value->days_of_suspension=NULL;
+					}
+
+					// UPDATE
+					$value->updated_at = Carbon::now();
+
+					$query_instance->update((array) $value);
+
+				} else {
+
+					// INSERT
+
+
+					if ($value->punishment_type == 'warning' && isset($value->days_of_suspension)) {
+						unset($value->days_of_suspension);
+					}
+
+					$value->violation_id = $id;
+					$value->updated_at = Carbon::now();
+					$value->created_at = Carbon::now();
+
+					$query_instance->insert( (array) $value);
+
+				}
+
+			}
+		} catch (Exception $e) {
+			
+			 return Redirect::action('ViolationsController@edit')->withInputs()->with('error', ['Something went wrong while processing your data. Please try again.']);
+
 		}
 
-		 return Redirect::action('ViolationsController@edit')->withInputs()->with('error', ['Something went wrong while processing your data. Please try again.']);
 
+				return Redirect::action('ViolationsController@index')->with('message', [' Violation edited']);
+
+		
 	}
 
 	/**

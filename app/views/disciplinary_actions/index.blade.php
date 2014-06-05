@@ -43,11 +43,15 @@
 			case 5:
 				$suffix = 'fifth';
 				break;
+
+			default:
+				$suffix = 'first';
 		}
 
 
 		return $suffix;
 	}
+	
 ?>
 
 <style type="text/css">
