@@ -1,0 +1,16 @@
+1700
+0300
+
+
+Night Shift
+
+Condensed form:
+Time IN (pm) : Show
+Time OUT (am) : Show
+
+Time in (am): hide
+time out (pm): hide
+
+
+Still in condensed form:
+Time in PM = If value is < 12

@@ -96,6 +96,7 @@ class DTRController extends \BaseController {
 									'time_in_pm'  => $data->time_in_pm,
 									'time_out_pm' => $data->time_out_pm,
 									'remarks' => $remarks,
+									'encoded_by' => Auth::user()->username,
 					              'created_at' => date('Y-m-d h:i:s'),
 					              'updated_at'=> date('Y-m-d h:i:s')];
 					
@@ -116,8 +117,10 @@ class DTRController extends \BaseController {
 
 					$status = $this->daily_time_records->create($employee_data);	
 					
+					unset($employee_data['encoded_by']);
 
 					$employee_data['employee_id'] = $data->employee_work_id;
+					$employee_data['id'] = $status->id;
 
 					$json_employee_data[] = $employee_data;
 						// Record job

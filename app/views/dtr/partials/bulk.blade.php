@@ -1,5 +1,4 @@
 
-
 <div class="panel panel-default">
 		  <div class="panel-heading">
 		    <h3 class="panel-title"><h4>Medical Examination Information</h4></h3>
@@ -37,7 +36,7 @@
 			<div class="form-group ">
 							
 					<div class="col-sm-2 text-right" style="padding-top: 5px;">
-						<span class="label label-info"> Time out AM</span>
+						<span class="label label-info"> <span class="_am">Time out AM</span> </span>
 					</div>
 
 					<div class="col-sm-2">
@@ -45,7 +44,7 @@
 					</div>
 
 					<div class="col-xs-2 text-right" style="padding-top: 5px;">
-						<span class="label label-warning"> Time in PM</span>
+						<span class="label label-warning"  ><span class="_pm"> Time in PM</span></span>
 					</div>
 
 					<div class="col-xs-2">
@@ -102,10 +101,10 @@
 		  <table id="medical_examination_information_table" class="table panel-smooth-edges">
 			<thead>
 				<th width="35%">ID Number 	</th>
-				<th width="15%" class="text-center"><strong>Time IN  </strong><span style="display:none;" class="timelabel label label-info"> AM </span></th>
-				<th id="header_timeout_am" width="15%" class="text-center" style="display:none;"><strong>Time OUT  </strong><span style="display:none;" class="timelabel label label-info">AM</span></th>
-				<th id="header_timein_pm" width="15%" class="text-center" style="display:none;"><strong>Time IN  </strong><span style="display:none;" class="timelabel label label-warning">PM</span></th>
-				<th width="15%" class="text-center"><strong>Time OUT  </strong><span class="timelabel label label-warning" style="display:none;">PM</span></th>
+				<th id="header_timein_am" width="15%" class="text-center"><strong>Time IN  </strong><span style="display:none;" class="timelabel label label-info"><span class="_amth">AM</span> </span></th>
+				<th id="header_timeout_am" width="15%" class="text-center" style="display:none;"><strong>Time OUT  </strong><span style="display:none;" class="timelabel label label-info"><span class="_amth">AM</span> </span></th>
+				<th id="header_timein_pm" width="15%" class="text-center" style="display:none;"><strong>Time IN  </strong><span style="display:none;" class="timelabel label label-warning"><span class="_pmth">PM</span></span></th>
+				<th id="header_timeout_pm" width="15%" class="text-center"><strong>Time OUT  </strong><span class="timelabel label label-warning" style="display:none;"><span class="_pmth">PM</span></span></th>
 				<th class="text-center">Total Hours</th>
 				<th class="text-center"> Remarks</th>
 				<th></th>
@@ -204,7 +203,72 @@
 var __panelsToToggle  = [];
 var __rowsToDisplay  = 10;
 var resultContainer = $('.resultContainer');
+var __dayShiftHoursAM = [],
+    __dayShiftHoursPM = [];
 
+var __shift = $('#shift').val();
+
+for (var i=6; i <=21; i++) {
+	
+	// GET AM hours
+	if (i < 12) {
+
+		if (i < 10) {
+			__dayShiftHoursAM.push( '0' + i + ':00' );
+			__dayShiftHoursAM.push( '0' + i + ':15' );
+			__dayShiftHoursAM.push( '0' + i + ':30' );
+			__dayShiftHoursAM.push( '0' + i + ':45' );	
+		} else {
+			__dayShiftHoursAM.push(  i + ':00' );
+			__dayShiftHoursAM.push(  i + ':15' );
+			__dayShiftHoursAM.push(  i + ':30' );
+			__dayShiftHoursAM.push(  i + ':45' );
+		}
+		
+	} else if (i >= 12) {
+		__dayShiftHoursPM.push( i + ':00');
+		__dayShiftHoursPM.push( i + ':15');
+		__dayShiftHoursPM.push( i + ':30');
+		__dayShiftHoursPM.push( i + ':45');
+	}
+
+}
+
+// // Remove all values in option
+// $('#def_timeout_am option').remove();
+// $('#def_timein_pm option').remove();
+
+// // Dayshift
+// if (__shift == 'ds') {
+
+// var _select = $('<select>');
+// var _select2 = $('<select>');
+
+// $.each(__dayShiftHoursAM, function(val, text) {
+//     _select.append(
+//             $('<option></option>').val(text).html(text)
+//         );
+// });
+
+
+// $.each(__dayShiftHoursPM, function(val, text) {
+//     _select2.append(
+//             $('<option></option>').val(text).html(text)
+//         );
+// });
+
+// $('#def_timeout_am').append(_select.html()).val('11:00');
+// $('#def_timein_pm').append(_select2.html()).val('12:00');
+
+
+
+// } else {
+// // Night shift
+
+// }
+
+// console.log(__dayShiftHoursAM);
+// console.log(__dayShiftHoursPM);
 </script>
 <script type="text/javascript" src="{{ asset('jquery/hr_disciplinary_actions.js') }}"></script>
 
@@ -212,25 +276,138 @@ var resultContainer = $('.resultContainer');
 
 	(function() {
 
-		$('#def_timeout_am').on('change', function() {
-			var timeout_am = $('input[name="time_out_am"]');
-			var default_timeout_am = $(this).val();
+		var show_full_dtr = $('#show_full_dtr').prop('checked');
 
-			$.each(timeout_am, function(key,value) {
-				$(this).val(default_timeout_am);
-			});
+
+
+		$('#shift').on('change', function() {
+			var shift = $(this).val();
+
+			if (shift == 'ds') {
+				
+				$('#def_timeout_am').val('11:00');				
+				$('._am').text('Time out AM');
+
+				$('#def_timein_pm').val('12:00');
+				$('._pm').text('Time in PM');
+
+				var time_in_am = $('input[name="time_in_am"]');
+				var time_out_am = $('input[name="time_out_am"]');
+
+
+				$('._amth').html('AM');
+				$('._pmth').html('PM');
+				time_in_am.attr('name', 'time_in_pm').attr('data-name', 'time_in_pm');
+				time_in_am.parent().parent().prev().prev().find('input').attr('name', 'time_in_am').attr('data-name', 'time_in_am');
+
+
+				time_out_am.attr('name', 'time_out_pm').attr('data-name', 'time_out_pm');
+				time_out_am.parent().parent().prev().prev().find('input').attr('name', 'time_out_am').attr('data-name', 'time_out_am');
+
+
+				$('#def_timeout_am').trigger('change');
+				$('#def_timein_pm').trigger('change');		
+
+				if (show_full_dtr == false) return false;
+
+				// Show time in AM and Time out PM
+				$('input[name="time_out_am"]').parent().parent().fadeOut();
+				$('input[name="time_in_pm"]').parent().parent().fadeOut();
+
+				$('input[name="time_out_pm"]').parent().parent().fadeIn();
+				$('input[name="time_in_am"]').parent().parent().fadeIn();
+
+
+			} else if (shift == 'ns' ) {
+				
+				$('#def_timeout_am').val('00:00');
+				$('._am').text('Time in AM');
+
+				$('#def_timein_pm').val('24:00');
+				$('._pm').text('Time out PM');
+
+				//Time in (am): hide
+				//time out (pm): hide
+
+
+				$('input[name="time_in_pm"]').attr('name', 'time_in_am');
+
+				var time_in_am = $('input[name="time_in_am"]');
+				var time_out_am = $('input[name="time_out_am"]');
+			
+				time_in_am.attr('data-name', 'time_in_pm');
+				time_in_am.attr('name', 'time_in_pm');
+
+				time_in_am.parent().parent().next().next().find('input').attr('name', 'time_in_am').attr('data-name', 'time_in_am');
+				// time_in_am.parent().parent().next().next().find('input').attr('name', 'time_in_am').data('time_in_am');
+
+				time_out_am.attr('name', 'time_out_pm').attr('data-name', 'time_out_pm');
+				time_out_am.parent().parent().next().next().find('input').attr('name', 'time_out_am').attr('data-name', 'time_out_am');
+
+
+				$('#def_timeout_am').trigger('change');
+				$('#def_timein_pm').trigger('change');
+
+				$('._amth').html('PM');
+				$('._pmth').html('AM');
+
+				if (show_full_dtr == false) return false;
+				// Show time in PM and time out AM
+				$('input[name="time_out_am"]').parent().parent().fadeIn();
+				$('input[name="time_in_pm"]').parent().parent().fadeIn();
+
+				$('input[name="time_out_pm"]').parent().parent().fadeOut();
+				$('input[name="time_in_am"]').parent().parent().fadeOut();
+			}
+		});
+	
+		// set default timeout
+		$('#def_timeout_am').on('change', function() {
+			var shift = $('#shift').val();
+			
+			if (shift == 'ds') {
+				var timeout_am = $('input[name="time_out_am"]');
+				var default_timeout_am = $(this).val();
+
+				$.each(timeout_am, function(key,value) {
+					$(this).val(default_timeout_am);
+				});	
+			} else if (shift =='ns') {
+				var timeout_am = $('input[name="time_in_am"]');
+				var default_timeout_am = $(this).val();
+
+				$.each(timeout_am, function(key,value) {
+					$(this).val(default_timeout_am);
+				});
+			}
+			
 		});
 
+		// Set default time in
 		$('#def_timein_pm').on('change', function() {
-			var timeout_am = $('input[name="time_in_pm"]');
-			var default_timeout_am = $(this).val();
+			
+			var shift = $('#shift').val();
 
-			$.each(timeout_am, function(key,value) {
-				$(this).val(default_timeout_am);
-			});
+			if (shift == 'ds') {
+				var timeout_am = $('input[name="time_in_pm"]');
+				var default_timeout_am = $(this).val();
+
+				$.each(timeout_am, function(key,value) {
+					$(this).val(default_timeout_am);
+				});	
+			} else if (shift == 'ns') {
+				var timeout_pm = $('input[name="time_out_pm"]');
+				var default_timeout_am = $(this).val();
+
+				$.each(timeout_pm, function(key,value) {
+					$(this).val(default_timeout_am);
+				});
+			}
+			
 		});
 
 		$('input[name="show_full_dtr"]').on('change', function() {
+
 
 				// Get all time out am
 				var timeout_am = $('input[name="time_out_am"]');
@@ -241,8 +418,11 @@ var resultContainer = $('.resultContainer');
 				var timein_am = $('input[name="time_in_am"]');
 
 				var timeout_pm  = $('input[name="time_out_pm"]');
+			
+			// Show all time fields
 			if ($(this).prop('checked') == true) {
 				
+				show_full_dtr = true;
 
 				// Show timeout AM
 				$.each(timeout_am, function(key, value) {
@@ -269,40 +449,72 @@ var resultContainer = $('.resultContainer');
 				$('.timelabel').fadeIn();
 
 			} else {
-				$('.timelabel').fadeOut();
-				$('#header_timeout_am').fadeOut(250);
-				$('#header_timein_pm').fadeOut(250);
+				
+				show_full_dtr = false;
+				var shift = $('#shift').val();
 
-					$.each(timeout_am, function(key, value) {
-						var _tipm = $(this);
-						var _tiam_val = _tipm.parent().parent().parent().find('input[name="time_in_pm"]').val();
-						var _toam_val = _tipm.parent().parent().parent().find('input[name="time_out_pm"]').val();
+				// For dayshift
+				if (shift == 'ds') {
 
-						console.log(_toam_val);
+					$('.timelabel').fadeOut();
+					$('#header_timeout_am').fadeOut(250);
+					$('#header_timein_pm').fadeOut(250);
 
-						if (_tiam_val == '00:00' && _toam_val == '00:00') {
-							_tipm.parent().parent().parent().find('input[name="time_out_pm"]').parent().parent().fadeOut();
-						} else {
-							_tipm.parent().parent().fadeOut();	
-						}
+						$.each(timeout_am, function(key, value) {
+							var _tipm = $(this);
+							var _tiam_val = _tipm.parent().parent().parent().find('input[name="time_in_pm"]').val();
+							var _toam_val = _tipm.parent().parent().parent().find('input[name="time_out_pm"]').val();
 
-						// $(this).parent().parent().fadeOut();
-					});
+							console.log(_toam_val);
 
-					$.each(timein_pm, function(key, value) {
-						var _tipm = $(this);
-						var _tiam_val = _tipm.parent().parent().parent().find('input[name="time_in_am"]').val();
-						var _toam_val = _tipm.parent().parent().parent().find('input[name="time_out_am"]').val();
+							if (_tiam_val == '00:00' && _toam_val == '00:00') {
+								_tipm.parent().parent().parent().find('input[name="time_out_pm"]').parent().parent().fadeOut();
+							} else {
+								_tipm.parent().parent().fadeOut();	
+							}
 
-						console.log(_toam_val);
+						});
 
-						if (_tiam_val == '00:00' && _toam_val == '00:00') {
-							_tipm.parent().parent().parent().find('input[name="time_in_am"]').parent().parent().fadeOut();
-						} else {
-							_tipm.parent().parent().fadeOut();	
-						}
-						
-					});
+						$.each(timein_pm, function(key, value) {
+							var _tipm = $(this);
+							var _tiam_val = _tipm.parent().parent().parent().find('input[name="time_in_am"]').val();
+							var _toam_val = _tipm.parent().parent().parent().find('input[name="time_out_am"]').val();
+
+							console.log(_toam_val);
+
+							if (_tiam_val == '00:00' && _toam_val == '00:00') {
+								_tipm.parent().parent().parent().find('input[name="time_in_am"]').parent().parent().fadeOut();
+							} else {
+								_tipm.parent().parent().fadeOut();	
+							}
+							
+						});
+				} else if (shift == 'ns') {
+
+						$('.timelabel').fadeOut();
+
+						// Hide time out column header
+							$('#header_timeout_am').fadeOut(250);
+
+						// Hide time in column header
+						$('#header_timein_pm').fadeOut(250);
+
+						// Loop through each
+						$.each(timeout_pm, function(key, value) {
+							var _tipm = $(this);
+
+							_tipm.parent().parent().fadeOut();
+						});
+
+						// Loop through each
+						$.each(timein_am, function(key, value) {
+							var _tiam = $(this);
+
+							_tiam.parent().parent().fadeOut();
+						});
+
+				}
+				
 			}
 		})	
 
@@ -648,10 +860,7 @@ var resultContainer = $('.resultContainer');
             input.next().remove();
             input.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
 
-
-			// input.after('<span class="resultName">' + name +'</span>');
 			$('.resultContainer').remove();
-			// console.log($(this).parents('*'));
 			e.preventDefault();
 		});
 
@@ -664,7 +873,8 @@ var resultContainer = $('.resultContainer');
 		$('#time_in_am, #time_out_am, #time_in_pm, #time_out_pm').datetimepicker({
 			pickTime:true,
 			pickDate: false,
-			use24hours: true
+			use24hours: true,
+			minuteStepping:15
 		});
 
 		$(document).on('blur', 'input[name="time_in_pm"], input[name="time_out_pm"],input[name="time_in_am"], input[name="time_out_am"] ', function(e) {
@@ -684,10 +894,11 @@ var resultContainer = $('.resultContainer');
 				 var parent = $(this).parent().parent().parent();   
 				 var total = 0;
 				 var shift = $('#shift').val();
-				 var show_full_dtr = $('#show_full_dtr').prop('checked');
 
-					console.log(shift);				 
-
+				 if (self.val().indexOf(':') == -1 && self.val() == 24) {
+				 	self.val('24:00');
+				 }
+				
 				if (self.attr('name') == 'time_out_am') {
 
 					 // Timeout for Dayshift
@@ -840,13 +1051,17 @@ var resultContainer = $('.resultContainer');
 
 
 
+						} else if (splitted_timein_pm[0] < 12 && shift == 'ns' && (show_full_dtr == false)) {
+
+
+
 						}
 					}
 				}
 
 
 							total = calculateTotalHours(parent);
-
+							// total=8;
 				if (total > 8) {
 					overtime = total - 8;
 
