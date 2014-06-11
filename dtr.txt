@@ -1,0 +1,30 @@
+Time in AM == (value > 12) 
+**Hide Time in AM
+**Show Time IN PM
+**Reset Time IN AM value to 00:00
+**Reset Time OUT AM value to 00:00
+
+Time out AM == (value > 12)
+** Hide Time out AM
+** Set time out AM to default value 11:00
+** Set time in PM to default value 12:00
+** Show Time out PM
+** Set time out PM value to time out AM value
+
+Time in PM == (value < 12)
+** Hide Time in PM
+** Show Time in AM
+** Hide Timeout PM
+** Show Timeout AM
+** Reset Time out PM to 00:00
+** Reset Time in PM to 00:00
+** Reset Time out AM to 00:00
+
+Time out PM == (value < 12 ) 
+** Hide Time out PM
+** Show Time OUT AM
+** Reset Time IN PM value to 00:00
+** Reset Time OUT PM value to 00:00
+
+
+Work date

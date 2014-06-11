@@ -198,14 +198,16 @@ Route::group(array('before' => ['auth']), function()
 
 
 // ============= Payroll Module =============
-Route::group(array('before' => 'auth'), function()
+Route::group(array('before' => 'auth', 'prefix' => 'payroll'), function()
 {
+	Route::resource('dtr', 'DTRController');
 	Route::resource('pay_period', 'PayPeriodsController');
 });
 
 // =========== Settings =====================
 Route::group(array('before' => 'auth'), function()
 {
+	Route::get('settings', 'SettingsController@index' );
 	Route::resource('settings/roles', 'RolesController');
 });
 

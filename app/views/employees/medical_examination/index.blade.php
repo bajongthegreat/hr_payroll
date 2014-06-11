@@ -43,28 +43,24 @@
 
   <table class="table table-hover">
 	<thead>
-		<th>Name</th>
-		<th> Date conducted</th>
+		<th width="10%"></th>
 		<th> Medical Establishment </th>
-		<th>Medical Findings</th>
-		<th>Recommendation</th>
-		<th>Remarks</th>
+		<th> Date conducted</th>
 		<th></th>
 
 	</thead>
 	<tbody>
 
 		@foreach($physical_examinations as $pe)
+
+			<?php 
+				$date_conducted = new DateTime($pe->date_conducted);
+			?>
 		
-			<tr data-employee_id="{{ $pe->employee_work_id }}">
-				<td> {{ $pe->lastname . ', ' .$pe->firstname . ' ' . ucfirst($pe->middlename[0]) . '.'}}</td>
-				<td> {{ $pe->date_conducted }} </td>
+			<tr data-employee_id="{{ $pe->employee_work_id }}" >
+  				<td class="__more_violations_parent" data-medical_establishment="{{ $pe->medical_establishment_id }}" data-date_conducted="{{ $pe->date_conducted }}" data-status="closed"  > <span class="label label-default"><span class="glyphicon glyphicon-list"></span>  View Employees Included</span></td>
 				<td> {{ $pe->establishment }} </td>
-				<td> {{ ($pe->medical_findings  == NULL) ? 'None' : $pe->medical_findings 	 }}</td>
-				<td> {{ $pe->recommendations }} </td>
-				<td> {{ ($pe->remarks != "") ? $pe->remarks : "N/A"}}</td>
-				<td> <a class="btn btn-default">Edit</a> </td>
-				<td> <a class="btn btn-danger">Delete</a> </td>
+				<td> {{ $date_conducted->format('F d, Y')  }} </td>
 			</tr>
 		@endforeach
 
@@ -75,4 +71,101 @@
 		@include('partials.pagination_links')
 
 
+@stop
+
+
+@section('scripts')
+<script type="text/javascript">
+	$('.__more_violations_parent').on('click', function(e) {
+		var URI = '/employees/medical_examinations';
+		var self = $(this);
+
+		var date_conducted = self.data('date_conducted');
+		var medical_establishment_id = self.data('medical_establishment');
+		console.log(medical_establishment_id);
+
+		if ($(this).data('status') == 'closed') {
+			
+			// Change status
+			$(this).data('status', 'open');
+ 
+			// Change the label
+			$(this).html('<span class="label label-default"><span class="glyphicon glyphicon-resize-small"></span> Collapse</span>');
+
+			$.ajax({
+				type: 'GET',
+				url: _globalObj._baseURL + URI,
+				data: { jq_ax: 'employees_included', medical_establishment_id: medical_establishment_id ,'date_conducted': date_conducted },
+				success: function(data) {
+					
+					if (!data) return false;
+					self.parent().parent().find('.__more_violations_child' + date_conducted).fadeOut().remove();
+
+					var tr_open_parent_from_original_table = '<tr class="__more_violations_child' + date_conducted +'">',
+					    tr_close_parent_from_original_table = '</tr>',
+					    tr_td_open_table_container = '<td colspan="7">',
+					    tr_td_close_table_container = '</td>';
+
+					var inner_table_open = '<table class="table">',
+					    inner_table_close = '</table>';
+
+					var inner_table_headers_open = '<thead>',
+					    inner_table_headers_close = '</thead>';
+
+					var inner_table_headers_child = ['Name', 'Medical Findings', 'Recommendation', 'Remarks' ,''],
+					   inner_table_headers_container = "";
+
+					var inner_table_tbody_open = '<tbody>',
+					    inner_table_tbody_close = '</tbody>';
+
+					 var inner_table_data_container = "";
+
+					// Fill inner table header container
+					for (var i = 0; i <= inner_table_headers_child.length - 1; i++) {
+						inner_table_headers_container += '<th>' + inner_table_headers_child[i] + '</th>';
+					};
+
+					if (data.length == 0) {}
+					else {
+						
+						var effectivity_date = "";
+						$.each(data, function(key,value) {
+							console.log(data[key])
+							inner_table_data_container += "<tr>";
+
+								days_suspended = (data[key].days_of_suspension == null) ? 'N/A' : data[key].days_of_suspension;
+								
+								inner_table_data_container += "<td>" + data[key].offense_number +"</td>";
+								inner_table_data_container += "<td>" + data[key].punishment_type +"</td>";
+								inner_table_data_container += "<td>" + days_suspended +"</td>";
+								// inner_table_data_container += '<td><a href="' + _globalObj._baseURL + URI + '/'  + data[key].id + '/edit' + '" class="btn btn-default">Edit</a></td>';
+								// inner_table_data_container += '<td><a href="#" data-employee_id="' + data[key].id + '" data-url="' + _globalObj._baseURL + URI + '"/' + data[key].id +' class="btn btn-default _deleteItem">Edit</a></td>';
+				
+							inner_table_data_container += "</tr>";
+						});
+						
+
+						var mynewChild = tr_open_parent_from_original_table + tr_td_open_table_container + '<div class="well">' + inner_table_open +
+						inner_table_headers_open + inner_table_headers_container +inner_table_headers_close +  inner_table_tbody_open + inner_table_data_container+ inner_table_tbody_close+inner_table_close +'</div>' + tr_td_close_table_container + tr_close_parent_from_original_table;
+						
+						self.parent().last().after('' + mynewChild);	
+
+					}
+
+
+
+				}
+			});
+			
+			// Append the data
+			
+		} else {
+			self.data('status', 'closed');
+			self.html('<span class="label label-default"><span class="glyphicon glyphicon-list"></span> View Employees Included</span>');
+			self.parent().parent().find('.__more_violations_child' + date_conducted).fadeOut().remove();
+		}
+	});
+
+
+</script>
 @stop

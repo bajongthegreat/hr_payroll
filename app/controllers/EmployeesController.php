@@ -75,7 +75,15 @@ class EmployeesController extends BaseController {
 			// Relative searching, using LIKE in SQL queries
 			if ( Input::get('stype') != 'absolute') 
 			{
-				$employees = $this->relativeDataSearch($src, $filter_params, $this->fields_to_use_on_search);
+				if (Input::has('department_id') && Input::get('department_id') != 0){
+					$department_id = [ Input::get('department_id') ];
+
+
+					$employees = $this->relativeDataSearch($src, $filter_params, $this->fields_to_use_on_search, NULL, ['field' => 'departments.id', 'values' => $department_id]);
+				} else {
+					$employees = $this->relativeDataSearch($src, $filter_params, $this->fields_to_use_on_search);	
+				}
+				
 			} 
 
 			// Absolute Searching, used specific field
@@ -127,10 +135,10 @@ class EmployeesController extends BaseController {
 					}
 	}
 
-	function relativeDataSearch($src, $filter_params, $db_field_to_use, $concat=[]) {
+	function relativeDataSearch($src, $filter_params, $db_field_to_use, $concat=[], $whereIn = []) {
 
 		return $this->employees->findLike($src, $db_field_to_use , ['position'], ['firstname','lastname'] )
-		->where('membership_status', '!=', 'applicant')->where(function($query) use ($filter_params, $src) {
+		->where('membership_status', '!=', 'applicant')->where(function($query) use ($filter_params, $src, $whereIn) {
 				
 		
 
@@ -139,9 +147,16 @@ class EmployeesController extends BaseController {
 				}
 					
 
-
+				if (count($whereIn) > 0) {
+							$query->whereIn($whereIn['field'], $whereIn['values']);	
+		        	
+				}
+		        		
+		        		
+		        	
 				
-				});
+				})->leftJoin('positions', 'positions.id', '=', 'employees.position_id')
+		          ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')->limit(50);
 	}
 
 

@@ -30,6 +30,11 @@ label {
   padding-top: 5px;
 }
 
+._totalhours {
+  margin-top: 10px;
+  text-align: center;
+}
+
 /* Sidebar navigation */
 .nav-sidebar {
   margin-right: -21px; /* 20px padding + 1px border */

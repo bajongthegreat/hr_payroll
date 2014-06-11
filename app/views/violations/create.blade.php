@@ -116,27 +116,6 @@ $('#violationSubmit').on('click', function(e) {
 					});	
 
 
-		
-		if (container.length == 0) {
-
-			$('.offense_panel').first().removeClass('panel-default').addClass('panel-danger');
-
-			$('html, body').animate({
-		        scrollTop: $('.offense_panel').first().offset().top -60
-		    }, 500);
-
-
-			// error[counter+3] = { message: 'Please make sure you entered a value on the first offense.', element: $('offense_panel').first() };	
-		}
-		
-		if (container.length > 0) {
-			$('.offenses_container').find('input').remove();
-			var offenses = JSON.stringify(container);
-			$('.offenses_container').append('<input type="hidden" name="offenses" value=\'' + offenses + '\'>');
-				// console.log(offenses);
-		} else {
-			return false;
-		}	
 
 
 		if ($('.has-error').length > 0) {
@@ -148,6 +127,31 @@ $('#violationSubmit').on('click', function(e) {
 		    $('.has-error').first().focus();
 
 		    return false;
+		} else {
+
+
+			
+			if (container.length == 0) {
+
+				$('.offense_panel').first().removeClass('panel-default').addClass('panel-danger');
+
+				$('html, body').animate({
+			        scrollTop: $('.offense_panel').first().offset().top -60
+			    }, 500);
+
+
+				// error[counter+3] = { message: 'Please make sure you entered a value on the first offense.', element: $('offense_panel').first() };	
+			}
+			
+			if (container.length > 0) {
+				$('.offenses_container').find('input').remove();
+				var offenses = JSON.stringify(container);
+				$('.offenses_container').append('<input type="hidden" name="offenses" value=\'' + offenses + '\'>');
+					// console.log(offenses);
+			} else {
+				return false;
+			}	
+			
 		}
 	});	
 })();

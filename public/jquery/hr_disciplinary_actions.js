@@ -16,8 +16,12 @@
             _togglePanels(__panelsToToggle, 'hide');
 
             // Will search for employee profile
-            function _searchEmployee(searchValue, element) {
+            function _searchEmployee(searchValue, element, department_id) {
             	console.log('searching...');
+
+               if (department_id == undefined) {
+                  department_id = 0;
+               }
 
             	$.ajax({
             		type: 'GET',
@@ -86,7 +90,10 @@
                                      $('.resultContainer').remove();
                                      $('.resultName').remove();
                                           element.val(id);
-                                          element.after('<span class="resultName">' + name +'</span>');
+                                          element.next().remove();
+                                          element.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
+                                          element.parent().next().find('input').focus();
+
                                     } else {
                                           // Redirect to save data even from unexpected page refresh
                                                 window.location = '#employee=' + id;

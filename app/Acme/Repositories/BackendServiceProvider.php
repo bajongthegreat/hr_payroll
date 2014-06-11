@@ -124,5 +124,11 @@ class BackendServiceProvider extends ServiceProvider
 		    'Acme\Repositories\Employee\DisciplinaryAction\DisciplinaryActionRepository'
 		);	
 
+		// Bind the CompanyInterface into the class CompanyRepository
+		$this->app->bind(
+			'Acme\Repositories\Payroll\DailyTimeRecord\DailyTimeRecordRepositoryInterface',
+		    'Acme\Repositories\Payroll\DailyTimeRecord\DailyTimeRecordRepository'
+		);	
+
 	}
 }

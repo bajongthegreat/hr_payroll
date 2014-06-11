@@ -42,6 +42,15 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 				return  $this->notAccessible();		
 		}
 
+
+		if (Input::has('jq_ax') && Input::get('jq_ax') == 'employees_included') {
+			$employees = $this->physical_examinations->getIncludedEmployeesOnExamination(  Input::get('date_conducted'), (int) Input::get('medical_establishment_id') );
+			// return Response::json($employees);
+			// return var_dump(Input::all());
+			return Response::json($employees);
+			// return ['hello'];
+		}
+
 		if (Input::has('src')) {
 			$src = Input::get('src');
 
@@ -50,7 +59,6 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 			$physical_examinations = $this->physical_examinations->getAllExaminationDataWithEmployee();
 	
 		}
-		
 
 		if (Input::get('output') == 'json') {
 			return Response::json($physical_examinations);

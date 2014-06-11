@@ -181,6 +181,45 @@ var __indexOf = function(needle) {
     return indexOf.call(this, needle);
 };
 
+function __parseTime(s) {
+    var part = s.match(/(\d+):(\d+)(?: )?(am|pm)?/i);
+
+    if (part == null ) return false;
+
+    var hh = parseInt(part[1], 10);
+    var mm = parseInt(part[2], 10);
+    var ap = part[3] ? part[3].toUpperCase() : null;
+    if (ap === "AM") {
+        if (hh == 12) {
+            hh = 0;
+        }
+    }
+    if (ap === "PM") {
+        if (hh != 12) {
+            hh += 12;
+        }
+    }
+    return { hh: hh, mm: mm };
+}
+
+function __getHour(diff) {
+  var msec = diff;
+  var hh = msec / 1000 / 60 / 60;
+ 
+  msec -= hh * 1000 * 60 * 60;
+  var mm = Math.floor(msec / 1000 / 60);
+ 
+  msec -= mm * 1000 * 60;
+  var ss = Math.floor(msec / 1000);
+ 
+  msec -= ss * 1000;
+
+  // console.log(msec);
+  // console.log(hh);
+
+  return hh;
+}
+
 $(document).ready(function() {
   
 

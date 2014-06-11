@@ -39,6 +39,21 @@ class EmployeePhysicalExaminationRepository extends RepositoryAbstract implement
             ->orderBy("$table.date_conducted", 'DESC');
 	 }
 
+	 public function getIncludedEmployeesOnExamination($date_conducted, $med_estab_id) {
+	 	$table = $this->table;
+	 	return DB::table($this->table)
+	 		->where("$table.date_conducted", '=', $date_conducted)
+	 		->where("$table.medical_establishment_id", '=', $med_estab_id)
+            ->leftJoin('employees', "$table.employee_id" , '=', 'employees.id')
+            ->leftJoin('medical_establishments', "$table.medical_establishment_id", '=', 'medical_establishments.id')
+            ->leftJoin('diseases', "$table.medical_findings_id", '=', 'diseases.id')
+            ->select("employees.lastname", "employees.firstname", "employees.middlename", 
+            	     "employees.employee_work_id", "$table.medical_findings_id", "$table.date_conducted",
+            	     "$table.recommendations", "$table.medical_establishment_id","$table.remarks", 'medical_establishments.name as establishment',
+            	     'diseases.name as medical_findings', DB::raw('CONCAT(lastname, ", ", firstname) as fullname'))
+            ->get();
+	 }
+
 	 public function getAllExaminationDataWithEmployee() {
 	 	$table = $this->table;
 	 	return DB::table($this->table)
@@ -48,7 +63,8 @@ class EmployeePhysicalExaminationRepository extends RepositoryAbstract implement
             ->select("employees.lastname", "employees.firstname", "employees.middlename", 
             	     "employees.employee_work_id", "$table.medical_findings_id", "$table.date_conducted",
             	     "$table.recommendations", "$table.medical_establishment_id","$table.remarks", 'medical_establishments.name as establishment',
-            	     'diseases.name as medical_findings')
+            	     'diseases.name as medical_findings', "$table.id")
+            ->groupBy("$table.date_conducted")
             ->orderBy("$table.date_conducted", 'DESC');
 	 }
 
