@@ -24,17 +24,21 @@
 	  		<thead>
 	  			<th width="10%"></th>
 	  			<th>Date</th>
-	  			<th>Department</th>
-	  			<th>Submitted by</th>
-
+	  			<th>Shift</th>
+	  			<th>Work Assignment</th>
+	  			
 	  		</thead>
 	  		<tbody>
 	  			@foreach ($daily_time_records as $dtr)
-	  				
+	  					<?php
+	  						$date = new DateTime($dtr->work_date);
+	  					 ?>
 	  				<tr  >
-	  					<td class="__more_violations_parent" data-status="closed" data-employee_id="" data-violation_id="{{ $dtr->id }}"> <span class="label label-default"><span class="glyphicon glyphicon-list"></span>  View all Included Employees</span></td>
-	  					<td> {{ $dtr->work_date}}</td>
-	  					<td> MG3 Sucker</td>
+	  					<td class="__more_violations_parent" data-status="closed"  data-work_date="{{ $dtr->work_date }}" data-shift="{{ $dtr->shift }}" data-work_assignment="{{ $dtr->work_assignment_id }}"> <span class="label label-default"><span class="glyphicon glyphicon-list"></span>  View all Included Employees</span></td>
+	  					<td> {{ $date->format('F d, Y') }}</td>
+	  					<td> {{ ($dtr->shift == 'ns') ? '<span class="label label-info">Night Shift</span>' : '<span class="label label-warning">Day shift</span>' }} </td>
+	  					<td> {{ $dtr->name }}</td>
+	  					<td> <a href="{{ action('DTRController@edit', $dtr->id) }}?shift={{$dtr->shift}}&work_date={{$dtr->work_date}}&work_assignment={{ $dtr->work_assignment_id }}&type=bulk"  class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> Edit</a></td>
 	  				</tr>
 	  			@endforeach
 	  		</tbody>
@@ -46,11 +50,13 @@
 @section('scripts')
 <script type="text/javascript">
 	$('.__more_violations_parent').on('click', function(e) {
-		var URI = '/employees/disciplinary_actions';
+		
+		var URI = '/payroll/dtr';
 		var self = $(this);
 
-		var employee_id = self.data('employee_id'),
-		    violation_id = self.data('violation_id');
+		var work_date = self.data('work_date');
+		var shift = self.data('shift');
+		var work_assignment_id = self.data('work_assignment');
 
 		if ($(this).data('status') == 'closed') {
 			
@@ -60,16 +66,20 @@
 			// Change the label
 			$(this).html('<span class="label label-default"><span class="glyphicon glyphicon-resize-small"></span> Collapse</span>');
 
+			console.log(work_assignment_id)
 			$.ajax({
 				type: 'GET',
 				url: _globalObj._baseURL + URI,
-				data: { jq_ax: 'employee_violations', employee_id: employee_id, violation_id: violation_id },
+				data: { jq_ax: 'dtr', 
+				        work_date:work_date, 
+				        shift: shift, 
+				        work_assignment: work_assignment_id },
 				success: function(data) {
 					
 					if (!data) return false;
-					self.parent().parent().find('.__more_violations_child' + employee_id + violation_id).fadeOut().remove();
+					self.parent().parent().find('.__more_violations_child' + work_date + shift + work_assignment_id).fadeOut().remove();
 
-					var tr_open_parent_from_original_table = '<tr class="__more_violations_child'+ employee_id + violation_id +'">',
+					var tr_open_parent_from_original_table = '<tr class="__more_violations_child'+ work_date + shift + work_assignment_id + '">',
 					    tr_close_parent_from_original_table = '</tr>',
 					    tr_td_open_table_container = '<td colspan="7">',
 					    tr_td_close_table_container = '</td>';
@@ -80,7 +90,7 @@
 					var inner_table_headers_open = '<thead>',
 					    inner_table_headers_close = '</thead>';
 
-					var inner_table_headers_child = ['Date Violated', 'Effectivity Date', ''],
+					var inner_table_headers_child = ['Employee', 'Time IN AM','Time OUT AM','Time IN PM', 'Time OUT PM' , 'Hours worked' ,''],
 					   inner_table_headers_container = "";
 
 					var inner_table_tbody_open = '<tbody>',
@@ -95,16 +105,31 @@
 
 					if (data.length == 0) {}
 					else {
-						
+						var overtime = "";
+						var total = 0;
 						var effectivity_date = "";
 						$.each(data, function(key,value) {
-							console.log(data[key])
+							// console.log(data[key])
 							inner_table_data_container += "<tr>";
+			
 								effectivity_date = (data[key].violation_effectivity_date == null) ? 'N/A' : data[key].violation_effectivity_date;
-								inner_table_data_container += "<td>" + data[key].violation_date +"</td>";
-								inner_table_data_container += "<td>" + effectivity_date +"</td>";
+								total = calculateTotalHours(data[key].time_in_am, data[key].time_out_am, data[key].time_in_pm, data[key].time_out_pm, data[key].shift);
+			
+								if (total.overtime != 0) {
+									overtime = '<span class="label label-info">' + total.overtime +' HR OT</span>';
+								} else {
+									overtime = "";
+								}
+
+								inner_table_data_container += "<td>" + data[key].lastname +  ', ' + data[key].firstname +"</td>";
+								inner_table_data_container += "<td>" + data[key].time_in_am +"</td>";
+								inner_table_data_container += "<td>" + data[key].time_out_am +"</td>";
+								inner_table_data_container += "<td>" + data[key].time_in_pm +"</td>";
+								inner_table_data_container += "<td>" + data[key].time_out_pm +"</td>";
+								inner_table_data_container += "<td>" + total.total + "  " + overtime +"</td>";
+								
 								inner_table_data_container += '<td><a href="' + _globalObj._baseURL + URI + '/'  + data[key].id + '/edit#employee=' + data[key].employee_work_id + '" class="btn btn-default">Edit</a></td>';
-								// inner_table_data_container += '<td><a href="#" data-employee_id="' + data[key].id + '" data-url="' + _globalObj._baseURL + URI + '"/' + data[key].id +' class="btn btn-default _deleteItem">Edit</a></td>';
+								// inner_table_data_container += '<td><a href="#" data-id="' + data[key].id + '" data-url="' + _globalObj._baseURL + URI + '"/' + data[key].id +' class="btn btn-default _deleteItem">Edit</a></td>';
 				
 							inner_table_data_container += "</tr>";
 						});
@@ -126,8 +151,9 @@
 			
 		} else {
 			self.data('status', 'closed');
-			self.html('<span class="label label-default"><span class="glyphicon glyphicon-list"></span> View all</span>');
-			self.parent().parent().find('.__more_violations_child' + employee_id + violation_id).fadeOut().remove();
+			self.html('<span class="label label-default"><span class="glyphicon glyphicon-list"></span> View all Included Employees</span>');
+			self.parent().parent().find('.__more_violations_child' + work_date + shift + work_assignment_id).fadeOut().remove();
+
 		}
 	});
 

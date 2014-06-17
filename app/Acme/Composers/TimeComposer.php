@@ -5,7 +5,7 @@ class TimeComposer {
 	protected $time;
 
 	public function __construct() {
-		for ($i=0; $i <= 24 ; $i++) { 
+		for ($i=0; $i <= 23 ; $i++) { 
 			# code...
 
 			if ($i <= 9) {

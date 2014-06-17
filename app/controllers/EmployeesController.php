@@ -137,7 +137,7 @@ class EmployeesController extends BaseController {
 
 	function relativeDataSearch($src, $filter_params, $db_field_to_use, $concat=[], $whereIn = []) {
 
-		return $this->employees->findLike($src, $db_field_to_use , ['position'], ['firstname','lastname'] )
+		return $this->employees->findLike($src, $db_field_to_use , ['position'], ['lastname', 'firstname'] )
 		->where('membership_status', '!=', 'applicant')->where(function($query) use ($filter_params, $src, $whereIn) {
 				
 		

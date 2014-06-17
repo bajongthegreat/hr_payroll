@@ -2,6 +2,7 @@
 
 use Acme\Repositories\Payroll\DailyTimeRecord\DailyTimeRecord as DTR;
 use Acme\Repositories\RepositoryAbstract;
+use DB;
 
 class DailyTimeRecordRepository extends RepositoryAbstract implements DailyTimeRecordRepositoryInterface {
 	
@@ -10,7 +11,7 @@ class DailyTimeRecordRepository extends RepositoryAbstract implements DailyTimeR
   	    */
 	  protected $model;
 
-	  protected $table = "dailytimerecord";
+	  protected $table = "dailytimerecords";
 	 
 	  /**
 	   * Constructor
@@ -20,4 +21,8 @@ class DailyTimeRecordRepository extends RepositoryAbstract implements DailyTimeR
 	    $this->model = $model;
 	 }
 
+	 public function allGrouped() {
+	 	$table = $this->table;
+	 	return DB::table($this->table)->leftJoin('positions', "$table.work_assignment_id", '=', 'positions.id')->groupBy('shift', 'work_date', 'work_assignment_id')->get();
+	 }
 }

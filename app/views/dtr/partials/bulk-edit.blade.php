@@ -10,20 +10,23 @@
 							
 					{{ Form::label('shift', 'Shift', array('class' => 'col-sm-2 text-right')) }}
 
-					<div class="col-sm-2">
+					<div class="col-sm-2" style="display:none;">
 						<?php 
 							$shift = (Input::has('shift')) ? Input::get('shift') : Input::old('shift');
 						?>
-							{{ Form::select('shift',['ds' => 'Day shift', 'ns' => 'Night shift'] , $shift, array('class' => 'form-control', 'required', 'id' => 'shift') ) }}
+							{{ Form::select('shift',['ds' => 'Day shift', 'ns' => 'Night shift'] , NULL , array('class' => 'form-control', 'required', 'id' => 'shift') ) }}
 					</div>
 
-
+					<div class="col-sm-2" style="padding-top: 5px;">
+							<p class="shift_label">{{ ($shift == 'ds') ? '<span class="label label-warning">Day shift</span>' : '<span class="label label-info">Night shift</span>'; }}</p>
+						</div>
 				
 
 				</div>	
 
 		<hr>
-		<div class="form-group">
+
+			<div class="form-group">
 				<div class="col-xs-2 text-right" style="padding-top: 5px;">
 						{{Form::label('department', 'Department', 'text-right')}}
 					</div>
@@ -31,11 +34,12 @@
 
 					<div class="col-sm-4">
 			
-							{{ Form::select('department',$departments , Input::old('department'), array('class' => 'form-control', 'required', 'id' => 'department_id') ) }}
+							{{ Form::select('department',$departments , Input::old('department_id') , array('class' => 'form-control', 'required', 'id' => 'department_id') ) }}
 					</div>
 		</div>
 
-		<div class="form-group" style=" display:none;">
+
+		<div class="form-group">
 				<div class="col-xs-2 text-right" style="padding-top: 5px;" >
 						{{Form::label('work_assignment_id', 'Work Assignment', ['class' => 'text-right'])}}
 					</div>
@@ -53,7 +57,7 @@
 
 					<div class="col-sm-2">
 						<div class='input-group date' id='birthdate' data-date-format="YYYY-MM-DD">
-							{{ Form::text('work_date', Input::old('work_date'), array('class' => 'form-control date', 'required', 'data-date-format' => 'YYYY-MM-DD', 'id' => 'work_date') ) }}
+							{{ Form::text('work_date', $dtr->work_date, array('class' => 'form-control date', 'required', 'data-date-format' => 'YYYY-MM-DD', 'id' => 'work_date') ) }}
 				 	
                     <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
                     </span>
@@ -118,9 +122,6 @@
 
 					<div class="col-xs-2">
 							{{ Form::checkbox('show_full_dtr', Input::old('work_date') ) }}
-				 	
-                
-
 					</div>
 
 					<!-- Add more rows -->
@@ -143,7 +144,7 @@
 				<th class="text-center"> Remarks</th>
 				<th></th>
 			</thead>
-			<tbody id="medical_examination_information_table_body">
+			<tbody id="dtr_information_table_body">
 				
 			</tbody>
 		</table>
@@ -166,6 +167,7 @@
 		  			<thead>
 		  				<th>Jobs done</th>
 		  			<th>Success jobs</th>
+		  			<th>Newly Created</th>
 		  			<th>Failed jobs</th>
 		  			<th>Duplications</th>
 		  			<th>Not included</th>
@@ -174,6 +176,7 @@
 		  			<tbody>
 		  				<td class="jobs_done"></td>
 		  				<td class="success_jobs"></td>
+		  				<th class="created"></th>
 		  				<td class="failed_jobs"></td>
 		  				<td class="duplications"></td>
 		  				<td class="not_included"></td>
@@ -233,13 +236,20 @@
 
 @section('scripts')
 <script>
-	
+var __oldShift = '{{ $dtr->shift}}'	
 var __panelsToToggle  = [];
 var __rowsToDisplay  = 10;
 var resultContainer = $('.resultContainer');
 var __dayShiftHoursAM = [],
     __dayShiftHoursPM = [];
+
+
+var __dataToUse = {{ $dtr_json }};
+
+var ids_prior_update = {{ json_encode($ids_prior_update) }}
+
 </script>
+
 <script type="text/javascript" src="{{ asset('jquery/hr_disciplinary_actions.js') }}"></script>
 
 <script>
@@ -247,9 +257,29 @@ var __dayShiftHoursAM = [],
 	(function() {
 
 		var show_full_dtr = $('#show_full_dtr').prop('checked');
+      	var oldDepartment = '{{ (isset($dtr->department_id)) ? $dtr->department_id  : 0}}',
+    	    oldPosition = '{{ (isset($dtr->position_id)) ? $dtr->position_id  : 0}}',
+    	    oldShift = '{{ $dtr->shift }}';
 
 
-		$('#department_id').trigger('change');
+    	$('#department_id').val(oldDepartment); 
+		if (oldDepartment != 0) {
+			hrApp.getSelectOptions(_globalObj._baseURL + '/positions/positionsByDepartment', oldDepartment, 'position_id', oldPosition);
+			if (__oldShift == 'ns') {
+				changeShift( oldShift );
+			}
+			
+		}
+
+		$('.shift_label').on('click', function() {
+			var shift_opt = $('#shift').parent();
+
+			if ( shift_opt.is(":visible") ) {
+				shift_opt.hide();				
+			} else {
+				shift_opt.show();
+			}
+		});
 
 		 $('#department_id').change(function(e, old) {
 		 	var department_id = $(this).find(":selected").val();
@@ -259,106 +289,18 @@ var __dayShiftHoursAM = [],
              hrApp.getSelectOptions(_globalObj._baseURL + '/positions/positionsByDepartment', department_id, 'position_id', oldPosition);
 		 });
 
-		 $('#position_id').change(function() {
-		 	$(this).closest('div[class^="form-group"]').removeClass('has-error');
-		 	$('#department_id').closest('div[class^="form-group"]').removeClass('has-error');
-		 });
-
 
 
 		$('#shift').on('change', function() {
+
 			var shift = $(this).val();
-
-			if (shift == 'ds') {
-				// Set default value for select				
-				$('#def_timeout_am').val('11:00');				
-				$('._am').text('Time out AM');
-
-				$('#def_timein_pm').val('12:00');
-				$('._pm').text('Time in PM');
-
-				var time_in_am = $('input[name="time_in_am"]');
-				var time_out_am = $('input[name="time_out_am"]');
-
-
-				$('._amth').html('AM');
-				$('._pmth').html('PM');
-				
-				// Update data-name attribute and name attribute
-				time_in_am.attr('name', 'time_in_pm').attr('data-name', 'time_in_pm');
-
-				// Find opposite element name [if time in AM, this element should be time in PM]
-				// Update data-name attribute and name attribute
-				time_in_am.parent().parent().prev().prev().find('input').attr('name', 'time_in_am').attr('data-name', 'time_in_am');
-
-				// Find opposite element name [if time in AM, this element should be time in PM]
-				// Update data-name attribute and name attribute
-				time_out_am.attr('name', 'time_out_pm').attr('data-name', 'time_out_pm');
-				time_out_am.parent().parent().prev().prev().find('input').attr('name', 'time_out_am').attr('data-name', 'time_out_am');
-
-				// Trigger the change event for our default values
-				$('#def_timeout_am').trigger('change');
-				$('#def_timein_pm').trigger('change');		
-
-				if (show_full_dtr == false) return false; // Still not working, fix this bug
-
-				// Show time in AM and Time out PM
-				$('input[name="time_out_am"]').parent().parent().fadeOut();
-				$('input[name="time_in_pm"]').parent().parent().fadeOut();
-
-				$('input[name="time_out_pm"]').parent().parent().fadeIn();
-				$('input[name="time_in_am"]').parent().parent().fadeIn();
-
-
-			} else if (shift == 'ns' ) {
-				
-				// Set default value for select
-				$('#def_timeout_am').val('00:00');
-				$('._am').text('Time in AM');
-
-				// Set default value for select
-				$('#def_timein_pm').val('23:00');
-				$('._pm').text('Time out PM');
-
-				//Time in (am): hide
-				//time out (pm): hide
-
-
-				$('input[name="time_in_pm"]').attr('name', 'time_in_am');
-
-				var time_in_am = $('input[name="time_in_am"]');
-				var time_out_am = $('input[name="time_out_am"]');
+			var shiftName = "";
 			
-				// Update data-name attribute and name attribute
-				time_in_am.attr('data-name', 'time_in_pm');
-				time_in_am.attr('name', 'time_in_pm');
-
-				// Find opposite element name [if time in AM, this element should be time in PM]
-				// Update data-name attribute and name attribute
-				time_in_am.parent().parent().next().next().find('input').attr('name', 'time_in_am').attr('data-name', 'time_in_am');
-
-				// Update data-name attribute and name attribute
-				time_out_am.attr('name', 'time_out_pm').attr('data-name', 'time_out_pm');
-
-				// Find opposite element name [if time in AM, this element should be time in PM]
-				// Update data-name attribute and name attribute
-				time_out_am.parent().parent().next().next().find('input').attr('name', 'time_out_am').attr('data-name', 'time_out_am');
-
-				// Trigger select change method
-				$('#def_timeout_am').trigger('change');
-				$('#def_timein_pm').trigger('change');
-
-				$('._amth').html('PM');
-				$('._pmth').html('AM');
-
-				if (show_full_dtr == false) return false;
-				// Show time in PM and time out AM
-				$('input[name="time_out_am"]').parent().parent().fadeIn();
-				$('input[name="time_in_pm"]').parent().parent().fadeIn();
-
-				$('input[name="time_out_pm"]').parent().parent().fadeOut();
-				$('input[name="time_in_am"]').parent().parent().fadeOut();
-			}
+			changeShift(shift, '#medical_examination_information_table');
+		
+			if (shift == 'ds') shiftName = '<span class="label label-warning">Day shift</span>';
+			else shiftName = '<span class="label label-info">Night shift</span>';
+				$('.shift_label').html(shiftName);
 		});
 	
 		// set default timeout
@@ -531,37 +473,35 @@ var __dayShiftHoursAM = [],
 		$('#processTableData').on('click', function(e) {
 
 			e.preventDefault();
-			var date_conducted = $('#work_date');
 
-			if ($('#position_id').val() == null || $('#position_id').val() == -1 || $('#position_id').val() == 00) {
-				$('#position_id').focus().closest('div[class^="form-group"]').addClass('has-error');
-				$('#department_id').closest('div[class^="form-group"]').addClass('has-error');
-				return false;
-			}
+			var date_conducted = $('#work_date');
 
 			// Check if date is filled
 			if ( date_conducted.val() == '' ) {
-				date_conducted.closest('div[class^="form-group"]').addClass('has-error');
-				date_conducted.focus();		
+				date_conducted.closest('div[class^="form-group"]').addClass('has-error').focus();		
 				return false;
 			} else {
 				date_conducted.closest('div[class^="form-group"]').removeClass('has-error');
 			}
 
 			// Get table's basic data
-			var table = document.getElementById("medical_examination_information_table_body");
+			var table = document.getElementById("dtr_information_table_body");
 			var cellData = {};
 			var tableData = {};	
 			var field = value = "";	
 
 
 			// Loop through each table rows
-			for(var i =0; i < table.rows.length -1; i++) {
+			for(var i =0; i < table.rows.length; i++) {
 
 				cellData = {};
+
+				cellData['id'] = table.rows[i].dataset.id;
+					
+
 				// Loop through each table cells
 				for (var j=0; j < table.rows[i].cells.length; j++) {
-
+					console.log(table.rows[i].cells[j].children[0].dataset.name);		
 					// Check if it is a span or an input type
 					if (table.rows[i].cells[j].children[0].tagName.toLowerCase() == 'input') {
 			
@@ -589,12 +529,14 @@ var __dayShiftHoursAM = [],
 
 					// Assign into an array for later use
 					cellData[field] = value;
-					// console.log(cellData);
+
+
 				}
 
 				// Check if employee ID is assigned
 				if (cellData['employee_work_id'] != undefined) {
 
+					console.log(cellData['employee_work_id'])
 					// Check if employee id has value
 					if (cellData['employee_work_id'] != "") tableData[i] = cellData;	
 				}
@@ -608,17 +550,19 @@ var __dayShiftHoursAM = [],
 
 			// Send the processed data into our database
 			$.ajax({
-					'type': 'POST',
-					'url': _globalObj._baseURL + '/payroll/dtr',
+					'type': 'PUT',
+					'url': _globalObj._baseURL + '/payroll/dtr/15',
 					'data' : { dtr_data: JSON.stringify(tableData), 
 						       shift: $('#shift').val(), 
 						       date: $('#work_date').val(),
 						       work_assignment_id: $('#position_id').val(),
-						       _token: _globalObj._token },
+						       _token: _globalObj._token,
+						       ids_prior_update: ids_prior_update },
 					success: function(data) {
 							output = JSON.parse(data);
-							
+							console.log(output)
 							if (output != undefined) {
+
 
 								// Only display charts when there's a job done
 								if (output.all_jobs.length == 0) return false;
@@ -638,6 +582,7 @@ var __dayShiftHoursAM = [],
 								encodedDataTable.removeClass('hide');
 								resultTable.removeClass('hide');
 								$('.jobs_done').html(output.all_jobs.length);
+								$('.created').html(output.created.length);
 								$('.success_jobs').html(output.success_jobs.length);
 								$('.failed_jobs').html(output.failed_jobs.length);
 								$('.duplications').html(output.duplications.length);
@@ -656,7 +601,7 @@ var __dayShiftHoursAM = [],
  									   $.each(value, function(k, v) {
  									   		
  									   		// Don't include this in our table
- 									   		if (k == 'created_at' || k == 'updated_at') return false;
+ 									   		if (k == 'created_at' || k == 'updated_at' || k=='work_assignment_id') return true;
  									   		 
  									   		 td_class = '';
 
@@ -744,7 +689,7 @@ var __dayShiftHoursAM = [],
 		    return array.hasOwnProperty(prop) && /^0$|^[1-9]\d*$/.test(prop) && prop <= 4294967294; // 2^32 - 2
 		}
 
-		function addRow(tableID, rowsToAdd) {
+		function addRow(tableID, rowsToAdd, defaultValues) {
 
 			// Work on JSON Objects
 		  
@@ -761,8 +706,7 @@ var __dayShiftHoursAM = [],
 	            for (var i = 0; i <= elementName.length-1; ++i) {
 		            				
 		            	var cell = row.insertCell(i);
-		            			 row.dataset.id= j;
-							
+		            		
 							var _type = 'input';
 
 							if (elementName[i] == 'total') {
@@ -782,6 +726,13 @@ var __dayShiftHoursAM = [],
 		            	element.name = elementName[i];
 		            	element.dataset.name= elementName[i];
 
+		            	if (defaultValues != undefined && defaultValues.length > 0) {
+		            	// element.value = getJSONdata(defaultValues[j], elementName[i]);
+						row.dataset.id = getJSONdata(defaultValues[j], 'id');
+		            	} else {
+		            		row.dataset.id= j;
+		            	}
+		            	
 		            		if (elementName[i] == 'total') {
 		            			element.classList.add('_totalhours');
 		            			element.classList.add('label');
@@ -790,11 +741,13 @@ var __dayShiftHoursAM = [],
 
 		            		} else {
 		            			element.classList.add('form-control');
-
+		            			element.classList.add(elementName[i]);
+		            			
 		            		}
 			            	
 			            	if (elementName[i] == 'time_in_am' || elementName[i] == 'time_out_am' || elementName[i] == 'time_in_pm' ||  elementName[i] == 'time_out_pm') {
-			            		
+			            
+		            			
 			            		// Create div for timepicker
 			            		var timepicker_container = document.createElement('div');
 
@@ -863,11 +816,54 @@ var __dayShiftHoursAM = [],
 			var rows = $('.rowCount').val();
 
 			// Call addRow() with the ID of a table
-			addRow('medical_examination_information_table_body', rows);
+			addRow('dtr_information_table_body', rows, []);
 	
 		});
 
-		addRow('medical_examination_information_table_body',5);
+   function Object_keys(obj) {
+            var keys = [], name;
+            for (name in obj) {
+                if (obj.hasOwnProperty(name)) {
+                    keys.push(name);
+                }
+            }
+            return keys;
+        }
+
+		if (__dataToUse.length > 0) {
+			addRow('dtr_information_table_body',__dataToUse.length, []);
+			console.log(__dataToUse[0])
+			var oldDataLength = __dataToUse.length;
+        	 var table = document.getElementById('dtr_information_table_body');
+            var rowCount = table.rows.length;
+            var row = table.rows;
+
+            for(var i=0; i< oldDataLength; i++) {
+
+            	// Only fill a table row with <td> element
+            	if (row[i].cells.length > 0) {
+
+            		// Loop through each cell
+            		for(var j=0; j<row[i].cells.length; j++) {
+							
+            			// Set ID to row
+            			row[i].dataset.id = __dataToUse[i]['id'];
+
+            			// Grab input element
+            			element = row[i].cells[j].getElementsByTagName('input');
+            			
+            			// Check if it is a valid input element
+            			if (element[0] != undefined) {
+            				elementName = element[0].getAttribute('name');
+            				
+            				element[0].value = __dataToUse[i][elementName];
+            			}
+            		}
+            	}
+            }
+
+
+		}
 		
 
 		$(document).on('keyup', '.searcheable', function(){

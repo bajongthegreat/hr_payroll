@@ -38,7 +38,39 @@ class DTRController extends \BaseController {
 	 */
 	public function index()
 	{
-		$daily_time_records = $this->daily_time_records->all();
+		$daily_time_records = $this->daily_time_records->allGrouped();
+
+
+		if (Input::has('jq_ax')) {
+
+			$work_date =  Input::get('work_date');
+			$work_assignment_id = Input::get('work_assignment');
+			$shift = Input::get('shift');
+
+			$dtr = $this->daily_time_records->find($shift, 'shift')
+			                                ->where('work_date', '=', $work_date)
+			                                ->where('work_assignment_id', '=', $work_assignment_id)
+			                                ->leftJoin('employees', 'employees.id', '=', "dailytimerecords.employee_id")
+			                                ->leftJoin('positions', 'positions.id', '=', 'work_assignment_id')
+			                                ->leftJoin('departments', 'departments.id', '=', 'positions.department_id')
+			                                ->select("dailytimerecords.id",
+			                                	    "dailytimerecords.work_date",
+			                                	    "dailytimerecords.shift",
+			                                	    "dailytimerecords.time_in_am",
+			                                	    "dailytimerecords.time_out_am",
+			                                	    "dailytimerecords.time_in_pm",
+			                                	    "dailytimerecords.time_out_pm",
+			                                	    "dailytimerecords.work_assignment_id",
+			                                	    "employees.lastname",
+			                                	    "employees.firstname",
+			                                	    "employees.middlename",
+			                                	    "departments.id as department_id")
+			                                ->get();
+
+
+			return Response::json($dtr);
+
+		}
 
 		return View::make('dtr.index', compact('daily_time_records'));
 	}
@@ -54,6 +86,10 @@ class DTRController extends \BaseController {
 		return View::make('dtr.create');
 	}
 
+
+	protected function processJobs() {
+
+	}
 
 	// For saving multiple records at once
 	protected function SaveBulk() {
@@ -78,6 +114,7 @@ class DTRController extends \BaseController {
 
 			$work_date = Input::get('date');
 			$shift = Input::get('shift');
+			$work_assignment_id = Input::get('work_assignment_id');
 			
 			foreach ($decoded_dtr_data as $data) {
 				# code...
@@ -91,6 +128,7 @@ class DTRController extends \BaseController {
 				$employee_data = ['employee_id' => $id,
 				                  'work_date' => $work_date,
 					              'shift' => $shift,  
+					              'work_assignment_id' => $work_assignment_id,
 									'time_in_am'  =>$data->time_in_am,
 									'time_out_am' => $data->time_out_am,
 									'time_in_pm'  => $data->time_in_pm,
@@ -192,7 +230,150 @@ class DTRController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-		//
+		
+			$work_date =  Input::get('work_date');
+			$work_assignment_id = Input::get('work_assignment');
+			$shift = Input::get('shift');
+
+			$dtr = $this->daily_time_records->find($shift, 'shift')
+			                                ->where('work_date', '=', $work_date)
+			                                ->where('work_assignment_id', '=', $work_assignment_id)
+			                                ->leftJoin('employees', 'employees.id', '=', "dailytimerecords.employee_id")
+			                                ->leftJoin('positions', 'positions.id', '=', 'work_assignment_id')
+			                                ->leftJoin('departments', 'departments.id', '=', 'positions.department_id')
+			                                ->select("dailytimerecords.id",
+			                                	    "dailytimerecords.work_date",
+			                                	    "dailytimerecords.shift",
+			                                	    "dailytimerecords.time_in_am",
+			                                	    "dailytimerecords.time_out_am",
+			                                	    "dailytimerecords.time_in_pm",
+			                                	    "dailytimerecords.time_out_pm",
+			                                	    "dailytimerecords.work_assignment_id",
+			                                	    "employees.lastname",
+			                                	    "employees.firstname",
+			                                	    "employees.middlename",
+			                                	    "employees.employee_work_id",
+			                                	    "dailytimerecords.remarks",
+			                                	    "departments.id as department_id",
+			                                	    "positions.id as position_id");
+
+			$ids_prior_update = $dtr->lists('employee_work_id');
+			$dtr_json =  json_encode($dtr->get()->toArray());
+			$dtr = $dtr->get()->first();	
+
+
+			return View::make('dtr.edit', compact('dtr', 'dtr_json', 'ids_prior_update'));
+	}
+
+	protected function bulkUpdate() {
+
+		$dtr_data = json_decode(Input::get('dtr_data'));
+		$shift = Input::get('shift');
+		$date = Input::get('date');
+		$ids_prior_update = Input::get('ids_prior_update');
+		$work_assignment = Input::get('work_assignment_id');
+
+
+		// Job checkers
+		$failed_jobs = [];
+		$success_jobs = [];
+		$jobs = [];
+		$duplications = [];
+		$not_included = [];
+		$created = [];
+
+
+		foreach ($dtr_data as $key => $value) {
+			# code...
+
+			// Get ORIGINAL id of employee from DB
+			$employee_id = $this->employees->find($value->employee_work_id, 'employee_work_id')->pluck('id');
+			$work_id = $value->employee_work_id;
+			// DUplicates
+			if (in_array($value->employee_work_id, $jobs)) {
+				$duplications[] = $value->employee_work_id;
+			}
+
+			// Job count
+			$jobs[] = $value->employee_work_id;
+
+			// Not included
+			if ($employee_id == NULL) {
+				$not_included[] = $value->employee_work_id;
+			}
+
+			// Set employee ID
+			$value->employee_id = $employee_id;
+			$value->shift = $shift;
+			$value->work_date = $date;
+			$value->work_assignment_id = $work_assignment;		
+
+			$employee_data = ['employee_id' => $employee_id,
+				                  'work_date' => $date,
+					              'shift' => $shift,  
+					              'work_assignment_id' => $work_assignment,
+									'time_in_am'  =>$value->time_in_am,
+									'time_out_am' => $value->time_out_am,
+									'time_in_pm'  => $value->time_in_pm,
+									'time_out_pm' => $value->time_out_pm,
+									'remarks' => $value->remarks,
+									'encoded_by' => Auth::user()->username,
+					              'created_at' => date('Y-m-d h:i:s'),
+					              'updated_at'=> date('Y-m-d h:i:s')];
+					
+
+			// Check if the data is new or old	
+			if (in_array($value->employee_work_id, $ids_prior_update)) {
+
+				$id = $value->id;
+
+				// Remove employee ID and work ID, I think it doesn't make sense to update them.
+				unset($employee_data->employee_id);
+				unset($value->employee_work_id);
+				
+				// Update
+				if ($this->daily_time_records->find($id)->update((array) $employee_data)) {
+					$success_jobs[] = $work_id;
+				} else {
+					$failed_jobs[] = $work_id;
+				}
+				$employee_data['employee_id'] = $work_id;
+				$json_employee_data[] = $employee_data;
+
+			} else {
+
+				unset($value->employee_work_id);
+
+
+				// Create
+				if ($this->daily_time_records->create( (array) $employee_data)) {
+					$success_jobs[] = $work_id;
+					$created[] = $work_id;
+				} else {
+					$failed_jobs[] = $work_id;
+				}
+
+				$employee_data['employee_id'] = $value->employee_work_id;
+				$json_employee_data[] = $employee_data;
+			}
+
+		}
+
+
+		// Return data
+
+			$output = json_encode(['all_jobs' => $jobs,
+									'created' => $created,
+								   'failed_jobs' => $failed_jobs,
+			                       'success_jobs' => $success_jobs,
+			                       'success_jobs_count' => count($success_jobs),
+			                       'failed_jobs_count' => count($failed_jobs),
+			                       'duplications' => $duplications,
+			                       'not_included' => $not_included,
+			                       'data' => $json_employee_data ])	;
+
+			 return Response::json($output);
+
 	}
 
 	/**
@@ -204,7 +385,11 @@ class DTRController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		
+		// Check if it is bulk or single
+		return $this->bulkUpdate();
+		
+		// return var_dump(Input::al/	l());
 	}
 
 	/**

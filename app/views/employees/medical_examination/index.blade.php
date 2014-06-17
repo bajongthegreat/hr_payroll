@@ -61,6 +61,7 @@
   				<td class="__more_violations_parent" data-medical_establishment="{{ $pe->medical_establishment_id }}" data-date_conducted="{{ $pe->date_conducted }}" data-status="closed"  > <span class="label label-default"><span class="glyphicon glyphicon-list"></span>  View Employees Included</span></td>
 				<td> {{ $pe->establishment }} </td>
 				<td> {{ $date_conducted->format('F d, Y')  }} </td>
+				<td> <a href="{{ action('EmployeesMedicalExaminationsController@edit', $pe->id) }}">Edit</a> </td>
 			</tr>
 		@endforeach
 
@@ -135,9 +136,10 @@
 
 								days_suspended = (data[key].days_of_suspension == null) ? 'N/A' : data[key].days_of_suspension;
 								
-								inner_table_data_container += "<td>" + data[key].offense_number +"</td>";
-								inner_table_data_container += "<td>" + data[key].punishment_type +"</td>";
-								inner_table_data_container += "<td>" + days_suspended +"</td>";
+								inner_table_data_container += "<td>" + data[key].lastname + ', ' + data[key].firstname + ' ' + data[key].middlename +"</td>";
+								inner_table_data_container += "<td>" + data[key].medical_findings +"</td>";
+								inner_table_data_container += "<td>" + data[key].recommendations +"</td>";
+								inner_table_data_container += "<td>" + data[key].remarks +"</td>";
 								// inner_table_data_container += '<td><a href="' + _globalObj._baseURL + URI + '/'  + data[key].id + '/edit' + '" class="btn btn-default">Edit</a></td>';
 								// inner_table_data_container += '<td><a href="#" data-employee_id="' + data[key].id + '" data-url="' + _globalObj._baseURL + URI + '"/' + data[key].id +' class="btn btn-default _deleteItem">Edit</a></td>';
 				

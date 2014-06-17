@@ -15,8 +15,10 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/bootstrap-datetimepicker.min.css')}}"/>
     <link rel="stylesheet" type="text/css" media="screen" href="{{asset('styles/pygments-manni.css')}}" />
-    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/main.css')}}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/main-layout.css.php')}}" />
     <link href="{{ asset('css/lightbox.css') }}" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+
     <!-- <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet"> -->
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -49,6 +51,8 @@
           </button>
           <a class="navbar-brand" href="#"> <img src="{{ asset('img/logo.png') }}" height="24" width="30"> TIBUD</a>
         </div>
+
+
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
 
@@ -65,16 +69,16 @@
             </li>
 
             
-              <li class="dropdown">
+              <!-- <li class="dropdown"> -->
 
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> Basic Files <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-             <li><a href="{{ action("UsersController@index") }}"><span class="glyphicon glyphicon-user"></span>  Users</a></li>
+              <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> Basic Files <b class="caret"></b></a> -->
+          <!-- <ul class="dropdown-menu"> -->
+             <!-- <li><a href="{{ action("UsersController@index") }}"><span class="glyphicon glyphicon-user"></span>  Users</a></li> -->
  
-            <li><a href="{{ action("SSSController@index") }}">SSS Contribution table</a></li>
-            <li><a href="{{ action("PhilhealthsController@index") }}">Phihealth Contribution table</a></li>
-            <li><a href="{{ action("HDMFController@index") }}">HDMF Contribution table</a></li>
-          </ul>
+            <!-- <li><a href="{{ action("SSSController@index") }}">SSS Contribution table</a></li> -->
+            <!-- <li><a href="{{ action("PhilhealthsController@index") }}">Phihealth Contribution table</a></li> -->
+            <!-- <li><a href="{{ action("HDMFController@index") }}">HDMF Contribution table</a></li> -->
+          <!-- </ul> -->
 
            
            
@@ -107,7 +111,7 @@
 
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>  Payroll <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="{{ action("EmployeesController@index") }}">Salary</a></li>
+            <li><a href="{{ action("DTRController@index") }}"> <span class="glyphicon glyphicon-dashboard"></span>  Daily Time Record</a></li>
             <li><a href="#">Payslips</a></li>
             <li><a href="#">Loans</a></li>
           </ul>
@@ -157,7 +161,26 @@
           <!-- Angular view templating -->
           <div class="content" ng-view>
 
-             
+            <noscript> 
+              <br>
+              <br>
+              <div  class="alert alert-danger">
+                <h3 style="text-align:center;"><span class="glyphicon glyphicon-warning-sign"></span>  In order for the system to run, please turn on your Javascript. </h3>
+
+                    <div class="well">
+                      <h4> For Google chrome browsers: </h4>
+
+                      <div>
+                        <li>Right click, select "View page Info" </li>
+                        <li>Under permissions, move your cursor Javascript</li>
+                        <li>Click the caret, it is labeled "Allowed by default" or "Blocked by you"</li>
+                        <li>Choose Global default.</li>
+                        <li>Refresh your browser.</li>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </noscript>             
 
           		@yield('content')
 
