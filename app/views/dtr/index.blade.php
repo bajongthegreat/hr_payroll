@@ -18,9 +18,42 @@
 	  <div class="header-buttons pull-left">
 	  <a href="{{ action('DTRController@create')}}" class="btn btn-success"><span class="glyphicon glyphicon-new-window"></span> Add new  Record</a>
 	   <a  href="{{ action('DTRController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-refresh"></span >  Refresh</a>
-	
+			
 	  </div>
+	  <?php 
+	  		$group = Input::has('group') ? Input::get('group') : 'grouped';
+	  ?>
+	    	<!--  Filter by year -->
+	<div class="header-buttons 	"><span  class="col-md-2"> {{ Form::select('year', [ 'grouped' => 'Grouped',
+		                                                                             'none' => 'Not grouped'], $group , ['class' => 'form-control', 'id' => 'group']) }}</div>
+
+
 	  <table class="table table-hover">
+	  	@if (Input::has('group') && Input::get('group') == 'none')
+	  		<thead>
+	  			<th>Employee ID</th>
+	  			<th>Employee Name</th>
+	  			<th>Date</th>
+	  			<th>Shift</th>
+	  			<th>Work Assignment</th>
+	  			
+	  		</thead>
+	  		<tbody>
+	  			@foreach ($daily_time_records as $dtr)
+	  					<?php
+	  						$date = new DateTime($dtr->work_date);
+	  					 ?>
+	  				<tr  >
+	  					<td> {{ $dtr->employee_work_id}}</td>
+	  					<td> {{ $dtr->lastname . ', ' . $dtr->firstname . ' ' . $dtr->middlename}}</td>
+	  					<td> {{ $date->format('F d, Y') }}</td>
+	  					<td> {{ ($dtr->shift == 'ns') ? '<span class="label label-info">Night Shift</span>' : '<span class="label label-warning">Day shift</span>' }} </td>
+	  					<td> {{ $dtr->work_assignment }}</td>
+	  					<td> <a href="{{ action('DTRController@edit', $dtr->id) }}?type=single"  class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> Edit</a></td>
+	  				</tr>
+	  			@endforeach
+	  		</tbody>
+	  	@else
 	  		<thead>
 	  			<th width="10%"></th>
 	  			<th>Date</th>
@@ -42,13 +75,23 @@
 	  				</tr>
 	  			@endforeach
 	  		</tbody>
+	  	@endif
 	  </table>
-	
+	  	@if (Session::has('message'))
+	  		<div class="alert alert-info text-center"> {{ Session::get('message') }}</div>
+	  	@endif
+	<?php $collection = $daily_time_records; ?>
+		@include('partials.pagination_links')
 
 @stop
 
 @section('scripts')
 <script type="text/javascript">
+
+	$('#group').on('change', function() {
+		window.location = '?group='+ $(this).val();
+	});
+
 	$('.__more_violations_parent').on('click', function(e) {
 		
 		var URI = '/payroll/dtr';
@@ -128,7 +171,7 @@
 								inner_table_data_container += "<td>" + data[key].time_out_pm +"</td>";
 								inner_table_data_container += "<td>" + total.total + "  " + overtime +"</td>";
 								
-								inner_table_data_container += '<td><a href="' + _globalObj._baseURL + URI + '/'  + data[key].id + '/edit#employee=' + data[key].employee_work_id + '" class="btn btn-default">Edit</a></td>';
+								inner_table_data_container += '<td><a href="' + _globalObj._baseURL + URI + '/'  + data[key].id + '/edit" class="btn btn-default">Edit</a></td>';
 								// inner_table_data_container += '<td><a href="#" data-id="' + data[key].id + '" data-url="' + _globalObj._baseURL + URI + '"/' + data[key].id +' class="btn btn-default _deleteItem">Edit</a></td>';
 				
 							inner_table_data_container += "</tr>";

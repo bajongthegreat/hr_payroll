@@ -12,20 +12,18 @@
 	
 	<div class="container">
 		
-		<?php $type = (Input::get('add_type') == 'bulk') ? "bulk" : "single"; ?>
-
-		{{Form::open(['action' => ['DTRController@edit', $dtr->id], 'class' => 'form-horizontal', 'role' => 'form', 'autocomplete' => 'off'])}}
 		
 
 
 		@if (Input::has('type') && Input::get('type') == 'bulk')
+			{{Form::open(['action' => ['DTRController@edit', $dtr->id], 'class' => 'form-horizontal', 'role' => 'form', 'autocomplete' => 'off'])}}
 			
 			@include('dtr.partials.bulk-edit')
 
 		@else
-			<script>
-				var __dataToUse = [];
-			</script>
+			{{Form::model($dtr, ['action' => ['DTRController@update', $dtr->id], 'method' => 'PUT',  'class' => 'form-horizontal', 'role' => 'form', 'autocomplete' => 'off'])}}
+		
+			@include('dtr.partials.single')
 		@endif
 
 

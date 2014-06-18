@@ -280,6 +280,10 @@ var _dtrModule = new dtrModule();
 
 			e.preventDefault();
 
+			if (!confirm('Are you sure you want to save this changes into the database?')) {
+			 	return false;
+			}
+
 			var date_conducted = $('#work_date');
 
 			// Check if date is filled

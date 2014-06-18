@@ -38,8 +38,12 @@ class DTRController extends \BaseController {
 	 */
 	public function index()
 	{
-		$daily_time_records = $this->daily_time_records->allGrouped();
-
+		if (Input::has('group') && Input::get('group') == 'none') {
+			$daily_time_records = $this->daily_time_records->allNotGrouped();
+		} else {
+			$daily_time_records = $this->daily_time_records->allGrouped();
+		}
+		
 
 		if (Input::has('jq_ax')) {
 
@@ -230,37 +234,64 @@ class DTRController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-		
-			$work_date =  Input::get('work_date');
-			$work_assignment_id = Input::get('work_assignment');
-			$shift = Input::get('shift');
+			if (Input::has('type') && Input::get('type') == 'bulk') {
 
-			$dtr = $this->daily_time_records->find($shift, 'shift')
-			                                ->where('work_date', '=', $work_date)
-			                                ->where('work_assignment_id', '=', $work_assignment_id)
-			                                ->leftJoin('employees', 'employees.id', '=', "dailytimerecords.employee_id")
-			                                ->leftJoin('positions', 'positions.id', '=', 'work_assignment_id')
-			                                ->leftJoin('departments', 'departments.id', '=', 'positions.department_id')
-			                                ->select("dailytimerecords.id",
-			                                	    "dailytimerecords.work_date",
-			                                	    "dailytimerecords.shift",
-			                                	    "dailytimerecords.time_in_am",
-			                                	    "dailytimerecords.time_out_am",
-			                                	    "dailytimerecords.time_in_pm",
-			                                	    "dailytimerecords.time_out_pm",
-			                                	    "dailytimerecords.work_assignment_id",
-			                                	    "employees.lastname",
-			                                	    "employees.firstname",
-			                                	    "employees.middlename",
-			                                	    "employees.employee_work_id",
-			                                	    "dailytimerecords.remarks",
-			                                	    "departments.id as department_id",
-			                                	    "positions.id as position_id");
+				$work_date =  Input::get('work_date');
+				$work_assignment_id = Input::get('work_assignment');
+				$shift = Input::get('shift');
 
-			$ids_prior_update = $dtr->lists('employee_work_id');
-			$dtr_json =  json_encode($dtr->get()->toArray());
-			$dtr = $dtr->get()->first();	
+				$dtr = $this->daily_time_records->find($shift, 'shift')
+				                                ->where('work_date', '=', $work_date)
+				                                ->where('work_assignment_id', '=', $work_assignment_id)
+				                                ->leftJoin('employees', 'employees.id', '=', "dailytimerecords.employee_id")
+				                                ->leftJoin('positions', 'positions.id', '=', 'work_assignment_id')
+				                                ->leftJoin('departments', 'departments.id', '=', 'positions.department_id')
+				                                ->select("dailytimerecords.id",
+				                                	    "dailytimerecords.work_date",
+				                                	    "dailytimerecords.shift",
+				                                	    "dailytimerecords.time_in_am",
+				                                	    "dailytimerecords.time_out_am",
+				                                	    "dailytimerecords.time_in_pm",
+				                                	    "dailytimerecords.time_out_pm",
+				                                	    "dailytimerecords.work_assignment_id",
+				                                	    "employees.lastname",
+				                                	    "employees.firstname",
+				                                	    "employees.middlename",
+				                                	    "employees.employee_work_id",
+				                                	    "dailytimerecords.remarks",
+				                                	    "departments.id as department_id",
+				                                	    "positions.id as position_id");
 
+				$ids_prior_update = $dtr->lists('employee_work_id');
+				$dtr_json =  json_encode($dtr->get()->toArray());
+				$dtr = $dtr->get()->first();	
+
+			} else {
+				$dtr = $this->daily_time_records->find($id, 'dailytimerecords.id')
+				                                ->leftJoin('employees', 'employees.id', '=', "dailytimerecords.employee_id")
+				                                ->leftJoin('positions', 'positions.id', '=', 'work_assignment_id')
+				                                ->leftJoin('departments', 'departments.id', '=', 'positions.department_id')
+				                                ->select("dailytimerecords.id",
+				                                	    "dailytimerecords.work_date",
+				                                	    "dailytimerecords.shift",
+				                                	    "dailytimerecords.time_in_am",
+				                                	    "dailytimerecords.time_out_am",
+				                                	    "dailytimerecords.time_in_pm",
+				                                	    "dailytimerecords.time_out_pm",
+				                                	    "dailytimerecords.work_assignment_id",
+				                                	    "employees.lastname",
+				                                	    "employees.firstname",
+				                                	    "employees.middlename",
+				                                	    "employees.employee_work_id",
+				                                	    "employees.id as employee_id",
+				                                	    "dailytimerecords.remarks",
+				                                	    "departments.id as department_id",
+				                                	    "positions.id as position_id")->get()->first();
+
+				$ids_prior_update = NULL;
+				$dtr_json =  NULL;
+				
+			}	
 
 			if ( count($dtr) == 0 ) {
 				return Redirect::action('DTRController@index');
@@ -380,6 +411,28 @@ class DTRController extends \BaseController {
 
 	}
 
+	public function singleUpdate($id) {
+		$shift = Input::get('shift');
+		$date = Input::get('work_date');
+		$work_assignment = Input::get('work_assignment_id');
+		$remarks = Input::get('remarks');
+		$time_in_am = Input::get('time_in_am');
+		$time_out_am = Input::get('time_out_am');
+		$time_in_pm = Input::get('time_in_pm');
+		$time_out_pm = Input::get('time_out_pm');
+
+		$data = [ 'shift' => $shift,
+		          'work_date' => $date,
+		          'work_assignment_id' => $work_assignment,
+		          'time_in_am' => $time_in_am,
+		          'time_out_am' => $time_out_am,
+		          'time_in_pm' => $time_in_pm,
+		          'time_out_pm' => $time_out_pm,
+		          'remarks' => $remarks];
+
+		return $this->daily_time_records->find($id)->update($data);
+
+	}
 	/**
 	 * Update the specified resource in storage.
 	 * PUT /dtrs/{id}
@@ -389,10 +442,17 @@ class DTRController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		
+		if (Request::ajax()) {	
+
 		// Check if it is bulk or single
 		return $this->bulkUpdate();
-		
+		} else {
+			if ($this->singleUpdate($id)) {
+				return Redirect::action('DTRController@index', ['group' => 'none'])->with('message', 'DTR updated.');
+			} else {
+				return Redirect::action("DTRController@edit", [$id])->withInputs();
+			}
+		}
 		// return var_dump(Input::al/	l());
 	}
 

@@ -4,7 +4,7 @@
 View::composer(['positions.create','positions.edit', 'employees.create', 'employees.show', 'employees.edit', 'departments.create','departments.edit', 'applicants.create','applicants.edit'], 'Acme\Composers\CompanyComposer');
 
 // Load $departments variable into this views
-View::composer(['positions.create','positions.edit', 'employees.create', 'employees.edit','dtr.partials.bulk','dtr.partials.bulk-edit'	], 'Acme\Composers\DepartmentComposer');
+View::composer(['positions.create','positions.edit', 'employees.create', 'employees.edit','dtr.partials.bulk','dtr.partials.bulk-edit', 'dtr.partials.single'	], 'Acme\Composers\DepartmentComposer');
 
 // Load $departments variable into this views
 View::composer(['employees.index'], 'Acme\Composers\DepartmentComposer@all');
@@ -29,6 +29,7 @@ View::composer([	'stageProcesses.create'], 'Acme\Composers\StageProcessComposer@
 View::composer(['employees.index', 'applicants.index'], 'Acme\Composers\CompanyComposer@raw');
 View::composer(['employees.index', 'applicants.index'], 'Acme\Composers\PositionComposer@raw');
 
+View::composer(['employees.index', 'applicants.index'], 'Acme\Composers\PositionComposer@raw');
 View::composer(['dtr.partials.bulk','dtr.partials.bulk-edit'], 'Acme\Composers\TimeComposer');
 
 

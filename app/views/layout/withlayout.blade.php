@@ -112,7 +112,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>  Payroll <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="{{ action("DTRController@index") }}"> <span class="glyphicon glyphicon-dashboard"></span>  Daily Time Record</a></li>
-            <li><a href="#">Payslips</a></li>
+            <li><a href="#">Process Payroll </a></li>
             <li><a href="#">Loans</a></li>
           </ul>
 
