@@ -138,7 +138,7 @@
 							
 					{{ Form::label('date_hired', 'Date Hired', array('class' => 'col-sm-4 text-right')) }}
 
-					<div class="col-sm-6">
+					<div class="col-sm-7">
 						<p class="form-control-static">
 							<?php 
 
@@ -149,9 +149,23 @@
 							    $datetime2 = date_create(date('Y-m-d'));
 							    
 							    $interval = date_diff($datetime1, $datetime2);
-							   
+									
+							    if ( $interval->format('%y') == 0) {
+							    	echo $date->format('F d,  Y') . ' ( ' . $interval->format('%m') .' month(s) and ' . $interval->format('%d') .' day(s)  in service)';
+							    } else {
+							    	
+							    	if ($interval->format('%y') == 1) {
+										$year_str = 'year';
+									} else {
+										$year_str = 'years';
+									}	
 
-								echo $date->format('F d,  Y') . ' (' . $interval->format('%y') .' years in service)';								
+									echo $date->format('F d,  Y') . ' (' . $interval->format('%y') .' ' . $year_str .' in service)';
+							    } 
+
+											    
+
+																
 							} else {
 								echo '<span class="label label-default">Not specified</span>';
 							}

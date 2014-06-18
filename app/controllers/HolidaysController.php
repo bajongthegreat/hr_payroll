@@ -1,7 +1,7 @@
 <?php
 
 use Acme\Repositories\Holiday\HolidayRepositoryInterface;
-
+use Carbon\Carbon;
 class HolidaysController extends BaseController {
 
 
@@ -41,7 +41,6 @@ class HolidaysController extends BaseController {
 		}
 
 		$year = Input::get('year');
-		
 
 
 
@@ -49,15 +48,15 @@ class HolidaysController extends BaseController {
 		if (Input::has('src')) {
 			$src = Input::get('src');
 
-			$holidays =  $this->holidays->findLike($src, $this->db_fields_to_use)->get();
+			$holidays =  $this->holidays->findLike($src, $this->db_fields_to_use)->paginate(15);
 
 		} 
 
 
 			if ($year) {
-				$holidays = $this->holidays->byYear($year)->get();
+				$holidays = $this->holidays->byYear($year)->paginate(15);
 			} else {
-			$holidays = $this->holidays->all();
+			$holidays = $this->holidays->byYear(Carbon::now()->year)->paginate(15);
 		}
 
 

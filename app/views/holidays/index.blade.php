@@ -20,26 +20,36 @@
 
   </div>
 	
-
+<?php 
+use Carbon\Carbon;
+$year= (Input::has('year')) ? Input::get('year') : Carbon::now()->year; ?>
   	<!--  Filter by year -->
-	<div class="header-buttons 	"><span  class="col-md-2"> <select class="form-control"><option>2014</option> </select> </span></div>
+	<div class="header-buttons 	"><span  class="col-md-2"> {{ Form::select('year', [ '2013' => '2013',
+		  																			 '2014' => '2014',
+		  																			 '2015' => '2015',
+		  																			 '2016' => '2016',
+		  																			 '2017' => '2017',
+		  																			 '2018' => '2018'], $year , ['class' => 'form-control', 'id' => 'year']) }}</div>
 
 <table class="table table-hover">
 	<thead>
-		<th>Name</th>
-		<th>Type</th>
-		<th>Date</th>
+		<th width="15%">Name</th>
+		<th width="15%">Type</th>
+		<th width="15%">Date</th>
+		<th></th>
 		<th>Remarks</th>
 	</thead>
 
 
 	<tbody>
 		@foreach($holidays as $holiday)
+		<?php $holiday_date = new DateTime($holiday->holiday_date); ?>
 			<tr >
 
 				<td> {{ $holiday->name }}</td>
 				<td>{{ ucfirst($holiday->type) }}</td>
-				<td> {{ ucfirst($holiday->holiday_date) }}</td>
+				<td> {{ '<span data-toggle="tooltip" data-placement="top" title="' . $holiday->holiday_date . '" class="holiday_date">' . $holiday_date->format('F d') . '</span>' }}</td>
+				<td>{{ '<span class="label label-info">' . $holiday_date->format('D') .'</span>' }}</td>
 				<td>{{ $holiday->remarks }}</td>
 			
 				
@@ -52,4 +62,16 @@
 	</tbody>
 </table>
 
+@stop
+
+@section('scripts')
+<script type="text/javascript">
+	(function(){
+			$('#year').on('change', function() {
+				window.location = '?year=' + $(this).val();
+			});
+
+			$('.holiday_date').tooltip();
+	})();
+</script>
 @stop

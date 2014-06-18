@@ -14,7 +14,7 @@
 						<?php 
 							$shift = (Input::has('shift')) ? Input::get('shift') : Input::old('shift');
 						?>
-							{{ Form::select('shift',['ds' => 'Day shift', 'ns' => 'Night shift'] , NULL , array('class' => 'form-control', 'required', 'id' => 'shift') ) }}
+							{{ Form::select('shift',['ds' => 'Day shift', 'ns' => 'Night shift'] , $shift , array('class' => 'form-control', 'required', 'id' => 'shift') ) }}
 					</div>
 
 					<div class="col-sm-2" style="padding-top: 5px;">
@@ -243,10 +243,10 @@ var resultContainer = $('.resultContainer');
 var __dayShiftHoursAM = [],
     __dayShiftHoursPM = [];
 
-
 var __dataToUse = {{ $dtr_json }};
-
 var ids_prior_update = {{ json_encode($ids_prior_update) }}
+
+var _dtrModule = new dtrModule();
 
 </script>
 
@@ -261,214 +261,20 @@ var ids_prior_update = {{ json_encode($ids_prior_update) }}
     	    oldPosition = '{{ (isset($dtr->position_id)) ? $dtr->position_id  : 0}}',
     	    oldShift = '{{ $dtr->shift }}';
 
-
-    	$('#department_id').val(oldDepartment); 
-		if (oldDepartment != 0) {
-			hrApp.getSelectOptions(_globalObj._baseURL + '/positions/positionsByDepartment', oldDepartment, 'position_id', oldPosition);
-			if (__oldShift == 'ns') {
-				changeShift( oldShift );
-			}
-			
-		}
-
-		$('.shift_label').on('click', function() {
-			var shift_opt = $('#shift').parent();
-
-			if ( shift_opt.is(":visible") ) {
-				shift_opt.hide();				
-			} else {
-				shift_opt.show();
-			}
-		});
-
-		 $('#department_id').change(function(e, old) {
-		 	var department_id = $(this).find(":selected").val();
-		 	var oldPosition = null;
-
-		 	$('#position_id').parent().parent().show();
-             hrApp.getSelectOptions(_globalObj._baseURL + '/positions/positionsByDepartment', department_id, 'position_id', oldPosition);
-		 });
+    	    var initializeObj = { oldDepartment: oldDepartment,
+    	                          oldPosition: oldPosition,
+    	                          oldShift: oldShift,
+    	                          show_full_dtr: show_full_dtr };
+  
 
 
+		// Loads DTR defaults
+		_dtrModule.initializer(initializeObj);
 
-		$('#shift').on('change', function() {
-
-			var shift = $(this).val();
-			var shiftName = "";
-			
-			changeShift(shift, '#medical_examination_information_table');
-		
-			if (shift == 'ds') shiftName = '<span class="label label-warning">Day shift</span>';
-			else shiftName = '<span class="label label-info">Night shift</span>';
-				$('.shift_label').html(shiftName);
-		});
+		// Load event handlers
+		_dtrModule.handlers();
 	
-		// set default timeout
-		$('#def_timeout_am').on('change', function() {
-			var shift = $('#shift').val();
-			
-			// For dayshift
-			if (shift == 'ds') {
-				var timeout_am = $('input[name="time_out_am"]');
-				var default_timeout_am = $(this).val();
-
-				$.each(timeout_am, function(key,value) {
-					$(this).val(default_timeout_am);
-				});	
-			} else if (shift =='ns') {
-			// For night shift
-				var timeout_am = $('input[name="time_in_am"]');
-				var default_timeout_am = $(this).val();
-
-				$.each(timeout_am, function(key,value) {
-					$(this).val(default_timeout_am);
-				});
-			}
-			
-		});
-
-		// Set default time in
-		$('#def_timein_pm').on('change', function() {
-			
-			var shift = $('#shift').val();
-
-			if (shift == 'ds') {
-				var timeout_am = $('input[name="time_in_pm"]');
-				var default_timeout_am = $(this).val();
-
-				$.each(timeout_am, function(key,value) {
-					$(this).val(default_timeout_am);
-				});	
-			} else if (shift == 'ns') {
-				var timeout_pm = $('input[name="time_out_pm"]');
-				var default_timeout_am = $(this).val();
-
-				$.each(timeout_pm, function(key,value) {
-					$(this).val(default_timeout_am);
-				});
-			}
-			
-		});
-
-		$('input[name="show_full_dtr"]').on('change', function() {
-
-
-				// Get all time out am
-				var timeout_am = $('input[name="time_out_am"]');
-
-				// get all time
-				var timein_pm = $('input[name="time_in_pm"]');
-
-				var timein_am = $('input[name="time_in_am"]');
-
-				var timeout_pm  = $('input[name="time_out_pm"]');
-			
-			// Show all time fields
-			if ($(this).prop('checked') == true) {
-				
-				show_full_dtr = true;
-
-				// Show  all timeout AM
-				$.each(timeout_am, function(key, value) {
-					$(this).parent().parent().fadeIn();
-				});
-
-				//  Show all Time IN PM
-				$.each(timein_pm, function(key, value) {
-
-					$(this).parent().parent().fadeIn();
-				});	
-
-				// Show all im in am
-				$.each(timein_am, function(key, value) {
-					$(this).parent().parent().fadeIn();
-				});				
-
-				// Show all time out pm
-				$.each(timeout_pm, function(key, value) {
-					$(this).parent().parent().fadeIn();
-				});	
-
-				// Show hidden column headers
-				$('#header_timeout_am').fadeIn(250);
-				$('#header_timein_pm').fadeIn(250);
-
-				// Show AM/PM labels
-				$('.timelabel').fadeIn();
-
-			} else {
-				
-				show_full_dtr = false;
-				var shift = $('#shift').val();
-
-				// For dayshift
-				if (shift == 'ds') {
-
-					// Hide column headers
-					$('#header_timeout_am').fadeOut(250);
-					$('#header_timein_pm').fadeOut(250);
-
-
-					// Hide AM/PM labels
-					$('.timelabel').fadeOut();
-
-						// Get all time out AM and hide it
-						$.each(timeout_am, function(key, value) {
-							var _tipm = $(this);
-							var _tiam_val = _tipm.parent().parent().parent().find('input[name="time_in_pm"]').val();
-							var _toam_val = _tipm.parent().parent().parent().find('input[name="time_out_pm"]').val();
-
-							console.log(_toam_val);
-
-							if (_tiam_val == '00:00' && _toam_val == '00:00') {
-								_tipm.parent().parent().parent().find('input[name="time_out_pm"]').parent().parent().fadeOut();
-							} else {
-								_tipm.parent().parent().fadeOut();	
-							}
-
-						});
-						// Get all time in PM and hide it
-						$.each(timein_pm, function(key, value) {
-							var _tipm = $(this);
-							var _tiam_val = _tipm.parent().parent().parent().find('input[name="time_in_am"]').val();
-							var _toam_val = _tipm.parent().parent().parent().find('input[name="time_out_am"]').val();
-
-							console.log(_toam_val);
-
-							if (_tiam_val == '00:00' && _toam_val == '00:00') {
-								_tipm.parent().parent().parent().find('input[name="time_in_am"]').parent().parent().fadeOut();
-							} else {
-								_tipm.parent().parent().fadeOut();	
-							}
-							
-						});
-				} else if (shift == 'ns') {
-
-						// Hide column headers
-						$('#header_timeout_am').fadeOut(250);
-						$('#header_timein_pm').fadeOut(250);
-
-						// Hide AM/PM labels
-						$('.timelabel').fadeOut();
-
-						// Hide all time out PM
-						$.each(timeout_pm, function(key, value) {
-							var _tipm = $(this);
-
-							_tipm.parent().parent().fadeOut();
-						});
-
-						// Hie all time in am
-						$.each(timein_am, function(key, value) {
-							var _tiam = $(this);
-
-							_tiam.parent().parent().fadeOut();
-						});
-
-				}
-				
-			}
-		})	
+		// Todo: _dtrModule.getTableData
 
 		$('#processTableData').on('click', function(e) {
 
@@ -484,103 +290,49 @@ var ids_prior_update = {{ json_encode($ids_prior_update) }}
 				date_conducted.closest('div[class^="form-group"]').removeClass('has-error');
 			}
 
-			// Get table's basic data
+	 		// Get table element
 			var table = document.getElementById("dtr_information_table_body");
-			var cellData = {};
-			var tableData = {};	
-			var field = value = "";	
+		
+			// Get table's basic data
+			tableData = _dtrModule.getTableData(table);
 
-
-			// Loop through each table rows
-			for(var i =0; i < table.rows.length; i++) {
-
-				cellData = {};
-
-				cellData['id'] = table.rows[i].dataset.id;
-					
-
-				// Loop through each table cells
-				for (var j=0; j < table.rows[i].cells.length; j++) {
-					console.log(table.rows[i].cells[j].children[0].dataset.name);		
-					// Check if it is a span or an input type
-					if (table.rows[i].cells[j].children[0].tagName.toLowerCase() == 'input') {
-			
-						// Get the attribute
-						field = table.rows[i].cells[j].children[0].dataset.name;
-					
-						// Get value
-						value = table.rows[i].cells[j].children[0].value;
-	
-					} else {
-
-						// If it is not an input, try to dig deeper to find input inside other tags
-						if (table.rows[i].cells[j].children[0].children[0] != undefined) {
-
-
-						// Get the attribute
-						field = table.rows[i].cells[j].children[0].children[0].dataset.name;
-					
-						// Get value
-						value = table.rows[i].cells[j].children[0].children[0].value;
-						}
-					}
-
-					
-
-					// Assign into an array for later use
-					cellData[field] = value;
-
-
-				}
-
-				// Check if employee ID is assigned
-				if (cellData['employee_work_id'] != undefined) {
-
-					console.log(cellData['employee_work_id'])
-					// Check if employee id has value
-					if (cellData['employee_work_id'] != "") tableData[i] = cellData;	
-				}
-				
-				
-
-				
-				console.log(tableData);
-		}
+			var ajaxData =  {  dtr_data: JSON.stringify(tableData), 
+						       shift: $('#shift').val(), 
+						       date: $('#work_date').val(),
+						       work_assignment_id: $('#position_id').val(),
+						       _token: _globalObj._token,
+						       ids_prior_update: ids_prior_update };
 
 
 			// Send the processed data into our database
 			$.ajax({
 					'type': 'PUT',
 					'url': _globalObj._baseURL + '/payroll/dtr/15',
-					'data' : { dtr_data: JSON.stringify(tableData), 
-						       shift: $('#shift').val(), 
-						       date: $('#work_date').val(),
-						       work_assignment_id: $('#position_id').val(),
-						       _token: _globalObj._token,
-						       ids_prior_update: ids_prior_update },
+					'data' : ajaxData ,
 					success: function(data) {
 							output = JSON.parse(data);
-							console.log(output)
+							
 							if (output != undefined) {
-
 
 								// Only display charts when there's a job done
 								if (output.all_jobs.length == 0) return false;
-								$('#buttons').hide();
+								
 
  								var success_jobs = output.success_jobs;
  								var failed_jobs = output.failed_jobs;
  								var duplications = output.duplications
  								var not_included = output.not_included;
 
+ 								$('#buttons').hide();
 								$('#medical_examination_information_table').hide();
 								var resultTable = $('#examination_creation_result');
 								var encodedDataTable = $('#examination_creation_result_data');
 								var resultTableData = $('#examination_creation_result_data tbody');
-								var skipped_items = ['created_at','updated_at'];
+								var skipped_items = ['created_at','updated_at', 'work_assignment_id'];
 
 								encodedDataTable.removeClass('hide');
 								resultTable.removeClass('hide');
+
 								$('.jobs_done').html(output.all_jobs.length);
 								$('.created').html(output.created.length);
 								$('.success_jobs').html(output.success_jobs.length);
@@ -601,7 +353,7 @@ var ids_prior_update = {{ json_encode($ids_prior_update) }}
  									   $.each(value, function(k, v) {
  									   		
  									   		// Don't include this in our table
- 									   		if (k == 'created_at' || k == 'updated_at' || k=='work_assignment_id') return true;
+ 									   		if (__in_array(k, skipped_items)) return true;
  									   		 
  									   		 td_class = '';
 
@@ -656,14 +408,15 @@ var ids_prior_update = {{ json_encode($ids_prior_update) }}
 
  									  row = row + '</tr>';	
 
- 									 resultTableData.append(row);			
-								});
+ 									 resultTableData.append(row);
 
-							}
+								}); // End of for each
 
-					}
-				});
+							} // End of xmlhttpResponse check
 
+					} // End of succes method
+
+				}); // End of AJAX
 		});
 	
 		function getJSON(data_param) {
@@ -857,7 +610,14 @@ var ids_prior_update = {{ json_encode($ids_prior_update) }}
             				elementName = element[0].getAttribute('name');
             				
             				element[0].value = __dataToUse[i][elementName];
+            			} else {
+            				span = row[i].cells[j].getElementsByTagName('span');
+							console.log(__hasClass(span[0], '_totalhours'));	
             			}
+
+
+
+
             		}
             	}
             }

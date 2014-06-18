@@ -160,6 +160,19 @@ var __in_array = function(type, allowedTypes) {
                 return found;
             }
 
+// Native way of checking if class exists
+var __hasClass = function(element, className) {
+
+    var regex = '/' + className +'/';
+
+    if ( element.className.match(regex) ) 
+    {
+       return true;
+    }
+
+    return false;
+}
+
 var __indexOf = function(needle) {
     if(typeof Array.prototype.indexOf === 'function') {
         indexOf = Array.prototype.indexOf;
@@ -390,113 +403,482 @@ $(document).on('click', '._deleteItem',function(e) {
 });
 
 
-function changeShift(shift, tableID, show_full_dtr) {
-  console.log(show_full_dtr);
-      if (shift == 'ds') {
-        console.log('Day shift');
-        // Set default value for select       
-        $('#def_timeout_am').val('11:00');        
-        $('._am').text('Time out AM');
 
-        $('#def_timein_pm').val('12:00');
-        $('._pm').text('Time in PM');
 
-          $(tableID + ' tr').each(function() {
+// ============================ USED in DTR ======================
+// ** Must create an instance to the page you want to use this
+// ** i.e var _dtrModule = new dtrModule();
+
+var dtrModule = function() {
+
+  // Get table data
+  this.getTableData = function(table) {
+    
+    var cellData = {};
+    var tableData = {}; 
+    var field = value = ""; 
+
+    // Loop through each table rows
+      for(var i =0; i < table.rows.length; i++) {
+
+          cellData = {};
+
+          cellData['id'] = table.rows[i].dataset.id;
             
-            var time_in_am = $(this).find('input[name="time_in_am"]');
-            var time_out_am = $(this).find('input[name="time_out_am"]');
-            var time_in_pm = $(this).find('input[name="time_in_pm"]');
-            var time_out_pm = $(this).find('input[name="time_out_pm"]');
-         
-            time_in_am_clone = time_in_am.clone(true);
-            time_out_am_clone = time_out_am.clone(true);
-            time_in_pm_clone = time_in_pm.clone(true);
-            time_out_pm_clone = time_out_pm.clone(true);
 
-            //  // Replace  Time IN PM with Tine IN AM
-            time_in_pm.replaceWith( time_in_am_clone );
+          // Loop through each table cells
+          for (var j=0; j < table.rows[i].cells.length; j++) {
+            console.log(table.rows[i].cells[j].children[0].dataset.name);   
            
-            // // Replace  Time IN AM with Tine IN PM
-            time_in_am.replaceWith( time_in_pm_clone );
-
-             
-            // // Replace  Time IN AM with Tine IN PM
-            time_out_am.replaceWith( time_out_pm_clone );
-
-            // // Replace  Time IN PM with Tine IN AM
-            time_out_pm.replaceWith( time_out_am_clone );
+            // Check if it is a span or an input type
            
-
-        });
-
-        $('._amth').html('AM');
-        $('._pmth').html('PM');
+            if (table.rows[i].cells[j].children[0].tagName.toLowerCase() == 'input') {
         
-       
-        // if (show_full_dtr == false) return false; // Still not working, fix this bug
-
-        // Show time in AM and Time out PM
-        // $('input[name="time_out_am"]').parent().parent().fadeOut();
-        // $('input[name="time_in_pm"]').parent().parent().fadeOut();
-
-        // $('input[name="time_out_pm"]').parent().parent().fadeIn();
-        // $('input[name="time_in_am"]').parent().parent().fadeIn();
-
-
-      } else if (shift == 'ns' ) {
-          console.log('Night shift');
-        // Set default value for select
-        $('#def_timeout_am').val('00:00');
-        $('._am').text('Time in AM');
-
-        // Set default value for select
-        $('#def_timein_pm').val('23:00');
-        $('._pm').text('Time out PM');
-
-        //Time in (am): hide
-        //time out (pm): hide
-
-        $(tableID + ' tr').each(function() {
+              // Get the attribute
+              field = table.rows[i].cells[j].children[0].dataset.name;
             
-          var time_in_am = $(this).find('input[name="time_in_am"]');
-          var time_out_am = $(this).find('input[name="time_out_am"]');
-          var time_in_pm = $(this).find('input[name="time_in_pm"]');
-          var time_out_pm = $(this).find('input[name="time_out_pm"]');
-       
-          time_in_am_clone = time_in_am.clone(true);
-          time_out_am_clone = time_out_am.clone(true);
-          time_in_pm_clone = time_in_pm.clone(true);
-          time_out_pm_clone = time_out_pm.clone(true);
+              // Get value
+              value = table.rows[i].cells[j].children[0].value;
+    
+            } else {
 
-          //  // Replace  Time IN PM with Tine IN AM
-          time_in_pm.replaceWith( time_in_am_clone );
-         
-          // // Replace  Time IN AM with Tine IN PM
-          time_in_am.replaceWith( time_in_pm_clone );
+              // If it is not an input, try to dig deeper to find input inside other tags
+              if (table.rows[i].cells[j].children[0].children[0] != undefined) {
 
-           
-          // // Replace  Time IN AM with Tine IN PM
-          time_out_am.replaceWith( time_out_pm_clone );
 
-          // // Replace  Time IN PM with Tine IN AM
-          time_out_pm.replaceWith( time_out_am_clone );
-         
+              // Get the attribute
+              field = table.rows[i].cells[j].children[0].children[0].dataset.name;
+            
+              // Get value
+              value = table.rows[i].cells[j].children[0].children[0].value;
+              }
+            }
 
-        });
+            
 
-        // // Trigger select change method
-        $('#def_timeout_am').trigger('change');
-        $('#def_timein_pm').trigger('change');
+            // Assign into an array for later use
+            cellData[field] = value;
 
-        $('._amth').html('PM');
-        $('._pmth').html('AM');
 
-        // if (show_full_dtr == false) return false;
-        // // Show time in PM and time out AM
-        // $('input[name="time_out_am"]').parent().parent().fadeIn();
-        // $('input[name="time_in_pm"]').parent().parent().fadeIn();
+          }
 
-        // $('input[name="time_out_pm"]').parent().parent().fadeOut();
-        // $('input[name="time_in_am"]').parent().parent().fadeOut();
+        
+        // Check if employee ID is assigned
+        if (cellData['employee_work_id'] != undefined) {
+
+          console.log(cellData['employee_work_id'])
+          // Check if employee id has value
+          if (cellData['employee_work_id'] != "") tableData[i] = cellData;  
+        }
+
+        
+    }
+    return tableData;
+  }
+
+  this.calculateTotalHours = function(raw_timein_am, raw_timeout_am, raw_timein_pm, raw_timeout_pm, shift) {
+
+
+      var np_10_03 = 0,
+          np_03_06 = 0;
+          var overtime = 0;
+      // GET AM Time in & OUT
+      time_in_am = __parseTime(raw_timein_am);
+      time_out_am = __parseTime(raw_timeout_am);
+
+
+      // GET PM Time in & OUT
+      time_in_pm = __parseTime(raw_timein_pm);
+      time_out_pm = __parseTime(raw_timeout_pm);
+
+      var am_in = new Date(2000, 0, 1, time_in_am.hh , time_in_am.mm); // 9:00 AM,
+      var am_out = new Date(2000, 0, 1, time_out_am.hh , time_out_am.mm);
+
+      var pm_in = new Date(2000, 0, 1, time_in_pm.hh , time_in_pm.mm); // 9:00 AM,
+      var pm_out = new Date(2000, 0, 1, time_out_pm.hh , time_out_pm.mm);
+
+      var am_time = __getHour(am_out - am_in);
+      var pm_time = __getHour(pm_out - pm_in);
+
+      if (shift == 'ns') {
+        np_10_03 =  getNightPemium_10_03(raw_timein_pm, raw_timeout_pm, raw_timein_am, raw_timeout_am);
       }
-}
+
+      total = pm_time + am_time;  
+
+     if (total > 8) {
+        overtime = total - 8;
+     }
+
+      return {'total': total,
+                'np_10_03': np_10_03,
+                'np_03_06': np_03_06,
+                'overtime': overtime};  
+    }
+
+      this.getNightPemium_10_03 = function(timein_pm, timeout_pm, time_in_am, time_out_am){
+
+            var set_1 = 0,
+                set_2 = 0,
+                pm_diff_deduct = 0;
+
+                // start at 10PM
+                var t1_pm = moment('22:00', 'HH:mm');
+                var t2_pm = moment(timeout_pm, 'HH:mm');
+
+                var pm_diff =  t2_pm.diff(t1_pm);
+
+              // End at 3 AM
+
+              var t1_am = moment(time_in_am, 'HH:mm');
+              var t2_am_def = moment('03:00', 'HH:mm');
+              var t2_am = moment(time_out_am, 'HH:mm');
+
+              if (__parseTime(time_out_am).hh < 3) {
+                var am_diff = t2_am.diff(t1_am);
+              } else {
+                var am_diff = t2_am_def.diff(t1_am);
+              }
+              
+            return __getHour(pm_diff) + __getHour(am_diff);
+
+        }
+
+
+  // For swapping out DTR elements
+  this.changeShift = function(shift, tableID, show_full_dtr) {
+          console.log(show_full_dtr);
+          console.log('from Module')
+              if (shift == 'ds') {
+                console.log('Day shift');
+                // Set default value for select       
+                $('#def_timeout_am').val('11:00');        
+                $('._am').text('Time out AM');
+
+                $('#def_timein_pm').val('12:00');
+                $('._pm').text('Time in PM');
+
+                  $(tableID + ' tr').each(function() {
+                    
+                    var time_in_am = $(this).find('input[name="time_in_am"]');
+                    var time_out_am = $(this).find('input[name="time_out_am"]');
+                    var time_in_pm = $(this).find('input[name="time_in_pm"]');
+                    var time_out_pm = $(this).find('input[name="time_out_pm"]');
+                 
+                    time_in_am_clone = time_in_am.clone(true);
+                    time_out_am_clone = time_out_am.clone(true);
+                    time_in_pm_clone = time_in_pm.clone(true);
+                    time_out_pm_clone = time_out_pm.clone(true);
+
+                    //  // Replace  Time IN PM with Tine IN AM
+                    time_in_pm.replaceWith( time_in_am_clone );
+                   
+                    // // Replace  Time IN AM with Tine IN PM
+                    time_in_am.replaceWith( time_in_pm_clone );
+
+                     
+                    // // Replace  Time IN AM with Tine IN PM
+                    time_out_am.replaceWith( time_out_pm_clone );
+
+                    // // Replace  Time IN PM with Tine IN AM
+                    time_out_pm.replaceWith( time_out_am_clone );
+                   
+
+                });
+
+                $('._amth').html('AM');
+                $('._pmth').html('PM');
+                
+               
+                // if (show_full_dtr == false) return false; // Still not working, fix this bug
+
+                // Show time in AM and Time out PM
+                // $('input[name="time_out_am"]').parent().parent().fadeOut();
+                // $('input[name="time_in_pm"]').parent().parent().fadeOut();
+
+                // $('input[name="time_out_pm"]').parent().parent().fadeIn();
+                // $('input[name="time_in_am"]').parent().parent().fadeIn();
+
+
+              } else if (shift == 'ns' ) {
+                  console.log('Night shift');
+                // Set default value for select
+                $('#def_timeout_am').val('00:00');
+                $('._am').text('Time in AM');
+
+                // Set default value for select
+                $('#def_timein_pm').val('23:00');
+                $('._pm').text('Time out PM');
+
+                //Time in (am): hide
+                //time out (pm): hide
+
+                $(tableID + ' tr').each(function() {
+                    
+                  var time_in_am = $(this).find('input[name="time_in_am"]');
+                  var time_out_am = $(this).find('input[name="time_out_am"]');
+                  var time_in_pm = $(this).find('input[name="time_in_pm"]');
+                  var time_out_pm = $(this).find('input[name="time_out_pm"]');
+               
+                  time_in_am_clone = time_in_am.clone(true);
+                  time_out_am_clone = time_out_am.clone(true);
+                  time_in_pm_clone = time_in_pm.clone(true);
+                  time_out_pm_clone = time_out_pm.clone(true);
+
+                  //  // Replace  Time IN PM with Tine IN AM
+                  time_in_pm.replaceWith( time_in_am_clone );
+                 
+                  // // Replace  Time IN AM with Tine IN PM
+                  time_in_am.replaceWith( time_in_pm_clone );
+
+                   
+                  // // Replace  Time IN AM with Tine IN PM
+                  time_out_am.replaceWith( time_out_pm_clone );
+
+                  // // Replace  Time IN PM with Tine IN AM
+                  time_out_pm.replaceWith( time_out_am_clone );
+                 
+
+                });
+
+                // // Trigger select change method
+                // $('#def_timeout_am').trigger('change');
+                // $('#def_timein_pm').trigger('change');
+
+                $('._amth').html('PM');
+                $('._pmth').html('AM');
+
+                // if (show_full_dtr == false) return false;
+                // // Show time in PM and time out AM
+                // $('input[name="time_out_am"]').parent().parent().fadeIn();
+                // $('input[name="time_in_pm"]').parent().parent().fadeIn();
+
+                // $('input[name="time_out_pm"]').parent().parent().fadeOut();
+                // $('input[name="time_in_am"]').parent().parent().fadeOut();
+              }
+        }
+
+  this.initializer = function(obj) {
+
+    $('#department_id').val(obj.oldDepartment); 
+    
+    if (obj.oldDepartment != 0) {
+      
+      hrApp.getSelectOptions(_globalObj._baseURL + '/positions/positionsByDepartment', obj.oldDepartment, 'position_id', obj.oldPosition);
+       
+        if (obj.oldShift == 'ns') {
+          _dtrModule.changeShift( obj.oldShift );
+        }
+        
+    }
+
+  }
+
+  this.handlers = function() {
+
+      // Toggle shift selection
+      $('.shift_label').on('click', function() {
+        var shift_opt = $('#shift').parent();
+
+        if ( shift_opt.is(":visible") ) {
+          shift_opt.hide();       
+        } else {
+          shift_opt.show();
+        }
+      });
+
+      // Show positions based on the selected department
+     $('#department_id').change(function(e, old) {
+        var department_id = $(this).find(":selected").val();
+        var oldPosition = null;
+
+        $('#position_id').parent().parent().show();
+               hrApp.getSelectOptions(_globalObj._baseURL + '/positions/positionsByDepartment', department_id, 'position_id', oldPosition);
+     });
+
+     // Change shifts
+      $('#shift').on('change', function() {
+
+        var shift = $(this).val();
+        var shiftName = "";
+        
+        _dtrModule.changeShift(shift, '#medical_examination_information_table');
+      
+        if (shift == 'ds') shiftName = '<span class="label label-warning">Day shift</span>';
+        else shiftName = '<span class="label label-info">Night shift</span>';
+          $('.shift_label').html(shiftName);
+      });
+
+      // set default timeout
+      $('#def_timeout_am').on('change', function() {
+        var shift = $('#shift').val();
+        
+        // For dayshift
+        if (shift == 'ds') {
+          var timeout_am = $('input[name="time_out_am"]');
+          var default_timeout_am = $(this).val();
+
+          $.each(timeout_am, function(key,value) {
+            $(this).val(default_timeout_am);
+          }); 
+        } else if (shift =='ns') {
+        // For night shift
+          var timeout_am = $('input[name="time_in_am"]');
+          var default_timeout_am = $(this).val();
+
+          $.each(timeout_am, function(key,value) {
+            $(this).val(default_timeout_am);
+          });
+        }
+        
+      });
+
+      // Set default time in
+      $('#def_timein_pm').on('change', function() {
+        
+        var shift = $('#shift').val();
+
+        if (shift == 'ds') {
+          var timeout_am = $('input[name="time_in_pm"]');
+          var default_timeout_am = $(this).val();
+
+          $.each(timeout_am, function(key,value) {
+            $(this).val(default_timeout_am);
+          }); 
+        } else if (shift == 'ns') {
+          var timeout_pm = $('input[name="time_out_pm"]');
+          var default_timeout_am = $(this).val();
+
+          $.each(timeout_pm, function(key,value) {
+            $(this).val(default_timeout_am);
+          });
+        }
+        
+      });
+
+      // show full dtr
+      $('input[name="show_full_dtr"]').on('change', function() {
+
+
+          // Get all time out am
+          var timeout_am = $('input[name="time_out_am"]');
+
+          // get all time
+          var timein_pm = $('input[name="time_in_pm"]');
+
+          var timein_am = $('input[name="time_in_am"]');
+
+          var timeout_pm  = $('input[name="time_out_pm"]');
+        
+        // Show all time fields
+        if ($(this).prop('checked') == true) {
+          
+          show_full_dtr = true;
+
+          // Show  all timeout AM
+          $.each(timeout_am, function(key, value) {
+            $(this).parent().parent().fadeIn();
+          });
+
+          //  Show all Time IN PM
+          $.each(timein_pm, function(key, value) {
+
+            $(this).parent().parent().fadeIn();
+          }); 
+
+          // Show all im in am
+          $.each(timein_am, function(key, value) {
+            $(this).parent().parent().fadeIn();
+          });       
+
+          // Show all time out pm
+          $.each(timeout_pm, function(key, value) {
+            $(this).parent().parent().fadeIn();
+          }); 
+
+          // Show hidden column headers
+          $('#header_timeout_am').fadeIn(250);
+          $('#header_timein_pm').fadeIn(250);
+
+          // Show AM/PM labels
+          $('.timelabel').fadeIn();
+
+        } else {
+          
+          show_full_dtr = false;
+          var shift = $('#shift').val();
+
+          // For dayshift
+          if (shift == 'ds') {
+
+            // Hide column headers
+            $('#header_timeout_am').fadeOut(250);
+            $('#header_timein_pm').fadeOut(250);
+
+
+            // Hide AM/PM labels
+            $('.timelabel').fadeOut();
+
+              // Get all time out AM and hide it
+              $.each(timeout_am, function(key, value) {
+                var _tipm = $(this);
+                var _tiam_val = _tipm.parent().parent().parent().find('input[name="time_in_pm"]').val();
+                var _toam_val = _tipm.parent().parent().parent().find('input[name="time_out_pm"]').val();
+
+                console.log(_toam_val);
+
+                if (_tiam_val == '00:00' && _toam_val == '00:00') {
+                  _tipm.parent().parent().parent().find('input[name="time_out_pm"]').parent().parent().fadeOut();
+                } else {
+                  _tipm.parent().parent().fadeOut();  
+                }
+
+              });
+              // Get all time in PM and hide it
+              $.each(timein_pm, function(key, value) {
+                var _tipm = $(this);
+                var _tiam_val = _tipm.parent().parent().parent().find('input[name="time_in_am"]').val();
+                var _toam_val = _tipm.parent().parent().parent().find('input[name="time_out_am"]').val();
+
+                console.log(_toam_val);
+
+                if (_tiam_val == '00:00' && _toam_val == '00:00') {
+                  _tipm.parent().parent().parent().find('input[name="time_in_am"]').parent().parent().fadeOut();
+                } else {
+                  _tipm.parent().parent().fadeOut();  
+                }
+                
+              });
+          } else if (shift == 'ns') {
+
+              // Hide column headers
+              $('#header_timeout_am').fadeOut(250);
+              $('#header_timein_pm').fadeOut(250);
+
+              // Hide AM/PM labels
+              $('.timelabel').fadeOut();
+
+              // Hide all time out PM
+              $.each(timeout_pm, function(key, value) {
+                var _tipm = $(this);
+
+                _tipm.parent().parent().fadeOut();
+              });
+
+              // Hie all time in am
+              $.each(timein_am, function(key, value) {
+                var _tiam = $(this);
+
+                _tiam.parent().parent().fadeOut();
+              });
+
+          }
+          
+        }
+      });
+
+
+
+  }
+
+};

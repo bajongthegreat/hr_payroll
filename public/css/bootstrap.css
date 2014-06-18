@@ -40,7 +40,7 @@ template {
 }
 
 html {
-  font-family: sans-serif;
+  /*font-family: sans-serif;*/
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
@@ -1864,6 +1864,7 @@ legend {
 }
 
 label {
+  font-family: sans-serif !important;
   display: inline-block;
   margin-bottom: 5px;
   font-weight: bold;

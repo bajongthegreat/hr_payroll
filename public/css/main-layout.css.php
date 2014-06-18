@@ -10,7 +10,7 @@ html {
 body {
 	padding-top: 40px;
   
-   font-family: "Roboto", sans-serif !important;
+   font-family: "Roboto", sans-serif;
 	
 }
 .__more_violations_parent {
@@ -29,9 +29,13 @@ footer {
 
 
 label {
-  /*font-family: Trebuchet MS, Arial;*/
   color: #7d7d7d;
   padding-top: 5px;
+}
+
+.label {
+  font-family: Trebuchet MS, Arial;
+  
 }
 
 ._totalhours {

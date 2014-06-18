@@ -21,11 +21,15 @@
 
 		  	<strong>{{ $stage }}</strong>
 		    <ul class="list-group" style="list-style: none;">
+		    	<?php $requirements_counter = 0; ?>
+
 		      @foreach ($requirements as $requirement)
 
 		      		@if (!isset($requirement->StageProcess->stage_process)) 
 		      			<?php continue; ?>
 		      		@else 
+		      		<?php $requirements_counter += 1;  ?>
+
 		      			@if ($requirement->StageProcess->stage_process == $stage)
 					         <?php 
 
@@ -44,8 +48,9 @@
 						   @endif
 		      		@endif
 
-			       
+
 		      @endforeach
+		      		      		{{ ($requirements_counter == 0 ) ? '<span class="label label-warning">No requirement specified</span>' : ''; }}
 
 		      <hr>
 

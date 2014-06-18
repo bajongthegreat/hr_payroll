@@ -49,6 +49,11 @@
 
 					if ((isset($employee->lastname) && $employee->lastname !="") && (isset($employee->firstname) && $employee->firstname != "") && (isset($employee->middlename) && $employee->middlename != "") ) {
 						$fullname = ucfirst($employee->lastname) . ', '  .  ucfirst($employee->firstname) . ' ' . ucfirst($employee->middlename[0]) . '.';
+					} elseif ( (isset($employee->lastname) && $employee->lastname !="") && (isset($employee->firstname) && $employee->firstname != "") ) {
+						$fullname = ucfirst($employee->lastname) . ', '  .  ucfirst($employee->firstname) ;
+
+					} elseif ( (isset($employee->lastname) && $employee->lastname !="") ) {
+						$fullname = '<span class="label label-warning">' . ucfirst($employee->lastname) . '</span>' ;
 					} else {
 						$fullname = "[Incomplete]";
 					}

@@ -262,6 +262,10 @@ class DTRController extends \BaseController {
 			$dtr = $dtr->get()->first();	
 
 
+			if ( count($dtr) == 0 ) {
+				return Redirect::action('DTRController@index');
+			}
+			 	
 			return View::make('dtr.edit', compact('dtr', 'dtr_json', 'ids_prior_update'));
 	}
 
@@ -330,7 +334,7 @@ class DTRController extends \BaseController {
 				// Remove employee ID and work ID, I think it doesn't make sense to update them.
 				unset($employee_data->employee_id);
 				unset($value->employee_work_id);
-				
+
 				// Update
 				if ($this->daily_time_records->find($id)->update((array) $employee_data)) {
 					$success_jobs[] = $work_id;
