@@ -1,6 +1,19 @@
-Changelog: 
+## HR & Payroll App v. 0.017
 
 
-** Redirects from profile added [Disciplinary actions, Medical Examinations]
-** Fix date bug on Medical Examination when doing a single insertion
-** Added date filters on disciplinary actions to prevent date mismatch
+### TODO
+
+
+##### Payroll
+
+* Link Rates to Positions
+* Design payroll calculation
+	* SSS, Pagibig, Philhealth Deductions
+	* Get salary
+* Generate Pay slips
+* Link salary history to Profile
+
+##### HR
+
+* Fix bug to Physical examinations where selecting None displays null in listing page. [Physical Examinations]
+* Include department Name on beside the Name of employee on its listing page. [employees]
