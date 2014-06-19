@@ -11,6 +11,8 @@ class HolidaysTableSeeder extends Seeder {
 		$faker = Faker::create();
 		DB::table('holidays')->truncate();
 
+		
+
 		for ($i= 2013; $i <= 2020; $i++) {
 			DB::table('holidays')->insert([ 
 				['name' => 'New Year\'s  Day',

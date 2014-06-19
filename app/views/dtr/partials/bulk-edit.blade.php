@@ -275,6 +275,12 @@ var _dtrModule = new dtrModule();
 		_dtrModule.handlers();
 	
 		// Todo: _dtrModule.getTableData
+		// To calculate result
+		setTimeout(function() {
+			$('input').each(function() {
+				if ($(this).val() != '') $(this).trigger('blur');
+			});
+		},2500);
 
 		$('#processTableData').on('click', function(e) {
 
@@ -496,6 +502,8 @@ var _dtrModule = new dtrModule();
 		            			element.classList.add('label-info');
 		            			cell.classList.add('text-center');
 
+		            			// TODO:
+
 		            		} else {
 		            			element.classList.add('form-control');
 		            			element.classList.add(elementName[i]);
@@ -613,11 +621,9 @@ var _dtrModule = new dtrModule();
             			if (element[0] != undefined) {
             				elementName = element[0].getAttribute('name');
             				
+            				// Set element value from Database
             				element[0].value = __dataToUse[i][elementName];
-            			} else {
-            				span = row[i].cells[j].getElementsByTagName('span');
-							console.log(__hasClass(span[0], '_totalhours'));	
-            			}
+            			} 
 
 
 
@@ -645,11 +651,17 @@ var _dtrModule = new dtrModule();
 			var id = $(this).parent().data('employee_id'),
 				name = $(this).parent().data('employee_name'),
 			    input = $(this).parent().parent().siblings('input.searcheable');
+			
+			var shift = $('#shift').val();
+			
 			$('.resultName').remove();            
             
 			input.val(id);
             input.next().remove();
             input.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
+
+            	input.parent().next().find('input').focus();
+            
 
 			$('.resultContainer').remove();
 			e.preventDefault();

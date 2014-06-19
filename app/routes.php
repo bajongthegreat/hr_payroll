@@ -201,6 +201,7 @@ Route::group(array('before' => ['auth']), function()
 Route::group(array('before' => 'auth', 'prefix' => 'payroll'), function()
 {
 	Route::resource('dtr', 'DTRController');
+	Route::resource('rates', 'RatesController');
 	Route::resource('pay_period', 'PayPeriodsController');
 });
 

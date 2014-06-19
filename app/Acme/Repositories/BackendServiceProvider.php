@@ -128,6 +128,12 @@ class BackendServiceProvider extends ServiceProvider
 		$this->app->bind(
 			'Acme\Repositories\Payroll\DailyTimeRecord\DailyTimeRecordRepositoryInterface',
 		    'Acme\Repositories\Payroll\DailyTimeRecord\DailyTimeRecordRepository'
+		);
+
+		// Bind the CompanyInterface into the class CompanyRepository
+		$this->app->bind(
+			'Acme\Repositories\Payroll\Rates\RatesRepositoryInterface',
+		    'Acme\Repositories\Payroll\Rates\RatesRepository'
 		);	
 
 	}

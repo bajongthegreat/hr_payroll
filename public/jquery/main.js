@@ -148,6 +148,7 @@ var myApp = function(mainURL) {
 
 
 // Custom Javascript functions
+
 var __in_array = function(type, allowedTypes) {
                 var found = false;
 
@@ -671,6 +672,8 @@ var dtrModule = function() {
         }
         
     }
+
+    
 
   }
 

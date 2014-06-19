@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('LeavesTableSeeder');
 		$this->call('PhilhealthsTableSeeder');
 		$this->call('HolidaysTableSeeder');
-		// $this->call('Work_assignmentsTableSeeder');
+		$this->call('RatesSeeder');
 		$this->call('Sss_loansTableSeeder');
 		$this->call('RequirementsTableSeeder');
 		$this->call('StageprocessesTableSeeder');

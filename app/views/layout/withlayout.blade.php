@@ -86,23 +86,23 @@
 
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-dashboard"></span> HR <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="{{ action("CompaniesController@index") }}"><span class="glyphicon glyphicon-user"></span>  Companies</a></li>
+            <li><a href="{{ action("CompaniesController@index") }}"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Companies</a></li>
 
-            <li><a href="{{ action("DepartmentsController@index") }}">Department</a></li>
-            <li><a href="{{ action("PositionsController@index") }}">Position</a></li>
-            <li><a href="{{ action("HolidaysController@index") }}"><span class="glyphicon glyphicon-calendar"></span>  Holidays</a></li>
-                        <li><a href="{{ action("StageProcessesController@index") }}">Stage Process</a></li>
-            <li><a href="{{ action("RequirementsController@index") }}">Requirements</a></li>
+            <li><a href="{{ action("DepartmentsController@index") }}"><span class="glyphicon glyphicon glyphicon-book"></span>&nbsp;&nbsp;Department</a></li>
+            <li><a href="{{ action("PositionsController@index") }}"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;&nbsp;Position</a></li>
+            <li><a href="{{ action("HolidaysController@index") }}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;&nbsp;Holidays</a></li>
+                        <li><a href="{{ action("StageProcessesController@index") }}"><span class="glyphicon glyphicon-picture"></span>&nbsp;&nbsp;Stage Process</a></li>
+            <li><a href="{{ action("RequirementsController@index") }}"><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Requirements</a></li>
 
-            <li><a href="{{ action("EmployeesMedicalExaminationsController@index") }}">Physical Examinations</a></li>
-            <li><a href="{{ action("ViolationsController@index") }}">Violations</a></li>
+            <li><a href="{{ action("EmployeesMedicalExaminationsController@index") }}"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;Physical Examinations</a></li>
+            <li><a href="{{ action("ViolationsController@index") }}"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;Violations</a></li>
             
 
-            <li><a href="{{ action("ApplicantsController@index") }}">Applicant Management</a></li>
-            <li><a href="{{ action("EmployeesController@index") }}">Employee Management</a></li>
+            <li><a href="{{ action("ApplicantsController@index") }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Applicant Management</a></li>
+            <li><a href="{{ action("EmployeesController@index") }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Employee Management</a></li>
 
-             <li><a href="{{ action("LeavesController@index") }}">Leaves Management</a></li>
-            <li><a href="#">Loans</a></li>
+             <li><a href="{{ action("LeavesController@index") }}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Leaves Management</a></li>
+            <!-- <li><a href="#">Loans</a></li> -->
           </ul>
 
 
@@ -111,7 +111,9 @@
 
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>  Payroll <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="{{ action("DTRController@index") }}"> <span class="glyphicon glyphicon-dashboard"></span>  Daily Time Record</a></li>
+            <li><a href="{{ action("DTRController@index") }}"> <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;  Daily Time Record</a></li>
+            <li><a href="{{ action("RatesController@index") }}"> <span class="glyphicon glyphicon-tags"></span> &nbsp; Rates</a></li>
+      
             <li><a href="#">Process Payroll </a></li>
             <li><a href="#">Loans</a></li>
           </ul>
