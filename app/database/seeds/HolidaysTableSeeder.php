@@ -93,7 +93,7 @@ class HolidaysTableSeeder extends Seeder {
 				 'remarks' => 'Bonifacio Day'	
 				],
 				['name' => 'Christmas Day',
-				 'type' => 'special',
+				 'type' => 'regular',
 				 'holiday_date' => $i . '-12-25',
 				 'created_at' => Carbon::now(),
 				 'updated_at' => Carbon::now(),

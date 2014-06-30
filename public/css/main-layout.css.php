@@ -8,6 +8,7 @@ html {
 }
 
 body {
+
 	padding-top: 40px;
   
    font-family: "Roboto", sans-serif;
@@ -71,6 +72,46 @@ label {
 
 
 /* Content Processing */
+
+.wrappedChild {
+  padding: 10px 5px;
+  background-color: #FFFFFF;
+  border: 1px solid #e3e3e3;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.page-header-def {
+  padding-bottom: 9px;
+  border-bottom: 1px solid #eeeeee;
+
+
+}
+
+.page-collapsible {
+    margin: 0;
+    padding:10px;
+    height:20px;
+
+    border-top:#f0f0f0 1px solid;
+    background: #cccccc;
+
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration:none;
+    text-transform:uppercase;
+    color: #000;
+    font-size:1em;
+}
+
+.border-top {
+ border-top: 1px solid; 
+}
+
+.border-bottom {
+  border-bottom: 1px solid #eeeeee;
+}
+
 
 .top-down-margin-5 {
   margin-top: 5px;

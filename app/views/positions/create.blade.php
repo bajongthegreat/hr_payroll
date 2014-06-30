@@ -14,7 +14,7 @@
 	
 <div class="container">
 
-	{{ Form::open(['action' => 'PositionsController@store', 'class' => 'form-horizontal', 'role' => 'form']) }}
+	{{ Form::open(['action' => 'PositionsController@store', 'class' => 'form-horizontal', 'role' => 'form' , 'id' => 'form']) }}
 
 	<div class="row">
 			
@@ -23,7 +23,7 @@
 				{{ Form::label('company_id', 'Please select a company', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-6">
-					{{ Form::select('company_id', $companies, Input::old('company_id'), array('class' => 'form-control', 'id' => 'company_id') ) }}
+					{{ Form::select('company_id', $companies, Input::old('company_id'), array('class' => 'form-control', 'id' => 'company_id', 'data-bv-message' => 'Please specify at least one language you can speak', 'data-bv-notempty' => 'true') ) }}
 				</div>
 				
 			</div>
@@ -36,6 +36,21 @@
 
 				<div class="col-sm-6">
 					<select class="form-control" id="department" name="department_id">
+						
+					</select>
+				</div>
+				
+			</div>
+
+
+			<div class="form-container">
+
+					<div class="form-group">
+						
+				{{ Form::label('rate_id', 'Rate per day', array('class' => 'col-sm-2')) }}
+
+				<div class="col-sm-2">
+					<select class="form-control" id="rate_id" name="rate_id" data-bv-message='Please specify at least one language you can speak' data-bv-notempty =true>
 						
 					</select>
 				</div>
@@ -95,8 +110,6 @@ $(function() {
         formContainer.fadeIn(250);
         isCompanySelected( $('#company_id').val());
      }
-
-
 	
 	// Company Selection
 	$('#company_id').change(function() {
@@ -106,11 +119,9 @@ $(function() {
 		isCompanySelected(selected);
 
 		hrApp.getSelectOptions(departmentsURL, selected, element);
-		
+		hrApp.getSelectOptions(_globalObj._baseURL + '/payroll/rates/forSelect' , null , 'rate_id');
 	});
-
 	
-
 
 	// Department Selection
 

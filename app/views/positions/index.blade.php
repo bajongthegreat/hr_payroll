@@ -24,7 +24,8 @@
 	<thead>
 		<th width="15%">ID</th>
 		<th width="15%">Name</th>
-		<th width="50%"> Department</th>
+		<th width="15%"> Department</th>
+		<th width="50%"> Rate</th>
 		<th></th>
 	</thead>
 
@@ -47,7 +48,7 @@
 						{{ ucfirst($position->department) }}
 					@endif
 				</td>
-				
+				<td> {{ $position->rate* 8 . ' (' . $position->rate . ')' }}</td>
 
 				<td align="center"> <a href="{{ route('positions.edit', $position->id) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Edit</a></td>
 				<td align="center">{{ Form::open(['action' => array('PositionsController@destroy', $position->id), 'method' => 'DELETE']) }} <button  type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span> Delete</button></form></td>

@@ -18,8 +18,8 @@ class EmployeesController extends BaseController {
 	protected $limit = 10;
 
 
-	protected $fields_to_use_on_search = ['firstname','lastname','middlename','employee_work_id'];
-	protected $fields_to_use_on_listings = ['firstname','lastname','middlename','employee_work_id','position_id','employment_status','membership_status'];
+	protected $fields_to_use_on_search = ['firstname','lastname','middlename','employee_work_id', 'name_extension'];
+	protected $fields_to_use_on_listings = ['firstname','lastname','middlename','employee_work_id','position_id','employment_status','membership_status','name_extension'];
 
 
 	protected $custom_message = ['messages' => ['sss_id.regex' => 'SSS ID must have a format of XX-XXXXXXX-X (2-7-1)' ,
@@ -106,6 +106,9 @@ class EmployeesController extends BaseController {
 
 		// Cast data to json
 		if (Request::get('output') == 'json') {
+			if (Input::has('count')) {
+				return Response::json(count($employees->get()));	
+			}
 			return Response::json($employees->get());
 		}
 
@@ -156,7 +159,9 @@ class EmployeesController extends BaseController {
 		        	
 				
 				})->leftJoin('positions', 'positions.id', '=', 'employees.position_id')
-		          ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')->limit(50);
+		          ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')->limit(50)
+		          ->select(DB::raw('employees.*'), 'departments.id as department_id', 'positions.id as position_id',
+		          	         'departments.name as department_name', 'positions.name as position_name');
 	}
 
 

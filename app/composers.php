@@ -1,10 +1,10 @@
 <?php
 
 // Load $companies variable into this views
-View::composer(['positions.create','positions.edit', 'employees.create', 'employees.show', 'employees.edit', 'departments.create','departments.edit', 'applicants.create','applicants.edit'], 'Acme\Composers\CompanyComposer');
+View::composer(['positions.create','positions.edit', 'employees.create', 'employees.show', 'employees.edit', 'departments.create','departments.edit', 'applicants.create','applicants.edit', 'payroll.create'], 'Acme\Composers\CompanyComposer');
 
 // Load $departments variable into this views
-View::composer(['positions.create','positions.edit', 'employees.create', 'employees.edit','dtr.partials.bulk','dtr.partials.bulk-edit', 'dtr.partials.single'	], 'Acme\Composers\DepartmentComposer');
+View::composer(['positions.create','positions.edit', 'employees.create', 'employees.edit','dtr.partials.bulk','dtr.partials.bulk-edit', 'dtr.partials.single', 'payroll.create'	], 'Acme\Composers\DepartmentComposer');
 
 // Load $departments variable into this views
 View::composer(['employees.index'], 'Acme\Composers\DepartmentComposer@all');

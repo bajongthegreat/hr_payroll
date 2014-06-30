@@ -132,13 +132,12 @@
         
             <?php foreach ($employees as $employee): ?>
 
-             <tr class="text-center" >
-
-                <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}" > <?php echo $employee->employee_work_id . '</td>'; ?>
-                <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}"> <?php echo   ucfirst($employee->lastname) . ', ' . $employee->firstname . '</td>'; ?>
-                <td> <?php echo  ($employee->position_id == 0 || (!isset($employee->position['name']) )) ? '<span class="label label-default">Not assigned</span>' : ucfirst($employee->position['name']) . '</td>'; ?>
-                <td > <?php echo  '<span class="label label-info">' . ucfirst(strtolower($employee->membership_status)) . '</span></td>'; ?>
-                <td> <?php echo '<span class="label label-info">' . ucfirst( strtolower($employee->employment_status)) . '</span></td>'; ?>
+             <tr >
+                <td  class="text-center clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}" > <?php echo $employee->employee_work_id . '</td>'; ?>
+                <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}"> <?php echo   ucfirst($employee->lastname) . ', ' . $employee->firstname . ' ' . $employee->name_extension .' ' . $employee->middlename .'</td>'; ?>
+                <td class="text-center"> <?php echo  ($employee->position_id == 0 || (!isset($employee->position['name']) )) ? '<span class="label label-default">Not assigned</span>' : ucfirst($employee->position['name']) . '</td>'; ?>
+                <td class="text-center"> <?php echo  '<span class="label label-info">' . ucfirst(strtolower($employee->membership_status)) . '</span></td>'; ?>
+                <td class="text-center"> <?php echo '<span class="label label-info">' . ucfirst( strtolower($employee->employment_status)) . '</span></td>'; ?>
                 <td> 
                    @if ($accessControl->hasAccess($uri, 'edit', $GLOBALS['_byPassRole']))
                   <a class="btn btn-small btn-default editButton" href="{{ action('EmployeesController@edit', $employee->employee_work_id ) }}"> <span class="glyphicon glyphicon-edit"></span> Edit</a> 

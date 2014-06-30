@@ -74,7 +74,7 @@ class jExcel {
 		    } else {
 		    	$val = ($cell->getValue() == NULL) ? "" : $cell->getValue();
 
-		    	 $this->values[$i][] =  $val ;
+		    	 $this->values[$i][] = (string) $val ;
 		    }
 
 

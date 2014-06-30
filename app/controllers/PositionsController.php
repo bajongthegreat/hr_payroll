@@ -42,19 +42,20 @@ class PositionsController extends BaseController {
 			                  ->OrWhere('positions.name', 'LIKE', "%$src%")
 			                  ->OrWhere('departments.name', 'LIKE', "%$src%")
 			                  ->leftJoin('departments', 'departments.id', '=' ,'positions.department_id')
-			                  ->select('positions.name', 'positions.id', 'departments.name as department');
+			                  ->leftJoin('employees_flat_rates', 'employees_flat_rates.id', '=', 'positions.rate_id')
+			                  ->select('positions.name', 'positions.id', 'departments.name as department', 'employees_flat_rates.rate as rate');
 
 		} else {
 
 			// Get all positions and order by rank
-			$positions = $this->positions->getAllWith(['department'])->orderBy('rank');
+			$positions = $this->positions->getAllWith(['department'])->orderBy('rank')->leftJoin('employees_flat_rates', 'employees_flat_rates.id', '=', 'positions.rate_id');
 		}
 
 		if (Request::get('output') == 'json') {
 			return Response::json($positions);
 		}
 
-			$positions = $positions->paginate(10);
+			$positions = $positions->paginate(10, ['positions.id', 'positions.name', 'positions.department_id', 'employees_flat_rates.name as rate_name', 'employees_flat_rates.rate']);
         return View::make('positions.index', compact('positions'));
 	}
 
@@ -87,12 +88,8 @@ class PositionsController extends BaseController {
 				return  $this->notAccessible();		
 		}
 
-		$data = Input::only('name', 'department_id');
+		$data = Input::only('name', 'department_id', 'rate_id');
 
-			Event::listen('illuminate.query', function ($sql, $bindings, $times) {
-			echo '<h3 class="page-header">Database Query</h3>';
-				var_dump($sql);
-		});
 
 		$position =  $this->positions->create($data);
 		
@@ -160,7 +157,7 @@ class PositionsController extends BaseController {
 				return  $this->notAccessible();		
 		}
 
-		$position = Input::only('name','department_id');
+		$position = Input::only('name','department_id', 'rate_id');
 
 		$position = $this->positions->update($id, $position);
 

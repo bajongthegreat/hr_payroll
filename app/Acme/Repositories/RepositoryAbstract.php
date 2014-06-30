@@ -1,5 +1,14 @@
 <?php namespace Acme\Repositories;
 
+
+/*** Author: James Norman Mones Jr.
+**   Date: June 2014
+**
+**	 Remarks: This are function extensions for Eloquent
+**/
+
+
+
 abstract class RepositoryAbstract {
 
 	// Create data

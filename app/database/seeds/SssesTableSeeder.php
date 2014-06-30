@@ -10,43 +10,43 @@ class SssesTableSeeder extends Seeder {
 		$sss = array(
 			['salary_range_start' => '100',
 			 'salary_range_end' => '1249.99',
-			 'employee_share' =>	'33.3',
-			 'employer_share' => '70.70'	
+			 'employee_share' =>	'36.3',
+			 'employer_share' => '73.70'	
 			  ],
 			['salary_range_start' => '1250',
 			 'salary_range_end' => '1749.99',
-			 'employee_share' =>	'50',
-			 'employer_share' => '106'	
+			 'employee_share' =>	'54.5',
+			 'employer_share' => '110.5'	
 			  ],
 			['salary_range_start' => '1750',
 			 'salary_range_end' => '2249.99',
-			 'employee_share' =>	'66.70',
-			 'employer_share' => '141.30'	
+			 'employee_share' =>	'72.70',
+			 'employer_share' => '147.30'	
 			  ],
 			['salary_range_start' => '2250',
 			 'salary_range_end' => '2749.99',
-			 'employee_share' =>	'83.30',
-			 'employer_share' => '176.70'	
+			 'employee_share' =>	'90.80',
+			 'employer_share' => '184.20'	
 			  ],
 			['salary_range_start' => '2750',
 			 'salary_range_end' => '3249.99',
-			 'employee_share' =>	'100',
-			 'employer_share' => '212'	
+			 'employee_share' =>	'109',
+			 'employer_share' => '221'	
 			  ],
 			['salary_range_start' => '3250',
 			 'salary_range_end' => '3749.99',
-			 'employee_share' =>	'116.70',
-			 'employer_share' => '247.30'	
+			 'employee_share' =>	'127.20',
+			 'employer_share' => '257.80'
 			  ],
 			['salary_range_start' => '3750',
 			 'salary_range_end' => '4249.99',
-			 'employee_share' =>	'133.30',
-			 'employer_share' => '282.70'	
+			 'employee_share' =>	'145.30',
+			 'employer_share' => '294.70'
 			  ],
 			['salary_range_start' => '4250',
 			 'salary_range_end' => '4749.99',
-			 'employee_share' =>	'150',
-			 'employer_share' => '318'	
+			 'employee_share' =>	'163.50',
+			 'employer_share' => '495',
 			  ],
 			['salary_range_start' => '4750',
 			 'salary_range_end' => '5249.99',

@@ -21,6 +21,13 @@ class CreateEmployeesPhysicalExaminationsTable extends Migration {
 			$table->string('recommendations');
 			$table->text('remarks');
 			$table->timestamps();
+
+			// Create relationship
+			$table->foreign('employee_id')
+			      ->references('id')
+			      ->on('employees')
+			      ->onDelete('cascade')
+			      ->onUpdate('cascade');
 		});
 	}
 

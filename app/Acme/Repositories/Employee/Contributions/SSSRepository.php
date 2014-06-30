@@ -1,6 +1,10 @@
 <?php namespace Acme\Repositories\Employee\Contributions;
 
-use HDMF;
+/*** Author: James Norman Mones Jr.
+**   Date: June 2014
+**/
+
+use SSS;
 
 /** 
 * Idea: Since ContributableInterface specified functions almost acts the same way with others that uses this interface,

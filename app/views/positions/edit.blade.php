@@ -28,6 +28,21 @@
 				
 			</div>
 
+			<div class="form-container">
+
+					<div class="form-group">
+						
+				{{ Form::label('rate_id', 'Rate per day', array('class' => 'col-sm-2')) }}
+
+				<div class="col-sm-2">
+					<select class="form-control" id="rate_id" name="rate_id" data-bv-message='Please specify at least one language you can speak' data-bv-notempty =true>
+						
+					</select>
+				</div>
+				
+			</div>
+
+
 
 			<div class="form-group">
 						
@@ -61,7 +76,18 @@
 
 @section('scripts')
 <script>
+
+	
+(function(){
+	var old_rate = {{$position->rate_id or null }};
+
+	hrApp.getSelectOptions(_globalObj._baseURL + '/payroll/rates/forSelect', 0 , 'rate_id', old_rate );
+
+})()
+
 	$(document).load(function () {
+
+		
 		$('#name').keyup(function () {
 			var name = $(this).val();
 

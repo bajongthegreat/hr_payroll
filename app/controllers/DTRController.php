@@ -47,6 +47,48 @@ class DTRController extends \BaseController {
 
 		if (Input::has('jq_ax')) {
 
+			if (Input::has('company_id') && Input::has('start_date') && Input::has('end_date')) {
+			$company_id = Input::get('company_id');
+			$start = Input::get('start_date');
+			$end = Input::get('end_date');
+
+
+			$dtr = DB::table('dailytimerecords')->whereBetween('work_date', [$start, $end])
+			                                    ->where('employees.company_id', '=', $company_id)
+			                                ->leftJoin('employees', 'employees.id', '=', "dailytimerecords.employee_id")
+			                                ->leftJoin('positions', 'positions.id', '=', 'work_assignment_id')
+			                                ->leftJoin('departments', 'departments.id', '=', 'positions.department_id')
+			                                ->select("dailytimerecords.id",
+			                                	    "dailytimerecords.work_date",
+			                                	    "dailytimerecords.shift",
+			                                	    "dailytimerecords.time_in_am",
+			                                	    "dailytimerecords.time_out_am",
+			                                	    "dailytimerecords.time_in_pm",
+			                                	    "dailytimerecords.time_out_pm",
+			                                	    "dailytimerecords.work_assignment_id",
+			                                	    "employees.lastname",
+			                                	    "employees.firstname",
+			                                	    "employees.middlename",
+			                                	    "departments.id as department_id",
+			                                	    "departments.name as department_name",
+			                                	    "positions.name as position_name",
+			                                	    "employees.id as employee_id");
+			        
+			         $dtr_notgrouped = $dtr->get();
+			        if (Input::has('unique')) {
+			        	$dtr->groupBy('employee_id');
+			        }
+
+			        $departments = $dtr->lists('department_id');	
+			        
+
+			        
+			        return Response::json(['data' => $dtr->get(),
+			        				'raw_data' => $dtr_notgrouped,
+				                   'count' => count( $dtr->get() ),
+				                   'departments' => $departments]);
+			} else {
+
 			$work_date =  Input::get('work_date');
 			$work_assignment_id = Input::get('work_assignment');
 			$shift = Input::get('shift');
@@ -68,11 +110,15 @@ class DTRController extends \BaseController {
 			                                	    "employees.lastname",
 			                                	    "employees.firstname",
 			                                	    "employees.middlename",
-			                                	    "departments.id as department_id")
+			                                	    "departments.id as department_id",
+			                                	    "departments.name as department_name",
+			                                	    "positions.name as position_name")
 			                                ->get();
 
+			                            return Response::json($dtr);
+			}                                
 
-			return Response::json($dtr);
+			
 
 		}
 
@@ -447,6 +493,7 @@ class DTRController extends \BaseController {
 		// Check if it is bulk or single
 		return $this->bulkUpdate();
 		} else {
+			
 			if ($this->singleUpdate($id)) {
 				return Redirect::action('DTRController@index', ['group' => 'none'])->with('message', 'DTR updated.');
 			} else {

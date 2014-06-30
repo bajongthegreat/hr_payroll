@@ -47,6 +47,21 @@
 
 				</div>
 		</div>
+
+
+		<div class="row">
+
+				<div class="form-group">
+							
+					{{ Form::label('name_extension', 'Name Extension ', array('class' => 'col-sm-4 text-right')) }}
+
+					<div class="col-sm-4">
+						<p class="form-control-static">{{ ucfirst($employee->name_extension) }}</p>
+					</div>
+
+				</div>
+		</div>
+
 		<hr>
 		<div class="row">
 
@@ -182,11 +197,11 @@
 
 		<div class="panel panel-default">
 		  <div class="panel-heading">
-		    <h3 class="panel-title"><h4><a data-toggle="collapse" data-parent="#accordion" href="#parentsinfo">
+		    <h3 class="panel-title"><h4><a data-toggle="collapse" data-parent="#accordion" href="#in_case_of_emergency">
           In case of emergency
         </a></h4></h3>
 		  </div>
-		  <div id="parentsinfo" class="panel-body panel-collapse collapse in">
+		  <div id="in_case_of_emergency" class="panel-body panel-collapse collapse in">
 
 		  	<div class="row">
 

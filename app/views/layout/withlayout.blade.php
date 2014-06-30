@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/bootstrap-datetimepicker.min.css')}}"/>
     <link rel="stylesheet" type="text/css" media="screen" href="{{asset('styles/pygments-manni.css')}}" />
     <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/main-layout.css.php')}}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/bootstrapValidator.css')}}"/>
     <link href="{{ asset('css/lightbox.css') }}" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
 
@@ -224,11 +225,14 @@
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bootstrapValidator.js') }}"></script>
 
     <!-- Plugins -->
     <script src="{{ asset('js/lightbox.min.js') }}"></script>
+
     <!-- Add fancyBox -->
     <link rel="stylesheet" href="{{ asset('css/jquery.fancybox.css?v=2.1.5') }}" type="text/css" media="screen" />
+
     <script type="text/javascript" src="{{ asset('js/jquery.fancybox.pack.js?v=2.1.5') }}"></script>
 
 

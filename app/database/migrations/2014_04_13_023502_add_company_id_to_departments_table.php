@@ -34,10 +34,12 @@ class AddCompanyIdToDepartmentsTable extends Migration {
 	 */
 	public function down()
 	{
+		DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+		
 		Schema::table('departments', function(Blueprint $table) {
 		
 			$table->dropColumn('company_id');
-			DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+			
 		});
 	}
 

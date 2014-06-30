@@ -26,6 +26,13 @@ class CreateDtrsTable extends Migration {
 			$table->string('noted_by');
 			$table->string('conformed_by');
 			$table->timestamps();
+
+			// Create relationship
+			$table->foreign('employee_id')
+			      ->references('id')
+			      ->on('employees')
+			      ->onDelete('cascade')
+			      ->onUpdate('cascade');
 		});
 	}
 

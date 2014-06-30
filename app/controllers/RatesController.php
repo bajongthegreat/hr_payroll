@@ -43,6 +43,17 @@ class RatesController extends \BaseController {
 		return View::make('rates.index', compact('rates'));
 	}
 
+	public function forSelect() {
+		$rates = $this->rates->parentOnly()->lists( 'rate','id' );
+
+		foreach ($rates as $key => $value) {
+			$rates[$key] = 'PHP ' . number_format($value * 8, 2);
+		}
+
+		return Response::json($rates);
+
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 * GET /rates/create

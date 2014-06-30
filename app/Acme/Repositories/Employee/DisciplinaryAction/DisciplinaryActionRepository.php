@@ -1,5 +1,10 @@
 <?php namespace Acme\Repositories\Employee\DisciplinaryAction;
 
+
+/*** Author: James Norman Mones Jr.
+**   Date: June 2014
+**/
+
 use Acme\Repositories\Employee\DisciplinaryAction\DisciplinaryAction;
 use Acme\Repositories\RepositoryAbstract;
 use DB;

@@ -20,6 +20,13 @@ class CreateDisciplinaryActionsTable extends Migration {
 			$table->date('violation_effectivity_date')->nullable();
 			$table->integer('violation_id')->unsigned()->index();
 			$table->timestamps();
+
+			// Create relationship
+			$table->foreign('employee_id')
+			      ->references('id')
+			      ->on('employees')
+			      ->onDelete('cascade')
+			      ->onUpdate('cascade');
 		});
 	}
 

@@ -59,7 +59,7 @@ class RatesSeeder extends Seeder {
 				 'night_premium_10_3' => 8.450,
 				 'night_premium_3_6' => 10.985,
 				 'parent_id' => 1,
-				 'type' => 'restday_with_special_holiday',
+				 'type' => 'restday_with_regular_holiday',
 				 'created_at' => Carbon::now(),
 				 'updated_at' => Carbon::now(),
 				 ]

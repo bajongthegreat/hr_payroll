@@ -201,13 +201,17 @@ Route::group(array('before' => ['auth']), function()
 Route::group(array('before' => 'auth', 'prefix' => 'payroll'), function()
 {
 	Route::resource('dtr', 'DTRController');
+
+	Route::get('rates/forSelect', 'RatesController@forSelect');
 	Route::resource('rates', 'RatesController');
 	Route::resource('pay_period', 'PayPeriodsController');
+
 });
 
 // =========== Settings =====================
 Route::group(array('before' => 'auth'), function()
 {
+	Route::resource('payroll', 'PayrollController');
 	Route::get('settings', 'SettingsController@index' );
 	Route::resource('settings/roles', 'RolesController');
 });

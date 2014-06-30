@@ -160,6 +160,19 @@ var __in_array = function(type, allowedTypes) {
 
                 return found;
             }
+/* Note: Regular expressions contain special (meta) characters, 
+*  and as such it is dangerous to blindly pass an argument in the find function above without pre-processing it to escape those characters. 
+*  This is covered in the Mozilla Developer Network's JavaScript Guide on Regular Expressions
+*/ 
+function escapeRegExp(string) {
+    return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+}
+
+/* replaceAll function below is safer, it could be modified to the following if you also include escapeRegExp
+*/ 
+function replaceAll(string, find, replace) {
+  return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+}
 
 // Native way of checking if class exists
 var __hasClass = function(element, className) {
@@ -885,3 +898,13 @@ var dtrModule = function() {
   }
 
 };
+
+// Extension
+// Disable function
+jQuery.fn.extend({
+    disable: function(state) {
+        return this.each(function() {
+            this.disabled = state;
+        });
+    }
+});

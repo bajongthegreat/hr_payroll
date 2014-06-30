@@ -70,7 +70,7 @@
 
             				
             			} else if (data.length == 1) {
-
+                        console.log(data);
                                      
             				resultContainer.fadeOut(250);
             				realID = data[0].id;			
@@ -105,7 +105,9 @@
                                                 
                                                 // Set ID
                                                 hiddenID.val(realID);
-                                                
+                                                   
+                                                   console.log(realID);
+
                                                 // Toggle Panels
                                                 _togglePanels(__panelsToToggle, 'show');
                                                 // console.log();      

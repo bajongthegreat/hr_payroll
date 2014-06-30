@@ -2,7 +2,7 @@
 
 class ImportsController extends \BaseController {
 
-	protected $allowedTables = ['employees'];
+	protected $allowedTables = ['employees', 'employees_grocery_po', 'employees_pharmacy_po', 'employees_savings'];
 	protected $default_uri = 'import';
 	protected $db_fields;
 
@@ -81,15 +81,15 @@ class ImportsController extends \BaseController {
 		$query = "";		
 		
 		// // Save to database
-		DB::transaction(function() use($jExcel, $data, &$message, &$status) {
+		DB::transaction(function() use($jExcel, $data, &$message, &$status, $table) {
 			try {
-
+				
 				// 		// print json_encode($data);
-			DB::table('employees')->insert($data);
+			DB::table($table)->insert($data);
 
 				// var_dump($count);
 				$message .= '<div> <strong>Inserting data </strong> (' . date('H:i:s') . "): Peak memory usage: " . (memory_get_peak_usage(true) / 1024 / 1024) . " MB\r\n" . '</div>';
-				$status = true;				
+					$status = true;				
 
 				// throw new Exception;
 

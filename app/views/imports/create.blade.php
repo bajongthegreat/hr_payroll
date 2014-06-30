@@ -32,7 +32,10 @@
 				{{ Form::label('importFor', 'Import For: ', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-3">
-					{{ Form::select('importFor', ['employees' => 'Employees'] ,Input::old('importFor'), array('class' => 'form-control ', 'id' => 'importFor' )) }}
+					{{ Form::select('importFor', ['employees' => 'Employees',
+					                              'employees_grocery_po' => 'Grocery Purchase Orders',
+					                              'employees_pharmacy_po' => 'Pharmacy PO',
+					                              'employees_savings' => 'Employee Savings'] ,Input::old('importFor'), array('class' => 'form-control ', 'id' => 'importFor' )) }}
 				</div>
 				
 				
@@ -117,7 +120,11 @@ $('#file').jmFileUpload({
 $("#uploadedFileLoc").change(function() {
 
 	var table = $('#importFor').val();
-
+	if (!confirm('You are about to import an Excel data into our database. Warning, importation does not include verification of each field. Please check first if the data is in correct format then press OK, otherwise you can cancel this out and come back later.' + 
+		         '<br><br> Table: ' + table)){
+		
+		return false;
+	}
 	$('.upload-info').append('<div> <strong>[5]</strong>	Assigned table name. </div>');
 	console.log(table);
 	
@@ -174,7 +181,7 @@ $("#uploadedFileLoc").change(function() {
 		error: function(data) {
 			
 			var response = data.responseText;
-
+			console.log(reponse);
 			if (response.error.type == 'PHPExcel_Reader_Exception') {
 				$('.upload-info').append('File not found or not readable.');
 				// $('.errorContainer').show();
