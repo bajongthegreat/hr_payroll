@@ -35,7 +35,8 @@
 					{{ Form::select('importFor', ['employees' => 'Employees',
 					                              'employees_grocery_po' => 'Grocery Purchase Orders',
 					                              'employees_pharmacy_po' => 'Pharmacy PO',
-					                              'employees_savings' => 'Employee Savings'] ,Input::old('importFor'), array('class' => 'form-control ', 'id' => 'importFor' )) }}
+					                              'employees_savings' => 'Employee Savings',
+					                              'employees_tickets' => 'Tickets'] ,Input::old('importFor'), array('class' => 'form-control ', 'id' => 'importFor' )) }}
 				</div>
 				
 				

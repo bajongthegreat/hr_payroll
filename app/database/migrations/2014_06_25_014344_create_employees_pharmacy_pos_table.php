@@ -16,7 +16,7 @@ class CreateEmployeesPharmacyPosTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('employee_work_id', 20)->index();
-			$table->date(' date');
+			$table->date('date');
 			$table->double('amount');
 			$table->string('remarks');
 			$table->timestamps();

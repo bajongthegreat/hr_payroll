@@ -34,7 +34,7 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 	  protected $fixed_deductions_table= "fixed_deductions";
 	  protected $adjustments_table= "adjustments";
 	  protected $employees_table = 'employees';
-
+	  protected $tickets_po_table = "employees_tickets";
 	  /**
 	   * Constructor
 	   */
@@ -61,6 +61,7 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 			$ee = $ee * $salary;
 			$er = $er * $salary;
 		}
+
 
 		$output = 0;
 		
@@ -111,7 +112,7 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 		$deduction = DB::table($this->fixed_deductions_table)->where('name', '=', $deduction_name )->pluck('amount');
 
 		if ($deduction ){
-			return $deduction; 
+			return (!is_null($deduction)) ? $deduction : 0; 
 		}
 		return 0;
 	}
@@ -201,12 +202,13 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 	public function timeDiff($in, $out, $shift='ds') {
 		$conv_in = strtotime($in);
 		$conv_out = strtotime($out);
+		// echo '<br> Time in: ' . $in . ' ==== Out' . $out;  
+		// echo '<br>' . (round(abs($conv_out - $conv_in) / 60,2) /60) .  '<br>';
 
 		return (round(abs($conv_out - $conv_in) / 60,2) /60);
 	}
 
 	public function getNightPremiumHours($in, $out) {
-
 
 
 		$in = explode(':',$in);
@@ -247,12 +249,13 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 				$out[0] += 24;
 			}
 
-			
-			// Check if the time is valid between 11 PM and 10 AM
-			if ($out[0] >= 23 && $out[0] <= 34) {
 
 				$np_10_3 = 0;
 				$np_3_6 = 0;
+
+			
+			// Check if the time is valid between 11 PM and 10 AM
+			if ($out[0] >= 23 && $out[0] <= 34) {
 
 				// Check if time is greater than 6:00 PM or 30
 				// If it is, use 30 as default otherwise use its default value plus the (minutes / 60)
@@ -263,22 +266,30 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 					$out[0] = $out[0] + ($out[1] / 60);
 				}
 
+
 				// Over 3 Pm
 				if ($out[0] >= 27) {
 					$np_3_6 = abs( $out[0] - 27);
 					$np_10_3 = 27 - $__in; 
+
 			
 				} else {
 
+
 					if ($out[0] < 27) {
 						$np_10_3 = $out[0] - $__in;
+
+						// echo $out[0] . ' - ' .  $__in;
 					}
 				}
 
+			} else {
+				$np_10_3 = ($out[0] = $out[0] + ($out[1] / 60)) - $__in;
+			}
+
+
 				return ['np_10' => $np_10_3, 
 				        'np_3' => $np_3_6];
-			} 
-
 
 
 		} 
@@ -294,7 +305,7 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 		$workday_type = "";
 
 		// Check if it is a rest day
-		if (in_array($_week_day, ['Sun', 'Sat'])) {	
+		if (in_array($_week_day, ['Sun'])) {	
 			$restday = true;
 		}
 
@@ -374,12 +385,15 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 
 			case 'savings':
 				$table = $this->savings_table;	
-			
+				break;
+
+			case 'tickets':
+				$table = $this->tickets_po_table;
+				break;			
 			default:
 				$table = NULL;
 				break;
 		}
-
 		if ($table == NULL ) return 0;
 
 
@@ -395,28 +409,34 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 
 	}
 
-	public function getNetPay($obj, $period = array() ) {
+	public function getNetPay($obj, $period = array(), $save = true ) {
 		
 		$final_payroll = array();
-
 		$grosspay = $deductions = 0;
 		foreach ($obj as $key => $workInfo) {
 			# code...
-
+			$deduction_allowance = 0;
+			$total_deductions = 0;
+			
 			$employee = $this->getEmployeeBasicInfo($key);
 
 			// Adjustments
 			$dr_adjustments = $this->getAdjustment($employee_id = $key, 'debit', $period['start'], $period['end']);
 			$cr_adjustments = $this->getAdjustment($employee_id = $key, 'credit', $period['start'], $period['end']);
 			
-			$grosspay = $workInfo['basic_pay'] + $workInfo['overtime_pay'] +  $workInfo['night_premium'] + ($cr_adjustments);
+			$grosspay = $workInfo['basic_pay'] + $workInfo['overtime_pay'] +  $workInfo['night_premium'] + $workInfo['holiday_pay'] + ($cr_adjustments);
 			
+			$deduction_allowance = $grosspay * 0.25;
+
+
 			// Employee Contributions
 			$sss_contribution = $this->getContribution($grosspay, 'sss', 'ee');
+			// var_dump($grosspay);
 			$philhealth_contribution = $this->getContribution($grosspay, 'philhealth', 'ee'); 	
 			$hdmf_contribution = $this->getContribution($grosspay, 'hdmf', 'ee');
 
-			// Fixed Deductions
+			// Fixed Deductions			
+			
 			$health_care = $this->getFixedDeductions('health_care');
 			$cbu = $this->getFixedDeductions('cbu');
 			$pledge = $this->getFixedDeductions('pledge');
@@ -424,17 +444,62 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 
 			// Imported Deductions
 			$grocery = $this->getPODeduction($employee->employee_work_id, 'grocery', $period['start'], $period['end']);
-			$pharmacy = 0;
-			$savings = 0;
-			$tickets = 0;
-			$memberships = 0;
-			$ca = 0;
-			// var_dump($grocery);
+			$pharmacy = $this->getPODeduction($employee->employee_work_id, 'pharmacy', $period['start'], $period['end']);
+			$savings = $this->getPODeduction($employee->employee_work_id, 'savings', $period['start'], $period['end']);
+			$tickets = $this->getPODeduction($employee->employee_work_id, 'tickets', $period['start'], $period['end']);
+			$memberships = $this->getPODeduction($employee->employee_work_id, 'memberships', $period['start'], $period['end']);
+			$ca = $this->getPODeduction($employee->employee_work_id, 'ca', $period['start'], $period['end']);
+
+			// Deduct only based on the amount, if grosspay is lower than  deductions, adjust it to not get a negative number
+			if ($grosspay > $health_care) {
+				$total_deductions += $health_care;
+			} else $health_care = 0;
+
+			if ($grosspay > ($cbu + $total_deductions)) {
+				$total_deductions += $cbu;
+			} else $cbu = 0;
+
+
+			// Subtract PO
+			$remainder = ($grosspay - $total_deductions) - $deduction_allowance;
+				
+				
+			// Less Priority
+			if ($remainder >= $pledge ) {
+				$total_deductions += $pledge;
+			} else $pledge = 0;
+
+			$remainder = ($grosspay - $total_deductions) - $deduction_allowance;
+
+
+			if ($remainder > $pharmacy) {
+				$total_deductions += $pharmacy;
+
+
+			} else {
+				$pharmacy = $remainder;
+				$total_deductions += $pharmacy;
+			}
+
+			$remainder = ($grosspay - $total_deductions) - $deduction_allowance;
+
+
+
+			if ($remainder > $grocery) {
+				$total_deductions += $grocery;
+			} else {
+				$grocery = $remainder;
+				$total_deductions += $grocery;
+			}
+
+
+			
+
+
+
 			// Total Deductions
 			$deductions = $sss_contribution +$philhealth_contribution + $hdmf_contribution;
 			$deductions += ($health_care + $cbu + $pledge) + ($dr_adjustments) + ($grocery + $savings + $pharmacy + $tickets + $memberships + $ca) ;
-
-
 
 				
 				$final_payroll[$key] = ['grosspay' => $grosspay,
@@ -442,12 +507,12 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 										'overtime_pay' => $workInfo['overtime_pay'],
 										'night_premium' => $workInfo['night_premium'],
 				                        'deductions' => $deductions,
-				                        'sss_contributions' => $sss_contribution,
+				                        'sss_contribution' => $sss_contribution,
 				                        'philhealth_contribution' => $philhealth_contribution,
 				                        'hdmf_contribution' => $hdmf_contribution,
 				                        'health_care' => $health_care,
 				                        'cbu' => $cbu,
-				                        'pledge', $pledge,
+				                        'pledge' => $pledge,
 				                        'grocery' => $grocery,
 				                        'pharmacy' => $pharmacy,
 				                        'savings' => $savings,
@@ -459,26 +524,48 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 				                        'netpay' => $grosspay - $deductions,
 				                        'days_worked' => $workInfo['days_worked'],
 				                        'name' => $employee->lastname . ',' . $employee->firstname . ' ' . $employee->middlename,
-				                        'employee_id' => $employee->employee_work_id ];
+				                        'employee_id' => $employee->employee_work_id,
+				                        'incentives' => 0,
+				                        'sss_loan' => 0,
+				                        'hdmf_loan' => 0,
+				                        'holiday' => $workInfo['holiday_pay'] ];
 
 			    // <-------------- Remittances ----------------------->
-				$this->submitRemittance('sss', $key, $sss_contribution, $period['end']);
-				$this->submitRemittance('philhealth', $key, $philhealth_contribution, $period['end']);
-				$this->submitRemittance('hdmf', $key, $hdmf_contribution, $period['end']);
+				
+				// Only save when requested
+				if ($save) {
 
-				$this->submitRemittance('health_care', $key, $health_care, $period['end']);
-				$this->submitRemittance('cbu', $key, $cbu, $period['end']);	
-				$this->submitRemittance('pledge', $key, $pledge, $period['end']);	
+					// Save remittances required by the government
+					$this->submitRemittance('sss', $key, $sss_contribution, $period['end']);
+					$this->submitRemittance('philhealth', $key, $philhealth_contribution, $period['end']);
+					$this->submitRemittance('hdmf', $key, $hdmf_contribution, $period['end']);
 
-				$this->submitRemittance('grocery', $key, $grocery, $period['end']);	
-				$this->submitRemittance('savings', $key, $savings, $period['end']);
-				$this->submitRemittance('pharmacy', $key, $pharmacy, $period['end']);
-				$this->submitRemittance('tickets', $key, $pharmacy, $period['end']);
-				$this->submitRemittance('memberships', $key, $pharmacy, $period['end']);
-				$this->submitRemittance('ca', $key, $pharmacy, $period['end']);
-			
+					// Save remittances required by the establishment
+					$this->submitRemittance('health_care', $key, $health_care, $period['end']);
+					$this->submitRemittance('cbu', $key, $cbu, $period['end']);	
+					$this->submitRemittance('pledge', $key, $pledge, $period['end']);	
+
+					// Save remittances of employees for their purchases and debt
+					$this->submitRemittance('grocery', $key, $grocery, $period['end']);	
+					$this->submitRemittance('savings', $key, $savings, $period['end']);
+					$this->submitRemittance('pharmacy', $key, $pharmacy, $period['end']);
+					$this->submitRemittance('tickets', $key, $pharmacy, $period['end']);
+					$this->submitRemittance('memberships', $key, $pharmacy, $period['end']);
+					$this->submitRemittance('ca', $key, $pharmacy, $period['end']);
+				
 				// <-------------- Save Payroll data ----------------------->
-					
+				
+
+				// Check first if the employee is already listed in previous payroll
+				// To prevent duplications
+				// $countDB = DB::table('payroll')->where('employee_id', '=', $key)
+				//                               ->where('pay_period_start', '=',$period['start'])
+				//                               ->where('pay_period_end' ,'=', $period['end'])
+				//                               ->select(DB::raw('count (*) as count'))
+				//                               ->pluck('count');
+				//  if ($countDB > 0) continue;
+
+				// Save the data	
 				DB::table('payroll')->insert(['employee_id' => $key, 
 					                          'pay_period_start' => $period['start'],
 					                          'pay_period_end' => $period['end'],
@@ -488,11 +575,22 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 					                          'netpay' => $grosspay-$deductions,
 					                          'date' => Carbon::now()]);
 
+				}
+
+
+			// For history purposes
+			// Since exporting the payroll to excel is essential
+			// It would be alot faster to dump all data into a json file
+			// So later when we use it, we dont need to query to database again
+			// If duplicate file is found, it will just overwrite it
+			$json_file= $this->createJSON($final_payroll, $period['start'], $period['end']);			
 	
 
 		}
 
-		return (array) $final_payroll;
+		return [ 'data' => $final_payroll,
+		         'json' => $json_file,
+		         'memory_used' => (memory_get_peak_usage(true) / 1024 / 1024) ];
 
 	}
 
@@ -501,6 +599,29 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 	}
 
 	
+
+	/**
+	 * Creates a .JSON file of payroll
+	 * GET /payroll/createJSON
+	 *  @param $data   - The payroll object
+	 *  @param $start  - Start of period
+	 *  @param $end    - End of period
+	 *
+	 * @return string  - HTTP link of json file
+	 */
+	public function createJSON($data, $start, $end) {
+	
+		$__start = str_replace('-', '_', $start);
+		$__end = str_replace('-', '_', $end);
+
+		$filename = 'payroll_for_' . $__start . '_to_' . $__end;
+
+		$fp = fopen(public_path() .'\\json\\' . $filename .'.json', 'w') or die('cannot create');
+		fwrite($fp, json_encode($data));
+		fclose($fp);
+
+		return asset('/json/' . $filename .'.json');
+	}	
 
 
 }

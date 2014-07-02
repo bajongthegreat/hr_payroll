@@ -10,6 +10,8 @@
 				@include('employees.partial.leaves');
 			@elseif($v =='violations')
 				@include('employees.partial.violations');
+			@elseif($v == 'dtr')
+				@include('employees.partial.dtr');
 			@else
 				@include('partials.requirements')
 				@include('employees.partial.profile')

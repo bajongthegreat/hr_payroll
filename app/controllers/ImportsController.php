@@ -2,7 +2,7 @@
 
 class ImportsController extends \BaseController {
 
-	protected $allowedTables = ['employees', 'employees_grocery_po', 'employees_pharmacy_po', 'employees_savings'];
+	protected $allowedTables = ['employees', 'employees_grocery_po', 'employees_pharmacy_po', 'employees_savings','employees_tickets'];
 	protected $default_uri = 'import';
 	protected $db_fields;
 
@@ -83,7 +83,7 @@ class ImportsController extends \BaseController {
 		// // Save to database
 		DB::transaction(function() use($jExcel, $data, &$message, &$status, $table) {
 			try {
-				
+
 				// 		// print json_encode($data);
 			DB::table($table)->insert($data);
 

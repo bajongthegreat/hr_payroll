@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('UsersTableSeeder');
 
 		
+			$this->call('DtrsTableSeeder');
 		$this->call('DepartmentsTableSeeder');
 		$this->call('SssesTableSeeder');
 		$this->call('PagibigsTableSeeder');
@@ -39,7 +40,6 @@ class DatabaseSeeder extends Seeder {
 		$this->call('Sss_loansTableSeeder');
 		$this->call('RequirementsTableSeeder');
 		$this->call('StageprocessesTableSeeder');
-			$this->call('DtrsTableSeeder');
 	
 	}
 

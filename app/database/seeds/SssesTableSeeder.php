@@ -46,41 +46,41 @@ class SssesTableSeeder extends Seeder {
 			['salary_range_start' => '4250',
 			 'salary_range_end' => '4749.99',
 			 'employee_share' =>	'163.50',
-			 'employer_share' => '495',
+			 'employer_share' => '331.50',
 			  ],
 			['salary_range_start' => '4750',
 			 'salary_range_end' => '5249.99',
-			 'employee_share' =>	'166.70',
-			 'employer_share' => '353.30'	
+			 'employee_share' =>	'181.70',
+			 'employer_share' => '368.30'	
 			  ],
-			['salary_range_start' => '17000',
-			 'salary_range_end' => '17999.99',
-			 'employee_share' =>	'212.50',
-			 'employer_share' => '212.50'	
+			['salary_range_start' => '5250',
+			 'salary_range_end' => '5749.99',
+			 'employee_share' =>	'199.80',
+			 'employer_share' => '405.20'	
 			  ],
-			['salary_range_start' => '18000',
-			 'salary_range_end' => '18999.99',
-			 'employee_share' =>	'225',
-			 'employer_share' => '225'	
+			['salary_range_start' => '5750',
+			 'salary_range_end' => '6249.99',
+			 'employee_share' =>	'218',
+			 'employer_share' => '442'	
 			  ],
-			['salary_range_start' => '19000',
-			 'salary_range_end' => '19999.99',
-			 'employee_share' =>	'237.5',
-			 'employer_share' => '237.5'	
+			['salary_range_start' => '6250',
+			 'salary_range_end' => '6749.99',
+			 'employee_share' =>	'236.20',
+			 'employer_share' => '478.80'	
 			  ],
-			['salary_range_start' => '20000',
-			 'salary_range_end' => '20999.99',
-			 'employee_share' =>	'250',
-			 'employer_share' => '250'	
+			['salary_range_start' => '6750',
+			 'salary_range_end' => '7249.99',
+			 'employee_share' =>	'254.30',
+			 'employer_share' => '515.70'	
 			  ],
-			['salary_range_start' => '21000',
-			 'salary_range_end' => '21999.99',
-			 'employee_share' =>	'262.50',
-			 'employer_share' => '262.50'	
+			['salary_range_start' => '7250',
+			 'salary_range_end' => '7749.99',
+			 'employee_share' =>	'272.50',
+			 'employer_share' => '552.50'	
 			  ],
-			['salary_range_start' => '22000',
-			 'salary_range_end' => '22999.99',
-			 'employee_share' =>	'275',
+			['salary_range_start' => '7750',
+			 'salary_range_end' => '8249.99',
+			 'employee_share' =>	'290',
 			 'employer_share' => '275'	
 			  ],
 			['salary_range_start' => '23000',

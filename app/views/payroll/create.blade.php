@@ -1,17 +1,139 @@
 @extends('layout.master')
 
 @section('content')
+<style type="text/css">
+.track-progress {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
 
+.track-progress li {
+  list-style-type: none;
+  display: inline-block;
+
+  position: relative;
+  margin: 0;
+  padding: 0;
+
+  text-align: center;
+  line-height: 30px;
+  height: 30px;
+
+  background-color: #f0f0f0;
+}
+.track-progress[data-steps="3"] li { width: 23%; }
+.track-progress[data-steps="4"] li { width: 25%; }
+.track-progress[data-steps="5"] li { width: 20%; }
+.track-progress[data-steps="6"] li { width: 15%; }
+
+.track-progress li > span {
+  display: block;
+
+  color: #999;
+  text-transform: uppercase;
+}
+
+.track-progress li.done > span {
+  color: #666;
+  background-color: #ccc;
+}
+
+.track-progress li[data-step="5"].done > span {
+  color: #FFFFFF;
+  background-color: #449d44;
+}
+/* Create arrows */
+.track-progress li > span:after,
+.track-progress li > span:before {
+  content: "";
+  display: block;
+  width: 0px;
+  height: 0px;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  border: solid transparent;
+  border-left-color: #f0f0f0;
+  border-width: 15px;
+}
+
+.track-progress li > span:after {
+  top: -5px;
+  z-index: 1;
+  border-left-color: white;
+  border-width: 20px;
+}
+
+.track-progress li > span:before {
+  z-index: 2;
+}
+
+/* make the arrow colors match the state of the previous step and remove the arrow in the first element */
+.track-progress li.done + li > span:before {
+  border-left-color: #ccc;
+}
+
+.track-progress li:first-child > span:after,
+.track-progress li:first-child > span:before {
+  display: none;
+}
+
+
+.track-progress li:first-child i,
+.track-progress li:last-child i {
+  display: block;
+  height: 0;
+  width: 0;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  border: solid transparent;
+  border-left-color: white;
+  border-width: 15px;
+}
+
+.track-progress li:last-child i {
+  left: auto;
+  right: -15px;
+
+  border-left-color: transparent;
+  border-top-color: white;
+  border-bottom-color: white;
+}
+</style>
 	<div class="page-header">
 <h1>Process Payroll</h1>
 </div>
 
 	
 <div class="container">
+  <ol class="track-progress" data-steps="5">
+   <li class="step-header done"  data-step="1">
+     <span> <span class="badge">1</span>  Select Pay Period</span>
+     <i></i>
+   </li><!--
+--><li class="step-header" data-step="2">
+     <span><span class="badge">2</span>  Select Company</span>
+   </li><!--
+--><li  class="step-header" data-step="3">
+     <span><span class="badge">3</span>  Include Employees</span>
+     <i></i>
+   </li><li class="step-header" data-step="4" >
+     <span><span class="badge">4</span>  Review Employees</span>
+   </li><li class="step-header" data-step="5">
+     <span><span class="badge">5</span>  Payroll</span>
+   </li><!--
+-->
+ </ol>
 
-
+<br>
 	<!-- Select Pay Period -->
-	<div class="panel panel-default">
+	<div class="panel panel-default" id="step1" >
 	  <div class="panel-heading">
 	    <h3 class="panel-title">Payroll Period</h3>
 	  </div>
@@ -40,8 +162,8 @@
 			        </div>
 			    	
 			    	<div class='col-md-10' style="margin-left: 50px;">
-			            <div class="form-group text-center">
-			                <a href="#select_company" class="btn btn-default">Next  <span class="glyphicon glyphicon-chevron-right	"></span></a>
+			            <div class="form-group text-center" data-step="1">
+			                <a href="#select_company" class="btn btn-default next">Next  <span class="glyphicon glyphicon-chevron-right	"></span></a>
 			            </div>
 			        </div>    
 			    
@@ -52,7 +174,7 @@
 
 
 	<!-- Select Company -->
-	<div class="panel panel-default" id="select_company">
+	<div class="panel panel-default" id="step2" data-step="2">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">For Company</h3>
 	  </div>
@@ -70,9 +192,9 @@
 					<input type="hidden" id="employees_container">
 			    	
 			    	<div class='col-md-10' style="margin-left: 50px;">
-			            <div class="form-group text-center">
-			                <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>  Prev  </a>
-			                <a href="#employees_to_include" class="btn btn-default">Next  <span class="glyphicon glyphicon-chevron-right	"></span></a>
+			            <div class="form-group text-center" data-step="2">
+			                <a href="#" class="btn btn-default prev"><span class="glyphicon glyphicon-chevron-left"></span>  Prev  </a>
+			                <a href="#employees_to_include" class="btn btn-default next">Next  <span class="glyphicon glyphicon-chevron-right	"></span></a>
 			            </div>
 			        </div>    
 			    
@@ -82,7 +204,7 @@
 	</div>
 
 	<!-- Employees Included -->
-	<div class="panel panel-default" id="employees_to_include">
+	<div class="panel panel-default" id="step3" data-step="3">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">Employees Included</h3>
 	  </div>
@@ -131,9 +253,9 @@
 					</div>
 			    	
 			    	<div class='col-md-10' style="margin-left: 75px;">
-			            <div class="form-group text-center">
-			                <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>  Prev  </a>
-			                <a href="#review_employees" class="btn btn-default" id="employees_include">Next  <span class="glyphicon glyphicon-chevron-right	"></span></a>
+			            <div class="form-group text-center" data-step="3">
+			                <a href="#" class="btn btn-default prev"><span class="glyphicon glyphicon-chevron-left"></span>  Prev  </a>
+			                <a href="#review_employees" class="btn btn-default next" id="employees_include">Next  <span class="glyphicon glyphicon-chevron-right	"></span></a>
 			            </div>
 			        </div>
 
@@ -145,7 +267,7 @@
 	</div>
 
 	<!-- Review Employees -->
-	<div class="panel panel-default" id="review_employees">
+	<div class="panel panel-default" id="step4" data-step="4">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">Review employees</h3>
 	  </div>
@@ -160,7 +282,7 @@
 			      </div> 
 
 			        <div class='col-md-10' style="margin-left: 50px; margin-top: 25px;">
-			            <table class="table table-bordered">
+			            <table class="table table-bordered re_table">
 			            	<thead>
 			            		<th>Name <span class="badge"> <span class="employees_counter">0</span></span></th>
 			            		<th>Days worked</th>
@@ -175,9 +297,9 @@
 	
 			    	
 			    	<div class='col-md-10' style="margin-left: 50px;">
-			            <div class="form-group text-center">
-			                <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>  Prev  </a>
-			                <a href="#process" id="process_payroll" class="btn btn-primary">Begin Process  </span></a>
+			            <div class="form-group text-center" data-step="4">
+			                <a href="#" class="btn btn-default prev"><span class="glyphicon glyphicon-chevron-left"></span>  Prev  </a>
+			                <a href="#process" id="process_payroll" class="btn btn-primary next">Begin Process  </span></a>
 			            </div>
 			        </div>    
 			    
@@ -188,7 +310,7 @@
 
 
 	<!-- Processed Payroll Data -->
-	<div class="panel panel-default" id="process">
+	<div class="panel panel-default" id="step5" data-step="5">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">Condensed View [Payroll]</h3>
 	  </div>
@@ -198,12 +320,13 @@
 			     
 			     <div class="col-md-11 text-center"> 
 			      	<div class="page-header-def">
+			      		<span class="pull-right" style="font-size: 10px;"><a href="#step5" class="export-excel">Export Excel</a></span>
 					  <h2><small>For Pay Period <span class="pay_period"></span></small></h2>
 					</div>
 			      </div> 
 
 			        <div class='col-md-10' style="margin-left: 50px; margin-top: 25px;">
-			            <table class="table table-bordered">
+			            <table class="table table-bordered tablesorter">
 			            	<thead>
 			            		<th>ID</th>
 			            		<th width="30%">Name</th>
@@ -218,15 +341,10 @@
 			            	</tbody>	
 
 			            </table>
-			        </div>    
-	
-			    	
-			    	<div class='col-md-10' style="margin-left: 50px;">
-			            <div class="form-group text-center">
-			                <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>  Prev  </a>
-			                <a href="#" class="btn btn-primary">Begin Process  </span></a>
-			            </div>
-			        </div>    
+
+			            <input type="hidden" name="payroll" class="payroll">
+
+			        </div>       
 			    
 			</div>
 
@@ -234,12 +352,6 @@
 	</div>
 
 
-				<!-- Progress -->
-	    	<div class="progress">
-			  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" style="width: 1%">
-			    <span class="sr-only">1% Complete</span>
-			  </div>
-			</div>
 
 
 </div>
@@ -323,60 +435,73 @@
 											$('.filter_type').html('Selecting all employees with DTR based on date range');
 
 											var _html = "";
+											var hours = 0;
+											$('#employees_list').append('');
+
 											$.each(employees, function(key, value) {
 
+												hours = calculateTotalHours(employees[key].time_in_am, employees[key].time_out_am, employees[key].time_in_pm, employees[key].time_out_pm, employees[key].shift);
+												
+
 												if (__in_array(employees[key].employee_id, seen)) {
-													if ($('.' + 'dp_' + employees[key].department_id + '_'+ employees[key].work_assignment_id).length <=1) {													
+													// if ($('.' + 'dp_' + employees[key].department_id + '_'+ employees[key].work_assignment_id).length <=1) {													
 
-														_html = '<tr class="dp_' + employees[key].department_id + '_'+ employees[key].work_assignment_id + '">';
-														_html +='<td>' + employees[key].department_name +'</td>';
-														_html +='<td>' + employees[key].position_name +'</td>';
-														_html +='<td><span class="days_worked_' + employees[key].department_id + '_'+ employees[key].work_assignment_id + '">' + 0 +'</span></td>';
-														_html += '</tr>';
+													// 	_html = '<tr class="dp_' + employees[key].department_id + '_'+ employees[key].work_assignment_id + '">';
+													// 	_html +='<td>' + employees[key].department_name +'</td>';
+													// 	_html +='<td>' + employees[key].position_name +'</td>';
+														
+													// 	_html +='<td><span class="days_worked_' + employees[key].department_id + '_'+ employees[key].work_assignment_id + '">' + 0 +'</span></td>';
+													// 	_html +='<td>><span class="hours_worked_' + employees[key].department_id + '_' + employees[key].work_assignment_id + '">' + hours.total +'</span></td>';
+											
+													// 	_html += '</tr>';
 
 
-														$('.parent_' + employees[key].employee_id).find('tbody').append(_html);
-													}
+													// 	$('.parent_' + employees[key].employee_id).find('tbody').append(_html);
+													// }
 
-													days_worked = parseInt($('.parent_days_worked_' + employees[key].employee_id).html());
-													$('.parent_days_worked_' + employees[key].employee_id).html(days_worked+1);
+													// days_worked = parseInt($('.parent_days_worked_' + employees[key].employee_id).html());
+													// $('.parent_days_worked_' + employees[key].employee_id).html(days_worked+1);
 													
-													days_worked_dp = $('.parent_' + employees[key].employee_id).find('.days_worked_' + employees[key].department_id + '_' + employees[key].work_assignment_id);
-													days_worked_dp.html( parseInt(days_worked_dp.html())+1 );
-
+													// days_worked_dp = $('.parent_' + employees[key].employee_id).find('.days_worked_' + employees[key].department_id + '_' + employees[key].work_assignment_id);
+													// hours_worked_dp = $('.parent_' + employees[key].employee_id).find('.hours_worked_' + employees[key].department_id + '_' + employees[key].work_assignment_id);
+													// days_worked_dp.html( parseInt(days_worked_dp.html())+1 );
+													// hours_worked_dp.html( parseInt(hours_worked_dp.html()) + hours.total );
 													return true;
 												}
 												else {
 													seen.push(employees[key].employee_id);
+
 
 													_html = '<tr>';
 													_html += '<td data-employee_id="' + employees[key].employee_id +'"> <span class="expand_dtr glyphicon glyphicon-plus-sign"></span>  ' + employees[key].lastname + ', ' + employees[key].firstname + ' ' +'</td>';
 													_html +='<td>' + '<span class="parent_days_worked_'+ employees[key].employee_id +'">' + 1 + '</span>' +'</td>';
 													_html += '</tr>';
 
-													_html += '<tr class="parent_' + employees[key].employee_id +'"  style="display:none;">';
-													_html += '<td colspan="4">' + '<div class="well">' + 
-																		'<table class="table table-hover">' +
-													                		'<thead>' +
-													                			'<th>Department</th>' +
-													                			'<th>Position </th>' +
-													                			'<th>Days worked </th>' +
-													                		'</thead>' +
-													                		'<tbody>' + 
-													                		'</tbody>' +
-													                	'</table>' +'</div>' +'</td>';
-													_html += '</tr>';
+													// _html += '<tr class="parent_' + employees[key].employee_id +'"  style="display:none;">';
+													// _html += '<td colspan="4">' + '<div class="well">' + 
+													// 					'<table class="table table-hover">' +
+													//                 			'<thead>' +
+													//                 				'<th>Department</th>' +
+													//                 				'<th>Position </th>' +
+													//                 				'<th>Days worked </th>' +
+													//                 			'</thead>' +
+													//                 		'<tbody>' + 
+													//                 		'</tbody>' +
+													//                 	'</table>' +'</div>' +'</td>';
+													// _html += '</tr>';
 													
 													$('#employees_list').append(_html);
 
-													_html = '<tr class="dp_' + employees[key].department_id + '_'+ employees[key].work_assignment_id + '">';
-													_html +='<td>' + employees[key].department_name +'</td>';
-													_html +='<td>' + employees[key].position_name +'</td>';
+													// _html = '<tr class="dp_' + employees[key].department_id + '_'+ employees[key].work_assignment_id + '">';
+													// _html +='<td>' + employees[key].department_name +'</td>';
+													// _html +='<td>' + employees[key].position_name +'</td>';
 
-													_html +='<td><span class="days_worked_' + employees[key].department_id + '_'+ employees[key].work_assignment_id + '">' + 1 +'</span></td>';
-													_html += '</tr>';
+													// _html +='<td><span class="days_worked_' + employees[key].department_id + '_'+ employees[key].work_assignment_id + '">' + 1 +'</span></td>';
+													// _html +='<td><span class="hours_worked_' + employees[key].department_id + '_'+ employees[key].work_assignment_id + '">' + hours.total +'</span></td>';
+													
+													// _html += '</tr>';
 
-													$('.parent_' + employees[key].employee_id).find('tbody').append(_html);
+													// $('.parent_' + employees[key].employee_id).find('tbody').append(_html);
 													
 												}
 											    
@@ -388,6 +513,8 @@
 											$('.filter_type').html('Selecting employees by department with DTR based on date range');
 											console.log('displaying by department');
 										}
+
+										$('.re_table').dataTable();
 								}
 							}
 
@@ -408,21 +535,22 @@
 								}
 						});
 
-						$('#process_payroll').on('click', function(e) {
+						$('#step4').on('click', function(e) {
 
 							// Make an AJAX call
 							$.ajax({
-								type: 'GET',
-								url: _globalObj._baseURL + '/payroll',
+								type: 'POST',
+								url: _globalObj._baseURL + '/payroll/process',
 								data: { start_date: $('#start_date').val(),
 							            end_date: $('#end_date').val(),
-							            company_id: $('#company_id').val() },
-							    success: function(data) {
+							            company_id: $('#company_id').val(),
+							            token: _globalObj._token },
+							    success: function(payroll) {
 							    	var row = "";
 							    	
 							    	$('#payroll_list').html('');
 
-							    	$.each(data, function(employee_id, employee) {
+							    	$.each(payroll.data, function(employee_id, employee) {
 							    		row = '<tr>';
 							    		row += 	'<td>' + employee.employee_id + '</td>';
 							    		row += 	'<td>' + employee.name + '</td>';
@@ -432,15 +560,82 @@
 							    		row += 	'<td>' + employee.netpay + '</td>';
 							    		 
 							    		$('#payroll_list').append(row);
+
+
 							    	});
+
+							    	$('.payroll').val( JSON.stringify(payroll.json) );
 							    }
+							}).done(function() {
+								$('.tablesorter').dataTable();
 							});
+
+
 
 
 							$(this).prop('disabled', false);
 							e.preventDefault();
 
 						});
+						
+						var max_form_count = 5;
+				
+							// Form wizard
+							for(var i=1; i<=5; i++) {
+								if (i== 1 ){ continue; }
+
+								$("#step" + i).hide();
+							}
+
+							$('.next').on('click', function() {
+								var current = $(this).parent().data('step');
+								var nextPage = $(this).parent().data('step') + 1;
+
+								if (nextPage <= max_form_count) {
+									$('#step' + nextPage).show();
+									$('#step' + current).hide();
+
+									$.each($('.step-header'), function(key, value) {
+											if ($(this).data('step') == nextPage) {
+												$(this).addClass('done');
+											}
+									});
+
+								}
+							});
+
+							$('.prev').on('click', function() {
+								var current = $(this).parent().data('step');
+								var prevPage = $(this).parent().data('step') - 1;
+
+								if (prevPage > 0) {
+									$('#step' + prevPage).show();
+									$('#step' + current).hide();									
+								}
+
+								$.each($('.step-header'), function(key, value) {
+											if ($(this).data('step') == current) {
+												$(this).removeClass('done');
+											}
+									});
+
+							});
+
+							$('.export-excel').on('click', function(e) {
+								var data =  $('.payroll').val();
+								var date_start = $('#start_date').val();
+								var date_end = $('#end_date').val();
+								console.log('wa');
+								setTimeout(function() {
+									window.location.href = _globalObj._baseURL + "/payroll/export" +  encodeURI("?" + "file=" + data + "&start=" + date_start + "&end=" + date_end + "&output=excel" );
+								}, 2000);
+
+								e.preventDefault();
+							});
+
+
+
+
 			        });
 
 

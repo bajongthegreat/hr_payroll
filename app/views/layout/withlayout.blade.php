@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/bootstrapValidator.css')}}"/>
     <link href="{{ asset('css/lightbox.css') }}" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
-
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.dataTables.css') }}">
     <!-- <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet"> -->
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -98,6 +98,8 @@
             <li><a href="{{ action("EmployeesMedicalExaminationsController@index") }}"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;Physical Examinations</a></li>
             <li><a href="{{ action("ViolationsController@index") }}"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;Violations</a></li>
             
+            <li><a href="{{ action("RatesController@index") }}"> <span class="glyphicon glyphicon-tags"></span> &nbsp; Rates</a></li>
+            
 
             <li><a href="{{ action("ApplicantsController@index") }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Applicant Management</a></li>
             <li><a href="{{ action("EmployeesController@index") }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Employee Management</a></li>
@@ -113,9 +115,8 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>  Payroll <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="{{ action("DTRController@index") }}"> <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;  Daily Time Record</a></li>
-            <li><a href="{{ action("RatesController@index") }}"> <span class="glyphicon glyphicon-tags"></span> &nbsp; Rates</a></li>
       
-            <li><a href="#">Process Payroll </a></li>
+            <li><a href="{{ action('PayrollController@create') }}">Process Payroll </a></li>
             <li><a href="#">Loans</a></li>
           </ul>
 
@@ -130,7 +131,12 @@
         
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{{  Session::get('email') }}} <b class="caret"></b></a>
               <ul class="dropdown-menu">
-         
+                 <li><a href="{{ action('ImportsController@create') }}"><span class="glyphicon glyphicon-import"></span>  Importation</a></li>          
+                 <li class="divider"></li>
+
+                 <li><a href="{{ action("UsersController@index") }}"><span class="glyphicon glyphicon-user"></span>  Users</a></li>
+ 
+                 <li class="divider"></li>
                  <li><a href="#users"><span class="glyphicon glyphicon-wrench"></span>  Settings</a></li> 
                 @if (Auth::check() )
                 <li> <a href="{{ url('logout')}}"><span class="glyphicon glyphicon-off"></span>  Logout</a> </li>
@@ -241,7 +247,7 @@
     <script src="{{ asset('jquery/jmsearcheable.js') }}"></script>
 
      <script src="{{ asset('jquery/employeeProfileSearcher.js') }}"></script>
-
+     <script type="text/javascript" src="{{ asset('js/jquery.dataTables.js')}}"></script> 
 
     <script type="text/javascript">
 

@@ -10,8 +10,10 @@
 	                             'url' => 'violations' ],
 
 	           'loans' => ['icon' => 'glyphicon-th-list',
-	                        'url' => 'loans']
-	         ];
+	                        'url' => 'loans'],
+	            'DTR' => ['icon' => 'glyphicon-th-list',
+	                        'url' => 'dtr']
+ 	         ];
 
 
 

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateEmployeesSavingsTable extends Migration {
+class CreateEmployeesTckets extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,10 +12,10 @@ class CreateEmployeesSavingsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('employees_savings', function(Blueprint $table)
+		Schema::create('employees_tickets', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('employee_work_id', 20)->index();
+			$table->string('employee_work_id', 20);
 			$table->date('date');
 			$table->double('amount');
 			$table->string('remarks');
@@ -31,7 +31,7 @@ class CreateEmployeesSavingsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('employees_savings');
+		Schema::drop('employees_tickets');
 	}
 
 }

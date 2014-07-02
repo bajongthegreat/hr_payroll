@@ -15,7 +15,7 @@ class CompaniesTableSeeder extends Seeder {
 		);
 
 		// Uncomment the below to run the seeder
-		// DB::table('companies')->insert($companies);
+		DB::table('companies')->insert($companies);
 	}
 
 }
