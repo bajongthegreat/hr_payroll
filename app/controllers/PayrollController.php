@@ -96,12 +96,12 @@ class PayrollController extends \BaseController {
 
 				}
 
-				if (in_array($work_type, ['regular_holiday', 'special_holiday', 'regular_holiday_with_restday']))
+				if (!$work_type != 'regular')
 				{
 					$basic_rate = $this->payroll->getRateByWorkAssignment($obj_dtr->work_assignment_id, 'regular');
 					
 					$basic_pay = $hours_worked * $basic_rate->rate;
-					$holiday_pay = $basic_rate->rate * 8;
+					$holiday_pay = ($rate->rate - $basic_rate->rate ) * 8;
 
 
 				} else {
@@ -184,6 +184,8 @@ class PayrollController extends \BaseController {
 	$objPHPExcel->getActiveSheet()->setCellValue('A2', "CONSOLIDATED PAYROLL");
 	$objPHPExcel->getActiveSheet()->setCellValue('A3', $start->format('F d') . ' TO ' . $end->format('F d') . ' ' . $end->format('Y') );
 	
+
+
 	// Add some data
 	$objPHPExcel->setActiveSheetIndex(0);
 	$objPHPExcel->getActiveSheet()->setCellValue('A5', "ID Number");
@@ -211,14 +213,37 @@ class PayrollController extends \BaseController {
 	$objPHPExcel->getActiveSheet()->setCellValue('W5', "Adjustment");
 	$objPHPExcel->getActiveSheet()->setCellValue('X5', "Netpay");
 
+	$objPHPExcel->getActiveSheet()->getStyle("A5:X5")->getFont()->setBold(true);
+	$objPHPExcel->getActiveSheet()->getStyle('A5:X5')->getAlignment()->setShrinkToFit(true);
+	
+	$style = array(
+        'alignment' => array(
+            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+        )
+    );
+
+	$objPHPExcel->getActiveSheet()->mergeCells('A1:X1');
+	$objPHPExcel->getActiveSheet()->mergeCells('A2:X2');
+	$objPHPExcel->getActiveSheet()->mergeCells('A3:X3');
+
+	$objPHPExcel->getActiveSheet()->getStyle('A1:X1')
+    ->getAlignment()
+    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 
 
+	$objPHPExcel->getActiveSheet()->getStyle('A2:X2')
+    ->getAlignment()
+    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
+
+	$objPHPExcel->getActiveSheet()->getStyle('A3:X3')
+    ->getAlignment()
+    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 	// Rename worksheet
 	$objPHPExcel->getActiveSheet()->setTitle('Payroll');
-	$objPHPExcel->getActiveSheet()->freezePane('A5');
+	$objPHPExcel->getActiveSheet()->freezePane('A6');
 
 
 	$i=6;

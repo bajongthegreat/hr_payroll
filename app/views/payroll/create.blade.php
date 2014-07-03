@@ -144,7 +144,7 @@
 			       <div class='col-md-5' style="margin-left: 50px;">
 			            <div class="form-group">
 			                <div class='input-group date' id='datetimepicker8' data-date-format="YYYY-MM-DD">
-			                    <input type='text' id="start_date" class="form-control text-center" placeholder="Start of Payroll"/>
+			                    <input type='text' id="start_date" class="form-control text-center" placeholder="Start of Payroll" required/>
 			                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
 			                    </span>
 			                </div>
@@ -154,13 +154,20 @@
 			        <div class='col-md-5'>
 			            <div class="form-group">
 			                <div class='input-group date' id='datetimepicker9' data-date-format="YYYY-MM-DD">
-			                    <input type='text' id="end_date" class="form-control text-center" placeholder="End of Payroll" />
+			                    <input type='text' id="end_date" class="form-control text-center" placeholder="End of Payroll" required/>
 			                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
 			                    </span>
 			                </div>
 			            </div>
 			        </div>
 			    	
+			    	<div class="col-xs-11" id="step1_error" style="display:none;">
+			    		<div class="alert alert-warning">
+			        	<strong>Warning!</strong> <span class='step1_error_message'></span>
+			        </div>
+
+			    	</div>
+			        
 			    	<div class='col-md-10' style="margin-left: 50px;">
 			            <div class="form-group text-center" data-step="1">
 			                <a href="#select_company" class="btn btn-default next">Next  <span class="glyphicon glyphicon-chevron-right	"></span></a>
@@ -191,6 +198,12 @@
 					
 					<input type="hidden" id="employees_container">
 			    	
+			    	<div class="col-xs-11" id="step2_error" style="display:none;">
+			    		<div class="alert alert-warning">
+			        	<strong>Warning!</strong> <span class='step2_error_message'></span>
+			        	</div>
+			    	</div>
+
 			    	<div class='col-md-10' style="margin-left: 50px;">
 			            <div class="form-group text-center" data-step="2">
 			                <a href="#" class="btn btn-default prev"><span class="glyphicon glyphicon-chevron-left"></span>  Prev  </a>
@@ -252,6 +265,12 @@
 
 					</div>
 			    	
+			    	<div class="col-xs-11" id="step3_error" style="display:none;">
+			    		<div class="alert alert-warning">
+			        	<strong>Warning!</strong> <span class='step3_error_message'></span>
+			        	</div>
+			    	</div>
+
 			    	<div class='col-md-10' style="margin-left: 75px;">
 			            <div class="form-group text-center" data-step="3">
 			                <a href="#" class="btn btn-default prev"><span class="glyphicon glyphicon-chevron-left"></span>  Prev  </a>
@@ -320,6 +339,9 @@
 			     
 			     <div class="col-md-11 text-center"> 
 			      	<div class="page-header-def">
+			      		<span data-step="5">
+			      		  <a href="#" class="btn btn-default prev pull-left"><span class="glyphicon glyphicon-chevron-left"></span>  Prev  </a> 
+			      		  </span>
 			      		<span class="pull-right" style="font-size: 10px;"><a href="#step5" class="export-excel">Export Excel</a></span>
 					  <h2><small>For Pay Period <span class="pay_period"></span></small></h2>
 					</div>
@@ -341,6 +363,8 @@
 			            	</tbody>	
 
 			            </table>
+
+			            <div class="loader"></div>
 
 			            <input type="hidden" name="payroll" class="payroll">
 
@@ -377,6 +401,16 @@
 			            	$(this).addClass('active');
 			            });
 			        	
+			            function stepMessage(step, message, toggle) {
+			            	if (toggle == 'show') {
+			            		$('.step'+ step +'_error_message').html(message);
+			            		$('#step' + step +'_error').show();
+
+			            	} else {
+			            		$('#step' + step +'_error').hide();
+			            	}
+			            };
+
 			        	$('#company_id').on('change', function() {
 			        		$.ajax({
 			        			type: 'GET',
@@ -436,7 +470,7 @@
 
 											var _html = "";
 											var hours = 0;
-											$('#employees_list').append('');
+											$('#employees_list').html('');
 
 											$.each(employees, function(key, value) {
 
@@ -545,10 +579,14 @@
 							            end_date: $('#end_date').val(),
 							            company_id: $('#company_id').val(),
 							            token: _globalObj._token },
+							    beforeSend: function() {
+							    	$('.loader').html('<div class="text-center"><img src="' + _globalObj.loaderImage + '"> <span style="font-size: 10px;">Please wait while the data is being fetched.</span></div>');
+							    },
 							    success: function(payroll) {
 							    	var row = "";
-							    	
+							    	$('.loader').html('');
 							    	$('#payroll_list').html('');
+
 
 							    	$.each(payroll.data, function(employee_id, employee) {
 							    		row = '<tr>';
@@ -590,6 +628,76 @@
 							$('.next').on('click', function() {
 								var current = $(this).parent().data('step');
 								var nextPage = $(this).parent().data('step') + 1;
+
+								// Validate forms
+
+								// Step 1
+								if (current == 1) {
+									var start_date = $('#start_date');
+									var end_date = $('#end_date');
+
+									// Check if empty [Start date]
+									if (start_date.val() == '' || start_date.val() == '0000-00-00') {
+										// start_date.addCl
+										start_date.parent().parent().addClass('has-error');
+										stepMessage(1, 'Please enter the starting date!', 'show');
+										return false;
+									} else start_date.parent().parent().removeClass('has-error');
+ 	
+ 									// Check if empty [End date]
+									if (end_date.val() == '' || end_date.val() == '0000-00-00') {
+										// start_date.addCl
+										end_date.parent().parent().addClass('has-error');
+										stepMessage(1, 'Please enter the ending date!', 'show');
+										return false;
+									} else end_date.parent().parent().removeClass('has-error'); 
+
+
+									// Check for validity of date
+									if (! moment( start_date.val() , 'YYYY-MM-DD', true).isValid() ) {
+										start_date.parent().parent().addClass('has-error');
+										stepMessage(1, 'Invalid date format for starting date!', 'show');
+										return false;
+									}
+
+									if (! moment( end_date.val() , 'YYYY-MM-DD', true).isValid() ) {
+										end_date.parent().parent().addClass('has-error');
+										stepMessage(1, 'Invalid date format for ending date!', 'show');
+										return false;
+									}
+
+									// Check if End date is after start date
+									if (!moment(end_date.val()).isAfter( start_date.val() )) {
+										stepMessage(1, 'The starting period date must be before the ending period not after!', 'show');
+										return false;
+									}
+									 stepMessage(1, '', 'hide');
+ 
+								}
+								// Step 2
+								if (current == 2){
+									var company_id_form = $('#company_id');
+									
+									if ($('#company_id').val() == 0) {
+										company_id_form.parent().addClass('has-error');
+										stepMessage(2, 'Please select company', 'show');
+										return false;
+										
+									} else company_id_form.parent().removeClass('has-error');
+									
+									stepMessage(2, '', 'hide');
+								}
+								
+								// Step 3
+								if (current == 3) {
+									var employee_count = parseInt($('.all_employees_badge').html());
+
+									if (isNaN(employee_count) || employee_count == 0) {
+										stepMessage(3, 'No data to process. Please go back to step 1 and select other dates.', 'show');
+										return false;
+									}
+									stepMessage(3, '', 'hide');
+								}
 
 								if (nextPage <= max_form_count) {
 									$('#step' + nextPage).show();
