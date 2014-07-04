@@ -138,7 +138,8 @@ var myApp = function(mainURL) {
                    
                 });
                     console.log(options);
-                 $('#' + element).html(options).trigger('change');
+                 $('#' + element ).html(options).trigger('change');
+                 $('.' + element ).html(options).trigger('change');
             }
         });
     }
@@ -331,6 +332,10 @@ function getJSONdata(obj, keyToFind) {
   }
 }
 
+
+// function rowCleanup(tableID) {
+
+// }
 function addRow_pe(tableID, rowsToAdd) {
 
       // Work on JSON Objects
@@ -384,6 +389,8 @@ function addRow_pe(tableID, rowsToAdd) {
 
             for (var j=0; j<= rowsToAdd-1; j++) {
               
+                row = table.insertRow(j);
+
               for (var i = 0; i <= elementName.length-1; ++i) {
                   
                   var cell = row.insertCell(i);
@@ -443,8 +450,8 @@ function addRow_pe(tableID, rowsToAdd) {
                   
                  
                 };
-                row = table.insertRow(rowCount+1);
-                // console.log(row);
+                    
+             
 
             };
 
@@ -484,29 +491,50 @@ if(typeof(type)==='undefined') {
         addRow_pe(tableID,__dataToUse.length, []);  
       }
       
-
-            for(var i=0; i< oldDataLength; i++) {
+      console.log(__dataToUse);
+            for(var i=0; i< oldDataLength; ++i) {
 
                 // Only fill a table row with <td> element
+
                 if (row[i].cells.length > 0) {
 
                     // Loop through each cell
                     for(var j=0; j<row[i].cells.length; j++) {
-                  
+                    
                       // Set ID to row
                       row[i].dataset.id = __dataToUse[i][identifier];
 
+                      // console.log(i)
+
                       // Grab input element
                       element = row[i].cells[j].getElementsByTagName('input');
-                      
+
+
                       // Check if it is a valid input element
                       if (element[0] != undefined) {
                         elementName = element[0].getAttribute('name');
                         
                         // Set element value from Database
+                        // console.log(elementName);
                         element[0].value = __dataToUse[i][elementName];
                       } 
 
+                      select  = row[i].cells[j].getElementsByTagName('select');
+
+                      // Check if it is a valid input element
+                      if (select[0] != undefined) {
+                        elementName = select[0].getAttribute('name');
+                        
+                        // Set element value from Database
+
+                        // console.log(typeof __dataToUse[i][elementName] === 'undefined');
+                        if (typeof __dataToUse[i][elementName] === 'undefined' || (!__dataToUse[i][elementName])) {
+                          continue;
+                        } else {
+                          select[0].value = __dataToUse[i][elementName];
+                        }
+                        
+                      }
 
 
 

@@ -304,14 +304,131 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 		$date_conducted = Input::get('date_conducted');
 		$medical_establishment_id = Input::get('medical_establishment_id');
 
-		$json_data = $this->physical_examinations->find($date_conducted, 'date_conducted')
+		$pe = $this->physical_examinations->find($date_conducted, 'date_conducted')
 		                                         ->where('medical_establishment_id', '=', $medical_establishment_id)
-		                                         ->get()->toArray();
-		 $json = json_encode($json_data);
+		                                         ->join('employees', 'employees.id', '=', 'employees_physical_examinations.employee_id')
+		                                         ->select('employees_physical_examinations.*', 'employees.employee_work_id', 'employees_physical_examinations.medical_findings_id as medical_findings', 'employees_physical_examinations.recommendations as recommendation')
+		                                         ->get();
+		 $json = json_encode($pe->toArray());
 
 		 // dd($json_data);
-		return View::make('employees.medical_examination.edit', compact('json'));
+		return View::make('employees.medical_examination.edit', compact(['json', 'pe']));
 	}
+
+		protected function updateBulk() {
+		// return 'Processing';
+		$examination_data = Input::get('examination_data');
+
+		$decoded_examination_data = json_decode($examination_data);
+
+		// Data container
+		$employee_data = [];
+		$json_employee_data = [];
+
+		// Job checkers
+		$failed_jobs = [];
+		$success_jobs = [];
+		$jobs = [];
+		$duplications = [];
+		$not_included = [];
+
+		if (count($decoded_examination_data) == 0 ) return false;
+		else {
+
+			$medical_establishment = Input::get('medical_establishment');
+			$date_conducted = Input::get('date_conducted');
+			
+			$medical_establishment_db = DB::table('medical_establishments')->where('id', '=', $medical_establishment)->pluck('name');
+		
+
+			
+
+			foreach ($decoded_examination_data as $data) {
+				# code...
+				// var_dump((array) $data);
+				
+				$id = $this->employees->find($data->employee_work_id, 'employee_work_id')->pluck('id');
+				$medical_findings = ($data->medical_findings == 'None') ? NULL : $data->medical_findings;
+				$recommendation = $data->recommendation;
+				$remarks = $data->remarks;
+				$medical_findings_db = DB::table('diseases')->where('id', '=', $data->medical_findings)->pluck('name');
+
+				$employee_data = ['employee_id' => $id,
+				                  'medical_establishment_id' => $medical_establishment,
+					              'medical_findings_id' => $medical_findings ,
+					              'recommendations' => $recommendation,
+					              'remarks' => $remarks,
+					              'date_conducted' => $date_conducted,
+					              'created_at' => date('Y-m-d h:i:s'),
+					              'updated_at'=> date('Y-m-d h:i:s')];
+					
+				// ID not found
+				if ($id == NULL ) {
+					$not_included[] = $data->employee_work_id;
+					$jobs[] = $data->employee_work_id;
+
+					// Save Employee Data
+					$employee_data['employee_id'] = $data->employee_work_id;
+					$json_employee_data[] = $employee_data;
+				} else {
+					
+					// Check for duplication first					
+					if (!in_array($data->employee_work_id, $jobs)) {
+			
+						$status = $this->physical_examinations->find($id, 'employee_id')->update($employee_data);		
+					
+					
+
+					$employee_data['employee_id'] = $data->employee_work_id;
+					$employee_data['medical_establishment_id'] = $medical_establishment_db;
+					$employee_data['medical_findings_id'] = is_null($medical_findings_db) ? 'N/A' : $medical_findings_db;
+					
+					$json_employee_data[] = $employee_data;
+					
+						// Record job
+						$jobs[] = $data->employee_work_id;
+
+						if ($status == false) {
+							$failed_jobs[] = $data->employee_work_id;
+						} else {
+							$success_jobs[] = $data->employee_work_id;
+						}
+
+					} else {
+					
+						// Save Employee Data
+						$employee_data['employee_id'] = $data->employee_work_id;
+						$employee_data['medical_establishment_id'] = $medical_establishment_db;
+				    	$employee_data['medical_findings_id'] = is_null($medical_findings_db) ? 'N/A' : $medical_findings_db;
+				
+						$json_employee_data[] = $employee_data;
+						
+						$jobs[] = $data->employee_work_id;
+						$duplications[] = $data->employee_work_id;
+					}
+				}
+
+				
+			}
+
+
+
+			$output = ['all_jobs' => $jobs,
+								   'failed_jobs' => $failed_jobs,
+			                       'success_jobs' => $success_jobs,
+			                       'success_jobs_count' => count($success_jobs),
+			                       'failed_jobs_count' => count($failed_jobs),
+			                       'duplications' => $duplications,
+			                       'not_included' => $not_included,
+			                       'data' => $json_employee_data];
+
+
+			 return Response::json($output);
+
+		}
+
+	}
+
 
 	/**
 	 * Update the specified resource in storage.
@@ -343,6 +460,8 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 
 				return Response::json(['status' => $status]);
 			}
+
+			return $this->updateBulk();
 				
 		}
 		
