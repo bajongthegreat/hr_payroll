@@ -1,6 +1,7 @@
 <?php
 
 use Acme\Repositories\Violations\ViolationRepositoryInterface;
+use Acme\Repositories\Violations\Offense\ViolationOffenseRepositoryInterface;
 
 use Acme\Services\Validation\ViolationsValidator as jValidator;
 
@@ -13,10 +14,14 @@ class ViolationsController extends \BaseController {
 
 	protected $db_fields_to_use = ['code','description','penalty'];
 	protected $default_uri = 'violations';
+	protected $violations_offenses;
+
 		 /**
 	     * Instantiate a newController instance.
 	     */
-	    public function __construct(ViolationRepositoryInterface $violations, jValidator $validator)
+	    public function __construct(ViolationRepositoryInterface $violations, 
+	    						    ViolationOffenseRepositoryInterface $violations_offenses,
+	    						    jValidator $validator)
 	    {
 	    	parent::__construct();
 
@@ -26,6 +31,7 @@ class ViolationsController extends \BaseController {
 	   
 	        // UsersRepository Dependency
 	        $this->violations = $violations;
+	        $this->violations_offenses = $violations_offenses;
 
 	        $this->validator = $validator;
 	                                                                                                                                  
@@ -41,6 +47,7 @@ class ViolationsController extends \BaseController {
 	 */
 	public function index()
 	{	
+		
 
 		// Check access control
 		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
@@ -71,7 +78,7 @@ class ViolationsController extends \BaseController {
 			$id = (int) Input::get('id');
 
 
-			$offenses = DB::table('violations_offenses')->where('violation_id', '=', $id)->get();
+			$offenses = $this->violations_offenses->find($id, 'violation_id' )->get();
 			return Response::json($offenses);
 		}
 
@@ -279,7 +286,7 @@ class ViolationsController extends \BaseController {
 				$query_instance = DB::table('violations_offenses')
 												->where('violation_id', '=', $id)
 				                                ->where('offense_number', '=', $value->offense_number);
-				                    var_dump($value);	
+				                    // var_dump($value);	
 
 				$offense_count_in_db = $query_instance->select(DB::raw('COUNT(*) as count'))
 				                                      ->pluck('count');

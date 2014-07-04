@@ -198,9 +198,13 @@ var resultContainer = $('.resultContainer');
 						       date_conducted: $('#date_conducted').val(),
 						       _token: _globalObj._token },
 					success: function(data) {
-							output = JSON.parse(data);
+							output = data;
 							
 							if (output != undefined) {
+
+								$('input').prop('disabled', true);
+								$('select').prop('disabled', true);
+
 
 								// Only display charts when there's a job done
 								if (output.all_jobs.length == 0) return false;
@@ -285,7 +289,8 @@ var resultContainer = $('.resultContainer');
 
  									  row = row + '</tr>';	
 
- 									 resultTableData.append(row);			
+ 									 resultTableData.append(row);	
+ 									 $('form').prop('disabled', true);		
 								});
 
 							}
@@ -425,8 +430,8 @@ var resultContainer = $('.resultContainer');
 		            	}
 		            	element.name = elementName[i];
 		            	element.dataset.name= elementName[i];
-			            	element.classList.add('form-control');
-			            	cell.appendChild(element);
+			            element.classList.add('form-control');
+			            cell.appendChild(element);
 		            	
 			           
 		            };
@@ -463,7 +468,21 @@ var resultContainer = $('.resultContainer');
 			}
 		});
 
+		
+		$(document).on('click', '.resultItem a', function(e) {
+			
+			var id = $(this).parent().data('employee_id'),
+				name = $(this).parent().data('employee_name'),
+			    input = $(this).parent().parent().siblings('input.searcheable');
+			$('.resultName').remove();            
+            
+			input.val(id);
+            input.next().remove();
+            input.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
 
+			$('.resultContainer').remove();
+			e.preventDefault();
+		});
 
 		// $(document).on('blur', '.searcheable', function() {
 		// 	$('.resultContainer').remove();

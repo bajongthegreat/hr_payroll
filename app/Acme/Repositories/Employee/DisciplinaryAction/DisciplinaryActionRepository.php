@@ -102,8 +102,12 @@ class DisciplinaryActionRepository extends RepositoryAbstract implements Discipl
             	    'positions.name as position',
             	    'departments.name as department',
             	    'violations.code as violation_code',
-            	    'companies.name as company')
+                  'violations.description as violation_description',
+            	    'companies.name as company', DB::raw('COUNT(*) as count') )
+            ->groupBy('violations.id')
             ->get();	
 	 }
 
+   
+   
 }

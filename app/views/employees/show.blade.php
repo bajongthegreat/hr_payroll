@@ -62,6 +62,8 @@
 				<div class="profile-label"> <b>Name: </b> {{ $fullname  }}</div>
 				<div class="profile-label"> <b>ID: </b> <?php echo (isset($employee->employee_work_id)) ? $employee->employee_work_id : 'Not specified'; ?></div>
 				<div class="profile-label"> <b>Company: </b> <?php echo (isset($company)) ? $company : 'Not specified'; ?></div>
+				<div class="profile-label"> <b>Position: </b> {{ (isset($employee->position->name) ) ? $employee->position->name : '<span class="label label-default">Not specified</span>'}} <a href="#" data-toggle="modal" data-target="#edit_position"><span class="glyphicon glyphicon-edit" ></span> Edit </a></div>
+
 				<div class="list-group">
 
 				   <!-- Shortcut for other route records -->
@@ -77,6 +79,59 @@
 
 		</div>
 
+		<!-- Modal start -->
+
+
+		<!-- Modal -->
+		<div class="modal fade" id="edit_position" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Change Position</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<input type="hidden" id="employee_id" value="{{$employee->id}}"> 
+		      <form  class="form-horizontal" role="form">
+			         <div class="form-group hidden">
+					{{ Form::label('company_id', 'Company', array('class' => 'col-sm-3 text-right')) }}
+
+					<div class="col-sm-8">
+						{{ Form::select('company_id', $companies, $employee->company_id , array('class' => 'form-control', 'id' => 'company_id', 'required') ) }}
+					</div>
+			</div>
+
+
+			 <div class="form-group" id="department_row">
+					{{ Form::label('department_id', 'Department', array('class' => 'col-sm-3 text-right')) }}
+
+					<div class="col-sm-8">
+						{{ Form::select('department_id', [], Input::old('department_id') , array('class' => 'form-control', 'id' => 'department_id', 'required') ) }}
+					</div>
+			</div>
+
+            	<div class="form-group" id="position_row">
+				{{ Form::label('position_id', 'Work Assignment', array('class' => 'col-sm-3 text-right')) }}
+
+				<div class="col-sm-8">
+					{{ Form::select('position_id', [] , Input::old('position_id') , array('class' => 'form-control', 'disabled', 'id' => 'position_id', 'required') ) }}
+				</div>
+			</div>
+
+			</form>	
+
+		      	
+
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary" id="change_position">Save changes</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- Modal end -->
 			
 
 			<div class="text-center">
@@ -216,6 +271,31 @@ $('#profile_pic_input').jmFileUpload({
 
 		 }
 		 $('#company_id').triggerHandler('change');
+
+		 // Change Position
+		 $('#change_position').on('click', function() {
+		 	
+		 	$(this).prop('disabled', true);
+		 	employee_id = $('#employee_id').val();
+		 	position_id = $('#position_id').val();
+
+		 	$.ajax({
+		 		type: 'POST',
+		 		url: _globalObj._baseURL + '/employees/change_position',
+		 		data: { employee_id: employee_id,
+		 		        position_id: position_id,
+		 		        _token: _globalObj._token },
+		 		 success: function(data) {
+		 		 	if (data == 1) {
+		 		 		window.location.reload();
+		 		 	}
+		 		 }
+		 	}).done(function() {
+		 		$(this).prop('disabled', false);
+		 		
+		 	});
+
+		 });
 
 	// (function() {
 	// 	$('.progress').hide();

@@ -287,6 +287,10 @@ function calculateTotalHours(raw_timein_am, raw_timeout_am, raw_timein_pm, raw_t
                 'overtime': overtime};  
     } 
 
+    function arrayHasOwnIndex(array, prop) {
+        return array.hasOwnProperty(prop) && /^0$|^[1-9]\d*$/.test(prop) && prop <= 4294967294; // 2^32 - 2
+    }
+
     function getNightPemium_10_03(timein_pm, timeout_pm, time_in_am, time_out_am){
 
       var set_1 = 0,
@@ -327,13 +331,204 @@ function getJSONdata(obj, keyToFind) {
   }
 }
 
+function addRow_pe(tableID, rowsToAdd) {
+
+      // Work on JSON Objects
+      
+      var table = document.getElementById(tableID);
+    
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+      var diseases_raw = [];
+            var diseases = [];
+            var recommendations_raw = [];
+            var recommendations = [];
+
+
+            //  Not yet working
+      $.ajax({
+            async: false,
+            type: 'GET',
+            url: _globalObj._baseURL + '/syncdata' + '?get=medical_findings',
+            success: function(data) {
+              diseases_raw = data;
+              
+            }
+          });
+
+      $.ajax({
+            async: false,
+            type: 'GET',
+            url: _globalObj._baseURL + '/syncdata' + '?get=recommendations',
+            success: function(data) {
+              recommendations_raw = data;
+              
+            }
+          });
+
+      for (key in diseases_raw) {
+          if (arrayHasOwnIndex(diseases_raw, key)) {
+              diseases[key] = diseases_raw[key];
+          }
+      }
+
+      for (key in recommendations_raw) {
+          if (arrayHasOwnIndex(recommendations_raw, key)) {
+              recommendations[key] = recommendations_raw[key];
+          }
+      }
+
+      diseases.push('None');
+
+            var elementName = ['employee_work_id', 'medical_findings', 'recommendation', 'remarks'];
+
+            for (var j=0; j<= rowsToAdd-1; j++) {
+              
+              for (var i = 0; i <= elementName.length-1; ++i) {
+                  
+                  var cell = row.insertCell(i);
+
+                  if (elementName[i] == 'medical_findings') {
+                      var element = document.createElement('select');
+                  
+                    for (var o = 0; o <= diseases.length - 1; o++)     {                
+                        
+                      if (diseases[o] != undefined) {
+
+                        opt = document.createElement("option");
+                          opt.value = o;
+
+                        if (diseases[o] == 'None') {
+                          opt.value = 'None'; 
+                        }
+
+                          opt.text=diseases[o];
+                          element.appendChild(opt); 
+
+                        if (diseases[o] == 'None') {
+                          opt.selected = true;  
+                        }
+                      }
+                        
+                    }
+
+
+                  } else if (elementName[i] == 'recommendation') {
+
+                    var element = document.createElement('select');
+
+                    for (var o = 0; o <= recommendations.length - 1; o++)     {                
+                       
+                      if (recommendations[o] != undefined) {
+                        opt = document.createElement("option");
+                          opt.value = recommendations[o];
+                          opt.text=recommendations[o];
+                          element.appendChild(opt); 
+                      }
+                        
+                    }
+                  } else {
+                    var element = document.createElement('input');
+                    element.type = "text";
+
+                    if (elementName[i] == 'employee_work_id'){
+                      element.className = element.className + 'searcheable';
+                    }
+                    
+                  }
+                  element.name = elementName[i];
+                  element.dataset.name= elementName[i];
+                    element.classList.add('form-control');
+                    cell.appendChild(element);
+                  
+                 
+                };
+                row = table.insertRow(rowCount+1);
+                // console.log(row);
+
+            };
+
+          
+           // console.log(currentRowCount);
+           $('.rowcount').html("" + rowCount);
+    }
+
+
+ function fillBlankTable(tableID, tableDataToUse, identifier, type) {
+
+// if identifier is not assigned, use ID as default value
+if(typeof(identifier)==='undefined') {
+  identifier = 'id';
+}
+
+
+// if identifier is not assigned, use ID as default value
+if(typeof(type)==='undefined') {
+  type = 'pe';
+}
+
+  var __dataToUse = tableDataToUse;
+
+    if (__dataToUse.length > 0) {
+
+     
+   
+      var oldDataLength = __dataToUse.length;
+      var table = document.getElementById(tableID);
+      var rowCount = table.rows.length;
+      var row = table.rows;
+
+
+       // Add rows based on the number of data available
+      if (type == 'pe') {
+        addRow_pe(tableID,__dataToUse.length, []);  
+      }
+      
+
+            for(var i=0; i< oldDataLength; i++) {
+
+                // Only fill a table row with <td> element
+                if (row[i].cells.length > 0) {
+
+                    // Loop through each cell
+                    for(var j=0; j<row[i].cells.length; j++) {
+                  
+                      // Set ID to row
+                      row[i].dataset.id = __dataToUse[i][identifier];
+
+                      // Grab input element
+                      element = row[i].cells[j].getElementsByTagName('input');
+                      
+                      // Check if it is a valid input element
+                      if (element[0] != undefined) {
+                        elementName = element[0].getAttribute('name');
+                        
+                        // Set element value from Database
+                        element[0].value = __dataToUse[i][elementName];
+                      } 
+
+
+
+
+                    }
+                }
+            }
+
+
+    }
+
+}
+
 $(document).ready(function() {
   
 
 
-   $('#_applicants_date_hired, #_applicants_birthdate, #birthdate, #date_conducted, .text-date').datetimepicker({
+   $('#_applicants_date_hired, #_applicants_birthdate, #date_conducted, .text-date').datetimepicker({
                     pickTime: false
     });
+
+   $('#birth_date').datetimepicker( {maxDate: '12/31/1998' , defaultDate: "1998-01-01", pickTime: false});
+
 
 var __timeout =undefined;
 

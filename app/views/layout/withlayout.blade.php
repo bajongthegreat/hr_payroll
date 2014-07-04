@@ -135,7 +135,9 @@
                  <li class="divider"></li>
 
                  <li><a href="{{ action("UsersController@index") }}"><span class="glyphicon glyphicon-user"></span>  Users</a></li>
- 
+                 <li><a href="{{ action("UsersController@edit", Auth::user()->id) }}"><span class="glyphicon glyphicon-lock"></span>  Change Password</a></li>
+
+
                  <li class="divider"></li>
                  <li><a href="#users"><span class="glyphicon glyphicon-wrench"></span>  Settings</a></li> 
                 @if (Auth::check() )

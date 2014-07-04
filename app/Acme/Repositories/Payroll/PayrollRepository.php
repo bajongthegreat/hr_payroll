@@ -410,7 +410,17 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 	}
 
 	public function getNetPay($obj, $period = array(), $save = true ) {
-		
+		$json_file = NULL;
+		$memory_used = 0;
+		$data = [];
+
+		// Checks if date is valid
+		if (!(isDateValid($period['start']) && $period['end'])) {
+			return ['data' => [],
+					'json' => NULL,
+			        'message' => 'Invalid date.'];
+		}
+
 		$final_payroll = array();
 		$grosspay = $deductions = 0;
 		foreach ($obj as $key => $workInfo) {
@@ -557,36 +567,42 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 				
 
 				// Check first if the employee is already listed in previous payroll
-				// To prevent duplications
-				// $countDB = DB::table('payroll')->where('employee_id', '=', $key)
-				//                               ->where('pay_period_start', '=',$period['start'])
-				//                               ->where('pay_period_end' ,'=', $period['end'])
-				//                               ->select(DB::raw('count (*) as count'))
-				//                               ->pluck('count');
-				//  if ($countDB > 0) continue;
+				// To prevent duplications based on employee_id, start and end of period
+				$countDB = DB::table('payroll')->where('employee_id', '=', $key)
+				                              ->where('pay_period_start', '=',$period['start'])
+				                              ->where('pay_period_end' ,'=', $period['end'])
+				                              ->select(DB::raw('COUNT(*) as count'))
+				                              ->pluck('count');
+					 if ($countDB > 0) {
+					 	continue;
+					 } else {
 
-				// Save the data	
-				DB::table('payroll')->insert(['employee_id' => $key, 
-					                          'pay_period_start' => $period['start'],
-					                          'pay_period_end' => $period['end'],
-					                          'days_worked' => $workInfo['days_worked'],
-					                          'grosspay' => $grosspay,
-					                          'deductions' => $deductions,
-					                          'netpay' => $grosspay-$deductions,
-					                          'date' => Carbon::now()]);
-
+						// Save the data	
+						DB::table('payroll')->insert(['employee_id' => $key, 
+							                          'pay_period_start' => $period['start'],
+							                          'pay_period_end' => $period['end'],
+							                          'days_worked' => $workInfo['days_worked'],
+							                          'grosspay' => $grosspay,
+							                          'deductions' => $deductions,
+							                          'netpay' => $grosspay-$deductions,
+							                          'date' => Carbon::now(),
+							                          'created_at' => Carbon::now(),
+							                          'updated_at' => Carbon::now()]);
+					}
 				}
 
+
+		
+
+		}
 
 			// For history purposes
 			// Since exporting the payroll to excel is essential
 			// It would be alot faster to dump all data into a json file
 			// So later when we use it, we dont need to query to database again
-			// If duplicate file is found, it will just overwrite it
+			// If a duplicate file is found, it will just overwrite it
 			$json_file= $this->createJSON($final_payroll, $period['start'], $period['end']);			
 	
-
-		}
 
 		return [ 'data' => $final_payroll,
 		         'json' => $json_file,
@@ -609,16 +625,31 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 	 *
 	 * @return string  - HTTP link of json file
 	 */
-	public function createJSON($data, $start, $end) {
+	public function createJSON($data, $start, $end, $table="") {
+
+		if (!(isDateValid($start) && isDateValid($end))) {
+			return NULL;
+		}
 	
 		$__start = str_replace('-', '_', $start);
 		$__end = str_replace('-', '_', $end);
 
 		$filename = 'payroll_for_' . $__start . '_to_' . $__end;
+		$filepath = public_path() .'\\json\\' . $filename .'.json';
+	
+		$fp = fopen($filepath, 'w');
+			fwrite($fp, json_encode($data));
+			fclose($fp);	
 
-		$fp = fopen(public_path() .'\\json\\' . $filename .'.json', 'w') or die('cannot create');
-		fwrite($fp, json_encode($data));
-		fclose($fp);
+
+		try {
+
+		} catch (Exception $e) {
+			if (is_readable($filepath)) {
+				unlink($filepath);
+			}
+		}
+		
 
 		return asset('/json/' . $filename .'.json');
 	}	

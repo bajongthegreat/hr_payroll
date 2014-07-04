@@ -6,23 +6,23 @@
 		  <div class="panel-body">
 		
 	
-		<div class="form-group ">
+		<div class="form-group">
 							
-					{{ Form::label('breaktime', 'Break time', array('class' => 'col-sm-2')) }}
-					<?php  $breaktime=  (Input::old('breaktime') != '' ) ? Input::old('breaktime') : '11:00'; ?>
-					<div class="col-sm-2">
-						{{ Form::select('breaktime' , $time , $breaktime , array('class' => 'form-control') ) }}
+					{{ Form::label('medical_establishment', 'Medical Establishment', array('class' => 'col-sm-2')) }}
+
+					<div class="col-sm-4">
+						{{ Form::select('medical_establishment', $medical_establishments ,Input::old('medical_establishment'), array('class' => 'form-control', 'required') ) }}
 					</div>
-				
+					<div class="col-sm-1" ><a href=" {{ action('MedicalEstablishmentsController@create') }}?ref={{ base64_encode(URL::current() . '?add_type=bulk' ) }}" class="btn btn-info"> <span class="glyphicon glyphicon-share"></span> Add </a></div>
 					<div class="col-sm-1" style="padding-top: 5px;">Add rows</div>
 					<div class="col-sm-1" style="margin-right: 10px; ">{{ Form::text('rowcount', NULL, ['class' => 'rowCount form-control', 'style' => 'width: 100px']) }}</div>
 					<div class="col-sm-1">   <a class="addRow btn btn-primary">Go</a> </div> 
 				</div>
 
 
-		<div class="form-group ">
+		<div class="form-group">
 							
-					{{ Form::label('work_date', 'Date', array('class' => 'col-sm-2')) }}
+					{{ Form::label('date_conducted', 'Date Conducted', array('class' => 'col-sm-2')) }}
 
 					<div class="col-sm-4">
 						<div class='input-group date ' id='birthdate' data-date-format="YYYY-MM-DD">
@@ -39,22 +39,19 @@
 	
 
 <hr>
-		  <table id="medical_examination_information_table" class="table">
-			<thead>
-				<th width="35%">ID Number 	</th>
-				<th width="15%" class="text-center"><strong>Time IN  </strong><span class="label label-info">AM</span></th>
-				<th width="15%" class="text-center"><strong>Time OUT  </strong><span class="label label-info">AM</span></th>
-				<th width="15%" class="text-center"><strong>Time IN  </strong><span class="label label-warning">PM</span></th>
-				<th width="15%" class="text-center"><strong>Time OUT  </strong><span class="label label-warning">PM</span></th>
-				<th class="text-center">Total Hours</th>
-				<th class="text-center"> Remarks</th>
-				<th></th>
-			</thead>
-			<tbody id="medical_examination_information_table_body">
-				
-			</tbody>
-		</table>
-	
+  <table id="medical_examination_information_table" class="table table-hover">
+	<thead>
+		<th width="15%">ID Number 	</th>
+		<th>Medical Findings</th>
+		<th>Recommendation</th>
+		<th>Remarks</th>
+		<th></th>
+	</thead>
+	<tbody id="medical_examination_information_table_body">
+		
+	</tbody>
+</table>
+
 
 <div class="panel panel-default hide" id="examination_creation_result">
 		  <div class="panel-heading">
@@ -195,15 +192,19 @@ var resultContainer = $('.resultContainer');
 			// Send the processed data into our database
 			$.ajax({
 					'type': 'POST',
-					'url': _globalObj._baseURL + '/payroll/dtr',
+					'url': _globalObj._baseURL + '/employees/medical_examinations',
 					'data' : { examination_data: JSON.stringify(tableData), 
 						       medical_establishment: $('#medical_establishment').val(), 
 						       date_conducted: $('#date_conducted').val(),
 						       _token: _globalObj._token },
 					success: function(data) {
-							output = JSON.parse(data);
+							output = data;
 							
 							if (output != undefined) {
+
+								$('input').prop('disabled', true);
+								$('select').prop('disabled', true);
+
 
 								// Only display charts when there's a job done
 								if (output.all_jobs.length == 0) return false;
@@ -288,7 +289,8 @@ var resultContainer = $('.resultContainer');
 
  									  row = row + '</tr>';	
 
- 									 resultTableData.append(row);			
+ 									 resultTableData.append(row);	
+ 									 $('form').prop('disabled', true);		
 								});
 
 							}
@@ -317,7 +319,9 @@ var resultContainer = $('.resultContainer');
 				return array;
 		}
 
-		
+		function arrayHasOwnIndex(array, prop) {
+		    return array.hasOwnProperty(prop) && /^0$|^[1-9]\d*$/.test(prop) && prop <= 4294967294; // 2^32 - 2
+		}
 
 		function addRow(tableID, rowsToAdd) {
 
@@ -327,68 +331,107 @@ var resultContainer = $('.resultContainer');
  		
             var rowCount = table.rows.length;
             var row = table.insertRow(rowCount);
+ 			var diseases_raw = [];
+            var diseases = [];
+            var recommendations_raw = [];
+            var recommendations = [];
 
 
-            var elementName = ['employee_work_id', 'time_in_am', 'time_out_am','time_in_pm', 'time_out_pm', 'total', 'remarks'];
+            //  Not yet working
+ 			$.ajax({
+						async: false,
+						type: 'GET',
+						url: _globalObj._baseURL + '/syncdata' + '?get=medical_findings',
+						success: function(data) {
+							diseases_raw = data;
+							
+						}
+					});
+
+ 			$.ajax({
+						async: false,
+						type: 'GET',
+						url: _globalObj._baseURL + '/syncdata' + '?get=recommendations',
+						success: function(data) {
+							recommendations_raw = data;
+							
+						}
+					});
+
+ 			for (key in diseases_raw) {
+			    if (arrayHasOwnIndex(diseases_raw, key)) {
+			        diseases[key] = diseases_raw[key];
+			    }
+			}
+
+			for (key in recommendations_raw) {
+			    if (arrayHasOwnIndex(recommendations_raw, key)) {
+			        recommendations[key] = recommendations_raw[key];
+			    }
+			}
+
+			diseases.push('None');
+
+            var elementName = ['employee_work_id', 'medical_findings', 'recommendation', 'remarks'];
 
             for (var j=0; j<= rowsToAdd-1; j++) {
 	            
 	            for (var i = 0; i <= elementName.length-1; ++i) {
-		            				
+		            	
 		            	var cell = row.insertCell(i);
-		            			 row.dataset.id= j;
-		            		
+
+		            	if (elementName[i] == 'medical_findings') {
+			            		var element = document.createElement('select');
+			            
+		            		for (var o = 0; o <= diseases.length - 1; o++)     {                
+				                
+		            			if (diseases[o] != undefined) {
+
+			            			opt = document.createElement("option");
+					                opt.value = o;
+
+		            				if (diseases[o] == 'None') {
+		            					opt.value = 'None';	
+		            				}
+
+					                opt.text=diseases[o];
+					                element.appendChild(opt);	
+
+		            				if (diseases[o] == 'None') {
+		            					opt.selected = true;	
+		            				}
+		            			}
+				                
+				            }
+
+
+		            	} else if (elementName[i] == 'recommendation') {
+
+		            		var element = document.createElement('select');
+
+		            		for (var o = 0; o <= recommendations.length - 1; o++)     {                
+				               
+		            			if (recommendations[o] != undefined) {
+		            				opt = document.createElement("option");
+					                opt.value = recommendations[o];
+					                opt.text=recommendations[o];
+					                element.appendChild(opt);	
+		            			}
+				                
+				            }
+		            	} else {
 		            		var element = document.createElement('input');
-		          	  		element.type = "text";
+		            		element.type = "text";
 
 		            		if (elementName[i] == 'employee_work_id'){
 		            			element.className = element.className + 'searcheable';
 		            		}
 			            	
-		            	
+		            	}
 		            	element.name = elementName[i];
 		            	element.dataset.name= elementName[i];
-
-			            	element.classList.add('form-control');
-
-			            	if (elementName[i] == 'time_in_am' || elementName[i] == 'time_out_am' || elementName[i] == 'time_in_pm' ||  elementName[i] == 'time_out_pm') {
-			            		
-			            		// Create div for timepicker
-			            		var timepicker_container = document.createElement('div');
-
-			            		timepicker_container.classList.add('input-group');
-			            		timepicker_container.classList.add('date');
-
-
-			            		timepicker_container.setAttribute('id', elementName[i]);
-								timepicker_container.setAttribute('data-date-format', 'HH:mm');
-
-								// Create a icon container
-                    			var input_group_addon = document.createElement('span'),
-                    			   input_group_addon_icon = document.createElement('span');
-
-                    			   // ICON container class
-                    			   input_group_addon.classList.add('input-group-addon');
-
-                    			   // ICON classes
-                    			   input_group_addon_icon.classList.add('glyphicon');
-                    			   input_group_addon_icon.classList.add('glyphicon-time');
-
-                    			   // Append ICON to ICON container
-                    			   input_group_addon.appendChild(input_group_addon_icon);
-
-	                    			    // Append the element to the div container
-										timepicker_container.appendChild(element);
-
-										// Append the ICON container to div container
-										timepicker_container.appendChild(input_group_addon);
-
-									cell.appendChild(timepicker_container);
-
-			            	} else {
-			            		cell.appendChild(element);	
-			            	}
-			            	
+			            element.classList.add('form-control');
+			            cell.appendChild(element);
 		            	
 			           
 		            };
@@ -413,7 +456,10 @@ var resultContainer = $('.resultContainer');
 	
 		});
 
-		addRow('medical_examination_information_table_body',5);
+		if (__dataToUse.length > 0) {
+			fillBlankTable('medical_examination_information_table_body', __dataToUse, 'id')
+		}
+		// addRow('medical_examination_information_table_body',5);
 		
 
 		$(document).on('keyup', '.searcheable', function(){
@@ -425,7 +471,7 @@ var resultContainer = $('.resultContainer');
 			}
 		});
 
-
+		
 		$(document).on('click', '.resultItem a', function(e) {
 			
 			var id = $(this).parent().data('employee_id'),
@@ -437,66 +483,13 @@ var resultContainer = $('.resultContainer');
             input.next().remove();
             input.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
 
-
-			// input.after('<span class="resultName">' + name +'</span>');
 			$('.resultContainer').remove();
-			console.log($(this).parents('*'));
 			e.preventDefault();
 		});
 
 		// $(document).on('blur', '.searcheable', function() {
 		// 	$('.resultContainer').remove();
 		// });
-
-		$('#time_in_am, #time_out_am, #time_in_pm, #time_out_pm').datetimepicker({
-			pickTime:true,
-			pickDate: false,
-			use24hours: true
-		});
-
-		$(document).on('blur', 'input[name="time_in_pm"], input[name="time_out_pm"],input[name="time_in_am"], input[name="time_out_am"] ', function(e) {
-			if ($(this).val() == "") $(this).val('00:00');
-		});
-
-
-		$(document).on('blur', 'input[name="time_out_pm"]', function(e) {
-
-				// console.log($(this).parent().parent().parent().data('id'));
-				var time_in_am = '00:00',
-				    time_out_am = '00:00',
-				    time_in_pm = '00:00',
-				    time_out_pm = '00:00';
-				 var parent = $(this).parent().parent().parent();   
-				
-				// Get AM Time IN and out
-				time_in_am = __parseTime(parent.find('input[name="time_in_am"]').val());
-				time_out_am = __parseTime(parent.find('input[name="time_out_am"]').val());
-
-				// GET AM Time OUT
-				time_in_pm = __parseTime(parent.find('input[name="time_in_pm"]').val());
-				time_out_pm = __parseTime(parent.find('input[name="time_out_pm"]').val());
-
-
-				var am_in = new Date(2000, 0, 1, time_in_am.hh , time_in_am.mm); // 9:00 AM,
-				var am_out = new Date(2000, 0, 1, time_out_am.hh , time_out_am.mm);
-
-
-				var pm_in = new Date(2000, 0, 1, time_in_pm.hh , time_in_pm.mm); // 9:00 AM,
-				var pm_out = new Date(2000, 0, 1, time_out_pm.hh , time_out_pm.mm);
-
-
-
-
-				var am_time = __getHour(am_out - am_in);
-				var pm_time = __getHour(pm_out - pm_in);
-
-				var total = pm_time + am_time;
-
-				parent.find('input[name="total"]').val(total);		
-			
-			
-		});
-		
 		
 	})()
 </script>

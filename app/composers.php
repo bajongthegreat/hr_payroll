@@ -36,7 +36,7 @@ View::composer(['dtr.partials.bulk','dtr.partials.bulk-edit'], 'Acme\Composers\T
 
 View::composer(['users.edit'], 'Acme\Composers\RolesComposer');
 View::composer(['employees.partial.medical'], 'Acme\Composers\MedicalExaminationsComposer');
-View::composer(['employees.medical_examination.partials.single_add', 'employees.medical_examination.partials.bulk_add'], 'Acme\Composers\MedicalExaminationsComposer@medical_establishments');
+View::composer(['employees.medical_examination.partials.single_add', 'employees.medical_examination.partials.bulk_add','employees.medical_examination.partials.bulk_edit'], 'Acme\Composers\MedicalExaminationsComposer@medical_establishments');
 View::composer(['employees.medical_examination.partials.single_add'], 'Acme\Composers\MedicalExaminationsComposer@medical_findings');
 View::composer(['employees.medical_examination.partials.single_add'], 'Acme\Composers\MedicalExaminationsComposer@recommendations');
 // View::composer(['employees.index'],'Acme\Composers\AccessControlComposer');
@@ -44,6 +44,8 @@ View::composer(['employees.medical_examination.partials.single_add'], 'Acme\Comp
 
 View::composer(['employees.partial.leaves'], 'Acme\Composers\LeavesComposer@leavesObject');
 View::composer(['employees.partial.violations'], 'Acme\Composers\EmployeeViolationsComposer@ViolationsObject');
+View::composer(['employees.partial.violations'], 'Acme\Composers\ViolationComposer@ViolationsOffenseObject');
+
 View::composer([ 'disciplinary_actions.index'], 'Acme\Composers\ViolationComposer@ViolationsObject');
 
 

@@ -15,18 +15,29 @@
 			    <table class="table table-striped">
 				  	<thead>
 				  		
-				  		<th>Violation Code</th>
-				  		<th>Date Violated</th>
-				  		<th>Effectivity Date</th>
+				  		<th width="10%">Code</th>
+				  		<th width="40%">Description</th>
+				  		<th width="5%">Times committed</th>
+				  		<th>Penalty</th>
 				  	</thead>
 
 				  	<tbody>
 
 				  		@foreach($violations as $violation)
+				  		<?php $count = $violation->count; 
+				  			  $penalty_object = $offense->getPenalty($violation->violation_id, $count);
+
+				  			  $punishment_type = $penalty_object['punishment_type'];
+
+				  			  if ($punishment_type == 'suspended') {
+				  			  		$punishment_type = $punishment_type . ' for ' . $penalty_object['days_of_suspension'] . ' days';
+				  			  }
+				  		?>
 				  			<tr>
 				  				<td> {{ $violation->violation_code }}</td>	
-				  				<td> {{ $violation->violation_date }}</td>
-				  				<td> {{ $violation->violation_effectivity_date or '<span class="label label-default">N/A</span>' }} </td>
+				  				<td> {{ $violation->violation_description }}</td>
+				  				<td> {{ $violation->count }} </td>
+				  				<td> <span class="label label-warning">{{ ucfirst($punishment_type) }}</span> </td>
 				  				<td> <a href="{{ action('DisciplinaryActionsController@edit', $violation->id) }}?ref={{ base64_encode(URL::current() . '?v=violations') }}#employee={{ $employee->employee_work_id}}" class="btn btn-default"> <span class="glyphicon glyphicon-pencil" ></span> </a></td>
 				  			</tr>
 				  		@endforeach

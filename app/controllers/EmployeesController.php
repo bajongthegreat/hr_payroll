@@ -294,6 +294,20 @@ class EmployeesController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
+	public function changePosition() {
+		$position_id = Input::get('position_id');
+		$id = Input::get('employee_id');
+
+		 // Warning: Validating for existing id is not yet implemented
+		$id_check = $this->employees->find($id)->first();
+
+		if ($id_check) {
+			return $this->employees->find($id)->update(['position_id' => $position_id]);			
+		}
+
+		return false;
+		
+	}
 	public function update($id)
 	{
 		$user_data = Input::except('_method','_token','department_id');

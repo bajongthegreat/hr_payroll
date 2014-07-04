@@ -65,7 +65,8 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 		}
 
 		$physical_examinations = $physical_examinations->paginate(10);
-		
+
+
 		return View::make('employees.medical_examination.index', compact('physical_examinations'));
 	}
 
@@ -116,6 +117,11 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 			$medical_establishment = Input::get('medical_establishment');
 			$date_conducted = Input::get('date_conducted');
 			
+			$medical_establishment_db = DB::table('medical_establishments')->where('id', '=', $medical_establishment)->pluck('name');
+		
+
+			
+
 			foreach ($decoded_examination_data as $data) {
 				# code...
 				// var_dump((array) $data);
@@ -124,6 +130,7 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 				$medical_findings = ($data->medical_findings == 'None') ? NULL : $data->medical_findings;
 				$recommendation = $data->recommendation;
 				$remarks = $data->remarks;
+				$medical_findings_db = DB::table('diseases')->where('id', '=', $data->medical_findings)->pluck('name');
 
 				$employee_data = ['employee_id' => $id,
 				                  'medical_establishment_id' => $medical_establishment,
@@ -148,13 +155,23 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 					if (!in_array($data->employee_work_id, $jobs)) {
 
 
-
-					$status = $this->physical_examinations->create($employee_data);	
+					$count = $this->physical_examinations->find($id, 'employee_id')
+					 									 ->where('date_conducted', '=', $date_conducted)
+														 ->select(DB::raw('COUNT(*) as count'))->pluck('count');
+					
+					if ($count == 0) {
+						$status = $this->physical_examinations->create($employee_data);		
+					} else {
+						$status = false;
+					}
 					
 
 					$employee_data['employee_id'] = $data->employee_work_id;
-
+					$employee_data['medical_establishment_id'] = $medical_establishment_db;
+					$employee_data['medical_findings_id'] = is_null($medical_findings_db) ? 'N/A' : $medical_findings_db;
+					
 					$json_employee_data[] = $employee_data;
+					
 						// Record job
 						$jobs[] = $data->employee_work_id;
 
@@ -165,8 +182,12 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 						}
 
 					} else {
+					
 						// Save Employee Data
 						$employee_data['employee_id'] = $data->employee_work_id;
+						$employee_data['medical_establishment_id'] = $medical_establishment_db;
+				    	$employee_data['medical_findings_id'] = is_null($medical_findings_db) ? 'N/A' : $medical_findings_db;
+				
 						$json_employee_data[] = $employee_data;
 						
 						$jobs[] = $data->employee_work_id;
@@ -177,14 +198,17 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 				
 			}
 
-			$output = json_encode(['all_jobs' => $jobs,
+
+
+			$output = ['all_jobs' => $jobs,
 								   'failed_jobs' => $failed_jobs,
 			                       'success_jobs' => $success_jobs,
 			                       'success_jobs_count' => count($success_jobs),
 			                       'failed_jobs_count' => count($failed_jobs),
 			                       'duplications' => $duplications,
 			                       'not_included' => $not_included,
-			                       'data' => $json_employee_data])	;
+			                       'data' => $json_employee_data];
+
 
 			 return Response::json($output);
 
@@ -277,8 +301,16 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
 				return  $this->notAccessible();		
 		}
+		$date_conducted = Input::get('date_conducted');
+		$medical_establishment_id = Input::get('medical_establishment_id');
 
-		View::make('employees.medical_examination.edit');
+		$json_data = $this->physical_examinations->find($date_conducted, 'date_conducted')
+		                                         ->where('medical_establishment_id', '=', $medical_establishment_id)
+		                                         ->get()->toArray();
+		 $json = json_encode($json_data);
+
+		 // dd($json_data);
+		return View::make('employees.medical_examination.edit', compact('json'));
 	}
 
 	/**

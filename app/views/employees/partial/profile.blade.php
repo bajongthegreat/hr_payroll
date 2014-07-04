@@ -56,7 +56,7 @@
 					{{ Form::label('name_extension', 'Name Extension ', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ ucfirst($employee->name_extension) }}</p>
+						<p class="form-control-static">{{ (trim($employee->name_extension) != '' ) ? ucfirst($employee->name_extension) : '<span class="label label-default">None</span>' }}</p>
 					</div>
 
 				</div>
@@ -210,7 +210,7 @@
 					{{ Form::label('in_case_of_emergency_name', 'Name', array('class' => 'col-sm-4 text-right')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->in_case_of_emergency_name or '<span class="label label-default">Not specified</span>' }}   </div>
+						<p class="form-control-static">{{ ($employee->in_case_of_emergency_name != '') ? $employee->in_case_of_emergency_name : '<span class="label label-default">Not specified</span>' }}   </div>
 					</div>
 
 				</div>
@@ -224,7 +224,7 @@
 					{{ Form::label('in_case_of_emergency_contact', 'Contact Number', array('class' => 'col-sm-4 text-right', 'required')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{ $employee->in_case_of_emergency_contact or '<span class="label label-default">Not specified</span>'}}   </div>
+						<p class="form-control-static">{{ $employee->in_case_of_emergency_contact != '' ? $employee->in_case_of_emergency_contact : '<span class="label label-default">Not specified</span>'}}   </div>
 					</div>
 
 				</div>
@@ -290,7 +290,7 @@
 					{{ Form::label('children_count', 'Number of Children', array('class' => 'col-sm-4 text-right', 'required')) }}
 
 					<div class="col-sm-4">
-						<p class="form-control-static">{{  (strlen($employee->children_count) > 0) ?  $employee->children_count : '<span class="label label-default">No child</span>'}}   </div>
+						<p class="form-control-static">{{  ($employee->children_count > 0 || $employee->children_count != '') ?  $employee->children_count : '<span class="label label-default">No child</span>'}}   </div>
 					</div>
 
 				</div>		
@@ -397,64 +397,7 @@
 						</div>
 				</div> <!-- End of Row -->
 
-				<div class="row">
 
-						<div class="form-group">
-									
-							{{ Form::label('sss_id', 'Salary', array('class' => 'col-sm-4 text-right')) }}
-
-							<div class="col-sm-4">
-								<p class="form-control-static">  {{ (isset($employee->salary) ) ? 'PHP ' . number_format( $employee->salary, 2) : '<span class="label label-default">Not specified</span>'}}  </div>
-
-							
-
-						</div>
-				</div> <!-- End of Row -->
-
-				<hr>	<!-- Seperator -->
-
-		    <div class="row">
-
-						<div class="form-group">
-									
-							{{ Form::label('sss_id', 'Annual PE', array('class' => 'col-sm-4 text-right')) }}
-
-							<div class="col-sm-4">
-								<p class="form-control-static"> {{ ($employee->annual_pe == 1) ? '<span class="label label-success">OK</span>' : '<span class="label label-default">None</span>' }}  </div>
-
-							
-
-						</div>
-				</div> <!-- End of Row -->
-
-			<div class="row">
-
-						<div class="form-group">
-									
-							{{ Form::label('sss_id', 'P.P.E Issuance', array('class' => 'col-sm-4 text-right')) }}
-
-							<div class="col-sm-4">
-						
-									<p class="form-control-static"> {{ ($employee->ppe_issuance == 1) ? '<span class="label label-success">OK</span>' : '<span class="label label-default">None</span>' }}  </div>
-
-							
-
-							</div>
-				</div> <!-- End of Row -->
-				
-				<div class="row">
-
-						<div class="form-group">
-									
-							{{ Form::label('sss_id', 'With R-1A', array('class' => 'col-sm-4 text-right')) }}
-
-							<div class="col-sm-4">
-								<p class="form-control-static"> {{ ($employee->with_r1a == 1) ?  '<span class="label label-success">Reported</span>' : '<span class="label label-default">None</span>' }}   </div>
-
-							
-
-						</div>
-				</div> <!-- End of Row -->
 
 				<hr>	<!-- Seperator -->
 

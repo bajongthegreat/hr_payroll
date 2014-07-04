@@ -68,7 +68,7 @@
 					{{ Form::label('name_extension', 'Name Extension', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-2">
-						{{ Form::select('name_extension', ['None',  'Sr', 'Jr'	,'III', 'IV','V','VI'],Input::old('name_extension'), array('class' => 'form-control') ) }}
+						{{ Form::select('name_extension', ['None' => 'None', 'Sr' => 'Sr','Jr' => 'Jr'	, 'III' => 'III', 'IV' => 'IV','V' => 'V', 'VI' => 'VI'],Input::old('name_extension'), array('class' => 'form-control') ) }}
 					</div>
 
 				</div>
@@ -83,8 +83,8 @@
 					<div class="form-group">
 				{{ Form::label('birthdate', 'Birthdate', array('class' => 'col-sm-2 text-right')) }}
 
-				 <div class='input-group date col-sm-4' id='birthdate' data-date-format="YYYY-MM-DD">
-				 	{{ Form::text('birthdate', Input::old('birthdate'), array('class' => 'form-control date', 'data-date-format' => "YYYY-MM-DD", 'required') ) }}
+				 <div class='input-group date col-sm-4' id='birth_date' data-date-format="YYYY-MM-DD">
+				 	{{ Form::text('birthdate', Input::old('birthdate'), array('class' => 'form-control', 'data-date-format' => "YYYY-MM-DD", 'required') ) }}
                     <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
                     </span>
                 </div>
@@ -177,7 +177,7 @@
 					{{ Form::label('in_case_of_emergency_name', 'Name', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('in_case_of_emergency_name', Input::old('in_case_of_emergency_name'), array('class' => 'form-control', 'required') ) }}
+						{{ Form::text('in_case_of_emergency_name', Input::old('in_case_of_emergency_name'), array('class' => 'form-control') ) }}
 					</div>
 
 				</div>
@@ -190,7 +190,7 @@
 					{{ Form::label('in_case_of_emergency_contact', 'Contact Number', array('class' => 'col-sm-2 text-right', 'required')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('in_case_of_emergency_contact', Input::old('in_case_of_emergency_contact'), array('class' => 'form-control', 'required') ) }}
+						{{ Form::text('in_case_of_emergency_contact', Input::old('in_case_of_emergency_contact'), array('class' => 'form-control') ) }}
 					</div>
 
 				</div>
@@ -221,7 +221,7 @@
 					{{ Form::label('mothers_name', 'Mother\'s Name', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('mothers_name', Input::old('mothers_name'), array('class' => 'form-control', 'required') ) }}
+						{{ Form::text('mothers_name', Input::old('mothers_name'), array('class' => 'form-control') ) }}
 					</div>
 
 				</div>
@@ -231,10 +231,10 @@
 
 				<div class="form-group">
 							
-					{{ Form::label('fathers_name', 'Father\'s Name', array('class' => 'col-sm-2 text-right', 'required')) }}
+					{{ Form::label('fathers_name', 'Father\'s Name', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('fathers_name', Input::old('fathers_name'), array('class' => 'form-control', 'required') ) }}
+						{{ Form::text('fathers_name', Input::old('fathers_name'), array('class' => 'form-control') ) }}
 					</div>
 
 				</div>

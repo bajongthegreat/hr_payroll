@@ -118,6 +118,12 @@ class BackendServiceProvider extends ServiceProvider
 		    'Acme\Repositories\Violations\ViolationRepository'
 		);	
 
+		// Bind the ViolationOffenseInterface into the class ViolationOffenseRepository
+		$this->app->bind(
+			'Acme\Repositories\Violations\Offense\ViolationOffenseRepositoryInterface',
+		    'Acme\Repositories\Violations\Offense\ViolationOffenseRepository'
+		);	
+
 		// Bind the CompanyInterface into the class CompanyRepository
 		$this->app->bind(
 			'Acme\Repositories\Employee\DisciplinaryAction\DisciplinaryActionRepositoryInterface',
@@ -130,17 +136,18 @@ class BackendServiceProvider extends ServiceProvider
 		    'Acme\Repositories\Payroll\DailyTimeRecord\DailyTimeRecordRepository'
 		);
 
-		// Bind the CompanyInterface into the class CompanyRepository
+		// Bind the RatesInterface into the class RatesRepository
 		$this->app->bind(
 			'Acme\Repositories\Payroll\Rates\RatesRepositoryInterface',
 		    'Acme\Repositories\Payroll\Rates\RatesRepository'
 		);	
 
-				// Bind the CompanyInterface into the class CompanyRepository
+		// Bind the PayrollInterface into the class PayrollRepository
 		$this->app->bind(
 			'Acme\Repositories\Payroll\PayrollRepositoryInterface',
 		    'Acme\Repositories\Payroll\PayrollRepository'
 		);	
+
 
 
 	}

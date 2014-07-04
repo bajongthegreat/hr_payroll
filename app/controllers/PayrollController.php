@@ -39,7 +39,7 @@ class PayrollController extends \BaseController {
 		$end_date = Input::get('end_date');
 
 		$company_id = (int) Input::get('company_id');
-
+		$company = '';
 		if ($start_date == '' || $end_date == '') {
 
 		} else {
@@ -125,17 +125,16 @@ class PayrollController extends \BaseController {
 			
 		
 			// echo '<pre>';
-			// var_dump($payrolldata);
-
+			
 			if (Request::ajax() || Input::get('output') == 'json'){
 				$payrolldata = $this->payroll->getNetPay($payroll_data_container, ['start' => $start_date,
-					                                                 			   'end' => $end_date]);
+					                                                 			   'end' => $end_date],true, $company);
 
 				return Response::json( $payrolldata );	
 			} elseif (Input::get('output') == 'excel') {
 						$payrolldata = $this->payroll->getNetPay($payroll_data_container, ['start' => $start_date,
-					                                                 			   'end' => $end_date], true);
-				return $this->deliverExcel( $payrolldata, $start_date, $end_date);
+					                                                 			   'end' => $end_date], true, $company);
+				return $this->deliverExcel( $payrolldata['data'], $start_date, $end_date);
 			}
 		}
 
@@ -164,6 +163,10 @@ class PayrollController extends \BaseController {
 
 	/** Include PHPExcel */
 	// require_once dirname(__FILE__) . '/../Classes/PHPExcel.php';
+
+	if (!(isDateValid($start) && isDateValid($end))) {
+		return Redirect::action('PayrollController@index')->with('message', 'Invalid date.');
+	}
 
 	$start = new DateTime($start);
 	$end = new DateTime($end);
@@ -327,6 +330,10 @@ class PayrollController extends \BaseController {
 
 	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 	 return $objWriter->save('php://output');
+	}
+
+	public function history() {
+		return View::make('payroll.history');
 	}
 
 	/**

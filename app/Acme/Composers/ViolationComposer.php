@@ -1,13 +1,15 @@
 <?php namespace Acme\Composers;
 
 use Acme\Repositories\Violations\ViolationRepositoryInterface;
-
+use Acme\Repositories\Violations\Offense\ViolationOffenseRepositoryInterface;
 class ViolationComposer {
 
 	protected $violations;
+	protected $offenses;
 
-	public function __construct( ViolationRepositoryInterface $violations ) {
+	public function __construct( ViolationRepositoryInterface $violations, ViolationOffenseRepositoryInterface $offenses ) {
 		$this->violations = $violations;
+		$this->offenses = $offenses;
 	}
 
 	public function compose($view) 
@@ -26,8 +28,8 @@ class ViolationComposer {
 		$view->with('violations', $this->violations);
 	}
 
-	public function ViolationsObject2($view) {
-		$view->with('v_obj', $this->violations);
+	public function ViolationsOffenseObject($view) {
+		$view->with('offense', $this->offenses);
 	}
 
 }

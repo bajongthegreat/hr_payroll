@@ -61,7 +61,7 @@
   				<td class="__more_violations_parent" data-medical_establishment="{{ $pe->medical_establishment_id }}" data-date_conducted="{{ $pe->date_conducted }}" data-status="closed"  > <span class="label label-default"><span class="glyphicon glyphicon-list"></span>  View Employees Included</span></td>
 				<td> {{ $pe->establishment }} </td>
 				<td> {{ $date_conducted->format('F d, Y')  }} </td>
-				<td> <a href="{{ action('EmployeesMedicalExaminationsController@edit', $pe->id) }}">Edit</a> </td>
+				<td> <a href="{{ action('EmployeesMedicalExaminationsController@edit', $pe->id) }}?date_conducted={{$pe->date_conducted}}&medical_establishment_id={{$pe->medical_establishment_id}}">Edit</a> </td>
 			</tr>
 		@endforeach
 
@@ -77,13 +77,24 @@
 
 @section('scripts')
 <script type="text/javascript">
+	$(document).on('keydown', function(e){
+		if (e.which == 27) {
+			
+			// Toggle all tables that are shown
+			$.each($('.__more_violations_parent'), function() {
+				if ($(this).data('status') == 'open') {
+					$(this).trigger('click');
+				}	
+			});
+		}
+	});
 	$('.__more_violations_parent').on('click', function(e) {
 		var URI = '/employees/medical_examinations';
 		var self = $(this);
 
 		var date_conducted = self.data('date_conducted');
 		var medical_establishment_id = self.data('medical_establishment');
-		console.log(medical_establishment_id);
+		
 
 		if ($(this).data('status') == 'closed') {
 			
@@ -107,7 +118,7 @@
 					    tr_td_open_table_container = '<td colspan="7">',
 					    tr_td_close_table_container = '</td>';
 
-					var inner_table_open = '<table class="table">',
+					var inner_table_open = '<table class="table table_' + date_conducted +  medical_establishment_id+'">',
 					    inner_table_close = '</table>';
 
 					var inner_table_headers_open = '<thead>',
@@ -134,10 +145,10 @@
 							console.log(data[key])
 							inner_table_data_container += "<tr>";
 
-								days_suspended = (data[key].days_of_suspension == null) ? 'N/A' : data[key].days_of_suspension;
+								medical_findings = (data[key].medical_findings == null) ? 'N/A' : data[key].medical_findings;
 								
 								inner_table_data_container += "<td>" + data[key].lastname + ', ' + data[key].firstname + ' ' + data[key].middlename +"</td>";
-								inner_table_data_container += "<td>" + data[key].medical_findings +"</td>";
+								inner_table_data_container += "<td>" + medical_findings +"</td>";
 								inner_table_data_container += "<td>" + data[key].recommendations +"</td>";
 								inner_table_data_container += "<td>" + data[key].remarks +"</td>";
 								// inner_table_data_container += '<td><a href="' + _globalObj._baseURL + URI + '/'  + data[key].id + '/edit' + '" class="btn btn-default">Edit</a></td>';
@@ -157,6 +168,8 @@
 
 
 				}
+			}).done(function() {
+				$('.table_' + date_conducted + medical_establishment_id).dataTable();
 			});
 			
 			// Append the data

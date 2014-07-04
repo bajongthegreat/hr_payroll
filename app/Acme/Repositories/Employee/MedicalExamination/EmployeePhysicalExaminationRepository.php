@@ -23,6 +23,7 @@ class EmployeePhysicalExaminationRepository extends RepositoryAbstract implement
 	 public function findAllExaminationsWithEmployee($src) {
 	 	$table = $this->table;
 	 	return DB::table($this->table)
+	 	    ->orWhere("$table.date_conducted", 'LIKE', "%$src%")
 	 		->orWhere('employees.lastname', 'LIKE', "%$src%")
 	 		->orWhere('employees.firstname', 'LIKE',  "%$src%")
 	 		->orWhere('employees.middlename', 'LIKE', "%$src%")
@@ -35,7 +36,8 @@ class EmployeePhysicalExaminationRepository extends RepositoryAbstract implement
             ->select("employees.lastname", "employees.firstname", "employees.middlename", 
             	     "employees.employee_work_id", "$table.medical_findings_id", "$table.date_conducted",
             	     "$table.recommendations", "$table.medical_establishment_id","$table.remarks", 'medical_establishments.name as establishment',
-            	     'diseases.name as medical_findings')
+            	     'diseases.name as medical_findings', "$table.id")
+            ->groupBy("$table.date_conducted")
             ->orderBy("$table.date_conducted", 'DESC');
 	 }
 
