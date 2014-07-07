@@ -32,7 +32,7 @@ class SSS_loansController extends BaseController {
 	 */
 	public function index()
 	{
-		$loans = $this->sss_loans->all();
+		$loans = $this->sss_loans->all_with_employee();
 
         return View::make('sss_loans.index', compact('loans'));
 	}

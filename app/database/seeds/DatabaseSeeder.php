@@ -40,7 +40,9 @@ class DatabaseSeeder extends Seeder {
 		$this->call('Sss_loansTableSeeder');
 		$this->call('RequirementsTableSeeder');
 		$this->call('StageprocessesTableSeeder');
-	
+			$this->call('DiseasesTableSeeder');
+		$this->call('ViolationsTableSeeder');
+		
 	}
 
 

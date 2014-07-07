@@ -2,19 +2,692 @@
 
 // Composer: "fzaninotto/faker": "v1.3.0"
 use Faker\Factory as Faker;
+use Carbon\Carbon;
 
 class ViolationsTableSeeder extends Seeder {
 
 	public function run()
 	{
-		$faker = Faker::create();
+		
+		// Uncomment the below to wipe the table clean before populating
+		DB::table('violations')->truncate();
+		DB::table('violations_offenses')->truncate();
 
-		foreach(range(1, 10) as $index)
-		{
-			Violation::create([
 
-			]);
-		}
+		$violations = array(
+			['id' => 1,
+			 'code' => '1.1',
+			 'description' => 'Absence without permission on any calendar day including Sunday, whether singly or consecutively, without reasonable excuse, except on legal holdiays and on the employee\'s established rest days, within one year period.',
+			 'created_at' => Carbon::now(),
+			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 2,
+			 'code' => '1.2',
+			 'description' => 'Unexcused tardiness within one year period.',
+			 'created_at' => Carbon::now(),
+			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 3,
+			 'code' => '1.3',
+			 'description' => 'Wasting time or loitering during working hours without permission within one year period.',
+			 'created_at' => Carbon::now(),
+			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 4,
+			 'code' => '1.4',
+			 'description' => 'Abandoning station without permission',
+			 'created_at' => Carbon::now(),
+			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 5,
+			 'code' => '2.1',
+			 'description' => 'Deliberately slowing down work or restricting output or engaging in sabotage.',
+			 'created_at' => Carbon::now(),
+			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 6,
+			 'code' => '2.2.a',
+			 'description' => 'Sleeping on the job, within one year period. (Management staff)',
+			 'created_at' => Carbon::now(),
+			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 7,
+			 'code' => '2.2.b',
+			 'description' => 'Sleeping on the job, within one year period. (Other employees)',
+			 'created_at' => Carbon::now(),
+			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 8,
+			 			 'code' => '2.3.a',
+			 			 'description' => '(With mitigating circumstances) Insubordination or willful disobedience of reasonable requests of Supervisor or Management staff, including refusal to accept work assignments.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 9,
+			 			 'code' => '2.3.b',
+			 			 'description' => '(Without mitigating circumstances) Insubordination or willful disobedience of reasonable requests of Supervisor or Management staff, including refusal to accept work assignments.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 10,
+			 			 'code' => '2.4',
+			 			 'description' => 'Reporting for work while obviously intoxicated or under influence of liquor.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 11,
+			 			 'code' => '2.5.a',
+			 			 'description' => 'Drinking any alcohol beverages, unless allowed by the Client-Company or Cooperative, within a five-year period. (On client company or cooperative property or premises during working hours)',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 12,
+			 			 'code' => '2.5.b',
+			 			 'description' => 'Drinking any alcohol beverages, unless allowed by the Client-Company or Cooperative, within a five-year period. (On client company property or premises or on client company\'s time )',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 13,
+			 			 'code' => '2.6.a',
+			 			 'description' => '(On client-company or cooperative property or premises or during working hours) Immoral behavior to include lascivious action and sexual harassment is defined as any unwelcomed or  uninvited sexual advances, requests for sexual favors and other verbal or physical conduct of sexual nature which unreasonably interfere with the individual\'s performance at work or creates an intimidating, hostile or offensive working environment.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 14,
+			 			 'code' => '2.6.b',
+			 			 'description' => '(On client-company or cooperative property or premises and on Coop/client company time) Immoral behavior to include lascivious action and sexual harassment is defined as any unwelcomed or  uninvited sexual advances, requests for sexual favors and other verbal or physical conduct of sexual nature which unreasonably interfere with the individual\'s performance at work or creates an intimidating, hostile or offensive working environment.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 15,
+			 			 'code' => '2.7.a',
+			 			 'description' => '(On client-company or cooperative property or premises or during working hours) Gambling to include betting, or collecting bets in raffle or lottery, within a five-year period.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 16,
+			 			 'code' => '2.7.b',
+			 			 'description' => '(On client-company or cooperative property or premises and on Coop/client company time) Gambling to include betting, or collecting bets in raffle or lottery, within a five-year period.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 17,
+			 			 'code' => '2.8',
+			 			 'description' => 'Use of profane or abusive language including spreading of false rumors or malicious statements against co-employee and cooperative itself in general.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 18,
+			 			 'code' => '2.9',
+			 			 'description' => 'Distributing written or printed matter of any description on Client-company / Coop premises unless specifically authorized by Management / Officers, within one year period.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 19,
+			 			 'code' => '2.10',
+			 			 'description' => 'Posting on or removal of any material from bulletin boards on the cliet company\'s / Cooperative\'s property at any time unless specifically authorized by Management, within one year period.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 20,
+			 			 'code' => '2.11.a',
+			 			 'description' => '(During working hours and on client company or on Cooperative premises) Fighting or provoking or instigating a fght by fisticuffs, within one year period.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 21,
+			 			 'code' => '2.11.b',
+			 			 'description' => '(During working hours and /or on client company or on Cooperative premises, with the use of deadly weapon) Fighting or provoking or instigating a fght by fisticuffs, within one year period.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 22,
+			 			 'code' => '2.12',
+			 			 'description' => 'Threatening, intimidating, coercing or interfering with or attempting bodily to or assaulting fellow employees insofar as such actions interfere with working relationship.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 23,
+			 			 'code' => '2.13',
+			 			 'description' => 'Vending, collecting payments of debts or soliciting or collecting contribution for any purpose whatsoever, at anytime in Client Company\'s Cooperative\'s premises, unless authorized by management, within one year period. ',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 24,
+			 			 'code' => '2.14',
+			 			 'description' => 'Formally accused in court for a crime without bail, or sentenced by final judgement to imprisonment for more than six months.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 25,
+			 			 'code' => '2.15.a',
+			 			 'description' => 'Engaging in horseplay, scuffling or throwing things, while at work or in Client-Company / Cooperative premises, within one year period. (Not resulting in damage to the client company/Cooperative property or injury to others) ',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 26,
+			 			 'code' => '2.15.b',
+			 			 'description' => 'Engaging in horseplay, scuffling or throwing things, while at work or in Client-Company / Cooperative premises, within one year period. (Resulting in damage to the client company/Cooperative property or injury to others) ',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 27,
+			 			 'code' => '2.16',
+			 			 'description' => 'Deliberately defacing or destroying Client Company/ Cooperative property to include any act of vandalism.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 28,
+			 			 'code' => '2.17',
+			 			 'description' => 'Possession or use of prohibited drugs during working hours and/or on Client-Company / Cooperative premises.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 29,
+			 			 'code' => '2.18',
+			 			 'description' => 'Engaging in kickership with Client company\'s regular planters and bringing with them their own kicker planters in the work place within one year period. ',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 30,
+			 			 'code' => '3.1',
+			 			 'description' => 'Making false statements or deliberately lying during formal investigation.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ], 
+			 ['id' => 31,
+			 			 'code' => '3.2.a',
+			 			 'description' => '(With mitigating circumstances) Falsifying and/or misrepresentation of reports or fraudulently altering personnel/working efficiencies or Cooperative records.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 32,
+			 			 'code' => '3.2.b',
+			 			 'description' => '(Without mitigating circumstances) Falsifying and/or misrepresentation of reports or fraudulently altering personnel/working efficiencies or Cooperative records.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 33,
+			 			 'code' => '3.3',
+			 			 'description' => 'Falsifying any signature on a Cooperative check/contracts and Daily time reports.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 34,
+			 			 'code' => '3.4',
+			 			 'description' => 'Knowingly filling daily time report of another employee having, the same records filled in by another employees or unauthorized altering of a time or daily time report or reporting names which are not actually present and padding efficiencies/ payroll.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ], 
+			 ['id' => 35,
+			 			 'code' => '3.5',
+			 			 'description' => 'Permitting another to use your ID card; using another ID card; altering/tampering ID card.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 36,
+			 			 'code' => '3.6.a',
+			 			 'description' => '(With mitigating circumstances) Stealing of any sort includng theft or removal from premses, without proper authorization, of any Client-Company/ Cooperative property or property of any employee without latter\'s  consent.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ],
+			 ['id' => 37,
+			 			 'code' => '3.6.b',
+			 			 'description' => '(Without mitigating circumstances) Stealing of any sort includng theft or removal from premses, without proper authorization, of any Client-Company/ Cooperative property or property of any employee without latter\'s  consent.',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ], 
+			 ['id' => 38,
+			 			 'code' => '3.7.a',
+			 			 'description' => 'All other acts of dishonesty (With mitigating circumstances)',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ], 
+			 ['id' => 39,
+			 			 'code' => '3.7.b',
+			 			 'description' => 'All other acts of dishonesty (Without mitigating circumstances)',
+			 			 'created_at' => Carbon::now(),
+			 			 'updated_at' => Carbon::now(),
+			 ]
+			 			 
+
+		);
+
+		$offenses = [
+
+					 [ 'offense_number' => 1,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 1,
+			           'punishment_type' => 'warning',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 3,
+			           'violation_id' => 1,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => 6,
+			           'violation_id' => 1,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 4,
+			           'days_of_suspension' => 12,
+			           'violation_id' => 1,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 5,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 1,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ], // ======================================== 2
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 2,
+			           'punishment_type' => 'warning',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 1,
+			           'violation_id' => 2,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => 2,
+			           'violation_id' => 2,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 4,
+			           'days_of_suspension' => 2,
+			           'violation_id' => 2,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 5,
+			           'days_of_suspension' => 2,
+			           'violation_id' => 2,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ], // ========================== 3
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 6,
+			           'violation_id' => 3,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 12,
+			           'violation_id' => 3,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 3,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ], // ====================== 4
+			         			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 6,
+			           'violation_id' => 4,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 12,
+			           'violation_id' => 4,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 4,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ], // ============= 5
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 5,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ], // ============= 6
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 12,
+			           'violation_id' => 6,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 6,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ], // ============= 7
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 6,
+			           'violation_id' => 7,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 12,
+			           'violation_id' => 7,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 7,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],// ============= 8
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 12,
+			           'violation_id' => 8,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 8,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],//============== 9
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 9,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ], // ============= 10
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 6,
+			           'violation_id' => 10,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 12,
+			           'violation_id' =>10,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 10,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],// ============= 11
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 6,
+			           'violation_id' => 11,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 12,
+			           'violation_id' =>11,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 11,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ], // 12
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 12,
+			           'violation_id' =>12,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 12,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],// ============= 13 (2.6 a)
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 6,
+			           'violation_id' => 13,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 12,
+			           'violation_id' =>13,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 13,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],// ============= 14 (2.6 b)
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 12,
+			           'violation_id' =>14,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 14,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],// ============= 15 (2.7 a)
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 6,
+			           'violation_id' => 15,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 12,
+			           'violation_id' =>15,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 15,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],// ============= 16 (2.7 b)
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 12,
+			           'violation_id' =>16,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 16,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],// ============= 17 (2.8 a)
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 6,
+			           'violation_id' => 17,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 12,
+			           'violation_id' =>17,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 17,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ], // ============ 18
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 18,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ], // ============ 19
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 19,
+			           'punishment_type' => 'warning',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 3,
+			           'violation_id' => 19,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => 6,
+			           'violation_id' => 19,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 4,
+			           'days_of_suspension' => 12,
+			           'violation_id' => 19,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 5,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 19,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],// ============= 20 2.11
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 12,
+			           'violation_id' =>20,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 20,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],// ============= 21
+
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 21,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ], // 22
+			         [ 'offense_number' => 1,
+			           'days_of_suspension' => 6,
+			           'violation_id' => 22,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 2,
+			           'days_of_suspension' => 12,
+			           'violation_id' => 22,
+			           'punishment_type' => 'suspended',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ],
+			         [ 'offense_number' => 3,
+			           'days_of_suspension' => NULL,
+			           'violation_id' => 22,
+			           'punishment_type' => 'discharged',
+			           'created_at' => Carbon::now(),
+			           'updated_at' => Carbon::now()
+			         ]
+
+			         ];
+
+		// Uncomment the below to run the seeder
+		DB::table('violations')->insert($violations);
+		DB::table('violations_offenses')->insert($offenses);
 	}
 
 }

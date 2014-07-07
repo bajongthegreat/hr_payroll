@@ -31,4 +31,11 @@ class EmployeeRequirementHelper {
 		return $this->employee_requirement->find($requirement_id, 'requirement_id');
 	}
 
+	public function datePassed($requirement_id, $employee_id) {
+		$employee_requirement = $this->employee_requirement->find($requirement_id, 'requirement_id')->where('employee_id','=', $employee_id)->pluck('date');
+		
+
+		return $employee_requirement;
+		
+	}
 }

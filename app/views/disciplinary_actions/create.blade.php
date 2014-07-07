@@ -22,10 +22,10 @@
 				    <h3 class="panel-title"><h4>Violation Information</h4></h3>
 				  </div>
 				  <div class="panel-body">
-
+				 
 				  	<!--  Medical Establishment creation form -->
 				  	@include('partials.disciplinary_actions.form')
-				 	
+				 	<input type="hidden" name="employee_work_id" class="hiddenWorkID" value="{{ Input::get('workid') }}">
 				 	<input type="hidden" name="employee_id" class="hiddenID">
 				 </div>  <!-- End of Body -->
 		</div> <!-- End of Panel -->
@@ -33,6 +33,9 @@
 		{{ Form::hidden('ref', Input::get('ref'))}}
 		@endif
 
+		@if (Session::has('message'))
+		<div class="alert alert-info" id="alert"> {{ Session::get('message') }} </div>
+		@endif
 		<!-- Form Buttons -->
 		<div class="container" id="buttons">
 				<div class="form-group">
@@ -73,6 +76,7 @@
            	var resultContainer = $('.resultContainer');
            	var hiddenID = $('.hiddenID');
 
+           	
 </script>
 @stop
 

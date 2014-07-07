@@ -27,6 +27,8 @@
 				  	@include('partials.disciplinary_actions.form')
 				 	
 				 	<input type="hidden" name="employee_id" class="hiddenID">
+				 	<input type="hidden" name="old_violation_id" class="old_violation_id" value="{{ $employee_violation->id }}">
+
 				 </div>  <!-- End of Body -->
 		</div> <!-- End of Panel -->
 

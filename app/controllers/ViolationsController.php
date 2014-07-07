@@ -64,6 +64,56 @@ class ViolationsController extends \BaseController {
 				$field = Input::get('field');
 
 				$violations = $this->violations->find($src, $field)->get()->first();
+				// var_dump($violations->toArray());
+				$offenses = $this->violations_offenses->find($violations->id, 'violation_id' )->get();
+				$violations->offenses = $offenses->toArray();
+
+				// Get how many times an employee violated a specified violation id 
+				if (Input::has('employee_id')) {
+					$times_committed = DB::table('disciplinary_actions')->where('violation_id', '=',$violations->id)
+					                                 ->where('employee_id', '=', (int) Input::get('employee_id'))->count();
+				} else {
+					$times_committed = 0;
+				}
+
+
+				 $offense_count = DB::table('violations_offenses')->where('violation_id', '=', $violations->id)->count();
+
+
+
+				$is_warning = false;
+				$is_last = false;
+				$current_is_warning = false;
+
+				// Next offense
+				if ($times_committed < $offense_count) {
+					$punishment_type = $this->violations_offenses->find($violations->id, 'violation_id')->where('offense_number', '=', $times_committed + 1)->pluck('punishment_type');
+
+						if ($punishment_type != 'warning') {
+							$is_warning = false;
+						} else {
+							$is_warning = true;
+						}
+				} else {
+					$is_last = true;
+					$is_warning = true;
+				}
+
+				
+
+				$current_punishment = $this->violations_offenses->find($violations->id, 'violation_id')->where('offense_number', '=', ($times_committed == 0) ? $times_committed + 1 : $times_committed )->pluck('punishment_type');
+
+					if ($current_punishment != 'warning') {
+						$current_is_warning = false;
+					} else  $current_is_warning = true;
+
+		
+
+				$violations->times_committed = $times_committed;
+				$violations->is_current_a_warning = $current_is_warning;
+				$violations->is_next_a_warning = $is_warning;
+				$violations->is_last = $is_last;
+
 			} else {
 				$violations = $this->violations->findLike($src, $this->db_fields_to_use);
 			}

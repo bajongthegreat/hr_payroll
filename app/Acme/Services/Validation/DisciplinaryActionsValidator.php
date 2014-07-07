@@ -9,6 +9,7 @@ class DisciplinaryActionsValidator extends Validator
 						);
 
 	static $create_rules = array(
+							'violation_id' => 'required|numeric',
 							'employee_id' => 'required|numeric',
 							'violation_date' => 'required|date',
 							'violation_effectivity_date' => 'date'

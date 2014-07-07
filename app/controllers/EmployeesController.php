@@ -378,7 +378,11 @@ class EmployeesController extends BaseController {
 
 		// Separator is present inside the ID i.e [2965-1029]
 		if (strpos($id, $separator) != false) {
-			$employee = $this->employees->find($id, $column)->get();
+			$employee = $this->employees->find($id, $column)
+							 ->leftJoin('positions', 'positions.id', '=', 'employees.position_id')
+							 ->leftJoin('departments', 'departments.id', '=', 'positions.department_id')
+							 ->select('employees.*','positions.name as position_name', 'departments.name as department_name')
+							 ->get();
 		} else {
 			$employee = $this->employees->find($id)->get();
 		}

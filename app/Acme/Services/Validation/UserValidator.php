@@ -17,6 +17,7 @@ class UserValidator extends Validator
 
 	static $update_rules = array(
 							'email' => 'email|required|unique:users',
+							'password' => 'required',
 							'password_confirmation' => 'required_with:password'
 						);
 

@@ -95,10 +95,39 @@ class DisciplinaryActionsController extends \BaseController {
 		}
 
 		$post_data = Input::only('violation_id', 'violation_date','violation_effectivity_date','employee_id');
-
+		$work_id = Input::get('employee_work_id');
 		// Validate Inputs
 		if (!$this->validator->validate($post_data, NULL)) {
 			return Redirect::back()->withInput()->withErrors($this->validator->errors());
+		}
+
+		if ($post_data['violation_id'] == 0) {
+			return Redirect::action('DisciplinaryActionsController@create', ['workid' => $work_id,'#employee='. $work_id])
+							->withInput()->withErrors('Please select violation!');			
+		}
+
+		$violation_count = $this->disciplinaryactions
+		                        ->find($post_data['employee_id'], 'employee_id')
+		                        ->where('violation_id', '=', $post_data['violation_id'])
+		                        ->count();
+
+		 $offense_count = DB::table('violations_offenses')->where('violation_id', '=', $post_data['violation_id'])->count();
+
+		// Limit violation
+		if ($violation_count >= $offense_count) {
+			
+			$message = 'Maximum of ' . $offense_count .' attempts of this violation is allowed.';
+			
+
+			// dd($work_id);
+
+			if (Request::ajax()) {
+				return Response::json(['message' => $message]);
+			} else {
+				Session::flash('message', $message);
+				return Redirect::action('DisciplinaryActionsController@create', ['workid' => $work_id,'#employee='. $work_id])
+							->withInput();			
+			}
 		}
 
 		if ($post_data['violation_effectivity_date'] == '') unset($post_data['violation_effectivity_date']);

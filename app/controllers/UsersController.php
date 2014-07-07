@@ -178,12 +178,21 @@ class UsersController extends BaseController {
 		);
 
 
+
 		// Check if we can update the user with an ID specified
 		if (!$this->validator->isValidForUpdate($id, $user_post, ['messages' => $messages, 'current_key' => 'email']))
 		{
 			return Redirect::back()->withInput()->withErrors( $this->validator->errors()  );
 		}	
-			
+		
+
+		if ($change_password) {
+			if ( isset($user_post['password']) && isset($user_post['password_confirmation']) ) {
+				if (trim($user_post['password']) != trim($user_post['password_confirmation'])) {
+					return Redirect::back()->withInput()->with('errors', ['Password confirmation dont match.']);  
+				}	
+			}
+		}	
 		// Update the user
 		$this->users->_update($id, $user_data, array('change_password' => $change_password));
 		

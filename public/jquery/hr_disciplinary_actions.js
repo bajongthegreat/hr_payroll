@@ -1,3 +1,17 @@
+function ordinal_suffix_of(i) {
+    var j = i % 10,
+        k = i % 100;
+    if (j == 1 && k != 11) {
+        return i + "st";
+    }
+    if (j == 2 && k != 12) {
+        return i + "nd";
+    }
+    if (j == 3 && k != 13) {
+        return i + "rd";
+    }
+    return i + "th";
+}
 
 			$('.resultContainer').hide();
 
@@ -102,6 +116,7 @@
                                                 $('#employee_name').html(name);
                                                 $('#date_hired').html(date_hired);
                                                 $('#position').html(position);
+                                                $('.sss_id').html(data[0].sss_id);
                                                 
                                                 // Set ID
                                                 hiddenID.val(realID);
@@ -180,11 +195,48 @@
                      $('#violation_date').data("DateTimePicker").setMaxDate(e.date);
                   });
 
-                  
+         
+                            var toggleForm = function(filter, is_next_a_warning, is_last) {
+                                 if ( filter === true) {
+                                    console.log(is_next_a_warning === true);
+                                    
+                                 if (is_last === true) {
+                                    toggleLast(true);
+                                 } else {
+                                    toggleLast(false);
+                                 }
+
+                                    if (is_next_a_warning === true) {
+                             
+                                       $('#violation_effectivity_date').prop('disabled',true);
+                                    } else {
+
+                                        $('#violation_effectivity_date').prop('disabled',false);
+
+                                    }
+
+                                 
+                                 
+                                 }
+                            };
+
+                            var toggleLast = function(is_last) {
+                               if (is_last === true) {
+                                       $('#violation_effectivity_date').prop('disabled',true);
+                                       $('#violation_date').prop('disabled', true);
+                                       $('#buttons').hide();
+                                    } else {
+                                       $('#violation_effectivity_date').prop('disabled',false);
+                                       $('#violation_date').prop('disabled', false);
+                                       $('#buttons').show();
+                                    }
+                            }
 			$('#violation_decription_container').hide();
 			$('#violation_id').on('change', function() {
 				var selectValue = $(this).val();
 				
+            var employee_id = $('.hiddenID').val();
+
 				console.log(selectValue);
 				if ( selectValue == 0  || selectValue == -1) {
 					return false;
@@ -192,20 +244,89 @@
 					$.ajax({
 						type: 'GET',
 						url: _globalObj._baseURL + '/violations',
-						data: { src: selectValue, output: 'json', field: 'id'},
+						data: { src: selectValue, output: 'json', field: 'id', employee_id: employee_id},
 						success: function(data) {
 							console.log(data);
-							if (data) {
+							var formfilter = true;
+                     var is_suspended = false;
+
+                     if (data) {
 								$('.violation_decription').html(data.description);
-								$('.penalty').html(data.penalty);
-								$('#violation_decription_container').show();
-							} else {
-								$('.violation_decription').hide();
-								$('#violation_decription_container').hide();
-							}
+                        var penalty = "<ul>";
+                            penalty += '<br>';
+                        
+
+
+                        for(var i=0; i < data.offenses.length; i++) {
+                           penalty += '<li>';
+                        
+                           if (data.times_committed-1 == i) {
+                              penalty += '<span class="label label-danger">';
+                           }
+                              if (!data.offenses[i]['days_of_suspension']) {
+                                    penalty +=  ordinal_suffix_of(data.offenses[i]['offense_number']) + ' offense (' + data.offenses[i]['punishment_type'] +')';  
+                                 is_suspended = false;
+                                
+                              } else {
+
+                                 penalty +=   ordinal_suffix_of(data.offenses[i]['offense_number']) + ' offense (' + data.offenses[i]['punishment_type'] +' for ' + data.offenses[i]['days_of_suspension'] +' days)';
+                                is_suspended = true; 
+                              }
+
+                            
+                            if (data.times_committed-1 == i) {
+                              
+                              penalty += '</span>';
+                           }  
+                           
+                              
+                           penalty += '</li>';
+                        }
+
+                        penalty += '</ul>';
+
+                        // Create is_create variable if it is not defined
+                        if (typeof is_create === undefined) {
+                           var is_create = true;
+                        }
+
+
+                        // Check if the selected value matches what is saved on the database
+                        // Only on edit
+
+                        // if (is_create === false ){
+                        //    var original_violation_id = $('.old_violation_id').val();
+                        //    var current_violation_id = $('#violation_id').val();
+
+                        //    if (original_violation_id == current_violation_id) {
+                        //       toggleForm(true, false, false);
+                        //    } else {
+                        //       toggleForm(true, false, data.is_last);
+                        //    } 
+                        // }  else toggleForm(true, data.is_next_a_warning, data.is_last);
+                        toggleForm(true, data.is_next_a_warning, data.is_last);
+                        
+                        console.log(data);
+                         
+                           // ===============================================
+   								$('.penalty').html(penalty);
+   								$('#violation_decription_container').show();
+   							} else {
+   								$('.violation_decription').hide();
+   								$('#violation_decription_container').hide();
+   							}
 								
 						}
 					});
 				}
 			});			
 		})();
+
+      (function(){
+
+               if ($('#violation_id').val() != 0 ) {
+                  setTimeout(function(){
+                     $('#violation_id').trigger('change');
+                  }, 1500);
+               }
+            })();

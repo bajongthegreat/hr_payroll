@@ -10,6 +10,12 @@
         Are you sure to <span id="modal_body_content"></span> this <span id="itemtype"></span>?
       </div>
       <div class="modal-footer">
+        <div class="col-md-5">
+          <div class='input-group date'  data-date-format="YYYY-MM-DD">
+            <input type="text" class="form-control requirement_date" data-date-format="YYYY-MM-DD" value="{{ date('Y-m-d')}}">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
+          </div>
+        </div>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button id="modal_save" type="button" class="btn btn-primary" data-status="save" data-dismiss="modal">Accept</button>
       </div>

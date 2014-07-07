@@ -155,14 +155,15 @@ class ApplicantsController extends BaseController {
 		$employee_id = Input::get('employee_id');
 		$requirement_id = Input::get('requirement_id');
 		$type = Input::get('process_type');
-
+		$date = Input::get('date');
 		$check = $this->applicant_requirements->find($requirement_id, 'requirement_id')->where('employee_id','=', $employee_id)->get();
 
 		
-
 		if ($type == 'pass') {
 			if (count($check) > 0) return "";
-			return ($this->applicant_requirements->create(['employee_id' => $employee_id, 'requirement_id' => $requirement_id])) ? json_encode(['status' => 'created']) : json_encode(['status' => 'error']);
+			return ($this->applicant_requirements->create(['employee_id' => $employee_id, 
+				                                           'requirement_id' => $requirement_id, 
+				                                           'date' => $date])) ? json_encode(['status' => 'created']) : json_encode(['status' => 'error']);
 		}
 		elseif ($type == 'remove') {
 			return ($this->applicant_requirements->delete($requirement_id, 'requirement_id')) ? json_encode(['status' => 'created']) : json_encode(['status' => 'error']);

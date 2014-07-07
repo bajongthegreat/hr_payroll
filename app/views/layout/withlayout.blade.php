@@ -18,7 +18,8 @@
     <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/main-layout.css.php')}}" />
     <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/bootstrapValidator.css')}}"/>
     <link href="{{ asset('css/lightbox.css') }}" rel="stylesheet" />
-    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+
+    <!-- <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/> -->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.dataTables.css') }}">
     <!-- <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet"> -->
 

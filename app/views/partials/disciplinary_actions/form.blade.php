@@ -5,11 +5,12 @@
 					{{ Form::label('violation', 'Violation Code', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::select('violation_id', $violations, Input::old('name'), array('class' => 'form-control', 'required', 'id' => 'violation_id') ) }}
+						{{ Form::select('violation_id', $violations, Input::old('violation_id'), array('class' => 'form-control', 'required', 'id' => 'violation_id') ) }}
 					</div>
 					<div class="col-sm-1">  <a href="{{ action('ViolationsController@create') }}?ref={{ base64_encode(URL::current() . '#employee=' . Input::get('employee_id') ) }}" class="btn btn-primary"> Add violation</a> </div>
 				</div>
 
+			
 
 
 <div class="panel panel-default" id="violation_decription_container">
@@ -41,7 +42,7 @@
 					{{ Form::label('violation_effectivity_date', 'Effectivity Date', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('violation_effectivity_date', Input::old('violation_effectivity_date'), array('class' => 'form-control text-date'	, 'data-date-format' => 'YYYY-MM-DD' ) ) }}
+						{{ Form::text('violation_effectivity_date', Input::old('violation_effectivity_date'), array('class' => 'form-control text-date'	, 'data-date-format' => 'YYYY-MM-DD', 'id' => 'violation_effectivity_date', 'required' ) ) }}
 					</div>
 
 				</div>

@@ -32,7 +32,7 @@ if (Auth::check() ) {
 
 Route::get('/', ['as' => 'main',function()
 {
-
+	return Redirect::to('employees');
 
 }]);
 

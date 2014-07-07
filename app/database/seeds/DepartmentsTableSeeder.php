@@ -296,7 +296,6 @@ class DepartmentsTableSeeder extends Seeder {
 
 		// Uncomment the below to run the seeder
 		DB::table('departments')->insert($departments);
-
 		DB::table('positions')->insert($positions);
 	}
 

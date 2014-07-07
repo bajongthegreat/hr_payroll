@@ -17,7 +17,7 @@
 				<a href="{{ isset($employee->image) ? asset($employee->image): 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png' }}" {{ isset($employee->image) ? 'data-lightbox="Profile Picture"' : '' }}>
 				<img src="{{ isset($employee->image) ? asset($employee->image): 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png' }}"  
 				width="234" height="234" alt="..." class="img-thumbnail employee-img" style="height: 234px; width: 274px;"
-				id="picture_holder"></a>
+					id="picture_holder"></a>
 
 				<!-- <canvas id="canvas" width="274" class="img-thumbnail" height="234" class="hidden"> -->
 
@@ -61,17 +61,20 @@
 
 				<div class="profile-label"> <b>Name: </b> {{ $fullname  }}</div>
 				<div class="profile-label"> <b>ID: </b> <?php echo (isset($employee->employee_work_id)) ? $employee->employee_work_id : 'Not specified'; ?></div>
-				<div class="profile-label"> <b>Company: </b> <?php echo (isset($company)) ? $company : 'Not specified'; ?></div>
-				<div class="profile-label"> <b>Position: </b> {{ (isset($employee->position->name) ) ? $employee->position->name : '<span class="label label-default">Not specified</span>'}} <a href="#" data-toggle="modal" data-target="#edit_position"><span class="glyphicon glyphicon-edit" ></span> Edit </a></div>
-				<div class="profile-label"><span> <b>DPC standing: </b></span> <span class="label label-success">Good standing</span></div>
+				<hr>
+				<div class="profile-label"> <b style="margin-right: 25px">Company </b> <?php echo (isset($company)) ? $company : 'Not specified'; ?></div>
+				<div class="profile-label"> <b style="margin-right: 8px">Department </b> <a href="#" class="inline-edit" style="border-bottom: 2px dashed" data-toggle="modal" data-target="#edit_position"><?php echo (isset($employee->department_name)) ? $employee->department_name : 'Not specified'; ?> </a></div>
+				<div class="profile-label"> <b style="margin-right: 30px">Position </b> <a href="#" class="inline-edit" style="border-bottom: 2px dashed" data-toggle="modal" data-target="#edit_position">{{ (isset($employee->position->name) ) ? $employee->position->name : '<span class="label label-default">Not specified</span>'}}  </a></div>
+				<hr>
+				<div class="profile-label"><span style="margin-right:15px;"> <b>DPC standing </b></span> <span class="label label-success">Good standing</span></div>
 				<?php 
 				$date = new DateTime();
 				$date = $date->format('Y-m-d');
 
-				$status = DB::table('leaves')->where('employee_id', '=', $employee->id)->whereBetween(DB::raw('CURDATE()'), [$date , $date])->where('status', '=', 'Approved')->get();
+				$on_leave = DB::table('leaves')->where('employee_id', '=', $employee->id)->whereBetween(DB::raw('CURDATE()'), [$date , $date])->where('status', '=', 'Approved')->get();
 				
-					if (count($status) > 0) {
-						echo '<div class="profile-label"> <b>Status: </b> <span class="label label-primary">On Leave</span </div>';	
+					if (count($on_leave) > 0) {
+						echo '<div class="profile-label"> <span style="margin-right: 65px"><b>Status </b></span> <span class="label label-primary">On Leave</span </div>';	
 					}
 
 				?>

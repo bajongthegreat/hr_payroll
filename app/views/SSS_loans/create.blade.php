@@ -35,7 +35,7 @@
 
 			<div class="form-group">
 						
-				{{ Form::label('sss_id', 'SSS ID: ', array('class' => 'col-sm-2')) }}
+				{{ Form::label('sss_id', 'SSS ID: ', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-3">
 					<p class="sss_id"></p>
@@ -46,17 +46,22 @@
 
 			<div class="form-group">
 						
-				{{ Form::label('date_issued', 'Date Issued: ', array('class' => 'col-sm-2')) }}
+				{{ Form::label('date_issued', 'Date Issued: ', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-2">
-					{{ Form::text('date_issued', Input::old('date_issued'), array('class' => 'form-control', 'data-format' => "YYYY-MM-DD") ) }}
+					<div class='input-group date' id='date_hired' data-date-format="YYYY-MM-DD">
+
+					{{ Form::text('date_issued', Input::old('date_issued'), array('class' => 'form-control', 'data-date-format' => "YYYY-MM-DD") ) }}
+					<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
+        
+                	</div>
 				</div>
 				
 			</div>
 
 				<div class="form-group">
 						
-				{{ Form::label('loan_amount', 'Loan Amount: ', array('class' => 'col-sm-2')) }}
+				{{ Form::label('loan_amount', 'Loan Amount: ', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-2">
 					{{ Form::text('loan_amount', Input::old('loan_amount'), array('class' => 'form-control') ) }}
@@ -65,18 +70,25 @@
 			</div>
 
 				<div class="form-group">
+
 						
-				{{ Form::label('salary_deduction_date', 'Start of Salary Deduction: ', array('class' => 'col-sm-2')) }}
+				{{ Form::label('salary_deduction_date', 'Start of Salary Deduction: ', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-2">
-					{{ Form::text('salary_deduction_date', Input::old('salary_deduction_date'), array('class' => 'form-control', 'data-format' => "YYYY-MM-DD") ) }}
+				<div class='input-group date' id='date_hired' data-date-format="YYYY-MM-DD">
+	
+					{{ Form::text('salary_deduction_date', Input::old('salary_deduction_date'), array('class' => 'form-control', 'data-date-format' => "YYYY-MM-DD") ) }}
+					<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
+        
+                	</div>
+
 				</div>
 				
 			</div>
 
 				<div class="form-group">
 						
-				{{ Form::label('monthly_amortization', 'Monthly Amortization: ', array('class' => 'col-sm-2')) }}
+				{{ Form::label('monthly_amortization', 'Monthly Amortization: ', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-2">
 					{{ Form::text('monthly_amortization', Input::old('monthly_amortization'), array('class' => 'form-control') ) }}
@@ -86,10 +98,10 @@
 
 				<div class="form-group">
 						
-				{{ Form::label('duration_in_months', 'Duration in Months: ', array('class' => 'col-sm-2')) }}
+				{{ Form::label('duration_in_months', 'Duration in Months: ', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-2">
-					{{ Form::text('duration_in_months', Input::old('duration_in_months'), array('class' => 'form-control') ) }}
+					{{ Form::input('number','duration_in_months', Input::old('duration_in_months'), array('class' => 'form-control') ) }}
 				</div>
 				
 			</div>
@@ -102,7 +114,7 @@
 						
 				{{ Form::label('submit', ' ', array('class' => 'col-sm-2')) }}
 
-				<div class="col-sm-4">
+				<div class="col-sm-2">
 					
 	     <div>{{ Form::submit('Submit', array('class' => 'btn btn-primary ')) }}</div>
 	      </div>
@@ -141,124 +153,25 @@
 	               $('#start_date').data("DateTimePicker").setMaxDate(e.date);
 	            });
 
+                           
 
-	            // ----------- AJAX transaction below -------------------
-	            var panels = '#loan_information, #employee_information, #buttons';
-				
-				// Hide all specified panels
-				togglePanels(panels, 'hide');
-
-
-            	// Check if employee hash is present
-            	// Then perform an ajax search
-            	if (hrApp.hasHash()) {
-            		ajaxSearchEmployee(hrApp.getHash('employee'), panels, 'employee_loader');
-					$('#employee_work_id').val(hrApp.getHash('employee'));
-            	}
-            	
-    
-
-				// Perform an AJAX search after an "Enter" key is fired
-           		$('#employee_work_id').keyup(function(e) {
-           			e.preventDefault();
-
-           			var id = $(this).val();
-
-           			// Enter key
-           			if (e.which == 13) {
-           				$('#work_id').val(id);
-           				window.location = '#employee=' + id;
-           				ajaxSearchEmployee(id, panels, 'employee_loader');
-           			}
-
-           		});
-            	
-               
-                  
-
-
-	            function ajaxSearchEmployee(id, pannels, loader) {
-
-	            	$('#work_id').val(id);
-
-	            	console.log('function up');
-	            	
-	            	$.ajax({
-           					type: 'GET',
-							url: employeeLink,
-							data: { src: id, output: 'json', limit: '1', stype: 'absolute'},
-							beforeSend: function() {
-								$(this).addClass('has-warning');
-								$('#' + loader).html("<img src='" + mainLink + "img/loading.gif' class=\"loading\"> 	");
-
-							},
-							success: function(data) {
-
-
-								// Remove Loading Image
-								$('#' + loader).empty();
-
-								if (data.length == 1) {
-
-									var employeeName = hrApp.personName(data[0], "lastname_first"),
-									     date_hired = moment(data[0].date_hired).format("dddd, MMMM Do YYYY"),
-									     sss_id = data[0].sss_id;
-
-
-									     	console.log(data);
-									// Show all specified panels
-									togglePanels(pannels, 'show');
-									
-
-									$('#employee_name').html("" + employeeName);
-									$('#date_hired').html(date_hired);
-									$('#employee_id').val(data[0].id);
-									$('.sss_id').html(sss_id);
-									$('.sss_id').val(sss_id);
-
-									
-								} else {
-									
-									// Remove all values to fields
-									emptyFields();
-
-									// Hide all specified panels
-									togglePanels(pannels, 'hide');
-
-									$('#errors').hide()
-
-									$('#' + loader).html('<span class="label label-warning">No data found</span>');
-									
-
-								}
-								
-								
-							}
-           				});
-	            } // End of ajaxSearchEmployee
-
-
-	            // Toggles all Bootstrap Panels
-	            function togglePanels(elements, type) {
-	            	if (type == 'show') {
-	            		console.log('showin')
-	            		$(elements).fadeIn(250);
-	            	}
-	            	else 
-	            	{
-	            		$(elements).fadeOut(250);
-	            	}
-	            }
-
-	            // Resets all values in fields
-	            function emptyFields() {
-	            	$('#employee_name').empty();
-					$('#date_hired').empty();
-					$('#employee_id').val('');
-	            }
-	           
             });
 
+            var __employee="";
+           	var __panelsToToggle = ['#loan_information', '#employee_information', '#buttons'];
+           	var __fieldsToEmpty = [];
+           	var __buttonsToHide = [];
+           	var __dbFieldsToUse = [];
+
+
+
+           	var __rowsToDisplay = 10;
+           	var resultContainer = $('.resultContainer');
+           	var hiddenID = $('#employee_id');
         </script>
 
+@stop
+
+@section('later_scripts')
+<script type="text/javascript" src="{{ asset('jquery/hr_disciplinary_actions.js') }}"></script>
 @stop

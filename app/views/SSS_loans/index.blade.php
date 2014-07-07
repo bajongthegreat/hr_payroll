@@ -58,11 +58,12 @@
 
   <table class="table table-hover">
   	<thead>
-      
-      <th>SSS ID</th>
-  		<th > Date Issued </th>
+    <th width="17%"> Name</th>   
+      <th width="15%">SSS ID</th>
+  		<th width="10%"> Date Issued </th>
   		<th > Loan Amount </th>
   		<th>Month Amortization</th>
+      <th>First Monthly Amortization</th>
   		<th>Duration In Months</th>
   	</thead>
 
@@ -75,13 +76,14 @@
       @foreach($loans as $loan)
      
       <tr>
-    
+    <td>{{ !isset($loan->lastname)?:strtoupper($loan->lastname)}}, {{ !isset($loan->firstname)?: strtoupper($loan->firstname)}} {{ !isset($loan->middlename[0]) ?: strtoupper($loan->middlename[0]) }} </td>
         <td>{{$loan->sss_id}}</td>
         <td>{{$loan->date_issued}}</td>
         <td>{{$loan->loan_amount}}</td>
         <td>{{$loan->monthly_amortization}}</td>
+        <th>{{$loan->salary_deduction_date}}</th>
         <td>{{$loan->duration_in_months}}</td>
-        <td><a class="label label-default" href="{{ action('SSS_loansController@edit', $loan->id)}}">Edit</a></td>
+        <td><a class="label label-default" href="{{ action('SSS_loansController@edit', $loan->id)}}?#employee={{$loan->employee_work_id}}">Edit</a></td>
       </tr>
       @endforeach
      

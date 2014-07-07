@@ -38,7 +38,7 @@
 				  				<td> {{ $violation->violation_description }}</td>
 				  				<td> {{ $violation->count }} </td>
 				  				<td> <span class="label label-warning">{{ ucfirst($punishment_type) }}</span> </td>
-				  				<td> <a href="{{ action('DisciplinaryActionsController@edit', $violation->id) }}?ref={{ base64_encode(URL::current() . '?v=violations') }}#employee={{ $employee->employee_work_id}}" class="btn btn-default"> <span class="glyphicon glyphicon-pencil" ></span> </a></td>
+				  				<td> <a href="{{ action('DisciplinaryActionsController@edit', $violation->id) }}?ref={{ base64_encode(URL::current() . '?v=violations') }}&workid={{ $employee->employee_work_id }}#employee={{ $employee->employee_work_id}}" class="btn btn-default"> <span class="glyphicon glyphicon-pencil" ></span> </a></td>
 				  			</tr>
 				  		@endforeach
 				 
@@ -58,7 +58,7 @@
 
 		  <div class="panel panel-default smooth-panel-edges" >
 		  <div class="panel-body">
-		    <a href="{{ action('DisciplinaryActionsController@create') }}?ref={{ base64_encode(URL::current() . '?v=violations') }}#employee={{$employee->employee_work_id}}" class="btn btn-primary pull-left">Add record</a>
+		    <a href="{{ action('DisciplinaryActionsController@create') }}?ref={{ base64_encode(URL::current() . '?v=violations') }}&workid={{ $employee->employee_work_id }}#employee={{$employee->employee_work_id}}" class="btn btn-primary pull-left">Add record</a>
 		    <a href="{{ action('DisciplinaryActionsController@index') }}" class="btn btn-default pull-right">Go to Disciplinary Actions </a>
 		  </div>
 		</div>

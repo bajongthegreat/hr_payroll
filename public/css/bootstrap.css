@@ -5218,6 +5218,12 @@ a.badge:focus {
   top: -1px;
 }
 
+.list-group-item .active {
+  color: #428bca;
+  background-color: #953b39;
+}
+
+
 a.list-group-item.active > .badge,
 .nav-pills > .active > a > .badge {
   color: #428bca;

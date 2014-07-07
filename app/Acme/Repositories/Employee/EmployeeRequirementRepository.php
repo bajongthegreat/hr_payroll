@@ -35,6 +35,4 @@ class EmployeeRequirementRepository  implements EmployeeRequirementRepositoryInt
 	}
 
 	
-
-
 }

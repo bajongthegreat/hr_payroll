@@ -99,7 +99,7 @@ $('#_applicants_company_id').change(function() {
     
     $('#_applicants_company_id').triggerHandler('change');
    
-
+$('.date').datetimepicker({ pickTime: false});
 
 // Exists on: Applicants.show
     $('._applicant_show_requirement').on('click', function(e) {
@@ -126,10 +126,11 @@ $('#_applicants_company_id').change(function() {
               var defaultClass = '<span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span>',
                    unavailableClass  ='<a href="#" class="_applicant_show_requirement"><span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
 
+           var date =  $('.requirement_date').val();
             $.ajax({
                 type: 'POST',
                 url: _globalObj._baseURL + '/applicants/requirements',
-                data: { process_type: ptype, employee_id: applicant_id, requirement_id: requirement_id, _token:_globalObj._token },
+                data: { process_type: ptype, employee_id: applicant_id, requirement_id: requirement_id, _token:_globalObj._token, date:date },
                 success: function(data) {
                     jsonData = JSON.parse(data);
                     

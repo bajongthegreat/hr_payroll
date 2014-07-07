@@ -165,10 +165,8 @@ class UserRepository extends RepositoryAbstract implements UserRepositoryInterfa
 		// Check if it will change only the password
 		$change_password = isset($options['change_password']) ? $options['change_password'] : false;
 
+				
 		
-		//Unset current and confirmation password
-		unset($userdata['password_confirmation']);
-
 		// Hash password if the password field is not empty and passes the validation
 		if ($change_password === true)
 		{
@@ -179,6 +177,8 @@ class UserRepository extends RepositoryAbstract implements UserRepositoryInterfa
 			unset($userdata['password']);
 		}
 
+		//Unset current and confirmation password
+		unset($userdata['password_confirmation']);
 
 		
 		// Update the user
