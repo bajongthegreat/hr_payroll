@@ -12,7 +12,7 @@ class ViolationsController extends \BaseController {
 	protected $violations;
 	protected $validator;
 
-	protected $db_fields_to_use = ['code','description','penalty'];
+	protected $db_fields_to_use = ['code','description'];
 	protected $default_uri = 'violations';
 	protected $violations_offenses;
 
@@ -72,6 +72,11 @@ class ViolationsController extends \BaseController {
 				if (Input::has('employee_id')) {
 					$times_committed = DB::table('disciplinary_actions')->where('violation_id', '=',$violations->id)
 					                                 ->where('employee_id', '=', (int) Input::get('employee_id'))->count();
+
+					if (!$times_committed) {
+						$times_committed = 0;
+					}
+
 				} else {
 					$times_committed = 0;
 				}
@@ -100,7 +105,7 @@ class ViolationsController extends \BaseController {
 				}
 
 				
-
+				// Current (For editing)
 				$current_punishment = $this->violations_offenses->find($violations->id, 'violation_id')->where('offense_number', '=', ($times_committed == 0) ? $times_committed + 1 : $times_committed )->pluck('punishment_type');
 
 					if ($current_punishment != 'warning') {

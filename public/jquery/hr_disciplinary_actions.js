@@ -1,6 +1,7 @@
 function ordinal_suffix_of(i) {
     var j = i % 10,
         k = i % 100;
+
     if (j == 1 && k != 11) {
         return i + "st";
     }
@@ -251,7 +252,8 @@ function ordinal_suffix_of(i) {
                      var is_suspended = false;
 
                      if (data) {
-								$('.violation_decription').html(data.description);
+								var decoded = $('.violation_decription').html(data.description).text();
+                        $('.violation_decription').html('<br><br>' + decoded);
                         var penalty = "<ul>";
                             penalty += '<br>';
                         
@@ -304,7 +306,21 @@ function ordinal_suffix_of(i) {
                         //       toggleForm(true, false, data.is_last);
                         //    } 
                         // }  else toggleForm(true, data.is_next_a_warning, data.is_last);
-                        toggleForm(true, data.is_next_a_warning, data.is_last);
+
+                        if (is_create === true) {
+                          toggleForm(true, data.is_next_a_warning, data.is_last);
+                        } else {
+                           var original_violation_id = $('.old_violation_id').val();
+                           var current_violation_id = $('#violation_id').val();
+                             // alert(original_violation_id + ' ' + current_violation_id);
+                            if (original_violation_id == current_violation_id) {
+                              toggleForm(true, data.is_current_a_warning, false);
+
+                           } else {
+                              toggleForm(true, data.is_current_a_warning, data.is_last);
+                            }
+                        }
+                        
                         
                         console.log(data);
                          

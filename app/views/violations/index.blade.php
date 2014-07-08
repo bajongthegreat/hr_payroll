@@ -32,7 +32,7 @@
 		  				<td class="__more_violations_parent" data-status="closed"  data-violation_id="{{ $violation->id }}"> <span class="label label-default"><span class="glyphicon glyphicon-list"></span>  View all</span></td>
 	  					
 		  				<td class="text-center">  {{$violation->code}} </td>
-		  				<td> {{$violation->description}} </td>
+		  				<td> {{html_entity_decode($violation->description) }} </td>
 		  				<td> <a href=" {{ action('ViolationsController@edit', $violation->id) }}" class="btn btn-default"> <span class="glyphicon glyphicon-edit"></span> Edit</a> </td>
 		  			</tr>
 		  		@endforeach

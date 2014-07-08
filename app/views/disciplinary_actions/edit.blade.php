@@ -27,7 +27,7 @@
 				  	@include('partials.disciplinary_actions.form')
 				 	
 				 	<input type="hidden" name="employee_id" class="hiddenID">
-				 	<input type="hidden" name="old_violation_id" class="old_violation_id" value="{{ $employee_violation->id }}">
+				 	<input type="hidden" name="old_violation_id" class="old_violation_id" value="{{ $employee_violation->violation_id }}">
 
 				 </div>  <!-- End of Body -->
 		</div> <!-- End of Panel -->
@@ -67,7 +67,7 @@
            	var __fieldsToEmpty = [];
            	var __buttonsToHide = [];
            	var __dbFieldsToUse = [];
-
+           	var is_create = false;
 
 
            	var __rowsToDisplay = 10;

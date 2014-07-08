@@ -69,7 +69,7 @@
            	var __fieldsToEmpty = [];
            	var __buttonsToHide = [];
            	var __dbFieldsToUse = [];
-
+           	var is_create = true;
 
 
            	var __rowsToDisplay = 10;

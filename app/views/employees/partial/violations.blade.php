@@ -17,8 +17,8 @@
 				  		
 				  		<th width="10%">Code</th>
 				  		<th width="40%">Description</th>
-				  		<th width="5%">Times committed</th>
-				  		<th>Penalty</th>
+				  		<th width="5%" class="text-center">Times committed</th>
+				  		<th class="text-center">Penalty</th>
 				  	</thead>
 
 				  	<tbody>
@@ -36,8 +36,8 @@
 				  			<tr>
 				  				<td> {{ $violation->violation_code }}</td>	
 				  				<td> {{ $violation->violation_description }}</td>
-				  				<td> {{ $violation->count }} </td>
-				  				<td> <span class="label label-warning">{{ ucfirst($punishment_type) }}</span> </td>
+				  				<td class="text-center"> <span class="badge"> {{ $violation->count }} </span> </td>
+				  				<td class="text-center"> <span class="label label-warning">{{ ucfirst($punishment_type) }}</span> </td>
 				  				<td> <a href="{{ action('DisciplinaryActionsController@edit', $violation->id) }}?ref={{ base64_encode(URL::current() . '?v=violations') }}&workid={{ $employee->employee_work_id }}#employee={{ $employee->employee_work_id}}" class="btn btn-default"> <span class="glyphicon glyphicon-pencil" ></span> </a></td>
 				  			</tr>
 				  		@endforeach
@@ -52,7 +52,7 @@
 
 		  @if (count($violations) == 0)
 		  
-		  	<div class="alert alert-warning text-center smooth-panel-edges">No Violation records found.</div>
+		  	<div class="alert alert-success text-center smooth-panel-edges">No Violation records found.</div>
 
 		  @endif
 

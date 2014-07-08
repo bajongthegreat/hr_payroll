@@ -59,28 +59,32 @@
           <ul class="nav navbar-nav">
 
 
-            <li class="active"> 
+            <!-- <li class="active"> 
               <a href="{{ asset('/admin')}}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+             -->
+              <li class="dropdown">
 
-                <li class="dropdown">
-
-       
-
-
-
-            </li>
-
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> Files <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+             <li><a href="{{ action("UsersController@index") }}"><span class="glyphicon glyphicon-user"></span>  Users</a></li>
             
-              <!-- <li class="dropdown"> -->
+                         <!-- <li><a href="{{ action("CompaniesController@index") }}"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Companies</a></li> -->
 
-              <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> Basic Files <b class="caret"></b></a> -->
-          <!-- <ul class="dropdown-menu"> -->
-             <!-- <li><a href="{{ action("UsersController@index") }}"><span class="glyphicon glyphicon-user"></span>  Users</a></li> -->
- 
-            <!-- <li><a href="{{ action("SSSController@index") }}">SSS Contribution table</a></li> -->
-            <!-- <li><a href="{{ action("PhilhealthsController@index") }}">Phihealth Contribution table</a></li> -->
-            <!-- <li><a href="{{ action("HDMFController@index") }}">HDMF Contribution table</a></li> -->
-          <!-- </ul> -->
+            <li><a href="{{ action("DepartmentsController@index") }}"><span class="glyphicon glyphicon glyphicon-book"></span>&nbsp;&nbsp;Department</a></li>
+            <li><a href="{{ action("PositionsController@index") }}"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;&nbsp;Position</a></li>
+            <li><a href="{{ action("HolidaysController@index") }}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;&nbsp;Holidays</a></li>
+            <li><a href="{{ action("StageProcessesController@index") }}"><span class="glyphicon glyphicon-picture"></span>&nbsp;&nbsp;Stage Process</a></li>
+            <li><a href="{{ action("RequirementsController@index") }}"><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Requirements</a></li>
+
+            <li><a href="{{ action("ViolationsController@index") }}"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;Violations</a></li>
+            
+            <li><a href="{{ action("RatesController@index") }}"> <span class="glyphicon glyphicon-tags"></span> &nbsp; Rates</a></li>
+
+
+            <li><a href="{{ action("SSSController@index") }}">SSS Contribution table</a></li>
+            <li><a href="{{ action("PhilhealthsController@index") }}">Phihealth Contribution table</a></li>
+            <li><a href="{{ action("HDMFController@index") }}">HDMF Contribution table</a></li>
+          </ul>
 
            
            
@@ -88,24 +92,11 @@
 
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-dashboard"></span> HR <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="{{ action("CompaniesController@index") }}"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Companies</a></li>
-
-            <li><a href="{{ action("DepartmentsController@index") }}"><span class="glyphicon glyphicon glyphicon-book"></span>&nbsp;&nbsp;Department</a></li>
-            <li><a href="{{ action("PositionsController@index") }}"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;&nbsp;Position</a></li>
-            <li><a href="{{ action("HolidaysController@index") }}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;&nbsp;Holidays</a></li>
-                        <li><a href="{{ action("StageProcessesController@index") }}"><span class="glyphicon glyphicon-picture"></span>&nbsp;&nbsp;Stage Process</a></li>
-            <li><a href="{{ action("RequirementsController@index") }}"><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Requirements</a></li>
-
-            <li><a href="{{ action("EmployeesMedicalExaminationsController@index") }}"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;Physical Examinations</a></li>
-            <li><a href="{{ action("ViolationsController@index") }}"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;Violations</a></li>
-            
-            <li><a href="{{ action("RatesController@index") }}"> <span class="glyphicon glyphicon-tags"></span> &nbsp; Rates</a></li>
-            
-
             <li><a href="{{ action("ApplicantsController@index") }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Applicant Management</a></li>
             <li><a href="{{ action("EmployeesController@index") }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Employee Management</a></li>
-
-             <li><a href="{{ action("LeavesController@index") }}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Leaves Management</a></li>
+            <li><a href="{{ action("DisciplinaryActionsController@index") }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DPC Management</a></li>
+            <li><a href="{{ action("EmployeesMedicalExaminationsController@index") }}"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;Physical Examinations</a></li>
+            <li><a href="{{ action("LeavesController@index") }}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Leaves Management</a></li>
             <!-- <li><a href="#">Loans</a></li> -->
           </ul>
 
