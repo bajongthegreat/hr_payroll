@@ -22,6 +22,7 @@
 					{{ Form::text('employee_work_id', Input::old('employee_work_id'), array('class' => 'form-control', 'placeholder' => 'Leave to auto generate') ) }}
 				</div>
 
+
 			</div>
 
 			<div class="form-group">
@@ -41,6 +42,8 @@
 					{{ Form::text('firstname', Input::old('firstname'), array('class' => 'form-control', 'required') ) }}
 				</div>
 
+				<div class="col-sm-1"> <span class="required">* Required</span> </div>
+
 			</div>
 
 			<div class="form-group">
@@ -50,6 +53,8 @@
 				<div class="col-sm-4">
 					{{ Form::text('middlename', Input::old('middlename'), array('class' => 'form-control', 'required') ) }}
 				</div>
+
+				<div class="col-sm-1"> <span class="required">* Required</span> </div>
 				
 			</div>
 
@@ -60,6 +65,8 @@
 				<div class="col-sm-4">
 					{{ Form::text('lastname', Input::old('lastname'), array('class' => 'form-control', 'required') ) }}
 				</div>
+
+				<div class="col-sm-1"> <span class="required">* Required</span> </div>
 				
 			</div>
 
@@ -89,6 +96,8 @@
                     </span>
                 </div>
 
+                <div class="col-sm-1"> <span class="required">* Required</span> </div>
+
 			</div>
 
 			<div class="form-group">
@@ -116,6 +125,8 @@
 				<div class="col-sm-4">
 					{{ Form::select('gender', ['-1' => 'Please select gender','Male' => 'Male', 'Female' => 'Female'], Input::old('gender') , array('class' => 'form-control', 'required') ) }}
 				</div>
+
+				<div class="col-sm-1"> <span class="required">* Required</span> </div>
 			</div>
 
 			<div class="form-group">
@@ -124,6 +135,8 @@
 				<div class="col-sm-4">
 					{{ Form::select('marital_status', $marital_status, Input::old('marital_status'), array('class' => 'form-control', 'required') ) }}
 				</div>
+
+				<div class="col-sm-1"> <span class="required">* Required</span> </div>
 			</div>
 
 
@@ -304,8 +317,10 @@
 					{{ Form::label('company_id', 'Company', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::select('company_id', $companies, Input::old('company_id') , array('class' => 'form-control', 'id' => 'company_id', 'required') ) }}
+						{{ Form::select('company_id', $companies, Input::old('company_id') , array('class' => 'form-control', 'id' => 'company_id') ) }}
 					</div>
+
+					<div class="col-sm-1"> <span class="required">* Required</span> </div>
 			</div>
 
 
@@ -313,16 +328,20 @@
 					{{ Form::label('department_id', 'Department', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::select('department_id', [], Input::old('department_id') , array('class' => 'form-control', 'id' => 'department_id', 'required') ) }}
+						{{ Form::select('department_id', [], Input::old('department_id') , array('class' => 'form-control', 'id' => 'department_id') ) }}
 					</div>
+
+					<div class="col-sm-1"> <span class="required">* Required</span> </div>
 			</div>
 
             	<div class="form-group" id="position_row">
 				{{ Form::label('position_id', 'Work Assignment', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-4">
-					{{ Form::select('position_id', [] , Input::old('position_id') , array('class' => 'form-control', 'disabled', 'id' => 'position_id', 'required') ) }}
+					{{ Form::select('position_id', [] , Input::old('position_id') , array('class' => 'form-control', 'disabled', 'id' => 'position_id') ) }}
 				</div>
+
+				<div class="col-sm-1"> <span class="required">* Required</span> </div>
 			</div>
 
 
@@ -405,6 +424,8 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
                     </span>
                 </div>
+
+
             </div>
 
 		  

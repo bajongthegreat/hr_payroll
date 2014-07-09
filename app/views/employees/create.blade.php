@@ -8,7 +8,7 @@
 <h1>Register Employee  <a  href="{{ action('EmployeesController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a>
 </h1>
 </div>
-{{ Form::open(array('action' => 'EmployeesController@store', 'class'=> 'form-horizontal', 'role' => 'form')) }}
+{{ Form::open(array('action' => 'EmployeesController@store', 'class'=> 'form-horizontal validateForm', 'role' => 'form')) }}
 
 @include('employees.partial.employee_form')
 
@@ -25,10 +25,14 @@
 	      </div>
 	    
 		</div>
-		
+		<div class="col-md-10">
+             @include('partials.errors')
+        </div>
 		{{ Form::close() }}
+
+
 	</div>
-		@include('partials.errors')
+		
 	</div>  <!-- Container -->
 
 </div>
@@ -54,29 +58,34 @@
             	
 
 
-            	$('#submit').on('click', function(e) {
+            	// $('#submit').on('click', function(e) {
             	
-            		var submit = $(this), 
-            		     clear = $('#clear'),
-            		    submitLoad = $('#submitload');
+            	// 	var submit = $(this), 
+            	// 	     clear = $('#clear'),
+            	// 	    submitLoad = $('#submitload');
 
-            		 var url = "{{ asset('img/loading.gif') }}";
+            	// 	 var url = "{{ asset('img/loading.gif') }}";
+             //         var form = $('.validateForm');
 
-            		submit.fadeOut(200);
-            		clear.fadeOut(200);
+                  
 
-            		$('#submitload').html('Sending.. &nbsp; &nbsp;' + '<img src="' + url +'" class="loading">' );
+            	// 	submit.fadeOut(200);
+            	// 	clear.fadeOut(200);
+
+
+
+            	// 	$('#submitload').html('Sending.. &nbsp; &nbsp;' + '<img src="' + url +'" class="loading">' );
 
             		
-            		// Disable for 10 seconds
-            		setTimeout(function() {
-            			submit.fadeIn(200);
-            			clear.fadeIn(200);
+            	// 	// Disable for 10 seconds
+            	// 	setTimeout(function() {
+            	// 		submit.fadeIn(200);
+            	// 		clear.fadeIn(200);
 
-            			$('#submitload').html('');
+            	// 		$('#submitload').html('');
 
-            		}, 5000);
-            	});
+            	// 	}, 5000);
+            	// });
            
             	  $('#company_id').change(function() {
 

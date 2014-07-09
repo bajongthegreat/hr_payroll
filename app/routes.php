@@ -32,7 +32,7 @@ if (Auth::check() ) {
 
 Route::get('/', ['as' => 'main',function()
 {
-	return Redirect::to('employees');
+	return Redirect::to('dashboard');
 
 }]);
 
@@ -203,6 +203,10 @@ Route::group(array('before' => 'auth'), function()
 // =========== AUX =====================
 Route::group(array('before' => 'auth'), function()
 {
+	Route::get('/dashboard', function() {
+		return View::make('dashboard.index');
+	});
+
 	Route::get('/import', 'ImportsController@create');
 	Route::post('/import/upload', 'ImportsController@upload');
 	Route::post('/import/start', 'ImportsController@start');

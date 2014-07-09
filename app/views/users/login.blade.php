@@ -7,7 +7,7 @@
         <h2 class="form-signin-heading">Please sign in</h2>
         
         <div class="form-group">
-        <input name="user" type="text" class="form-control" placeholder="Email address"  value="{{Input::old('user') }}" autofocus>
+        <input name="user" type="text" class="form-control" placeholder="Username or Email"  value="{{Input::old('user') }}" autofocus>
         </div>
 
         <div class="form-group">

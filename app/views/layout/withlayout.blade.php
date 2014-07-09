@@ -2,36 +2,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Tibud Cooperative HR and Payroll @yield('title')</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="<?php echo URL::to('img/favicon.ico'); ?>">
-     <style type="text/css">
-    
-  
-    </style>
 
-    <!-- Bootstrap -->
-    <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">
-
-    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/bootstrap-datetimepicker.min.css')}}"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('styles/pygments-manni.css')}}" />
-    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/main-layout.css.php')}}" />
-    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/bootstrapValidator.css')}}"/>
-    <link href="{{ asset('css/lightbox.css') }}" rel="stylesheet" />
-
-    <!-- <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/> -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.dataTables.css') }}">
-    <!-- <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet"> -->
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+    <!-- Styles and other configs -->
+    @include('layout.header')
 
     <style type="text/css">
-
+html {
+  overflow-x: scroll; /* Prevent scroll on narrow devices */
+}
     @yield('styles')
     </style>
 
@@ -42,120 +20,8 @@
   </head>
   <body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#"> <img src="{{ asset('img/logo.png') }}" height="24" width="30"> TIBUD</a>
-        </div>
+    @include('layout.navigation')
 
-
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-
-
-            <!-- <li class="active"> 
-              <a href="{{ asset('/admin')}}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-             -->
-              <li class="dropdown">
-
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> Files <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-             <li><a href="{{ action("UsersController@index") }}"><span class="glyphicon glyphicon-user"></span>  Users</a></li>
-            
-                         <!-- <li><a href="{{ action("CompaniesController@index") }}"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Companies</a></li> -->
-
-            <li><a href="{{ action("DepartmentsController@index") }}"><span class="glyphicon glyphicon glyphicon-book"></span>&nbsp;&nbsp;Department</a></li>
-            <li><a href="{{ action("PositionsController@index") }}"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;&nbsp;Position</a></li>
-            <li><a href="{{ action("HolidaysController@index") }}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;&nbsp;Holidays</a></li>
-            <li><a href="{{ action("StageProcessesController@index") }}"><span class="glyphicon glyphicon-picture"></span>&nbsp;&nbsp;Stage Process</a></li>
-            <li><a href="{{ action("RequirementsController@index") }}"><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Requirements</a></li>
-
-            <li><a href="{{ action("ViolationsController@index") }}"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;Violations</a></li>
-            
-            <li><a href="{{ action("RatesController@index") }}"> <span class="glyphicon glyphicon-tags"></span> &nbsp; Rates</a></li>
-
-
-            <li><a href="{{ action("SSSController@index") }}">SSS Contribution table</a></li>
-            <li><a href="{{ action("PhilhealthsController@index") }}">Phihealth Contribution table</a></li>
-            <li><a href="{{ action("HDMFController@index") }}">HDMF Contribution table</a></li>
-          </ul>
-
-           
-           
-            <li class="dropdown">
-
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-dashboard"></span> HR <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="{{ action("ApplicantsController@index") }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Applicant Management</a></li>
-            <li><a href="{{ action("EmployeesController@index") }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Employee Management</a></li>
-            <li><a href="{{ action("DisciplinaryActionsController@index") }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DPC Management</a></li>
-            <li><a href="{{ action("EmployeesMedicalExaminationsController@index") }}"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;Physical Examinations</a></li>
-            <li><a href="{{ action("LeavesController@index") }}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Leaves Management</a></li>
-            <!-- <li><a href="#">Loans</a></li> -->
-          </ul>
-
-
-
-           <li class="dropdown">
-
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>  Payroll <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="{{ action("DTRController@index") }}"> <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;  Daily Time Record</a></li>
-      
-            <li><a href="{{ action('PayrollController@create') }}">Process Payroll </a></li>
-            <li><a href="#">Loans</a></li>
-          </ul>
-
-
-            </li>
-                
-            </ul>
-          
-               <ul class="nav navbar-nav navbar-right hidden-sm">
-
-             <li class=" dropdown" >
-        
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{{  Session::get('email') }}} <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                 <li><a href="{{ action('ImportsController@create') }}"><span class="glyphicon glyphicon-import"></span>  Importation</a></li>          
-                 <li class="divider"></li>
-
-                 <li><a href="{{ action("UsersController@index") }}"><span class="glyphicon glyphicon-user"></span>  Users</a></li>
-                 <li><a href="{{ action("UsersController@edit", Auth::user()->id) }}"><span class="glyphicon glyphicon-lock"></span>  Change Password</a></li>
-
-
-                 <li class="divider"></li>
-                 <li><a href="#users"><span class="glyphicon glyphicon-wrench"></span>  Settings</a></li> 
-                @if (Auth::check() )
-                <li> <a href="{{ url('logout')}}"><span class="glyphicon glyphicon-off"></span>  Logout</a> </li>
-                @endif
-            
-              </ul>
-
-            </li>
-         
-
-
-          
-          </ul>
-
-
- <form class="navbar-form navbar-right" role="search" autocomplete="off">
-            <input type="text" class="form-control" placeholder="Quick Lookup..." id="header_search" on>
-           <div id="main_search_result" >.</div>
-
-          </form>
-
-
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
     @yield('header')
 
     
@@ -198,65 +64,17 @@
         <p>&copy; Company 2013</p>
       </footer>
     
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="{{asset('js/jquery-1.10.2.js') }}"></script>
-    <script src="{{ asset('jquery/main.js') }}"></script>
-
-    <script type="text/javascript">
-      var mainLink = "{{ route('main') . "/\";"}} 
-      var employeeLink = "{{ action('EmployeesController@index') . "\";" }}
-
-      var hrApp = new myApp(mainLink);
-
-     var _globalObj = {{ json_encode(array('_token'=> csrf_token(),
-                                           '_baseURL' =>  route('main'),
-                                           'loaderImage' => asset('img/loading.gif') 
-                                           ) 
-                                      ) 
-                      }}
+    
 
 
 
+    <!-- Main scripts -->
+    @include('layout.main_scripts')
 
-    </script>
 
     @yield('after_jquery')
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/bootstrapValidator.js') }}"></script>
-
-    <!-- Plugins -->
-    <script src="{{ asset('js/lightbox.min.js') }}"></script>
-
-    <!-- Add fancyBox -->
-    <link rel="stylesheet" href="{{ asset('css/jquery.fancybox.css?v=2.1.5') }}" type="text/css" media="screen" />
-
-    <script type="text/javascript" src="{{ asset('js/jquery.fancybox.pack.js?v=2.1.5') }}"></script>
 
 
-    <!-- Custom plugins by James Mones -->
-    <script type="text/javascript" src="{{ asset('jquery/jmfileupload.js') }}"></script>
-    <script src="{{ asset('jquery/jmsearcheable.js') }}"></script>
-
-     <script src="{{ asset('jquery/employeeProfileSearcher.js') }}"></script>
-     <script type="text/javascript" src="{{ asset('js/jquery.dataTables.js')}}"></script> 
-
-    <script type="text/javascript">
-
-   $('#header_search').jmSearcheable({
-          containerWrapper: '#main_search_result',
-          url:  employeeLink,
-          urlWithID: true,
-          idSeparator: '/',
-          idField: 'employee_work_id',
-          fadeOut: 'slow',
-          format: 'employee_work_id: - :lastname'
-      });
-
-    </script>
-    
     @yield('scripts')
 
 

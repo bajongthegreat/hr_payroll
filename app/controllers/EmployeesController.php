@@ -217,14 +217,19 @@ class EmployeesController extends BaseController {
 
 		$user_data = Input::except('_method','_token','department_id');
 
+
+		if (!isset($user_data['position_id']) || $user_data['position_id'] == 0) {
+			return Redirect::action('EmployeesController@create',[ '#errors'])->withInput()->withErrors(['Please select company first then choose your department and work assignment.']);
+		}
+
 		// Validate Inputs
 		if (!$this->validator->validate($user_data, NULL, $this->custom_message)) {
 
-			return Redirect::back()->withInput()->withErrors($this->validator->errors());
+			return Redirect::action('EmployeesController@create',[ '#errors'])->withInput()->withErrors($this->validator->errors());
 		}
 
 		// Generate the ID of employee
-		$user_data['employee_work_id'] = (isset($user_data['employee_work_id']) && strlen($user_data['employee_work_id']) > 0) ? $user_data['employee_work_id'] : $this->employees->generate_work_id('2317'); 
+		$user_data['employee_work_id'] = (isset($user_data['employee_work_id']) && strlen($user_data['employee_work_id']) > 0) ? $user_data['employee_work_id'] : $this->employees->generate_work_id('9520'); 
 
 		// Register employee	
 		$employee = $this->employees->create( $user_data );

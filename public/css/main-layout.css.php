@@ -10,9 +10,7 @@ header("Content-type: text/css; charset: UTF-8"); ?>
 
 
 /* Global Settings */
-html {
-	overflow-x: scroll; /* Prevent scroll on narrow devices */
-}
+
 
 body {
 
@@ -23,6 +21,11 @@ body {
 }
 .__more_violations_parent {
   cursor: pointer;
+}
+
+.required {
+  font-size: 11px;
+  color: red;
 }
 
 footer {
@@ -69,10 +72,12 @@ label {
   background-color: #428bca;
 }
 
-/* Hide for mobile, show la     ter */
+/* Hide for mobile, show la     ter 
 .sidebar {
   display: none;
 }
+
+*/
 
  @media (min-width: 800px) {
     .logout {
@@ -345,6 +350,24 @@ label {
     	 border-radius: 3px;
 
 	}
+
+  /* Steady */
+
+   .sidebar-fixed {
+    margin-top: 0 !important;
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+
 
 	#approvalInfo-container {
 
