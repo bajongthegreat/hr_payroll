@@ -28,15 +28,20 @@ class DisciplinaryActionRepository extends RepositoryAbstract implements Discipl
 
        public function getOffensesCount($employee_id, $violation_id) {
             $table = $this->table;
-            return DB::table($this->table)->where("$table.employee_id", '=', $employee_id)
+            return DB::table($this->table)->whereNull($table . '.deleted_at')
+                                          ->where("$table.employee_id", '=', $employee_id)
                                           ->where("$table.violation_id", '=', $violation_id)
+                                          ->where(DB::raw('( TIMESTAMPDIFF(YEAR, DATE_FORMAT(NOW() ,\'%Y-01-01\') , CURDATE() ) )'), '<=', 'violations.period_before_reset' )
+                                          ->leftJoin('violations', 'violations.id', '=', 'disciplinary_actions.violation_id')
                                           ->select(DB::raw('count(*) as count '))
                                           ->pluck('count');
        }
        
        public function getEmployeeViolations($employee_id, $violation_id) {
             $table = $this->table;
-            return DB::table($this->table)->where("$table.employee_id", '=', $employee_id)
+            return DB::table($this->table)
+                                          ->whereNull($table . '.deleted_at')
+                                          ->where("$table.employee_id", '=', $employee_id)
                                           ->where("$table.violation_id", '=', $violation_id)
                                           ->leftJoin('employees', 'employees.id', '=', "$table.employee_id")
                                           ->select("$table.*", "employees.employee_work_id");
@@ -44,6 +49,7 @@ class DisciplinaryActionRepository extends RepositoryAbstract implements Discipl
 	 public function getAllWithJoins() {
 	 	$table = $this->table;
 	 	return DB::table($this->table)
+          ->whereNull($table . '.deleted_at')
             ->join('employees', "$table.employee_id" , '=', 'employees.id')
             ->leftJoin('positions', "employees.position_id", '=', 'positions.id')
             ->leftJoin('departments', "positions.department_id", '=', 'departments.id')
@@ -63,6 +69,7 @@ class DisciplinaryActionRepository extends RepositoryAbstract implements Discipl
    public function findWithJoins($src) {
     $table = $this->table;
     return DB::table($this->table)
+            ->whereNull($table . '.deleted_at')
             ->orWhere('employees.lastname', 'LIKE', "%$src%")
             ->orWhere('employees.firstname', 'LIKE', "%$src%")
             ->orWhere('employees.middlename', 'LIKE', "%$src%")
@@ -72,6 +79,7 @@ class DisciplinaryActionRepository extends RepositoryAbstract implements Discipl
             ->orWhere('positions.name', 'LIKE', "%$src%")
             ->orWhere('companies.name', 'LIKE', "%$src%")
             ->orWhere('violations.first_offense', 'LIKE', "%$src%")
+            ->whereNull('deleted_at')
             ->join('employees', "$table.employee_id" , '=', 'employees.id')
             ->leftJoin('positions', "employees.position_id", '=', 'positions.id')
             ->leftJoin('departments', "positions.department_id", '=', 'departments.id')
@@ -91,7 +99,8 @@ class DisciplinaryActionRepository extends RepositoryAbstract implements Discipl
 	 public function findViolation($id, $field="id") {
 	 	$table = $this->table;
 	 	return DB::table($this->table)
-	 		->where($field, '=', $id)
+	 	       	->where($field, '=', $id)
+            ->whereNull($table . '.deleted_at')
             ->join('employees', "$table.employee_id" , '=', 'employees.id')
             ->leftJoin('positions', "employees.position_id", '=', 'positions.id')
             ->leftJoin('departments', "positions.department_id", '=', 'departments.id')
@@ -108,6 +117,5 @@ class DisciplinaryActionRepository extends RepositoryAbstract implements Discipl
             ->get();	
 	 }
 
-   
    
 }

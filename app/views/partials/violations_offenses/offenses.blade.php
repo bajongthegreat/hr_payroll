@@ -30,7 +30,7 @@ if (isset($offenses[$i-1])) {
 							{{ Form::label('first_offense', 'Punishment type', array('class' => 'col-sm-2 text-right')) }}
 
 							<div class="col-sm-4">
-								{{ Form::select('punishment_type', ['Please select an item', 'warning' => 'Warning', 'suspended' => 'Suspended', 'demotion' => 'Demotion', 'discharge' => 'Discharge' ], $punishment_type, ['class' => 'form-control _punishment_type']) }}
+								{{ Form::select('punishment_type', ['Please select an item', 'warning' => 'Warning', 'suspended' => 'Suspended', 'demotion' => 'Demotion', 'discharged' => 'Discharge' ], $punishment_type, ['class' => 'form-control _punishment_type']) }}
 							</div>
 
 						</div>

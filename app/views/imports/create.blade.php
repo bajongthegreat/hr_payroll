@@ -42,7 +42,18 @@
 				
 			</div>
 
-		
+			<div class="form-group">
+						
+				{{ Form::label('action', 'Action: ', array('class' => 'col-sm-2 text-right')) }}
+
+				<div class="col-sm-3">
+					{{ Form::select('action', ['insert' => 'Insert',
+					                           'update' => 'Update',
+					                              ] ,Input::old('action'), array('class' => 'form-control ', 'id' => 'action' )) }}
+				</div>
+				
+				
+			</div>		
 
 
 			<div class="form-group">
@@ -121,6 +132,8 @@ $('#file').jmFileUpload({
 $("#uploadedFileLoc").change(function() {
 
 	var table = $('#importFor').val();
+	var action = $('#action').val();
+
 	if (!confirm('You are about to import an Excel data into our database. Warning, importation does not include verification of each field. Please check first if the data is in correct format then press OK, otherwise you can cancel this out and come back later.' + 
 		         '<br><br> Table: ' + table)){
 		
@@ -128,7 +141,7 @@ $("#uploadedFileLoc").change(function() {
 	}
 	$('.upload-info').append('<div> <strong>[5]</strong>	Assigned table name. </div>');
 	console.log(table);
-	
+	console.log(action);
 			var i = 0;
 			
 	var processTime = setInterval(function(){
@@ -148,10 +161,11 @@ $("#uploadedFileLoc").change(function() {
 									}
 
 								},1000);
+
 	$.ajax({
 		url:  _globalObj._baseURL + '/import/start',
 		type: 'POST',
-		data: { 'file': $(this).val(), 'importFor': table },
+		data: { 'file': $(this).val(), 'importFor': table, 'action': action },
 		beforeSend: function() {
 
 			$('.upload-info').append('<div><strong>[5]</strong> Importing process started. </div>');

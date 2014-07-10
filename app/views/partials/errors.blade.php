@@ -1,4 +1,9 @@
 
+@if (Session::has('message') )
+    
+    <div id="message" class="alert alert-info"> {{ Session::get('message') }}</div>
+
+@endif
 
 @if (count($errors) > 0) 
 

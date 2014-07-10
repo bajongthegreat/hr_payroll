@@ -14,16 +14,23 @@
 	</script>
 	<div class="container">
 		
-		<?php $type = (Input::get('add_type') == 'bulk') ? "bulk" : "single"; ?>
+		<?php $type = (Input::get('type') == 'bulk') ? "bulk" : "single"; ?>
 
-		{{Form::open(['action' => 'EmployeesMedicalExaminationsController@update', 'class' => 'form-horizontal', 'role' => 'form', 'autocomplete' => 'off'])}}
 		
-		
-			@include('employees.medical_examination.partials.bulk_edit');
-		
+			@if ($type != 'bulk')
+				{{Form::model($pe, ['action' => ['EmployeesMedicalExaminationsController@update', $pe->id], 'method' => 'PATCH', 'class' => 'form-horizontal', 'role' => 'form', 'autocomplete' => 'off'])}}
+			
+				@include('employees.medical_examination.partials.single_edit');				
+			@else
+				{{Form::model($pe, ['action' => 'EmployeesMedicalExaminationsController@update', 'class' => 'form-horizontal', 'role' => 'form', 'autocomplete' => 'off'])}}
+				@include('employees.medical_examination.partials.bulk_edit');
+			
+			@endif
+
+				{{Form::close()}}
 
 		@include('partials.errors')
 
-		{{Form::close()}}
+		
 	</div>
 @stop

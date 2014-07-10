@@ -346,6 +346,7 @@ class DTRController extends \BaseController {
 			return View::make('dtr.edit', compact('dtr', 'dtr_json', 'ids_prior_update'));
 	}
 
+
 	protected function bulkUpdate() {
 
 		$dtr_data = json_decode(Input::get('dtr_data'));
@@ -370,6 +371,8 @@ class DTRController extends \BaseController {
 			// Get ORIGINAL id of employee from DB
 			$employee_id = $this->employees->find($value->employee_work_id, 'employee_work_id')->pluck('id');
 			$work_id = $value->employee_work_id;
+
+			
 			// DUplicates
 			if (in_array($value->employee_work_id, $jobs)) {
 				$duplications[] = $value->employee_work_id;

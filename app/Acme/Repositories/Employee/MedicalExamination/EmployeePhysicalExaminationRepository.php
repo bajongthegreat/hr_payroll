@@ -52,7 +52,7 @@ class EmployeePhysicalExaminationRepository extends RepositoryAbstract implement
             ->select("employees.lastname", "employees.firstname", "employees.middlename", 
             	     "employees.employee_work_id", "$table.medical_findings_id", "$table.date_conducted",
             	     "$table.recommendations", "$table.medical_establishment_id","$table.remarks", 'medical_establishments.name as establishment',
-            	     'diseases.name as medical_findings', DB::raw('CONCAT(lastname, ", ", firstname) as fullname'))
+            	     'diseases.name as medical_findings', DB::raw('CONCAT(lastname, ", ", firstname) as fullname'), "$table.id")
             ->get();
 	 }
 

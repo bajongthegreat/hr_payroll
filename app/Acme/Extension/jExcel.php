@@ -73,7 +73,7 @@ class jExcel {
 
 		    } else {
 		    	$val = ($cell->getValue() == NULL) ? "" : $cell->getValue();
-
+		    	
 		    	 $this->values[$i][] = (string) $val ;
 		    }
 
@@ -87,6 +87,10 @@ class jExcel {
 
 		$temp = array();
 		$i = 1;
+		
+		if ($this->values === NULL) return false;
+
+
 		foreach ($this->values as $key => $value) {
 
 			$key=  $key-1;

@@ -24,7 +24,7 @@ class ImportsController extends \BaseController {
             
 
             $extension = $file->getClientOriginalExtension();
-            $fileName = date('Y') . date('m') . '-' . sha1($file->getClientOriginalName() . '-' .rand(1,99999)) . ".$extension";
+            $fileName = date('Y') . date('m') . '-' . sha1($file->getClientOriginalName() . '-' .rand(1,99999)) . '_' . $file->getClientOriginalName();
  
  			 $destinationPath = 'imports';
 
@@ -51,6 +51,9 @@ class ImportsController extends \BaseController {
 
 		// Check if that table is in our list that is available and prepared for importation
 		$table = (in_array(Input::get('importFor'), $this->allowedTables)) ? Input::get('importFor') : NULL;
+		$action = (in_array(Input::get('action') , ['insert', 'update'])) ? Input::get('action') : NULL;
+
+		if ($action === NULL) return Reponse::json([]);
 
 		if ($table === NULL) {
 			throw new Exception("Table is not valid. Please do it again.", 101);
@@ -80,16 +83,30 @@ class ImportsController extends \BaseController {
 		$status = false;
 		$query = "";		
 		
+
 		// // Save to database
-		DB::transaction(function() use($jExcel, $data, &$message, &$status, $table) {
+		DB::transaction(function() use($jExcel, $data, &$message, &$status, $table, $action) {
 			try {
 
-				// 		// print json_encode($data);
-			DB::table($table)->insert($data);
+				if ($action == 'insert') {
 
-				// var_dump($count);
-				$message .= '<div> <strong>Inserting data </strong> (' . date('H:i:s') . "): Peak memory usage: " . (memory_get_peak_usage(true) / 1024 / 1024) . " MB\r\n" . '</div>';
+					DB::table($table)->insert($data);
+
+					$message .= '<div> <strong>Inserting data </strong> (' . date('H:i:s') . "): Peak memory usage: " . (memory_get_peak_usage(true) / 1024 / 1024) . " MB\r\n" . '</div>';
 					$status = true;				
+					
+				} else {
+
+					foreach ($data as $index => $content) {
+							$employee_id = $content['employee_work_id'];
+							unset($content['employee_work_id']);
+
+							DB::table($table)->where('employee_work_id', '=', $employee_id)->update($content);
+								
+					}		
+					$message .= '<div> <strong>Updating data </strong> (' . date('H:i:s') . "): Peak memory usage: " . (memory_get_peak_usage(true) / 1024 / 1024) . " MB\r\n" . '</div>';
+							$status = true;			
+				}
 
 				// throw new Exception;
 
@@ -97,8 +114,10 @@ class ImportsController extends \BaseController {
 				// echo $e->getMessage();
 				$error = $e->getMessage();
 				$message .= '<div> <strong>Rolling back due to some problems: </strong> (' . date('H:i:s') . "): Peak memory usage: " . (memory_get_peak_usage(true) / 1024 / 1024) . " MB\r\n" . '</div>';
+				
+				$message .= '<div> <strong>Error: </strong> ' . $error . '</div>';
 			
-				var_dump($error);
+				// var_dump($error);
 				$status = false;
 				$error = "Failed to process data.";
 				DB::rollback();
@@ -115,7 +134,8 @@ class ImportsController extends \BaseController {
 			                  'status' => ($status == true) ? 'success' : 'failed',
 			                  'error' => (isset($error)) ? $error : NULL ,
 			                  'file' => $file,
-			                 'query' => $query] );
+			                 'query' => $query,
+			                 'data' => $data] );
 	}
 
 	public function create() {

@@ -1,3 +1,6 @@
+<script type="text/javascript">
+            var timerStart = Date.now();
+</script>
 
 <!DOCTYPE html>
 <html>
@@ -61,7 +64,8 @@ html {
 
     <footer>
         @yield('footer')
-        <p>&copy; Company 2013</p>
+        <p class="text-center">TIBUD sa Katibawasan Cooperative &copy;2014</p>
+        <!-- <div id="page_load_counter" class="text-center" style="display:none;">Page generated in <span class="load_time"></span> seconds.</div> -->
       </footer>
     
     
@@ -86,5 +90,12 @@ html {
      <script src="{{ asset('jquery/hr_applicants.js') }}"></script>
 
      @yield('later_scripts')
+     <script type="text/javascript">
+      $(document).ready(function() {
+                 // $('.load_time').html(Date.now()-timerStart/1000);
+                 // $('#page_load_counter').show();
+                 console.log('Page load time:' + (Date.now()-timerStart));
+             });
+     </script>
   </body>
 </html>

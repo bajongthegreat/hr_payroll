@@ -1,4 +1,5 @@
 <?php
+use Carbon\Carbon;
 
 App::singleton('AccessControl', function()  { 
 			return  new AccessControl(Auth::user()->id, Auth::user()->role_id);
@@ -32,6 +33,15 @@ if (Auth::check() ) {
 
 Route::get('/', ['as' => 'main',function()
 {
+	// DB::statement(' 
+	// 	DELETE FROM disciplinary_actions 		
+	// 	LEFT OUTER JOIN violations ON violations.id = disciplinary_actions.violation_id
+	// 	WHERE ( TIMESTAMPDIFF(YEAR, disciplinary_actions.violation_date , CURDATE() ) )  <= violations.period_before_reset');
+
+	DB::table('disciplinary_actions')->leftJoin('violations','violations.id', '=', 'disciplinary_actions.violation_id')
+	                                 ->where(DB::raw('( TIMESTAMPDIFF(YEAR, disciplinary_actions.violation_date , CURDATE() ) )') , '>', 'violations.period_before_reset')
+	                                 ->update(['deleted_at' => Carbon::now() ]);
+
 	return Redirect::to('dashboard');
 
 }]);
@@ -42,39 +52,10 @@ Route::get('/', ['as' => 'main',function()
 
 Route::get('/demo', function()
 {
-	// $objPHPExcel = new PHPExcel();
-	// $filename = "C:\Tibud\sssloan december.xls";
-	// $objPHPExcel = PHPExcel_IOFactory::load("C:\Tibud\New data\chunk.xlsx");
-	// // $excelReader = PHPExcel_IOFactory::createReaderForFile($filename);
-
-
-
-	$jExcel = App::make('Acme\Extension\jExcel');
-
-	$jExcel->loadFile("C:\Tibud\New data\chunk.xlsx");
-
-
-	$jExcel->getFieldAndValues();
-
-
-
-	$employees = App::make('Acme\Repositories\Employee\EmployeeRepositoryInterface');
-
-	Event::listen('illuminate.query', function ($sql, $bindings, $times) {
-			echo '<h3 class="page-header">Database Query</h3>';
-				var_dump($sql);
-		});
-
-	// dd( $jExcel->convertValuesAndFieldsToDBArray(true) );
-
-		try {
-			$data = $jExcel->convertValuesAndFieldsToDBArray(true);
-
-			// DB::table('employees')->insert($data);
-		} catch (Exception $e) {
-			echo $e->getMessage();
-		}	
-
+	// disable DOMPDF's internal autoloader if you are using Composer
+;
+		// Use this to download the file.
+		// $dompdf->stream("my.pdf");
 	return '';
 });
 
@@ -147,6 +128,10 @@ Route::group(array('before' => ['auth']), function()
 	Route::resource('employees/medical_examinations', 'EmployeesMedicalExaminationsController');
 
 	// Employee Controller
+	Route::get('employees/masterfile', 'EmployeesController@masterfile');
+
+
+	// Employee Controller
 	Route::post('employees/change_position', 'EmployeesController@changePosition');
     Route::resource('employees', 'EmployeesController');
 	Route::get('employees/promote', 'EmployeesController@promoteview');
@@ -206,6 +191,11 @@ Route::group(array('before' => 'auth'), function()
 	Route::get('/dashboard', function() {
 		return View::make('dashboard.index');
 	});
+	Route::get('/reports', 'ReportsController@index');
+	Route::get('/reports/employee/generate_excel_masterlist', 'ReportsController@create_employee_masterlist_excel');
+	Route::get('/reports/dpc/generate_excel', 'ReportsController@create_dpc_excel');
+	
+	Route::get('/reports/employee', 'ReportsController@employee_index');
 
 	Route::get('/import', 'ImportsController@create');
 	Route::post('/import/upload', 'ImportsController@upload');

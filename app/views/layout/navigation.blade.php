@@ -70,7 +70,24 @@
 
 
             </li>
-                
+              
+
+
+           <li class="dropdown">
+
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>  Reports <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="{{ action('ReportsController@employee_index') }}"> <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;  Employee</a></li>
+      
+            <li><a href="{{ action('PayrollController@create') }}">Process Payroll </a></li>
+            <li><a href="#">Loans</a></li>
+          </ul>
+
+
+            </li>
+
+
+
             </ul>
           
                <ul class="nav navbar-nav navbar-right hidden-sm">

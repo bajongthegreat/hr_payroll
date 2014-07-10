@@ -80,7 +80,8 @@
   <a href="{{ action('EmployeesController@create')}}" class="btn btn-success"><span class="glyphicon glyphicon-new-window"></span> Create new Employee</a>
     @endif
    <a  href="{{ action('EmployeesController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-refresh"></span >  Refresh</a>
-   
+ 
+     
  
 
   </div>
@@ -94,6 +95,7 @@
   		<th class="text-center">Position</th>
       <th class="text-center">Membership status</th>
   		<th class="text-center">Employment status</th>
+      <th colspan="2" class="text-center"> <a  href="{{ action('EmployeesController@masterfile') }}" class="label label-success "><img width="12" src="{{ asset('img/icons/32x32/menu-pull-up.png') }}">  Export Excel</a></th>
   	</thead>
 
   
@@ -109,7 +111,7 @@
                 <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}"> <?php echo   ucfirst($employee->lastname) . ', ' . $employee->firstname . ' ' . $employee->name_extension .' ' . $employee->middlename .'</td>'; ?>
                 <td class="text-center"> <?php echo  ($employee->position_id == 0 || (!isset($employee->position['name']) )) ? '<span class="label label-default">Not assigned</span>' : ucfirst($employee->position['name']) . '</td>'; ?>
                 <td class="text-center"> <?php echo  '<span class="label label-info">' . ucfirst(strtolower($employee->membership_status)) . '</span></td>'; ?>
-                <td class="text-center"> <?php echo '<span class="label label-info">' . ucfirst( strtolower($employee->employment_status)) . '</span></td>'; ?>
+                <td class="text-center"> <?php echo '<span class="label ' . (strtolower($employee->employment_status) == 'resigned' ? 'label-danger' : 'label-success') . '">' . ucfirst( strtolower($employee->employment_status)) . '</span></td>'; ?>
                 <td> 
                    @if ($accessControl->hasAccess($uri, 'edit', $GLOBALS['_byPassRole']))
                   <a class="btn btn-small btn-default editButton" href="{{ action('EmployeesController@edit', $employee->employee_work_id ) }}"> <span class="glyphicon glyphicon-edit"></span> Edit</a> 

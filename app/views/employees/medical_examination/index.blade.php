@@ -61,7 +61,7 @@
   				<td class="__more_violations_parent" data-medical_establishment="{{ $pe->medical_establishment_id }}" data-date_conducted="{{ $pe->date_conducted }}" data-status="closed"  > <span class="label label-default"><span class="glyphicon glyphicon-list"></span>  View Employees Included</span></td>
 				<td> {{ $pe->establishment }} </td>
 				<td> {{ $date_conducted->format('F d, Y')  }} </td>
-				<td> <a href="{{ action('EmployeesMedicalExaminationsController@edit', $pe->id) }}?date_conducted={{$pe->date_conducted}}&medical_establishment_id={{$pe->medical_establishment_id}}">Edit</a> </td>
+				<td> <a href="{{ action('EmployeesMedicalExaminationsController@edit', $pe->id) }}?date_conducted={{$pe->date_conducted}}&medical_establishment_id={{$pe->medical_establishment_id}}&type=bulk">Edit</a> </td>
 			</tr>
 		@endforeach
 
@@ -151,7 +151,8 @@
 								inner_table_data_container += "<td>" + medical_findings +"</td>";
 								inner_table_data_container += "<td>" + data[key].recommendations +"</td>";
 								inner_table_data_container += "<td>" + data[key].remarks +"</td>";
-								// inner_table_data_container += '<td><a href="' + _globalObj._baseURL + URI + '/'  + data[key].id + '/edit' + '" class="btn btn-default">Edit</a></td>';
+								inner_table_data_container += '<td><a href="' + _globalObj._baseURL + URI + '/'  + data[key].id + '/edit?' + 'work_id=' + data[key].employee_work_id +'" class="btn btn-default">Edit</a>&nbsp;';								
+								inner_table_data_container += '<a href="#" url="' + _globalObj._baseURL + URI + '/'  + data[key].id + '/'  +  '" data-employee_id="' + data[key].id +'" class="btn btn-default _deleteItem">Delete</a></td>';
 								// inner_table_data_container += '<td><a href="#" data-employee_id="' + data[key].id + '" data-url="' + _globalObj._baseURL + URI + '"/' + data[key].id +' class="btn btn-default _deleteItem">Edit</a></td>';
 				
 							inner_table_data_container += "</tr>";

@@ -6,8 +6,8 @@ use App;
 class MedicalExaminationsComposer {
 
 	protected $medicals;
-	protected $medical_establishments = ['Donasco Medical Clinic' => 'Donasco Medical Clinic', 'Howard Hubbard Hospital' => 'Howard Hubbard Hospital'];
-	protected $medical_findings = ['None' => 'None','Hypertension' => 'Hypertension', 'Urinary Tract Infection' => 'Urinary Tract Infection', 'Cardiomegaly' => 'Cardiomegaly', 'Pulmonary Tuberculosis' => 'Pulmonary Tuberculosis'];
+	// protected $medical_establishments = ['Donasco Medical Clinic' => 'Donasco Medical Clinic', 'Howard Hubbard Hospital' => 'Howard Hubbard Hospital'];
+	// protected $medical_findings = ['None' => 'None','Hypertension' => 'Hypertension', 'Urinary Tract Infection' => 'Urinary Tract Infection', 'Cardiomegaly' => 'Cardiomegaly', 'Pulmonary Tuberculosis' => 'Pulmonary Tuberculosis'];
 	protected $recommendations = ['Fit to work' => 'Fit to work', 'Unfit to work' => 'Unfit to work', 'Pending' => 'Pending'];
 
 	public function __construct(EmployeePhysicalExaminationRepositoryInterface $medicals) {
@@ -29,7 +29,11 @@ class MedicalExaminationsComposer {
 	}
 
 	public function medical_findings($view) {
-		$view->with('medical_findings', $this->medical_findings);	
+		$medical_findings = App::make('Acme\Repositories\Employee\MedicalExamination\Disease\DiseaseRepositoryInterface');
+				
+				$arr = $medical_findings->all()->lists('name', 'id');
+
+		$view->with('medical_findings', $arr);	
 	}
 
 	public function recommendations($view) {

@@ -43,6 +43,7 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 		}
 
 
+
 		if (Input::has('jq_ax') && Input::get('jq_ax') == 'employees_included') {
 			$employees = $this->physical_examinations->getIncludedEmployeesOnExamination(  Input::get('date_conducted'), (int) Input::get('medical_establishment_id') );
 			// return Response::json($employees);
@@ -284,6 +285,9 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 				return  $this->notAccessible();		
 		}
 
+				// var_dump(123);
+
+
 		View::make('employees.medical_examination.show');
 	}
 
@@ -301,6 +305,16 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
 				return  $this->notAccessible();		
 		}
+
+		if (Input::get('type') != 'bulk') {
+
+			$pe = $this->physical_examinations->find($id)->first();
+			// dd($pe);
+			$json = json_encode([]);
+
+
+		} else {
+			
 		$date_conducted = Input::get('date_conducted');
 		$medical_establishment_id = Input::get('medical_establishment_id');
 
@@ -311,13 +325,19 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 		                                         ->get();
 		 $json = json_encode($pe->toArray());
 
+
+
+		} 
+
+
+		return View::make('employees.medical_examination.edit', compact(['json', 'pe']) );
 		 // dd($json_data);
-		return View::make('employees.medical_examination.edit', compact(['json', 'pe']));
 	}
 
 		protected function updateBulk() {
 		// return 'Processing';
 		$examination_data = Input::get('examination_data');
+		$ids_prior_update = Input::get('ids_prior_update');
 
 		$decoded_examination_data = json_decode($examination_data);
 
@@ -439,11 +459,12 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 	 */
 	public function update($id)
 	{
-
 		// Check access control
 		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
 				return  $this->notAccessible();		
 		}
+
+
 
 		if (Request::ajax() ) {
 
@@ -464,6 +485,33 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 			return $this->updateBulk();
 				
 		}
+		// dd(Input::all());
+		
+		$employee_work_id = Input::get('employee_work_id');
+		$date_conducted = Input::get('date_conducted');
+		$medical_establishment_id = Input::get('medical_establishment');
+		$medical_findings = Input::get('medical_findings');
+		$recommendation = Input::get('recommendation');
+		$remarks = Input::get('remarks');
+
+
+		$data = [ 'date_conducted' => $date_conducted,
+		          'medical_establishment_id' => $medical_establishment_id,
+		          'medical_findings_id' => $medical_findings,
+		          'recommendations' => $recommendation,
+		          'remarks' => $remarks ];
+
+		 if ( $this->physical_examinations->find($id)->update($data) ) {
+		 	$message = "P.E Information details updated.";
+		 } else {
+		 	$message = "Failed to update P.E Information.";
+		 }
+
+		 return Redirect::action('EmployeesMedicalExaminationsController@edit', [$id, 'work_id' => $employee_work_id, '#message' ])->with('message', $message);
+
+
+
+		echo 'waaa';
 		
 	}
 
@@ -476,11 +524,15 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
+		var_dump(123);
 		
 		// Check access control
-		if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
-				return  $this->notAccessible();		
-		}
+		// if ( !$this->accessControl->hasAccess($this->default_uri, 'delete', $this->byPassRoles) ) {
+		// 		return  $this->notAccessible();		
+		// }
+		// var_dump($id);
+		// return $this->physical_examinations->find($id)->delete();
+		return 1212;
 	}
 
 }

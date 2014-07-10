@@ -273,6 +273,8 @@ class ViolationsController extends \BaseController {
 		if ( !$this->accessControl->hasAccess($this->default_uri, 'view', $this->byPassRoles) ) {
 				return  $this->notAccessible();		
 		}
+
+		return Redirect::action('ViolationsController@edit', $id);
 	}
 
 	/**

@@ -74,6 +74,9 @@
     
 
       @foreach($loans as $loan)
+      <?php 
+            $loan_date = new DateTime($loan->salary_deduction_date);
+      ?>
      
       <tr>
     <td>{{ !isset($loan->lastname)?:strtoupper($loan->lastname)}}, {{ !isset($loan->firstname)?: strtoupper($loan->firstname)}} {{ !isset($loan->middlename[0]) ?: strtoupper($loan->middlename[0]) }} </td>
@@ -81,7 +84,7 @@
         <td>{{$loan->date_issued}}</td>
         <td>{{$loan->loan_amount}}</td>
         <td>{{$loan->monthly_amortization}}</td>
-        <th>{{$loan->salary_deduction_date}}</th>
+        <th>{{ $loan_date->format('F Y') }}</th>
         <td>{{$loan->duration_in_months}}</td>
         <td><a class="label label-default" href="{{ action('SSS_loansController@edit', $loan->id)}}?#employee={{$loan->employee_work_id}}">Edit</a></td>
       </tr>

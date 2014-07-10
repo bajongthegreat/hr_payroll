@@ -76,8 +76,16 @@
 	  				
 	  				<tr  >
 	  					<td class="__more_violations_parent" data-status="closed" data-employee_id="{{ $violator->employee_id}}" data-violation_id="{{ $violator->violation_id }}"> <span class="label label-default"><span class="glyphicon glyphicon-list"></span>  View all</span></td>
-	  					<?php $number_violated = $disciplinaryactions->getOffensesCount($violator->employee_id, $violator->violation_id); ?>
-	  					
+	  					<?php $number_violated = $disciplinaryactions->getOffensesCount($violator->employee_id, $violator->violation_id); 
+
+				  			  $penalty_object = $offense->getPenalty($violator->violation_id, $number_violated);
+
+				  			  $punishment_type = $penalty_object['punishment_type'];
+
+				  			  if ($punishment_type == 'suspended') {
+				  			  		$punishment_type = $punishment_type . ' for ' . $penalty_object['days_of_suspension'] . ' days';
+				  			  }
+				  		?>
 
 	  					<td><a class="label label-info" href="{{ action('EmployeesController@show', $violator->employee_work_id) }}?v=violations"> {{ $violator->lastname or ''}}, {{ $violator->firstname or '' }} {{ (isset($violator->middlename[0])) ? ucfirst($violator->middlename) . '.'  : '' }} </a></td>
 	  					<td>{{ $violator->company }}</td>
@@ -85,7 +93,7 @@
 	  					<td> {{ $violator->position or '<span class="label label-default">Not specified</span>'}}</td>
 	  					<td> <span class="label label-warning">{{ $violator->violation_code }}</span></td>
 
-	  					<td> <span class="label label-warning"> {{ $violations->find($violator->violation_id, 'id')->pluck(wordifyWithSuffix($number_violated) . '_offense') }} ({{$number_violated}})</span></td>
+	  					<td> <span class="label label-warning">  {{$punishment_type}}</span></td>
 	  					
 	  				</tr>
 	  			@endforeach
