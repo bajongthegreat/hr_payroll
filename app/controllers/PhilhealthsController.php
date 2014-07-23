@@ -10,6 +10,7 @@ class PhilhealthsController extends BaseController {
 	public function index()
 	{
 		$philh = Philhealth::all();
+		
         return View::make('philhealths.index', compact('philh'));
 	}
 

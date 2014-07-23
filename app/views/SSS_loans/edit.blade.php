@@ -11,8 +11,13 @@
 
 <?php 
 	$employee_work_id = $loan->employee->employee_work_id;
-	$employee_name = ucfirst($loan->employee->lastname) . ', ' . ucfirst($loan->employee->firstname) . ' ' . ucfirst($loan->employee->middlename[0]);
-	$date_hired = $loan->employee->date_hired;
+
+	// $firstname = isset($loan->employee->firstname) ? $loan->employee->firstname : '';
+	// $middlename = isset($loan->employee->middlename[0]) ? $loan->employee->middlename[0] : '';
+
+
+	// $employee_name = ucfirst($loan->employee->lastname) . ', ' . ucfirst($firstname) . ' ' . ucfirst($middlename);
+	// $date_hired = $loan->employee->date_hired;
 ?>
 
 <!-- Employee Search Panel -->
@@ -73,6 +78,17 @@
 				
 			</div>
 
+			
+				<div class="form-group">
+						
+				{{ Form::label('duration_in_months', 'Duration in Months: ', array('class' => 'col-sm-2 text-right')) }}
+
+				<div class="col-sm-2">
+					{{ Form::input('number','duration_in_months', Input::old('duration_in_months'), array('class' => 'form-control') ) }}
+				</div>
+				
+			</div>
+
 				<div class="form-group">
 
 						
@@ -100,15 +116,6 @@
 				
 			</div>
 
-				<div class="form-group">
-						
-				{{ Form::label('duration_in_months', 'Duration in Months: ', array('class' => 'col-sm-2 text-right')) }}
-
-				<div class="col-sm-2">
-					{{ Form::input('number','duration_in_months', Input::old('duration_in_months'), array('class' => 'form-control') ) }}
-				</div>
-				
-			</div>
 
 
 
@@ -157,7 +164,8 @@
 
 
 	            
-	           
+	           	
+                          
             });
 
 

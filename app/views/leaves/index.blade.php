@@ -77,7 +77,7 @@
       @foreach($leaves as $leave)
      
       <tr>
-        <td><a href="{{ action('LeavesController@show', $leave->id) }}"><span class="label label-default">View</span></a></td>
+        <td><a href="{{ action('LeavesController@show', $leave->id) }}?work_id={{$leave->employee->employee_work_id}}"><span class="label label-default">View</span></a></td>
 
         <td>{{$leave->employee->employee_work_id}}</td>
         <td>{{ucfirst($leave->employee->lastname)}}, {{ ucfirst($leave->employee->firstname) }}</td>

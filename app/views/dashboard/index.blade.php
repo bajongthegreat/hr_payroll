@@ -8,12 +8,21 @@ $pe_count = DB::table('employees_physical_examinations')->where(DB::raw('YEAR(da
 $violator_count = DB::table('disciplinary_actions')->where(DB::raw('YEAR(violation_date)'), '=', date('Y'))->groupBy('employee_id')->count();
 $leave_count = DB::table('leaves')->where(DB::raw('YEAR(start_date)'), '=', date('Y'))->groupBy('employee_id')->count();
 
+$on_leave = DB::table('leaves')->orWhere(function($query) {
+
+
 $date= date('Y-m-d');
 
-$on_leave = DB::table('leaves')->whereBetween(DB::raw('CURDATE()'), [$date , $date])->groupBy('employee_id')->where('status', 'Approved')->count();
+
+  $query->where('start_date', '=', DB::raw('CURDATE() ') );
+  $query->where('end_date', '=', DB::raw('CURDATE() '));
+
+})->groupBy('employee_id')->where('status', 'Approved')->count();
 
 if (!$on_leave) $on_leave = 0;
+if (!$violator_count) $violator_count = 0;
 $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', date('m'))->get();
+
 
 ?>
 <!DOCTYPE html>
@@ -151,7 +160,7 @@ $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', da
                         <?php 
                           $holiday_date = new DateTime($holiday->holiday_date);
                         ?>
-                          {{$holiday->name}} will be on {{ $holiday_date->format('F d, Y') }}
+                          {{ $holiday->name}} will be on {{ $holiday_date->format('F d, Y') }}
                         @endforeach
                       </ul>
                     @endif

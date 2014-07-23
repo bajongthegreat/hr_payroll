@@ -24,7 +24,7 @@ class ReportsController extends BaseController {
     }
 
     public function create_dpc_excel() {
-    		$month = 8; 
+    		$month = 7; 
 
     	$data = DB::table('disciplinary_actions')->where(DB::raw('MONTH(violation_date)'), '=', $month)
     									 ->whereNull('disciplinary_actions.deleted_at')

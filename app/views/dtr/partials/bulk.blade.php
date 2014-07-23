@@ -31,7 +31,7 @@
 
 					<div class="col-sm-4">
 			
-							{{ Form::select('department',$departments , Input::old('department'), array('class' => 'form-control', 'required', 'id' => 'department_id') ) }}
+							{{ Form::select('department',['Please select department'] + $departments , Input::old('department'), array('class' => 'form-control', 'required', 'id' => 'department_id') ) }}
 					</div>
 		</div>
 
@@ -43,7 +43,7 @@
 
 					<div class="col-sm-4">
 			
-							{{ Form::select('work_assignment_id', [] , Input::old('work_assignment_id'), array('class' => 'form-control', 'required', 'id' => 'position_id') ) }}
+							{{ Form::select('work_assignment_id', ['Please wait while positions are loaded.'] , Input::old('work_assignment_id'), array('class' => 'form-control', 'required', 'id' => 'position_id') ) }}
 					</div>
 		</div>
 
@@ -132,7 +132,7 @@
 
 				<hr>
 
-		  <table id="medical_examination_information_table" class="table panel-smooth-edges">
+		  <table id="dtr_information_table" class="table panel-smooth-edges">
 			<thead>
 				<th width="35%">ID Number 	</th>
 				<th id="header_timein_am" width="15%" class="text-center"><strong>Time IN  </strong><span style="display:none;" class="timelabel label label-info"><span class="_amth">AM</span> </span></th>
@@ -143,7 +143,7 @@
 				<th class="text-center"> Remarks</th>
 				<th></th>
 			</thead>
-			<tbody id="medical_examination_information_table_body">
+			<tbody id="dtr_information_table_body">
 				
 			</tbody>
 		</table>
@@ -157,9 +157,9 @@
 
 	
 
-<div class="panel panel-default hide smooth-panel-edges" id="examination_creation_result">
+<div class="panel panel-default hide smooth-panel-edges" id="dtr_creation_result">
 		  <div class="panel-heading">
-		    <h3 class="panel-title"><h4>Data submission status</h4></h3>
+		    <h3 class="panel-title"><h4>Data submission status <a href="#" class="btn btn-success pull-right use-again">Use this data again</a></h4></h3>
 		  </div>
 		  <div class="panel-body">
 		  		<table class="table table-striped">
@@ -186,7 +186,7 @@
 
 
 
-<div class="panel panel-default hide smooth-panel-edges" id="examination_creation_result_data">
+<div class="panel panel-default hide smooth-panel-edges" id="dtr_creation_result_data">
 		  <div class="panel-heading">
 		    <h3 class="panel-title"><h4>Encoded data</h4></h3>
 		  </div>
@@ -220,8 +220,7 @@
 		<div class="form-group">
 		 <div class="form-group pull-left">
 		 	
-
-	     	{{ Form::submit('Submit', array('class' => 'btn btn-primary ', 'id'=> 'processTableData')) }}
+		 	<a href="#" class="btn btn-primary" id="processTableData">Submit</a>
 	      	 {{ Form::reset('Clear', array('class' => 'btn btn-default', 'id' => 'clear')) }} 
 	      	 <div id="submitload"></div>
 	      </div>
@@ -247,6 +246,8 @@ var __dayShiftHoursAM = [],
 	(function() {
 
 		var show_full_dtr = $('#show_full_dtr').prop('checked');
+
+
 
 
 		$('#department_id').trigger('change');
@@ -531,6 +532,10 @@ var __dayShiftHoursAM = [],
 		$('#processTableData').on('click', function(e) {
 
 			e.preventDefault();
+
+
+
+
 			var date_conducted = $('#work_date');
 
 			if ($('#position_id').val() == null || $('#position_id').val() == -1 || $('#position_id').val() == 00) {
@@ -548,8 +553,13 @@ var __dayShiftHoursAM = [],
 				date_conducted.closest('div[class^="form-group"]').removeClass('has-error');
 			}
 
+
+			if (!confirm('Are you sure you want to save this data into the database?')) {
+			 	return false;
+			}
+
 			// Get table's basic data
-			var table = document.getElementById("medical_examination_information_table_body");
+			var table = document.getElementById("dtr_information_table_body");
 			var cellData = {};
 			var tableData = {};	
 			var field = value = "";	
@@ -629,14 +639,15 @@ var __dayShiftHoursAM = [],
  								var duplications = output.duplications
  								var not_included = output.not_included;
 
-								$('#medical_examination_information_table').hide();
-								var resultTable = $('#examination_creation_result');
-								var encodedDataTable = $('#examination_creation_result_data');
-								var resultTableData = $('#examination_creation_result_data tbody');
+								$('#dtr_information_table').hide();
+								var resultTable = $('#dtr_creation_result');
+								var encodedDataTable = $('#dtr_creation_result_data');
+								var resultTableData = $('#dtr_creation_result_data tbody');
 								var skipped_items = ['created_at','updated_at'];
 
 								encodedDataTable.removeClass('hide');
 								resultTable.removeClass('hide');
+
 								$('.jobs_done').html(output.all_jobs.length);
 								$('.success_jobs').html(output.success_jobs.length);
 								$('.failed_jobs').html(output.failed_jobs.length);
@@ -863,37 +874,111 @@ var __dayShiftHoursAM = [],
 			var rows = $('.rowCount').val();
 
 			// Call addRow() with the ID of a table
-			addRow('medical_examination_information_table_body', rows);
+			addRow('dtr_information_table_body', rows);
 	
 		});
 
-		addRow('medical_examination_information_table_body',5);
+		addRow('dtr_information_table_body',5);
 		
 
-		$(document).on('keyup', '.searcheable', function(){
+		// $(document).on('keyup', '.searcheable', function(e){
 			
-			if ($(this).val().length > 1) {
-				_searchEmployee($(this).val(), $(this));		
-			} else {
-				$('.resultContainer').remove();	
-			}
-		});
+		// 	if ($(this).val().length > 1) {
+			
+		// 		// Down
+		// 		if (e.which == 40) {
+				
+		// 			var resultItem = $('.resultContainer .resultItem'); 
+		// 			var resultItemActive = $('.resultContainer .resultItem .active');
+		// 			// Check if first is selected
+
+		// 				if (resultItem.hasClass('active')) {
+		// 					var index = $('.resultItem.active').data('index');
+							
+		// 						resultItem.eq(index).removeClass('active');
+		// 						resultItem.eq(index+1).addClass('active');
+		// 					console.log(index);
+		// 				}							
+					
+					
+			
+
+		// 		} else if (e.which == 38) {
+
+		// 			var resultItem = $('.resultContainer .resultItem'); 
+		// 			var resultItemActive = $('.resultContainer .resultItem .active');
+		// 			// Check if first is selected
+
+		// 				if (resultItem.hasClass('active')) {
+		// 					var index = $('.resultItem.active').data('index');
+							
+		// 						resultItem.eq(index).removeClass('active');
+		// 						resultItem.eq(index-1).addClass('active');
+		// 					console.log(index);
+		// 				}							
+					
+
+		// 		} else if (e.which == 13) {
+		// 			// For enter
+
+		// 			var resultItem = $('.resultContainer .resultItem'); 
+					
+		// 			resultItem.each(function() {
+		// 				if ($(this).hasClass('active')) {
+		// 					var id = $(this).data('employee_id');
+				
+		// 					var id = $(this).data('employee_id'),
+		// 						name = $(this).data('employee_name'),
+		// 					    input = $(this).parent().siblings('input.searcheable');
+		// 					$('.resultName').remove();            
+				            
+		// 					input.val(id);
+		// 		            input.next().remove();
+		// 		                                     input.parent().find('.input-group-addon').remove();
+				                 
+		// 		            input.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
+
+		// 					$('.resultContainer').remove();
+
+		// 				}
+		// 			});
+
+		// 			e.preventDefault();
+		// 			return false;
+
+		// 		} else {
+		// 			_searchEmployee($(this).val(), $(this));
+		// 		}
+							
+		// 	} else {
+		// 		$('.resultContainer').remove();	
+		// 	}
 
 
-		$(document).on('click', '.resultItem a', function(e) {
+
+
+
+
+		// 	console.log(e.which)
+		// });
+
+
+		// $(document).on('click', '.resultItem a', function(e) {
 			
-			var id = $(this).parent().data('employee_id'),
-				name = $(this).parent().data('employee_name'),
-			    input = $(this).parent().parent().siblings('input.searcheable');
-			$('.resultName').remove();            
+		// 	var id = $(this).parent().data('employee_id'),
+		// 		name = $(this).parent().data('employee_name'),
+		// 	    input = $(this).parent().parent().siblings('input.searcheable');
+		// 	$('.resultName').remove();            
             
-			input.val(id);
-            input.next().remove();
-            input.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
+		// 	input.val(id);
+  //           input.next().remove();
+  //                                    input.parent().find('.input-group-addon').remove();
+                 
+  //           input.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
 
-			$('.resultContainer').remove();
-			e.preventDefault();
-		});
+		// 	$('.resultContainer').remove();
+		// 	e.preventDefault();
+		// });
 
 		$(document).on('blur', 'input[name="time_out_pm"]', function() {
 			var timeout = __parseTime($(this).val());
@@ -1117,7 +1202,41 @@ var __dayShiftHoursAM = [],
 		});
 
 		
+		$('.use-again').on('click', function() {
+				var dtrinfo = $('#dtr_information_table');
+				var resultTable = $('#dtr_creation_result');
+			    var encodedDataTable = $('#dtr_creation_result_data');
+				var resultTableData = $('#dtr_creation_result_data tbody');
+				dtrinfo.show();
+								encodedDataTable.addClass('hide');
+								resultTable.addClass('hide');
+				$('#buttons').show();
 		
+		});	
+
+		// Universal Key event
+		$(document).on('keyup', function(e) {
+			
+			// Submit form
+			if (e.keyCode  == 13 && e.ctrlKey) {
+				$('#processTableData').trigger('click');
+				console.log('wee')
+			}
+
+			// Use the same data
+			if (e.keyCode  == 85 && e.ctrlKey && e.shiftKey) {
+				$('.use-again').trigger('click');
+				console.log('wee')
+			}
+
+			// Select first searcheable element
+			if (e.keyCode  == 70 && e.ctrlKey && e.shiftKey) {
+				$('.searcheable').first().focus();
+				console.log('wee')
+			}						
+
+			console.log(e.keyCode);
+		});	
 	})()
 </script>
 @stop

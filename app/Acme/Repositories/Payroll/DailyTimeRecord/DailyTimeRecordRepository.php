@@ -21,17 +21,29 @@ class DailyTimeRecordRepository extends RepositoryAbstract implements DailyTimeR
 	    $this->model = $model;
 	 }
 
-	 public function allGrouped($paginate= 10) {
+	 public function allGrouped($paginate= 10, $src = NULL) {
 	 	$table = $this->table;
-	 	return DB::table($this->table)->leftJoin('positions', "$table.work_assignment_id", '=', 'positions.id')->groupBy('shift', 'work_date', 'work_assignment_id')->paginate(10);
+	 	return DB::table($this->table)->leftJoin('positions', "$table.work_assignment_id", '=', 'positions.id')->orWhere(function($query) use ($src) {
+	 																														if ($src != NULL) {
+	 																															$query->orWhere('positions.name', 'LIKE', '%' . $src .'%');
+	 																															$query->orWhere('shift', 'LIKE', '%' . $src .'%');
+	 																														}
+	 																													})->groupBy('shift', 'work_date', 'work_assignment_id')->paginate($paginate);
 	 }
 
-	 public function allNotGrouped($paginate = 10) {
+	 public function allNotGrouped($paginate = 10, $src = NULL) {
 	 	$table = $this->table;
 	 	return DB::table($this->table)->leftJoin('positions', "$table.work_assignment_id", '=', 'positions.id')
 	 								  ->leftJoin('employees', 'employees.id', '=', "$table.employee_id")
 	 	                              ->groupBy('employee_id','work_date', 'shift')
 	 	                              ->leftJoin('departments', 'departments.id', '=', 'positions.department_id')
+	 	                              ->orWhere(function($query) use($src) {
+	 	                              	if ($src != NULL) {
+	 	                              		$query->orWhere('positions.name', 'LIKE', '%'.$src .'%');
+	 	                              		$query->orWhere('dailytimerecords.shift', 'LIKE', '%'.$src .'%');
+	 	                              		$query->orWhere('employees.employee_work_id', 'LIKE', '%'.$src .'%');
+	 	                              	}
+	 	                              })
 				                      ->select("dailytimerecords.id",
 				                                	    "dailytimerecords.work_date",
 				                                	    "dailytimerecords.shift",

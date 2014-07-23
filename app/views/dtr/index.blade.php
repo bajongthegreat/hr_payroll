@@ -11,7 +11,8 @@
 	
 	  <div class="search-container col-md-4 pull-right">
 		{{ Form::open(['method' => 'GET'])}}	
-	  <input class="form-control " name="src" placeholder="Search employee..." id="search" ng-model="query">
+	  <input class="form-control " name="src" placeholder="Search employee..." id="search" ng-model="query" value="{{{ Input::get('src') }}}">
+	  <input type="hidden" name="group" value="{{{Input::get('group')}}}">
 		{{ Form::close() }}
 	  </div>
 	

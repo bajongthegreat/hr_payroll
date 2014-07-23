@@ -69,6 +69,17 @@
 				
 			</div>
 
+
+				<div class="form-group">
+						
+				{{ Form::label('duration_in_months', 'Duration in Months: ', array('class' => 'col-sm-2 text-right')) }}
+
+				<div class="col-sm-2">
+					{{ Form::input('number','duration_in_months', Input::old('duration_in_months'), array('class' => 'form-control') ) }}
+				</div>
+				
+			</div>
+
 				<div class="form-group">
 
 						
@@ -96,15 +107,6 @@
 				
 			</div>
 
-				<div class="form-group">
-						
-				{{ Form::label('duration_in_months', 'Duration in Months: ', array('class' => 'col-sm-2 text-right')) }}
-
-				<div class="col-sm-2">
-					{{ Form::input('number','duration_in_months', Input::old('duration_in_months'), array('class' => 'form-control') ) }}
-				</div>
-				
-			</div>
 
 
 
@@ -153,7 +155,6 @@
 	               $('#start_date').data("DateTimePicker").setMaxDate(e.date);
 	            });
 
-                           
 
             });
 

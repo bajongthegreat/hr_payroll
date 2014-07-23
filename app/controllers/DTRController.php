@@ -38,10 +38,13 @@ class DTRController extends \BaseController {
 	 */
 	public function index()
 	{
+
+		$src = (Input::get('src') != "") ? Input::get('src') : NULL;
+
 		if (Input::has('group') && Input::get('group') == 'none') {
-			$daily_time_records = $this->daily_time_records->allNotGrouped();
+			$daily_time_records = $this->daily_time_records->allNotGrouped(20, $src);
 		} else {
-			$daily_time_records = $this->daily_time_records->allGrouped();
+			$daily_time_records = $this->daily_time_records->allGrouped(10, $src);
 		}
 		
 
@@ -201,24 +204,36 @@ class DTRController extends \BaseController {
 					// Check for duplication first					
 					if (!in_array($data->employee_work_id, $jobs)) {
 
+					$employee_data_count = $this->daily_time_records->find($id, 'employee_id')
+					                                         ->where('work_date', '=', $work_date)
+					                                         ->where('shift', '=', $shift)
+					                                         ->count();
+					 // // Skip duplicate data
+					 if ($employee_data_count > 0) {
+					 	$failed_jobs[] = $data->employee_work_id;
+					 } else {
 
+					 
 
 					$status = $this->daily_time_records->create($employee_data);	
 					
-					unset($employee_data['encoded_by']);
-
-					$employee_data['employee_id'] = $data->employee_work_id;
-					$employee_data['id'] = $status->id;
-
-					$json_employee_data[] = $employee_data;
-						// Record job
-						$jobs[] = $data->employee_work_id;
-
 						if ($status == false) {
 							$failed_jobs[] = $data->employee_work_id;
 						} else {
 							$success_jobs[] = $data->employee_work_id;
 						}
+
+						// unset($employee_data['encoded_by']);
+
+						
+						$employee_data['id'] = $status->id;
+					}
+
+					$employee_data['employee_id'] = $data->employee_work_id;
+					$json_employee_data[] = $employee_data;
+						// Record job
+						$jobs[] = $data->employee_work_id;
+
 
 					} else {
 						// Save Employee Data

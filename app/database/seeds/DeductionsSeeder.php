@@ -10,16 +10,16 @@ class DeductionsSeeder extends Seeder {
 		// DB::table('companies')->truncate();
 
 		$fixed_deductions = array(
-			['name' => 'Health Care',
-			 'amount' => 75,
+			['name' => 'health_care',
+			 'amount' => 125,
 			 'created_at' => Carbon::now(),
 			 'updated_at' => Carbon::now() ],
-			 ['name' => 'CBU - Capital Build-Up',
-			  'amount' => 115,
+			 ['name' => 'cbu',
+			  'amount' => 100,
 			 'created_at' => Carbon::now(),
 			 'updated_at' => Carbon::now() ],
-			  ['name' => 'Pledge',
-			   'amount' => 100,
+			  ['name' => 'pledge',
+			   'amount' => 75,
 			 'created_at' => Carbon::now(),
 			 'updated_at' => Carbon::now() ]
 		);

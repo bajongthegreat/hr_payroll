@@ -63,13 +63,23 @@ class SSS_loansController extends BaseController {
 		$sss_loan_data = Input::only('sss_id','date_issued','loan_amount', 'salary_deduction_date', 'monthly_amortization','duration_in_months','employee_id');
 		$hash_segment = '#employee=' . $id;
 
+
+		$sss_loan_data['status'] = 'open';
+
+		// dd($hash_segment);
+
 		// Validate Inputs
 		if (!$this->validator->validate($sss_loan_data, NULL, $custom_message)) {
-			return Redirect::action('SSS_loansController@create',$hash_segment )->withInput()->withErrors($this->validator->errors());
+			return Redirect::action('SSS_loansController@create', [$hash_segment] )->withInput()->withErrors($this->validator->errors());
 		}
 
-		$this->sss_loans->create($sss_loan_data);
+		$loan_count = $this->sss_loans->find($sss_loan_data['employee_id'], 'employee_id')->where('date_issued', '=', $sss_loan_data['date_issued'])->count();
 
+		if ($loan_count == 0) {
+			$this->sss_loans->create($sss_loan_data);
+		}
+
+		
 		return Redirect::action('SSS_loansController@index');
 	}
 

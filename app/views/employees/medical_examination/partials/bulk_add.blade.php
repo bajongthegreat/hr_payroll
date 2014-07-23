@@ -459,30 +459,22 @@ var resultContainer = $('.resultContainer');
 		addRow('medical_examination_information_table_body',5);
 		
 
-		$(document).on('keyup', '.searcheable', function(){
-			
-			if ($(this).val().length > 1) {
-				_searchEmployee($(this).val(), $(this));		
-			} else {
-				$('.resultContainer').remove();	
-			}
-		});
 
 		
-		$(document).on('click', '.resultItem a', function(e) {
+		// $(document).on('click', '.resultItem a', function(e) {
 			
-			var id = $(this).parent().data('employee_id'),
-				name = $(this).parent().data('employee_name'),
-			    input = $(this).parent().parent().siblings('input.searcheable');
-			$('.resultName').remove();            
+		// 	var id = $(this).parent().data('employee_id'),
+		// 		name = $(this).parent().data('employee_name'),
+		// 	    input = $(this).parent().parent().siblings('input.searcheable');
+		// 	$('.resultName').remove();            
             
-			input.val(id);
-            input.next().remove();
-            input.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
+		// 	input.val(id);
+  //           input.next().remove();
+  //           input.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
 
-			$('.resultContainer').remove();
-			e.preventDefault();
-		});
+		// 	$('.resultContainer').remove();
+		// 	e.preventDefault();
+		// });
 
 		// $(document).on('blur', '.searcheable', function() {
 		// 	$('.resultContainer').remove();

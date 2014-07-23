@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddTimestampsToDisciplinaryActionsTable extends Migration {
+class AddStatusToSssLoansTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,9 +12,9 @@ class AddTimestampsToDisciplinaryActionsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('disciplinary_actions', function(Blueprint $table)
+		Schema::table('sss_loans', function(Blueprint $table)
 		{
-			$table->softDeletes();
+			$table->string('status', 20);
 		});
 	}
 
@@ -26,9 +26,9 @@ class AddTimestampsToDisciplinaryActionsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('disciplinary_actions', function(Blueprint $table)
+		Schema::table('sss_loans', function(Blueprint $table)
 		{
-			$table->dropColumn('deleted_at');
+			$table->dropColumn('status');
 		});
 	}
 

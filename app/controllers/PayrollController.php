@@ -406,4 +406,20 @@ class PayrollController extends \BaseController {
 		//
 	}
 
+
+	public function detailed_view() {
+
+		$file = json_decode(Input::get('file'));
+		$start = Input::get('start');
+		$end =  Input::get('end');
+
+		// Open the file via HTTP not in direct file directory, for security purposes
+		$data = json_decode(@file_get_contents($file));
+	
+		if (count($data) == 0) return '<p> <strong>No data to display, Please try again.</strong> </p>';
+
+
+		return View::make('payroll.detailed_view', compact('data'));
+	}
+
 }

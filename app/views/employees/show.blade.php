@@ -71,7 +71,9 @@
 				$date = new DateTime();
 				$date = $date->format('Y-m-d');
 
-				$on_leave = DB::table('leaves')->where('employee_id', '=', $employee->id)->whereBetween(DB::raw('CURDATE()'), [$date , $date])->where('status', '=', 'Approved')->get();
+				$on_leave = DB::table('leaves')->where('employee_id', '=', $employee->id)->orWhere('start_date', '=', DB::raw('CURDATE()') )
+																						 ->orWhere('end_date', '=', DB::raw('CURDATE()') )
+				                                                                         ->where('status', '=', 'Approved')->get();
 				
 					if (count($on_leave) > 0) {
 						echo '<div class="profile-label"> <span style="margin-right: 65px"><b>Status </b></span> <span class="label label-primary">On Leave</span </div>';	

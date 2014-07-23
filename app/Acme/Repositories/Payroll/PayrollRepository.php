@@ -5,6 +5,7 @@ use Acme\Repositories\RepositoryAbstract;
 use DB;
 use DateTime;
 use Carbon\Carbon;
+
 // Class Dependencies
 use Acme\Repositories\Employee\Contributions\SSSRepository as SSS;
 use Acme\Repositories\Employee\Contributions\PhilhealthRepository as Philhealth;
@@ -148,6 +149,31 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 		}
 
 		return false;
+	}
+
+	public function getSSSloan_bill($employee_id) {
+
+
+	    // Get the first month payment date
+		$loan_object = DB::table('sss_loans')->where('employee_id', '=', $employee_id)
+		                                            ->where('status', '=', 'open')
+		                                            ->first(['salary_deduction_date', 'id', 'monthly_amortization','loan_amount']);
+
+		 // Employee has no loan
+		 if (!$loan_object) return 0;
+
+
+         // Payments
+		 $payments = DB::table('sss_loans_remittance')->where('sss_loan_id', '=', $loan_object->id)
+		                                              ->pluck(DB::raw('SUM(amount)'));
+		 
+		// Deduct payments to the loan amount
+		$remainder = $loan_object->loan_amount - $payments;
+
+		// If loan
+		if ($remainder > $loan_object->monthly_amortization ) return $loan_object->monthly_amortization;
+
+		return $remainder;
 	}
 
 	public function getDTRfromRange($start_date, $end_date, $employee_id = NULL, $company_id = NULL, $departments = array() ) {
@@ -423,11 +449,12 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 
 		$final_payroll = array();
 		$grosspay = $deductions = 0;
+
 		foreach ($obj as $key => $workInfo) {
 			# code...
 			$deduction_allowance = 0;
 			$total_deductions = 0;
-			
+			$remainder = 0;
 			$employee = $this->getEmployeeBasicInfo($key);
 
 			// Adjustments
@@ -436,7 +463,7 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 			
 			$grosspay = $workInfo['basic_pay'] + $workInfo['overtime_pay'] +  $workInfo['night_premium'] + $workInfo['holiday_pay'] + ($cr_adjustments);
 			
-			$deduction_allowance = $grosspay * 0.25;
+			$deduction_allowance = $grosspay * 0.50;
 
 
 			// Employee Contributions
@@ -460,57 +487,60 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 			$memberships = $this->getPODeduction($employee->employee_work_id, 'memberships', $period['start'], $period['end']);
 			$ca = $this->getPODeduction($employee->employee_work_id, 'ca', $period['start'], $period['end']);
 
-			// Deduct only based on the amount, if grosspay is lower than  deductions, adjust it to not get a negative number
-			if ($grosspay > $health_care) {
-				$total_deductions += $health_care;
-			} else $health_care = 0;
 
-			if ($grosspay > ($cbu + $total_deductions)) {
-				$total_deductions += $cbu;
-			} else $cbu = 0;
+			// Loans
+			$sss_loan = $this->getSSSloan_bill($key);
 
+			$deductions_arr = ['health_care', 'cbu', 'pledge',
+							   'dr_adjustments',
+							   'sss_contribution', 'philhealth_contribution','hdmf_contribution',
+			                   'grocery','pharmacy','savings','tickets', 'memberships', 'ca',
+			                   'sss_loan'];
 
-			// Subtract PO
-			$remainder = ($grosspay - $total_deductions) - $deduction_allowance;
+	
+
+			
+			for ($i=0; $i < count($deductions_arr); $i++) { 
 				
 				
-			// Less Priority
-			if ($remainder >= $pledge ) {
-				$total_deductions += $pledge;
-			} else $pledge = 0;
+				// Prioritized Deductions
+				if ($i == 0) 
+				{
+					if ($grosspay > ${ $deductions_arr[$i] }) 
+					{
+						$total_deductions += ${ $deductions_arr[$i] };
+					} 
+					else ${ $deductions_arr[$i] } = 0;
+				}
+				else
+				{
+					
+					$remainder = ($grosspay - $total_deductions) - $deduction_allowance;
 
-			$remainder = ($grosspay - $total_deductions) - $deduction_allowance;
+					if ($remainder >= ${ $deductions_arr[$i] } ) 
+					{
+						$total_deductions += ${ $deductions_arr[$i] };
+					} 
+					else ${ $deductions_arr[$i] }  = 0;		
+
+					
+				}
 
 
-			if ($remainder > $pharmacy) {
-				$total_deductions += $pharmacy;
-
-
-			} else {
-				$pharmacy = $remainder;
-				$total_deductions += $pharmacy;
 			}
 
-			$remainder = ($grosspay - $total_deductions) - $deduction_allowance;
 
-
-
-			if ($remainder > $grocery) {
-				$total_deductions += $grocery;
-			} else {
-				$grocery = $remainder;
-				$total_deductions += $grocery;
-			}
 
 
 			
 
 
-
 			// Total Deductions
-			$deductions = $sss_contribution +$philhealth_contribution + $hdmf_contribution;
-			$deductions += ($health_care + $cbu + $pledge) + ($dr_adjustments) + ($grocery + $savings + $pharmacy + $tickets + $memberships + $ca) ;
+			// $deductions = $sss_contribution +$philhealth_contribution + $hdmf_contribution;
+			// $deductions += ($health_care + $cbu + $pledge) + ($dr_adjustments) + ($grocery + $savings + $pharmacy + $tickets + $memberships + $ca) ;
+			// $deductions +=  $sss_loan;
 
+			$deductions = $total_deductions;
 				
 				$final_payroll[$key] = ['grosspay' => $grosspay,
 										'basic_pay' => $workInfo['basic_pay'],
@@ -536,7 +566,7 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 				                        'name' => $employee->lastname . ',' . $employee->firstname . ' ' . $employee->middlename,
 				                        'employee_id' => $employee->employee_work_id,
 				                        'incentives' => 0,
-				                        'sss_loan' => 0,
+				                        'sss_loan' => $sss_loan,
 				                        'hdmf_loan' => 0,
 				                        'holiday' => $workInfo['holiday_pay'] ];
 
@@ -612,6 +642,26 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 
 	public function getDeductions() {
 
+	}
+
+	public function employee_sss_loans($employee_id, $date) {
+			
+		if ( !isDateValid($start) ) {
+			return false;
+		}
+
+		$formatted_date = new DateTime($date);
+		$month = $formatted_date->format('m');
+		$year = $formatted_date->format('Y');
+
+		DB::table('sss_loans')->where('employee_id', '=', $employee_id)
+		                      ->where(function($query) {
+
+		                      		$query->where(DB::raw(' YEAR(salary_deduction_date) '), '=', $year );
+		                      		$query->where(DB::raw(' MONTH(salary_deduction_date) '), '=', $month );
+		                      	
+
+		                      	});
 	}
 
 	

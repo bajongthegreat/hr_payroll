@@ -50,14 +50,39 @@ Route::get('/', ['as' => 'main',function()
 
 
 
+
+
 Route::get('/demo', function()
 {
-	// disable DOMPDF's internal autoloader if you are using Composer
-;
-		// Use this to download the file.
-		// $dompdf->stream("my.pdf");
-	return '';
+		$employee_id = 1982;
+
+
+
+
+			
+
+
+		 // // Billing SSS Loan
+		 // $salary_deduction_date = new DateTime($loan_object->salary_deduction_date);
+		 // $now = new DateTime();
+
+		 // $interval = new DateInterval('P1M');
+
+		 // // ** Check if the current month is the salary deduction date
+		 // var_dump($now->format('m-Y')  >=  $salary_deduction_date->format('m-Y'));
+		 // echo '<br>';
+		 // var_dump($salary_deduction_date->add($interval)->format('m-Y'));
+		 // echo '<br>';
+		
+
+		                                            // echo DateTime::createFromFormat('m-d-Y', '04-15-2013')->modify('+5 day')->format('m-d-Y');
+
+
+		 // var_dump($loan_object);	
+	return ''	;
 });
+
+
 
 
 
@@ -174,6 +199,7 @@ Route::group(array('before' => 'auth', 'prefix' => 'payroll'), function()
 	Route::post('process', 'PayrollController@process');
 	Route::get('export', 'PayrollController@export');
 	Route::get('history', 'PayrollController@history');
+	Route::get('detailed_view', 'PayrollController@detailed_view');
 	
 });
 

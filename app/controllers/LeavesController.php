@@ -92,10 +92,8 @@ class LeavesController extends BaseController {
 		$leave_data = Input::except('_token', 'work_id', 'ref');
 
 		$id = Input::get('work_id');
-
-		// dd($id);/
-
-
+		
+		// 
 		$hash_segment = '#employee=' . $id;
 
 
@@ -222,6 +220,9 @@ class LeavesController extends BaseController {
 				return  $this->notAccessible();		
 		}
 
+
+
+
 		$leave = $this->leaves->find($id);
 
 		if (isset($leave[0])) {
@@ -250,6 +251,13 @@ class LeavesController extends BaseController {
 		$id = (int) Input::get('id');
 		$data = Input::except('id','_token','_method', 'ref');
 
+		$work_id = Input::get('work_id');
+
+		
+		// 
+		$hash_segment = '#employee=' . $work_id;
+
+
 		$update_status = $this->leaves->update($id, $data);
 
 		if ($update_status) {
@@ -263,7 +271,7 @@ class LeavesController extends BaseController {
 
 			}
 		}
-			return  Redirect::action('LeavesController@show', $id);
+			return  Redirect::action('LeavesController@show', [$id, $hash_segment]);
 		}
 		
 	}

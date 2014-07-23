@@ -50,7 +50,7 @@ function ordinal_suffix_of(i) {
             			// Hide loader
             			$('#employee_loader').html('');
                               $('.employee_loader').html('');
-
+                  var _class = "";
             			var name;
             			var id;
             			var searchItem = "";
@@ -70,7 +70,11 @@ function ordinal_suffix_of(i) {
             					name = hrApp.personName(data[i]);
             					id = data[i].employee_work_id;
 
-            					searchItem += '<div class="resultItem" data-employee_name="' + name +'" data-employee_id="' + id +'"><a href="?reload=true&employee_id=' + id +'#employee=' + id +'"> <span class="label label-default">'+ id +'</span>  '+  name +'  </div></a>';
+                      if (i == 0) {
+                        _class = "active";
+                      } else _class = "";
+
+            					searchItem += '<div class="resultItem ' + _class +'" data-index="' + i +'"  data-employee_name="' + name +'" data-employee_id="' + id +'"><a href="?reload=true&employee_id=' + id +'#employee=' + id +'"> <span class="id-container">'+ id +'</span>  '+  name +'  </div></a>';
             				}
 
                                     if (element) {
@@ -87,7 +91,7 @@ function ordinal_suffix_of(i) {
             			} else if (data.length == 1) {
                         console.log(data);
                                      
-            				resultContainer.fadeOut(250);
+            				// resultContainer.fadeOut(250);
             				realID = data[0].id;			
             				id = data[0].employee_work_id;
 
@@ -102,12 +106,17 @@ function ordinal_suffix_of(i) {
                                     }
             				
                                     if (element) {
-                                     $('.resultContainer').remove();
-                                     $('.resultName').remove();
-                                          element.val(id);
-                                          element.next().remove();
-                                          element.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
-                                          element.parent().next().find('input').focus();
+                                     // $('.resultContainer').remove();
+                                     // $('.resultName').remove();
+                                     //   element.val(id);
+                                     //      // element.next().remove();
+
+                                     //      // Remove Input group addons
+                                     //      element.parent().find('.input-group-addon').remove();
+                                     //      console.log(element.parent().find('.input-group-addon'));
+
+                                     //      element.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
+                                          
 
                                     } else {
                                           // Redirect to save data even from unexpected page refresh
@@ -121,7 +130,7 @@ function ordinal_suffix_of(i) {
                                                 
                                                 // Set ID
                                                 hiddenID.val(realID);
-                                                   
+                                                $('#work_id').val(id);   
                                                    console.log(realID);
 
                                                 // Toggle Panels
@@ -178,6 +187,108 @@ function ordinal_suffix_of(i) {
            				_searchEmployee(searchVal);
            			}
             });
+
+
+                $(document).on('click', '.resultItem a', function(e) {
+      
+                var id = $(this).parent().data('employee_id'),
+                  name = $(this).parent().data('employee_name'),
+                    input = $(this).parent().parent().siblings('input.searcheable');
+                $('.resultName').remove();            
+                      
+                input.val(id);
+                      input.next().remove();
+                                               input.parent().find('.input-group-addon').remove();
+                           
+                      input.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
+
+                $('.resultContainer').remove();
+                e.preventDefault();
+              });
+
+            
+
+                $(document).on('keyup', '.searcheable', function(e){
+      
+      if ($(this).val().length > 1) {
+      
+        // Down
+        if (e.which == 40) {
+        
+          var resultItem = $('.resultContainer .resultItem'); 
+          var resultItemActive = $('.resultContainer .resultItem .active');
+          // Check if first is selected
+
+            if (resultItem.hasClass('active')) {
+              var index = $('.resultItem.active').data('index');
+              
+                resultItem.eq(index).removeClass('active');
+                resultItem.eq(index+1).addClass('active');
+              console.log(index);
+            }             
+          
+          
+      
+
+        } else if (e.which == 38) {
+
+          var resultItem = $('.resultContainer .resultItem'); 
+          var resultItemActive = $('.resultContainer .resultItem .active');
+          // Check if first is selected
+
+            if (resultItem.hasClass('active')) {
+              var index = $('.resultItem.active').data('index');
+              
+                resultItem.eq(index).removeClass('active');
+                resultItem.eq(index-1).addClass('active');
+              console.log(index);
+            }             
+          
+
+        } else if (e.which == 13) {
+          // For enter
+
+          var resultItem = $('.resultContainer .resultItem'); 
+          
+          resultItem.each(function() {
+            if ($(this).hasClass('active')) {
+              var id = $(this).data('employee_id');
+        
+              var id = $(this).data('employee_id'),
+                name = $(this).data('employee_name'),
+                  input = $(this).parent().siblings('input.searcheable');
+              $('.resultName').remove();            
+                    
+              input.val(id);
+                    input.next().remove();
+                                             input.parent().find('.input-group-addon').remove();
+                         
+                    input.after('<span class="input-group-addon"><span class="label label-info">' + name +'</span></span>');
+
+              $('.resultContainer').remove();
+
+            }
+          });
+
+          e.preventDefault();
+          return false;
+
+        } else {
+          _searchEmployee($(this).val(), $(this));
+        }
+              
+      } else {
+        $('.resultContainer').remove(); 
+      }
+
+
+
+
+
+
+      console.log(e.which)
+    });
+
 
 
 
@@ -345,4 +456,21 @@ function ordinal_suffix_of(i) {
                      $('#violation_id').trigger('change');
                   }, 1500);
                }
+
+
+               // Loan
+
+                $('#duration_in_months, #loan_amount').on('keyup', function() {
+                              var duration = parseInt($('#duration_in_months').val() );
+                              var loan_amount = parseFloat($('#loan_amount').val());
+
+
+                              var monthly_amortization = Math.round( (loan_amount/duration) * 100)/100;
+
+                               if (isNaN(monthly_amortization)) {
+                                monthly_amortization = 0;
+                               }
+
+                              $('#monthly_amortization').val(  monthly_amortization); 
+                           });
             })();

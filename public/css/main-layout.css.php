@@ -415,7 +415,26 @@ label {
      background-color: #ffffff;
       margin: 4px 0; 
    }
-    
+
+
+    .id-container {
+      margin: 0 15px;
+    }
+
+    .resultItem{
+      margin: 5px 2px;
+      padding: 5px 2px;
+      
+      font-size: 13px;
+      /*background: #660;*/
+      color: #AAA;
+      border: 1px solid #000;
+    }
+
+    .resultItem.active {
+      background: #428bca;
+      
+    }
 
      #main_search_result {
 

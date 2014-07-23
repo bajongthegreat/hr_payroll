@@ -15,11 +15,7 @@ class AddPeriodBeforeResetToViolationsTable extends Migration {
 		Schema::table('violations', function(Blueprint $table)
 		{
 			$table->double('period_before_reset');
-			$table->dropColumn('first_offense');
-			$table->dropColumn('second_offense');
-			$table->dropColumn('third_offense');
-			$table->dropColumn('fourth_offense');
-			$table->dropColumn('fifth_offense');
+			
 		});
 	}
 
