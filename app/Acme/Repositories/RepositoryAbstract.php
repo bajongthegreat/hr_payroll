@@ -45,6 +45,7 @@ abstract class RepositoryAbstract {
 		return $this->model->where($field, '=', $id);
 	}
 
+
 	// Find specific data
 	public function findWith($id, $with="", $field="id") 
 	{

@@ -238,6 +238,8 @@ var __rowsToDisplay  = 10;
 var resultContainer = $('.resultContainer');
 var __dayShiftHoursAM = [],
     __dayShiftHoursPM = [];
+
+    var redirect = false;
 </script>
 <script type="text/javascript" src="{{ asset('jquery/hr_disciplinary_actions.js') }}"></script>
 
@@ -875,6 +877,17 @@ var __dayShiftHoursAM = [],
 
 			// Call addRow() with the ID of a table
 			addRow('dtr_information_table_body', rows);
+
+			// Re-initialize forms to maintain time format
+			setTimeout(function(){
+				$('#time_in_am, #time_out_am, #time_in_pm, #time_out_pm').datetimepicker({
+					pickTime:true,
+					pickDate: false,
+					use24hours: true,
+					minuteStepping:15
+					});
+
+			}, 2000);
 	
 		});
 

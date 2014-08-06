@@ -38,6 +38,9 @@ class UsersController extends BaseController {
      */
     public function __construct(UserRepositoryInterface $users, jValidator $validator)
     {
+
+    	parent::__construct();
+
     	// For Cross Site Request Forgery protection
         $this->beforeFilter('csrf', array('on' => 'post'));
 
@@ -63,6 +66,12 @@ class UsersController extends BaseController {
 		// 	echo '<h3 class="page-header">Database Query</h3>';
 		// 		var_dump($sql);
 		// });
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('users', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 
 		// Search term
 		$src = Request::get('src');
@@ -94,6 +103,11 @@ class UsersController extends BaseController {
 	 */
 	public function create()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('users', 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
         return View::make('users.create');
 	}
 
@@ -104,6 +118,11 @@ class UsersController extends BaseController {
 	 */
 	public function store()
 	{
+		// Check access control
+		if ( !$this->accessControl->hasAccess('users', 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$user_data = Input::only('username', 'password', 'password_confirmation', 'email');
 
 		
@@ -136,6 +155,22 @@ class UsersController extends BaseController {
 	 */
 	public function show($id)
 	{
+
+
+		// Check access control
+		if ( (!$this->accessControl->hasAccess('users', 'view', $this->byPassRoles)) ) {
+				
+				// Always allow logged user to view their profile
+				if (Auth::user()->id == $id) {
+					goto loggedUser;
+				}
+
+				return  $this->notAccessible();		
+		}
+
+		// Goto
+		loggedUser:
+
 		// Find the user
 		$user = $this->users->find($id)->first();
 
@@ -151,6 +186,21 @@ class UsersController extends BaseController {
 	 */
 	public function edit($id)
 	{
+
+		// Check access control
+		if ( (!$this->accessControl->hasAccess('users', 'edit', $this->byPassRoles)) ) {
+				
+				// Always allow logged user to view their profile
+				if (Auth::user()->id == $id) {
+					goto loggedUser;
+				}
+
+				return  $this->notAccessible();		
+		}
+
+		// Goto
+		loggedUser:
+
 		$user = $this->users->find($id)->get()->first();
  
 		// Unset the password

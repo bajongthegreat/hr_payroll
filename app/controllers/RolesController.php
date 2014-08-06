@@ -5,6 +5,8 @@ use Acme\Repositories\User\Role\RolesRepositoryInterface;
 // Use a Validation Service
 use Acme\Services\Validation\RolesValidator as jValidator;
 
+
+use Carbon\Carbon;
 class RolesController extends \BaseController {
 
 
@@ -172,7 +174,9 @@ class RolesController extends \BaseController {
 		$role = $this->roles->find($id)->get()->first();
 
 		if (!$role) return Redirect::action('RolesController@index')->with('error', ['No role found with that ID.']);
+		
 		$permissions = json_encode($role->permissions()->lists('action_permitted', 'uri_segment'));
+		
 		$old_roles = json_encode($role->permissions()->lists('uri_segment', 'id'));
 
 		return View::make('roles.edit', compact('role', 'permissions', 'old_roles'));
@@ -252,7 +256,9 @@ class RolesController extends \BaseController {
 						try {
 							DB::table('roles_permissions')->insert(['role_id' => $id,
 												                    'uri_segment' => $key,
-												                    'action_permitted' => implode('|', $value)]);
+												                    'action_permitted' => implode('|', $value),
+												                    'created_at' => Carbon::now(),
+												                    'updated_at' => Carbon::now() ]);
 						} catch (Exception $e) {
 							DB::rollback();	
 						}

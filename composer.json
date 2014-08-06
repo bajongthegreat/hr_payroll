@@ -8,8 +8,8 @@
 		 "way/generators": "dev-master",
 		 "fzaninotto/faker" : "dev-master",
 		 "stripe/stripe-php" : "dev-master",
-		  "dompdf/dompdf" : "dev-master",
-		  "phpoffice/phpexcel": "dev-develop"
+		  "phpoffice/phpexcel": "dev-develop",
+		  "cboden/ratchet": "0.3.*"
 	},
 	"autoload": {
 		"classmap": [

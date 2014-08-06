@@ -12,7 +12,7 @@ class DtrsTableSeeder extends Seeder {
 		$shift = ['ns', 'ds','ds','ns','ds'];
 
 		DB::table('dailytimerecords')->truncate();
-		$employees = DB::table('employees')->limit(50)->get();
+		$employees = DB::table('employees')->limit(1200)->get();
 
 
 		foreach ($employees as $employee) {
@@ -36,7 +36,7 @@ class DtrsTableSeeder extends Seeder {
 									                                  'time_out_am' => "11:" . $min[rand(0,3)],
 									                                  'time_in_pm' => "13:00",
 									                                  'time_out_pm' => rand(14,19) .":" . $min[rand(0,3)],
-									                                  'work_date' => '2014-06-' .$i,
+									                                  'work_date' => '2014-06-' . $i,
 									                                  'work_assignment_id' => rand(3,15)]);	
 				}
 				else 

@@ -23,10 +23,29 @@
 
 
         <div class="form-group">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block submit" type="submit">Sign in</button>
     	
     	</div>
       {{ Form::close() }}
 
 
+@stop
+
+@section('scripts')
+<script type="text/javascript">
+    (function(){
+        
+        $('.submit').on('click', function() {
+            
+            $('.submit').prop('disabled', true);
+
+            setTimeout(function() {
+
+                $(this).prop('disabled', false);
+
+            }, 5000);
+        });
+
+    })();
+</script>
 @stop

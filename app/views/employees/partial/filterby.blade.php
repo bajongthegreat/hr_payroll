@@ -14,14 +14,14 @@
                               </a>
                             </h4>
                           </div>
-                          <div id="collapseOne" class="panel-collapse collapse in">
+                          <div id="collapseOne" class="panel-collapse collapse">
                             <div class="panel-body">
                               <ul class="list-group filter-list" style="font-size: 12px; font-weight: bold; list-style:none;" data-category="company_id" data-limit="1">
                                 
                                   @foreach($companies as $company)
 
                                   @if (isset($filter_params['company_id']))
-                                        @if (in_array($company->id, $filter_params['company_id']))
+                                          @if (in_array($company->id, $filter_params['company_id']))
                                            <li><input type="checkbox" data-fieldvalue="{{ $company->id }}"  class="filter-item" checked> {{ $company->name}}  </li>
                                         @else 
                                           <li><input type="checkbox" data-fieldvalue="{{ $company->id }}"  class="filter-item"> {{ $company->name}}  </li>

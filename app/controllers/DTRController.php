@@ -38,6 +38,11 @@ class DTRController extends \BaseController {
 	 */
 	public function index()
 	{
+			// Check access control
+		if ( !$this->accessControl->hasAccess('payroll/dtr', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 
 		$src = (Input::get('src') != "") ? Input::get('src') : NULL;
 
@@ -136,6 +141,12 @@ class DTRController extends \BaseController {
 	 */
 	public function create()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('payroll/dtr', 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		return View::make('dtr.create');
 	}
 
@@ -269,6 +280,12 @@ class DTRController extends \BaseController {
 	 */
 	public function store()
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('payroll/dtr', 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		//
 		// var_dump(Input::all());
 		return $this->SaveBulk();
@@ -295,6 +312,12 @@ class DTRController extends \BaseController {
 	 */
 	public function edit($id)
 	{
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('payroll/dtr', 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 			if (Input::has('type') && Input::get('type') == 'bulk') {
 
 				$work_date =  Input::get('work_date');
@@ -506,6 +529,14 @@ class DTRController extends \BaseController {
 	 */
 	public function update($id)
 	{
+
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('payroll/dtr', 'edit', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
+
 		if (Request::ajax()) {	
 
 		// Check if it is bulk or single
@@ -530,7 +561,11 @@ class DTRController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		
+		// Check access control
+		if ( !$this->accessControl->hasAccess('payroll/dtr', 'delete', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 	}
 
 }

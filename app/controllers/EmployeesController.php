@@ -178,9 +178,7 @@ class EmployeesController extends BaseController {
 		        	
 				
 				})->leftJoin('positions', 'positions.id', '=', 'employees.position_id')
-		          ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')->limit(50)
-		          ->select(DB::raw('employees.*'), 'departments.id as department_id', 'positions.id as position_id',
-		          	         'departments.name as department_name', 'positions.name as position_name');
+			  ->select('employees.*', 'positions.name as position_name', DB::raw('(SELECT name FROM departments WHERE departments.id = positions.department_id) as department_name') );
 	}
 
 
@@ -195,7 +193,8 @@ class EmployeesController extends BaseController {
 	}
 
 	function getAllEmployeeData($filter_params) {
-		return $this->employees->getAllWith(['position'])->where('membership_status', '!=', 'applicant')->where(function($query) use ($filter_params) {
+
+		return $this->employees->notApplicant()->where(function($query) use ($filter_params) {
 				
 				if (isset($filter_params)) {
 					$this->addFilterFieldsToDB($query, $filter_params);
@@ -203,7 +202,8 @@ class EmployeesController extends BaseController {
 
 			
 				
-			});
+			})->leftJoin('positions', 'positions.id', '=', 'employees.position_id')
+			  ->select('employees.*', 'positions.name as position_name', DB::raw('(SELECT name FROM departments WHERE departments.id = positions.department_id) as department_name') );
 	}
 
 	/**
@@ -224,7 +224,7 @@ class EmployeesController extends BaseController {
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @return Response
+	 * @return m_responsekeys(conn, identifier)
 	 */
 	public function store()
 	{
@@ -296,7 +296,7 @@ class EmployeesController extends BaseController {
 	public function edit($id)
 	{
 		// Check access control
-		if ( !$this->accessControl->hasAccess('employees', 'edit', [0, 1]) ) {
+		if ( !$this->accessControl->hasAccess('employees', 'edit', $this->byPassRoles) ) {
 				return  $this->notAccessible();		
 		}
 
@@ -375,7 +375,7 @@ class EmployeesController extends BaseController {
 	{
 		
 
-		if (Request::ajax())
+		if ( Request::ajax() )
 		{
 			$id = Input::get('employee_work_id');
 
@@ -402,6 +402,7 @@ class EmployeesController extends BaseController {
 
 		// Separator is present inside the ID i.e [2965-1029]
 		if (strpos($id, $separator) != false) {
+
 			$employee = $this->employees->find($id, $column)
 							 ->leftJoin('positions', 'positions.id', '=', 'employees.position_id')
 							 ->leftJoin('departments', 'departments.id', '=', 'positions.department_id')

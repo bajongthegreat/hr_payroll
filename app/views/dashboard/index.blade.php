@@ -6,7 +6,8 @@ $new_employees_count = DB::table('employees')->where(DB::raw('MONTH(created_at)'
 $employee_count = DB::table('employees')->count();
 $pe_count = DB::table('employees_physical_examinations')->where(DB::raw('YEAR(date_conducted)'), '=', date('Y'))->count();
 $violator_count = DB::table('disciplinary_actions')->where(DB::raw('YEAR(violation_date)'), '=', date('Y'))->groupBy('employee_id')->count();
-$leave_count = DB::table('leaves')->where(DB::raw('YEAR(start_date)'), '=', date('Y'))->groupBy('employee_id')->count();
+$leave_count = DB::table('leaves')->where(DB::raw('YEAR(start_date)'), '=', date('Y'))->where('status', '=', 'approved')->count();
+
 
 $on_leave = DB::table('leaves')->orWhere(function($query) {
 
@@ -21,7 +22,11 @@ $date= date('Y-m-d');
 
 if (!$on_leave) $on_leave = 0;
 if (!$violator_count) $violator_count = 0;
-$holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', date('m'))->get();
+if (!$leave_count) $leave_count = 0;
+
+$holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', date('m'))
+                                 ->where(DB::raw('YEAR(holiday_date)'), '=', date('Y'))
+                                 ->get();
 
 
 ?>
@@ -39,6 +44,17 @@ $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', da
     <!-- Navigation -->
     @include('layout.navigation')
 
+    <style type="text/css">
+      .legend {
+
+        border: 1px solid #AAA;
+      }
+    </style>
+    <script type="text/javascript">
+      var pe_count = {{ $pe_count or 0}};
+      var violator_count = {{ $violator_count or 0}};
+      var leave_count = {{ $leave_count or 0}};
+    </script>
 <br><br>   
     <!-- Main -->
 <div class="container">
@@ -117,23 +133,28 @@ $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', da
                           </span>
                       </div>
 
-                                            
-                      <div class="row top-down-margin-5">
-                        <span class="col-md-3"> Who took P.E</span>
-                        <span class="col-md-3"> <span class="badge">{{ $pe_count }}</span> </span>
+                      <canvas id="hr_summary" width="350" height="200"></canvas>  
+                     
+
+                    <div class="legend text-center" style="max-width: 365px; padding: 5px;">                           
+                      <div class="row top-down-margin-5" style="margin-left: 10px">
+                        <span class="col-md-5 text-right"> <span style="background: #F7464A;"></span> Who took P.E</span>
+                        <span class="col-md-5"> <span class="badge">{{ $pe_count }}</span> </span>
                       </div>
 
-                      <div class="row top-down-margin-5">
-                        <span class="col-md-3"> Violated a rule</span>
-                        <span class="col-md-3"> <span class="badge">{{ $violator_count }}</span> </span>
+                      <div class="row top-down-margin-5" style="margin-left: 10px">
+                        <span style="background:#46BFBD; " class="col-md-5 text-right"> Violated a rule</span>
+                        <span class="col-md-5"> <span class="badge">{{ $violator_count }}</span> </span>
                       </div>
 
-                      <div class="row top-down-margin-5">
-                        <span class="col-md-3"> Filed a leave</span>
-                        <span class="col-md-3"> <span class="badge">{{ $leave_count }}</span> </span>
+                      <div class="row top-down-margin-5" style="margin-left: 10px ">
+                        <span style="background: #FDB45C;" class="col-md-5 text-right"> Filed a leave</span>
+                        <span  class="col-md-5"> <span class="badge">{{ $leave_count }}</span> </span>
                       </div>
 
+                      </div>
 
+                      <br>
                   </div>
 
                </div><!--/panel-->
@@ -160,7 +181,7 @@ $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', da
                         <?php 
                           $holiday_date = new DateTime($holiday->holiday_date);
                         ?>
-                          {{ $holiday->name}} will be on {{ $holiday_date->format('F d, Y') }}
+                          <li>{{ $holiday->name}} will be on {{ $holiday_date->format('F d, Y') }} </li>
                         @endforeach
                       </ul>
                     @endif
@@ -226,9 +247,9 @@ $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', da
               
                 <div class="panel panel-default">
                   <div class="panel-heading"><div class="panel-title">Engagement</div></div>
-                  <div class="panel-body pull-center">  
-                  
-                  <strong> Under construction</strong>  
+                  <div class="panel-body">  
+                
+                  <canvas id="myChart" width="350" height="300"></canvas>  
                   
                   </div>
                </div><!--/panel-->
@@ -273,6 +294,66 @@ $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', da
     <!-- Main scripts -->
     @include('layout.main_scripts')
 
+    <script type="text/javascript" src="{{ asset('js/Chart.min.js') }}"></script>
+
+    <script type="text/javascript">
+      // Get the context of the canvas element we want to Select
+      var ctx = document.getElementById("myChart").getContext("2d");
+      
+      var data = {
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          datasets: [
+              {
+                  label: "My First dataset",
+                  fillColor: "rgba(220,220,220,0.5)",
+                  strokeColor: "rgba(220,220,220,0.8)",
+                  highlightFill: "rgba(220,220,220,0.75)",
+                  highlightStroke: "rgba(220,220,220,1)",
+                  data: [65, 59, 80, 81, 56, 55, 40]
+              },
+              {
+                  label: "My Second dataset",
+                  fillColor: "rgba(151,187,205,0.5)",
+                  strokeColor: "rgba(151,187,205,0.8)",
+                  highlightFill: "rgba(151,187,205,0.75)",
+                  highlightStroke: "rgba(151,187,205,1)",
+                  data: [28, 48, 40, 19, 86, 27, 90]
+              }
+          ]
+      };
+
+      var myBarChart = new Chart(ctx).Bar(data);
+    </script>
+
+    <script type="text/javascript">
+      // Get the context of the canvas element we want to Select
+      var pie = document.getElementById("hr_summary").getContext("2d");
+    
+    var _data = [
+        {
+            value: pe_count,
+            color:"#F7464A",
+            highlight: "#FF5A5E",
+            label: "Who took P.E"
+        },
+        {
+            value: violator_count,
+            color: "#46BFBD",
+            highlight: "#5AD3D1",
+            label: "Violated a rule"
+        },
+        {
+            value: leave_count,
+            color: "#FDB45C",
+            highlight: "#FFC870",
+            label: "Filed a leave"
+        }
+    ];
+
+    // For a pie chart
+    var myPieChart = new Chart(pie).Pie(_data);
+
+    </script>
 
   </body>
 </html>

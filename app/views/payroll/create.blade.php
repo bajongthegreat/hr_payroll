@@ -383,7 +383,10 @@
 
 			            </table>
 
-			            <div class="loader"></div>
+			            <div class="loader">
+			            	
+			            </div>
+			            <div class="timer"></div>
 
 			            <input type="hidden" name="payroll" class="payroll">
 
@@ -589,6 +592,36 @@
 						});
 
 						$('#step4').on('click', function(e) {
+							
+							var i=0;
+							var m=0;
+							var h=0;
+							var _time;
+							var processTime = setInterval(function(){
+									++i;
+
+									if (i == 60) {
+										i = 0;
+										m++;
+									}
+
+									if (m == 60) {
+										m = 0;
+										h++;
+									}
+
+									if (m == 0 && h == 0) {
+										_time = i + ' s';
+									} else if (m != 0 && h == 0) {
+										_time = m + ' m ' + i + ' s'; 
+									} else {
+										_time = h + ' h ' + m + ' m' + i + ' s';
+									}
+
+									$('.timer').html('<strong>Process time</strong>:  ' + _time );
+								
+
+								},1000);
 
 							// Make an AJAX call
 							$.ajax({
@@ -600,12 +633,15 @@
 							            token: _globalObj._token },
 							    beforeSend: function() {
 							    	$('.loader').html('<div class="text-center"><img src="' + _globalObj.loaderImage + '"> <span style="font-size: 10px;">Please wait while the data is being fetched.</span></div>');
+							    	
 							    },
 							    success: function(payroll) {
 							    	var row = "";
 							    	$('.loader').html('');
+							    	$('.timer').html('');
 							    	$('#payroll_list').html('');
 
+							    	window.clearInterval(processTime);
 
 							    	$.each(payroll.data, function(employee_id, employee) {
 							    		row = '<tr>';

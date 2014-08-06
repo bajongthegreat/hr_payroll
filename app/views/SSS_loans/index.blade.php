@@ -58,13 +58,13 @@
 
   <table class="table table-hover">
   	<thead>
-    <th width="17%"> Name</th>   
-      <th width="15%">SSS ID</th>
-  		<th width="10%"> Date Issued </th>
+      <th></th>
+      <th>ID</th>
+      <th width="25%"> Name</th>   
+      <th width="13%">SSS ID</th>
+  		<th width="15%"> Date Issued </th>
   		<th > Loan Amount </th>
-  		<th>Month Amortization</th>
-      <th>First Monthly Amortization</th>
-  		<th>Duration In Months</th>
+      <th>Deduction starts</th>
   	</thead>
 
   
@@ -79,14 +79,14 @@
       ?>
      
       <tr>
-    <td>{{ !isset($loan->lastname)?:strtoupper($loan->lastname)}}, {{ !isset($loan->firstname)?: strtoupper($loan->firstname)}} {{ !isset($loan->middlename[0]) ?: strtoupper($loan->middlename[0]) }} </td>
+        <td> <a class="label label-info label-value" href="{{ action('SSS_loansController@show', $loan->id)}}">View details</a> </td>
+        <td> {{ $loan->id }}</td>
+        <td>{{ !isset($loan->lastname)?:strtoupper($loan->lastname)}}, {{ !isset($loan->firstname)?: strtoupper($loan->firstname)}} {{ !isset($loan->middlename[0]) ?: strtoupper($loan->middlename[0]) }} </td>
         <td>{{$loan->sss_id}}</td>
         <td>{{$loan->date_issued}}</td>
         <td>{{$loan->loan_amount}}</td>
-        <td>{{$loan->monthly_amortization}}</td>
         <th>{{ $loan_date->format('F Y') }}</th>
-        <td>{{$loan->duration_in_months}}</td>
-        <td><a class="label label-default" href="{{ action('SSS_loansController@edit', $loan->id)}}?#employee={{$loan->employee_work_id}}">Edit</a></td>
+        <td><a class="btn btn-default" href="{{ action('SSS_loansController@edit', $loan->id)}}?#employee={{$loan->employee_work_id}}">Edit</a></td>
       </tr>
       @endforeach
      

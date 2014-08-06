@@ -23,11 +23,16 @@ class RequirementComposer {
 		$view->with('document_types', $this->document_types);
 	}
 
+
+	// Used by old employees show
+	// public function raw($view) {
+	// 	$view->with('requirements', $this->requirements->getAllWith(['StageProcess'])->get() );
+	// }
+
+
 	public function raw($view) {
-		$view->with('requirements', $this->requirements->getAllWith(['StageProcess'])->get() );
+		$view->with('requirements', $this->requirements);
 	}
-
-
 
 
 }

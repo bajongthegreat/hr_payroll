@@ -10,7 +10,7 @@
               <li><a href="{{ action('LeavesController@index') }}">Leaves</a></li>
 
               <li> 
-                   <div class="filter-collection well">
+                   <div class="filter-collection well" style="margin: 3px;">
           
                     <div class="filter-title" style="font-size: 16px; font-weight: bold;"> Filter by:</div>
                     <div class="filter-content"> 

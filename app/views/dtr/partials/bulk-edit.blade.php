@@ -247,7 +247,7 @@ var __dataToUse = {{ $dtr_json }};
 var ids_prior_update = {{ json_encode($ids_prior_update) }}
 
 var _dtrModule = new dtrModule();
-
+var redirect = false;
 </script>
 
 <script type="text/javascript" src="{{ asset('jquery/hr_disciplinary_actions.js') }}"></script>

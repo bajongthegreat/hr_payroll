@@ -15,6 +15,8 @@
 				@include('employees.partial.violations');
 			@elseif($v == 'dtr')
 				@include('employees.partial.dtr');
+			@elseif ($v == 'loans')
+				@include('employees.partial.loans');
 			@else
 				@include('partials.requirements')
 				@include('employees.partial.profile')

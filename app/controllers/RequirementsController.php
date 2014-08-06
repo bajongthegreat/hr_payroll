@@ -93,6 +93,7 @@ class RequirementsController extends BaseController {
 				return  $this->notAccessible();		
 		}
 
+
         return View::make('requirements.create');
 	}
 
@@ -108,17 +109,25 @@ class RequirementsController extends BaseController {
 				return  $this->notAccessible();		
 		}
 
-		$input = Input::all();
+		$input = Input::except('ref');
 		
 		// Validate Inputs
 		if ($this->validator->validate($input)) {
 		
 			$this->requirements->create($input);
 			
+			if (Input::has('ref'))
+			{
+				return Redirect::to(base64_decode(Input::get('ref')));
+			}
+				
 			return Redirect::route('requirements.index');
 		
 		
 		}
+
+
+		
 
 		return Redirect::route('requirements.create')
 					->withInput()

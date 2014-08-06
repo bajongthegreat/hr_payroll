@@ -25,7 +25,12 @@
 				{{ Form::label('stage_process_id', 'Stage Process', array('class' => 'col-sm-2')) }}
 
 				<div class="col-sm-6">
-					{{ Form::select('stage_process_id', $stage_processes ,Input::old('stage_process'), array('class' => 'form-control', 'id' => 'document') ) }}
+					
+					<?php 
+						$old = Input::has('stage_process') ? Input::get('stage_process') : Input::old('stage_process'); 
+					?>
+
+					{{ Form::select('stage_process_id', $stage_processes , $old , array('class' => 'form-control', 'id' => 'document') ) }}
 				</div>
 				
 			</div>

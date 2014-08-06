@@ -10,6 +10,8 @@ class PayrollController extends \BaseController {
 	     */
 	    public function __construct(PayrollRepositoryInterface $payroll)
 	    {
+	    	parent::__construct();
+        
 	    	// For Cross Site Request Forgery protection
 	        // $this->beforeFilter('csrf', array('on' => 'post'));
 	
@@ -27,13 +29,28 @@ class PayrollController extends \BaseController {
 	 * @return Response
 	 */
 	public function index() {
-		return $this->process();
-		// return View::make('payroll.index');
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('payroll', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
+		// return $this->process();
+		$payroll = $this->payroll->all_payroll_by_period();
+
+
+		return View::make('payroll.index', compact('payroll'));
 	}
 
 
 	public function process()
 	{
+
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('payroll', 'create', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 
 		$start_date =  Input::get('start_date');
 		$end_date = Input::get('end_date');
@@ -41,7 +58,8 @@ class PayrollController extends \BaseController {
 		$company_id = (int) Input::get('company_id');
 		$company = '';
 		if ($start_date == '' || $end_date == '') {
-
+			return Response::json(['message' => 'Start date or End Date not specified.',
+				                   'error' => 'p100']);
 		} else {
 
 
@@ -143,6 +161,12 @@ class PayrollController extends \BaseController {
 	}
 
 	public function export() {
+
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('payroll', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
 
 		$file = json_decode(Input::get('file'));
 		$start = Input::get('start');
@@ -409,6 +433,12 @@ class PayrollController extends \BaseController {
 
 	public function detailed_view() {
 
+
+		// Check access control
+		if ( !$this->accessControl->hasAccess('payroll', 'view', $this->byPassRoles) ) {
+				return  $this->notAccessible();		
+		}
+
 		$file = json_decode(Input::get('file'));
 		$start = Input::get('start');
 		$end =  Input::get('end');
@@ -416,7 +446,13 @@ class PayrollController extends \BaseController {
 		// Open the file via HTTP not in direct file directory, for security purposes
 		$data = json_decode(@file_get_contents($file));
 	
-		if (count($data) == 0) return '<p> <strong>No data to display, Please try again.</strong> </p>';
+		if (count($data) == 0) return '<p>
+		              						<strong>No data to display, Please try again. <br>
+
+		              					     Make sure that the required parameters are properly specified: <u>File</u>, <u>start</u> and <u>end</u>.</strong> 
+		                               </p>
+
+		                               ';
 
 
 		return View::make('payroll.detailed_view', compact('data'));

@@ -56,31 +56,16 @@ Route::get('/demo', function()
 {
 		$employee_id = 1982;
 
+	$html = View::make('partials.biodata');
 
+		$dompdf = new DOMPDF();
+		$dompdf->load_html($html);
+		$dompdf->render();
 
-
-			
-
-
-		 // // Billing SSS Loan
-		 // $salary_deduction_date = new DateTime($loan_object->salary_deduction_date);
-		 // $now = new DateTime();
-
-		 // $interval = new DateInterval('P1M');
-
-		 // // ** Check if the current month is the salary deduction date
-		 // var_dump($now->format('m-Y')  >=  $salary_deduction_date->format('m-Y'));
-		 // echo '<br>';
-		 // var_dump($salary_deduction_date->add($interval)->format('m-Y'));
-		 // echo '<br>';
-		
-
-		                                            // echo DateTime::createFromFormat('m-d-Y', '04-15-2013')->modify('+5 day')->format('m-d-Y');
-
-
-		 // var_dump($loan_object);	
-	return ''	;
+		// Use this to output to the broswer
+		return $dompdf->stream('my.pdf',array('Attachment'=> false));
 });
+
 
 
 
@@ -177,7 +162,7 @@ Route::group(array('before' => ['auth']), function()
 	Route::post('leaves/reject', 'LeavesController@reject');
 	Route::resource('leaves', 'LeavesController');
 
-
+	Route::resource('sss_loans/payment', 'SSS_loan_paymentsController');
 	Route::resource('sss_loans', 'SSS_loansController');
 	Route::resource('holidays', 'HolidaysController');
 

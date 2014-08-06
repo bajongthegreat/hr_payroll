@@ -3,7 +3,11 @@
 @section('content')
 
 
-			<?php $v = Input::get('v'); ?>
+			<?php $v = Input::get('v'); 
+
+			$default_avatar = asset('img/default-avatar.png');
+
+			?>
 
 <div class="container-fluid">
 
@@ -14,8 +18,8 @@
 				
 				<div>
 
-				<a href="{{ isset($employee->image) ? asset($employee->image): 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png' }}" {{ isset($employee->image) ? 'data-lightbox="Profile Picture"' : '' }}>
-				<img src="{{ isset($employee->image) ? asset($employee->image): 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png' }}"  
+				<a href="{{ isset($employee->image) && $employee->image != ""  ? asset($employee->image): $default_avatar }}" {{ isset($employee->image) ? 'data-lightbox="Profile Picture"' : '' }}>
+				<img src="{{ isset($employee->image) && $employee->image != "" ? asset($employee->image): $default_avatar }}"  
 				width="234" height="234" alt="..." class="img-thumbnail employee-img" style="height: 234px; width: 274px;"
 					id="picture_holder"></a>
 
@@ -139,6 +143,8 @@ $('#profile_pic_input').jmFileUpload({
 	customData: { _token:  _globalObj._token, employee_work_id: "{{$employee_work_id}}" },
 	imageContainer: '#picture_holder'
 });
+
+$('._popover').popover({ html: true});
 
  	var oldDepartment = '{{ (isset($employee->position->department_id)) ? $employee->position->department_id  : 0}}',
             	    oldPosition = '{{ (isset($employee->position->id)) ? $employee->position->id  : 0}}';
@@ -267,118 +273,6 @@ $('#profile_pic_input').jmFileUpload({
 
 		 });
 
-	// (function() {
-	// 	$('.progress').hide();
-
-	// 	$('#profile_pic_input').on('change', function(e) {
-
-	// 		var fileType = e.target.files[0].type;
-	// 		var allowedTypes = ['image/jpeg','image/png'];
-
-	// 		// Emulate PHP in_array function in Javascript
-	// 		var in_array = function(type, allowedTypes) {
-	// 			var found = false;
-
-	// 			for (var i = allowedTypes.length - 1; i >= 0; i--) {
-	// 				if (allowedTypes[i] == type) {
-	// 					found = true;
-	// 				}
-	// 			};
-
-	// 			return found;
-	// 		}
-			
-	// 		// Terminate function if file type not allowed
-	// 		if (in_array(fileType, allowedTypes) === false) {
-	// 			return false;
-	// 		}
-
-
-	// 		// $('#picture_holder').addClass('hidden');
-	// 		// $('#canvas').removeClass('hidden');
-
-
-	// 		// // Get the canvas element
-	// 		// var ctx = document.getElementById('canvas').getContext('2d');
-
-	// 		// // Set as new image
-	// 		// var img = new Image;
-
-	// 		// // Fetch the URL of the selected file
-	// 		// img.src = URL.createObjectURL(e.target.files[0]);
-
-	// 		// // Load the image into canvas
-	// 		// img.onload = function() {
-
-	// 		// 	// Fill the image inside the canvas
-	// 		// 	// documentation: http://www.w3schools.com/tags/canvas_drawimage.asp
-	// 		//     ctx.drawImage(img, 0,0, img.height, img.width,0,0, 410,234);
-	// 		// }
-
-	// 		// Reset progress bar values
-	// 		$('.progress-bar').css('width', 0+'%').html(0 + "%");
-
-	// 		// Get all files in file input
-	// 		var file = $(this).prop('files')[0];
-	// 		var data = new FormData();
-
-
-	// 			// Append file to Formdata
-	// 			data.append('file',file);
-	// 			data.append('_token', _globalObj._token);
-
-	// 			console.log(data);
-
-
-	// 		 var xhr = new XMLHttpRequest();
- //        	xhr.open('POST', _globalObj._baseURL + '/employees/photo');
- //       		 xhr.onload = function () {
-
- //            if (xhr.status === 200) {
- //                console.log('all done: ' + xhr.status);
- //            } else {
- //                console.log('Something went terribly wrong...');
- //            }
- //        };
- //        xhr.upload.onprogress = function (event) {
- //        	$('.progress').fadeIn(250);
- //            if (event.lengthComputable) {
- //                var complete = (event.loaded / event.total * 100 | 0);
- //                console.log(complete);
- //                $('.progress-bar').css('width', complete+'%').html(complete + "%");
- //            }
- //        };
-
- //        xhr.onload = function () {
- //        	 var arraybuffer = xhr.response;
-
- //        	 console.log(arraybuffer);
- //        };
-
- //        xhr.send(data);
-
-	// 		// $.ajax({
-	// 		//     url: _globalObj._baseURL + '/employees/photo',
-	// 		//     type: "POST",
-	// 		//     dataType: "json",
-	// 		//     data: data,
-	// 		//     processData: false,
-	// 		//      cache: false,
- //   //     			   contentType: false,
-	// 		//     complete: function() { console.log("Completed."); },
-	// 		//     progress: function(evt) {
-	// 		//         if (evt.lengthComputable) {
-	// 		//             console.log("Loaded " + parseInt( (evt.loaded / evt.total * 100), 10) + "%");
-	// 		//         }
-	// 		//         else {
-	// 		//             console.log("Length not computable." + evt.loaded);
-	// 		//         }
-	// 		//     }
-			 
-	// 		// });
-
-	// 	});
-	// })();
 
 </script>
 @stop

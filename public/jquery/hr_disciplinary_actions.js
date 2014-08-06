@@ -22,9 +22,11 @@ function ordinal_suffix_of(i) {
             	__employee = hrApp.getHash('employee');
 
             	// ajaxSearchEmployee(hrApp.getHash('employee'), '#leave_information, #employee_information, #buttons', 'employee_loader');
-            	_searchEmployee(__employee);
+            	
 
-				$('#employee_work_id').val(hrApp.getHash('employee'));
+				      $('#employee_work_id').val(hrApp.getHash('employee'));
+
+              _searchEmployee(__employee);
             }
 
 
@@ -80,6 +82,8 @@ function ordinal_suffix_of(i) {
                                     if (element) {
                                           $('.resultContainer').remove();
                                           element.after('<div class="resultContainer" style="width: 330px;">' +searchItem +'</div>');
+                                              _togglePanels(__panelsToToggle, 'hide');
+      
                                     } else {
                                           resultContainer.html(searchItem);
                                           resultContainer.show();
@@ -88,15 +92,14 @@ function ordinal_suffix_of(i) {
                                     }
 
             				
-            			} else if (data.length == 1) {
-                        console.log(data);
-                                     
-            				// resultContainer.fadeOut(250);
-            				realID = data[0].id;			
-            				id = data[0].employee_work_id;
+            			} 
+                  else if (data.length == 1) {
+    // resultContainer.fadeOut(250);
+                    realID = data[0].id;      
+                    id = data[0].employee_work_id;
 
-            				name = hrApp.personName(data[0]);
-            				date_hired = data[0].date_hired;
+                    name = hrApp.personName(data[0]);
+                    date_hired = data[0].date_hired;
 
                                     if (data.hasOwnProperty('position') ) {
                                           position = data[0].position.name;
@@ -104,7 +107,7 @@ function ordinal_suffix_of(i) {
                                     } else {
                                           position = 'Unassigned';
                                     }
-            				
+                    
                                     if (element) {
                                      // $('.resultContainer').remove();
                                      // $('.resultName').remove();
@@ -119,7 +122,7 @@ function ordinal_suffix_of(i) {
                                           
 
                                     } else {
-                                          // Redirect to save data even from unexpected page refresh
+                                            // Redirect to save data even from unexpected page refresh
                                                 window.location = '#employee=' + id;
                                           
 
@@ -137,8 +140,8 @@ function ordinal_suffix_of(i) {
                                                 _togglePanels(__panelsToToggle, 'show');
                                                 // console.log();      
                                     }
-            				
-            			} else {
+                    
+                  } else {
 
 
                                     if (element) {
@@ -147,8 +150,8 @@ function ordinal_suffix_of(i) {
                                     } else {
                                           resultContainer.hide();
                                           
-                                    }
-
+                                    }                                
+                     _togglePanels(__panelsToToggle, 'hide');
             				$('#employee_loader').html('<span class="label label-danger">No data found</span>');
             			}
 
@@ -185,12 +188,16 @@ function ordinal_suffix_of(i) {
            			// Enter key
            			if (e.which == 13) {
            				_searchEmployee(searchVal);
+
+                  console.log('hello');
            			}
             });
 
 
                 $(document).on('click', '.resultItem a', function(e) {
-      
+                if (redirect === false) {
+
+
                 var id = $(this).parent().data('employee_id'),
                   name = $(this).parent().data('employee_name'),
                     input = $(this).parent().parent().siblings('input.searcheable');
@@ -204,11 +211,12 @@ function ordinal_suffix_of(i) {
 
                 $('.resultContainer').remove();
                 e.preventDefault();
+                }
               });
 
             
 
-                $(document).on('keyup', '.searcheable', function(e){
+      $(document).on('keyup', '.searcheable', function(e){
       
       if ($(this).val().length > 1) {
       
@@ -464,13 +472,13 @@ function ordinal_suffix_of(i) {
                               var duration = parseInt($('#duration_in_months').val() );
                               var loan_amount = parseFloat($('#loan_amount').val());
 
-
-                              var monthly_amortization = Math.round( (loan_amount/duration) * 100)/100;
+                              // var monthly_amortization = Math.round( (loan_amount/duration) * 100)/100;
+                              var monthly_amortization = Math.round( ((loan_amount/duration )  * 1.10 ) * 100)/100;
 
                                if (isNaN(monthly_amortization)) {
                                 monthly_amortization = 0;
                                }
 
-                              $('#monthly_amortization').val(  monthly_amortization); 
+                              $('#monthly_amortization').val( monthly_amortization); 
                            });
             })();

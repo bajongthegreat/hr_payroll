@@ -17,7 +17,7 @@ class BaseController extends Controller {
 	   
 	        // UsersRepository Dependency
 	        $this->accessControl = App::make('AccessControl');
-	                                                                                                                                  
+				                                                                                                                                  
 	        
 	    }
 	
@@ -28,6 +28,7 @@ class BaseController extends Controller {
 	 */
 	protected function setupLayout()
 	{
+		
 
 		if ( ! is_null($this->layout))
 		{

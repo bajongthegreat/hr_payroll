@@ -33,16 +33,18 @@
 
      @yield('content')
 
+     
+    @include ('partials.errors')
+
     </div> <!-- /container -->
 
   
     
-    @include ('partials.errors')
 
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+   <!-- Main scripts -->
+    @include('layout.main_scripts')
+
   </body>
 </html>

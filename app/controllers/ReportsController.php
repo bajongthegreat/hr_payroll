@@ -9,6 +9,8 @@ class ReportsController extends BaseController {
      */
     public function __construct()
     {
+    	parent::__construct();
+    	
         $this->beforeFilter('csrf', array('on' => 'post'));
 
         $this->afterFilter('log', array('only' =>
@@ -24,7 +26,7 @@ class ReportsController extends BaseController {
     }
 
     public function create_dpc_excel() {
-    		$month = 7; 
+    		$month = date('m'); 
 
     	$data = DB::table('disciplinary_actions')->where(DB::raw('MONTH(violation_date)'), '=', $month)
     									 ->whereNull('disciplinary_actions.deleted_at')

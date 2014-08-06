@@ -75,7 +75,7 @@
 				{{ Form::label('name', 'Name', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-10">
-					<p id="employee_name">{{ isset($employee_name) ? $employee_name : "-----------"}}</p>
+					<p id="employee_name" class="label-value">{{ isset($employee_name) ? $employee_name : "-----------"}}</p>
 				</div> 
 
 			</div>
@@ -85,7 +85,7 @@
 				{{ Form::label('date_hired', 'Date Hired', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-10">
-					<p id="date_hired">{{ isset($date_hired) ? $date_hired : "-----------"}}</p>
+					<p id="date_hired" class="label-value">{{ isset($date_hired) ? $date_hired : "-----------"}}</p>
 				</div>  
 
 			</div>
@@ -97,7 +97,7 @@
 				{{ Form::label('position', 'Position', array('class' => 'col-sm-2 text-right')) }}
 
 				<div class="col-sm-8">
-					<p id="position">{{ isset($position) ? $position : "-----------"}}</p>
+					<p id="position" class="label-value">{{ isset($position) ? $position : "-----------"}}</p>
 				</div>  
 
 			</div>

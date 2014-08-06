@@ -40,6 +40,10 @@ class EmployeeRepository extends RepositoryAbstract implements EmployeeRepositor
 	    $this->model = $model;
 	 }
 
+	 public function notApplicant() {
+	 	return $this->model->where('membership_status', '!=', 'applicant');
+	 }
+
 	 public function removeDuplicates() {
 	 	return DB::statement('
 	 		CREATE TABLE employees_verify AS SELECT DISTICT * FROM employees;

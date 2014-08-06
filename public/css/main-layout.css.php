@@ -15,7 +15,7 @@ header("Content-type: text/css; charset: UTF-8"); ?>
 body {
 
 	padding-top: 40px;
-  
+  min-width: 860px;  
    font-family: "Roboto", sans-serif;
 	
 }
@@ -85,6 +85,12 @@ label {
     }
   }
 
+/* SSS Loans Template */
+
+.summary-title {
+  border-bottom: 1px solid #aaa;
+  font-weight:bold;
+}
 
 /* Content Processing */
 
@@ -132,6 +138,13 @@ label {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+.label-value {
+  font-family: sans-serif !important;
+  margin-top: 5px;
+  display: inline-block;
+}
+
 .parent{
     text-align: center;
 }

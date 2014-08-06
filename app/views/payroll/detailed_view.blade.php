@@ -13,11 +13,14 @@
 <!-- Don't use .container at all or you will have to
      override a lot of responsive styles. -->
 
-
+<?php 
+	$start = new DateTime(Input::get('start'));
+	$end = new DateTime(Input::get('end'));
+?>
 <div class="page-header-less-margin">
 	<div class="report-header-title">TIBUD SA KATIBAWASAN MULTI-PURPOSE COOPERATIVE</div>
 	<div class="report-header-title">CONSOLIDATED PAYROLL</div>
-	<div class="report-header-title">June 01 TO July 01 2014	</div>
+	<div class="report-header-title">{{ $start->format('F d')}} TO {{ $end->format('F d, Y')}}	</div>
 </div>
 
 <table class="tablesorter" style="width: 1480px;">
@@ -62,18 +65,18 @@
 				<td class="text-center">{{ number_format($value->grosspay, 2) }}</td>
 				<td class="text-center">{{ ($value->hdmf_contribution == 0) ? "-" : $value->hdmf_contribution  }}</td>
 				<td class="text-center">{{ ($value->sss_contribution == 0) ? "-"  : $value->sss_contribution }}</td>
-				<td class="text-center">{{ ($value->philhealth_contribution) ? "-" : $value->philhealth_contribution }}</td>
-				<td class="text-center">{{ ($value->sss_loan) ? "-" : $value->sss_loan }}</td>
-				<td class="text-center">{{ ($value->hdmf_loan == 0) ? "-" : $value->hdmf_loan  }}</td>
-				<td class="text-center">{{ ($value->health_care  == 0) ? "-" : $value->health_care }}</td>
-				<td class="text-center">{{ ($value->cbu == 0) ? "-" : $value->cbu }}</td>
-				<td class="text-center">{{ ($value->pledge == 0) ? "-" : $value->pledge  }}</td>
-				<td class="text-center">{{ ($value->pharmacy == 0) ? "-" : $value->pharmacy }}</td>
-				<td class="text-center">{{ ($value->tickets == 0) ? "-" : $value->tickets }}</td>
-				<td class="text-center">{{ ($value->grocery == 0) ? "-" : $value->grocery }}</td>
-				<td class="text-center">{{ ($value->savings == 0) ? "-" : $value->savings }}</td>
-				<td class="text-center">{{ ($value->adjustment_dr == 0) ? "-" : $value->adjustment_dr }}</td>
-				<td class="text-center">{{ ($value->netpay == 0) ? "-" : $value->netpay }}</td>
+				<td class="text-center">{{ ($value->philhealth_contribution == 0) ? "-" : $value->philhealth_contribution }}</td>
+				<td class="text-center">{{ ($value->sss_loan == 0) ? "-" : number_format($value->sss_loan,2) }}</td>
+				<td class="text-center">{{ ($value->hdmf_loan == 0) ? "-" : number_format($value->hdmf_loan,2)  }}</td>
+				<td class="text-center">{{ ($value->health_care  == 0) ? "-" : number_format($value->health_care,2) }}</td>
+				<td class="text-center">{{ ($value->cbu == 0) ? "-" : number_format($value->cbu,2) }}</td>
+				<td class="text-center">{{ ($value->pledge == 0) ? "-" : number_format($value->pledge,2)  }}</td>
+				<td class="text-center">{{ ($value->pharmacy == 0) ? "-" : number_format($value->pharmacy,2) }}</td>
+				<td class="text-center">{{ ($value->tickets == 0) ? "-" : number_format($value->tickets,2) }}</td>
+				<td class="text-center">{{ ($value->grocery == 0) ? "-" : number_format($value->grocery,2) }}</td>
+				<td class="text-center">{{ ($value->savings == 0) ? "-" : number_format($value->savings,2) }}</td>
+				<td class="text-center">{{ ($value->adjustment_dr == 0) ? "-" : number_format($value->adjustment_dr,2) }}</td>
+				<td class="text-center">{{ ($value->netpay == 0) ? "-" : number_format($value->netpay, 2) }}</td>
 
 
 			</tr>

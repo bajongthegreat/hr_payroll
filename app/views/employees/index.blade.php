@@ -87,50 +87,95 @@
   </div>
 
 
+<table class="table table-hover tablesorter">
+    <thead>
+      <th></th>
+      <!-- Image -->
+      <th></th> 
+      <th></th>
 
-  <table class="table table-hover" ng-controller="EmployeeController" id="employeeTable">
-  	<thead >
-  		<th class="text-center" >ID </th>
-  		<th class="text-center" > Name </th>
-  		<th class="text-center">Position</th>
-      <th class="text-center">Membership status</th>
-  		<th class="text-center">Employment status</th>
-      <th colspan="2" class="text-center"> <a  href="{{ action('EmployeesController@masterfile') }}" class="label label-success "><img width="12" src="{{ asset('img/icons/32x32/menu-pull-up.png') }}">  Export Excel</a></th>
-  	</thead>
+    </thead>
 
-  
+    <tbody>
+       @foreach ($employees as $employee)
 
-  	<tbody id="employees" >
+              <?php 
+              // dd($employees); 
+              // Birth date
+              if ($employee->birthdate == '0000-00-00' || $employee->birthdate == '') {
+                // echo '<span class="label label-default">Not specified</span>';
+              } else {
 
-     
-        
-            <?php foreach ($employees as $employee): ?>
+                $date = new DateTime($employee->birthdate);
 
-             <tr >
-                <td  class="text-center clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}" > <?php echo $employee->employee_work_id . '</td>'; ?>
-                <td class="clickableRow" href="{{ route('employees.index') }}/{{ $employee->employee_work_id }}"> <?php echo   ucfirst($employee->lastname) . ', ' . $employee->firstname . ' ' . $employee->name_extension .' ' . $employee->middlename .'</td>'; ?>
-                <td class="text-center"> <?php echo  ($employee->position_id == 0 || (!isset($employee->position['name']) )) ? '<span class="label label-default">Not assigned</span>' : ucfirst($employee->position['name']) . '</td>'; ?>
-                <td class="text-center"> <?php echo  '<span class="label label-info">' . ucfirst(strtolower($employee->membership_status)) . '</span></td>'; ?>
-                <td class="text-center"> <?php echo '<span class="label ' . (strtolower($employee->employment_status) == 'resigned' ? 'label-danger' : 'label-success') . '">' . ucfirst( strtolower($employee->employment_status)) . '</span></td>'; ?>
-                <td> 
-                   @if ($accessControl->hasAccess($uri, 'edit', $GLOBALS['_byPassRole']))
-                  <a class="btn btn-small btn-default editButton" href="{{ action('EmployeesController@edit', $employee->employee_work_id ) }}"> <span class="glyphicon glyphicon-edit"></span> Edit</a> 
-                   @endif
+                $datetime1 = date_create($employee->birthdate);
+                  $datetime2 = date_create(date('Y-m-d'));
+                  
+                  $interval = date_diff($datetime1, $datetime2);
 
-                    @if ($accessControl->hasAccess($uri, 'delete', $GLOBALS['_byPassRole']))
-                  <a class="btn btn-small btn-default deleteButton" href="#" data-employee_id="{{ $employee->employee_work_id}}"> <span class="glyphicon glyphicon-remove"></span> Delete</a> </td>
-                    @endif
-               </tr>
-            <?php endforeach; ?>
-       
+                  $birthdate = '(' . $interval->format('%y') .' years old) ';
 
-      
-        
-         
 
-     
-  	</tbody>
-  </table>
+              }
+
+              // Date Hired
+             if ($employee->date_hired && $employee->date_hired != "0000-00-00" && $employee->date_hired != "") {
+                $d_hired = new DateTime($employee->date_hired);
+
+                $datetime1 = date_create($employee->date_hired);
+                  $datetime2 = date_create(date('Y-m-d'));
+                  
+                  $date_hired_interval = date_diff($datetime1, $datetime2);
+                  
+                  if ( $date_hired_interval->format('%y') == 0) {
+                    $date_hired = $d_hired->format('F d,  Y') . ' ( ' . $date_hired_interval->format('%m') .' month(s) and ' . $date_hired_interval->format('%d') .' day(s)  in service)';
+                  } else {
+                    
+                    if ($date_hired_interval->format('%y') == 1) {
+                      $year_str = 'year';
+                    } else {
+                      $year_str = 'years';
+                  } 
+
+                  $date_hired = $d_hired->format('F d,  Y') . ' (' . $date_hired_interval->format('%y') .' ' . $year_str .' in service)';
+              } 
+            } else {
+              $date_hired = "Not specified";
+            }
+
+              $photo = ($employee->image != "") ? $employee->image : 'img/default-avatar.png'; 
+              ?>
+      <tr>
+        <!-- <td><input type="checkbox" data-employee_id="{{ $employee->id }}" class="employee-item-checkbox" style="margin-top: 54px;"></td> -->
+        <td width="125px"> <a href="{{ route('employees.show', $employee->employee_work_id) }}"> <img class="img-thumbnail" src="{{ asset($photo) }}" style="width:120; height:120;"> </a></td>
+        <td colspan="5">
+            <div class="short-profile" style="width: 70%; float:left;">
+                  <div class="name" style="font-size: 15px; "> <strong><u>{{ $employee->lastname }}, {{ $employee->firstname}}</u> <span style="font-size:13px; font-style:italic; font-weight: normal;">{{ $birthdate or "" }}</span></strong></div>
+                    <div class="name" style="font-size: 13px"> {{ $employee->company->name }}  </div>
+                    <div class="name" style="font-size: 13px"> <u>{{ ($employee->department_name != "") ? $employee->department_name : "<i>Not Assigned</i>" }}</u>  {{ ($employee->position_name != "") ? '/ <u>' . $employee->position_name  . '</u>': "" }}</div>
+              <hr>
+                    <div class="name" style="font-size: 13px; margin-top:5px;"> Date hired: {{ $date_hired }}</div>                  
+                    <div class="name" style="font-size: 13px; margin-top:5px;"> Status: <u>{{ ucfirst(strtolower($employee->membership_status))}}</u></div>
+
+            </div>
+
+            <div class="list-buttons" style="width: 30%;float:left;">
+              
+              @if ($accessControl->hasAccess($uri, 'delete', $GLOBALS['_byPassRole']))
+              <button data-employee_id="{{ $employee->employee_work_id}}" type="button" class="close pull-right deleteButton"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              @endif
+ 
+              @if ($accessControl->hasAccess($uri, 'edit', $GLOBALS['_byPassRole']))
+              <a href="{{ route('employees.edit', $employee->employee_work_id) }}" class="btn btn-default" style="margin: 30px 50px;">Edit Profile Information</a>
+              @endif
+            </div>
+
+        </td>
+      </tr>
+      @endforeach
+    </tbody>
+</table>
+
 
 @if (count($employees) == 0)
 
@@ -173,6 +218,7 @@
 
     $('.deleteButton').on('click', function(e) {
 
+      if (! confirm('Are you sure to delete this item?') ) return false;
       // Prevent from going back to top when clicking the button
       e.preventDefault();
 
@@ -185,7 +231,7 @@
       // Contact server to delete the employee
       $.ajax({
         type: 'DELETE',
-        url: '{{ action('EmployeesController@destroy') }}',
+        url: '{{ action('EmployeesController@index') }}' + '/'+ id,
         data: { employee_work_id: id },
         success: function(data) {
         
@@ -197,7 +243,11 @@
       
     });
 
+    $('.employee-item-checkbox').on('click', function() {
+      console.log($(this).data('employee_id'));
+    });
 
+    // $('.tablesorter').dataTable();
 })();
 
 

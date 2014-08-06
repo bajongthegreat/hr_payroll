@@ -32,6 +32,7 @@
 						{{ Form::text('firstname', Input::old('firstname'), array('class' => 'form-control', 'required') ) }}
 					</div>
 
+							<div class="col-sm-1"> <span class="required label-value">*Required</span> </div>
 				</div>
 			</div>
 
@@ -44,6 +45,7 @@
 					<div class="col-sm-4">
 						{{ Form::text('middlename', Input::old('middlename'), array('class' => 'form-control', 'required') ) }}
 					</div>
+							<div class="col-sm-1"> <span class="required label-value">*Required</span> </div>
 
 				</div>
 		</div>
@@ -57,6 +59,7 @@
 					<div class="col-sm-4">
 						{{ Form::text('lastname', Input::old('lastname'), array('class' => 'form-control', 'required') ) }}
 					</div>
+							<div class="col-sm-1"> <span class="required label-value">*Required</span> </div>
 
 				</div>
 		</div>
@@ -94,6 +97,9 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
                     </span>
                 </div>
+
+							<div class="col-sm-1"> <span class="required label-value">*Required</span> </div>
+                
 
 				</div>
 		</div>
@@ -338,6 +344,7 @@
 								{{ Form::select('company_id', $companies, Input::old('company_id') , array('class' => 'form-control', 'id' => 'company_id', 'required') ) }}
 							</div>
 
+										<div class="col-sm-1"> <span class="required label-value">*Required</span> </div>
 							
 
 						</div>
@@ -352,6 +359,8 @@
 							<div class="col-sm-4">
 								{{ Form::select('department_id', [], Input::old('department_id') , array('class' => 'form-control', 'id' => 'department_id', 'required') ) }}
 							</div>
+
+							<div class="col-sm-1"> <span class="required label-value">*Required</span> </div>
 
 							
 
@@ -368,75 +377,7 @@
 								{{ Form::select('position_id', [] , Input::old('position_id') , array('class' => 'form-control', 'disabled', 'id' => 'position_id', 'required') ) }}
 							</div>
 
-							
-
-						</div>
-				</div> <!-- End of Row -->
-
-				<hr>	<!-- Seperator -->
-
-				 <div class="row">
-
-						<div class="form-group">
-									
-							{{ Form::label('salary', 'Salary: ', array('class' => 'col-sm-4 text-right')) }}
-
-							<div class="col-sm-4">
-								<div class="input-group">
-								  <span class="input-group-addon">PHP</span>
-								  {{ Form::text('salary', Input::old('salary'), array('class' => 'form-control', 'required') ) }}
-								  <span class="input-group-addon"></span>
-								</div>
-								
-							</div>
-
-							
-
-						</div>
-				</div> <!-- End of Row -->
-
-			<hr>	<!-- Seperator -->
-
-		    <div class="row">
-
-						<div class="form-group">
-									
-							{{ Form::label('annual_pe', 'Annual PE', array('class' => 'col-sm-4 text-right')) }}
-
-							<div class="col-sm-4">
-								{{ Form::checkbox('annual_pe',  1)}}
-							</div>
-
-							
-
-						</div>
-				</div> <!-- End of Row -->
-
-			<div class="row">
-
-						<div class="form-group">
-									
-							{{ Form::label('ppe_issuance', 'P.P.E Issuance', array('class' => 'col-sm-4 text-right')) }}
-
-							<div class="col-sm-4">
-								{{ Form::checkbox('ppe_issuance',  1)}}
-							</div>
-
-							
-
-						</div>
-				</div> <!-- End of Row -->
-				
-				<div class="row">
-
-						<div class="form-group">
-									
-							{{ Form::label('with_r1a', 'With R-1A', array('class' => 'col-sm-4 text-right')) }}
-
-							<div class="col-sm-4">
-								{{ Form::checkbox('with_r1a',  1)}}
-							</div>
-
+							<div class="col-sm-1"> <span class="required label-value">*Required</span> </div>
 							
 
 						</div>
