@@ -54,6 +54,26 @@ html {
               </div>
             </noscript>             
 
+            <!-- TODO -->
+
+<!--             <div style="border: 1px solid #000;">
+                
+                <div style="margin: 15px 5px;">
+                  <div style="font-size:16px; margin-bottom: 5px;">TODO</div>
+                      <span style="margin-bottom: 5px;">Build reports for:</span>
+                      <ul>
+                        <li>Employee Profile</li>
+                        <li>Employee Masterlist ->  <span class="label label-success">Excel done</span></li>
+                        <li>SSS Loan - Monthly Report</li>
+                        <li>DTR report - (per employee)</li>
+                        <li>DTR report - (per position)</li>
+                        <li>DTR report - (per department)</li>
+
+                      </ul>
+                </div>
+
+            </div>
+ -->
           		@yield('content')
 
  
@@ -64,7 +84,7 @@ html {
 
     <footer>
         @yield('footer')
-        <p class="text-center">TIBUD sa Katibawasan Cooperative &copy;2014</p>
+        <p class="text-center">{{ Config::get('company.name.full')}} <strong>({{ Config::get('company.name.acro')}})</strong> <br>HR and Payroll System | &copy;2014</p>
         <!-- <div id="page_load_counter" class="text-center" style="display:none;">Page generated in <span class="load_time"></span> seconds.</div> -->
       </footer>
     

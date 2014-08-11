@@ -25,6 +25,8 @@
 					        <h4 class="list-group-item-heading">Physical Examination Report</h4>
 					        <p class="list-group-item-text">A summary of Physical Examinations done.</p>
 					      </a>
+
+
 					    </div>
                   </div>
                 </div>
@@ -33,21 +35,33 @@
                   <div class="panel-heading">Payroll</div>
                   <div class="panel-body">
                     <div class="list-group employee-list">
+					      
 					      <a href="#" class="list-group-item">
 					        <h4 class="list-group-item-heading">Payslip</h4>
 					        <p class="list-group-item-text">Creates a file that lists all employee payslips within the specified payroll period.</p>
 					      </a>
+
 					      <a href="#" class="list-group-item">
 					        <h4 class="list-group-item-heading">SSS Contributions Report</h4>
 					        <p class="list-group-item-text">Creates a file of all the contributions by both the employer and the employee.</p>
 					      </a>
+
 					      <a href="#" class="list-group-item">
 					        <h4 class="list-group-item-heading">Physical Examination Report</h4>
 					        <p class="list-group-item-text">A summary of Physical Examinations done.</p>
 					      </a>
+
+
+					      <a href="#" class="list-group-item">
+					        <h4 class="list-group-item-heading">SSS Monthly Report</h4>
+					        <p class="list-group-item-text">A summary of SSS Loan payments.</p>
+					      </a>
 					    </div>
                   </div>
-                </div>
+    </div>
         
 
+@stop
+
+@section('scripts')
 @stop

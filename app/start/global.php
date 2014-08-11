@@ -147,3 +147,13 @@ function isDateValid($date) {
         return false;
     }
 }
+
+function monthName($month_number) {
+	$months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October','Novermber', 'December'];
+
+	if ($month_number > 12  || $month_number < 1) {
+		throw new Exception('Invalid month');
+	}
+
+	return $months[$month_number - 1 ];
+}

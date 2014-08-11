@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/"> <img src="{{ asset('img/logo.png') }}" height="24" width="30"> TIBUD</a>
+          <a class="navbar-brand" href="/"> <img src="{{ asset('img/logo.png') }}" height="24" width="30"> {{ Config::get('company.name.acro') }}</a>
         </div>
 
 

@@ -1,3 +1,17 @@
+<style type="text/css">
+ .chkbox {
+ 	padding: 5px 4px !important;
+ 	margin-top: 5px !important;
+ 	margin-right: 10px;
+ }
+ .list-item {
+ 	margin-top: 5px;
+ }
+
+ .list-item span {
+ 	margin-left: 10px;
+ }
+</style>
 
 <!-- Needs Requirements -->
 		<div class="panel panel-info">
@@ -60,7 +74,7 @@
 						$button = ($canEdit) ? '<span class="label label-info">Submit</span>' : "";
 
 						// Icon to be used if not passed
-		         		$icon = '<a href="#"  class="' . $requirement_class . '"> '  .$button . ' <span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
+		         		$icon =  '<a href="#"  class="' . $requirement_class . '"> '  .$button . ' <span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
 
 			 		} else {
 
@@ -78,7 +92,7 @@
 					         	
 			 		}
 
-				echo '<li style="margin-top: 5px" data-type="' . $type. '" data-document="' . ucfirst($requirement_item->document). '" data-applicant_id="' . $id . '" data-requirement_id="' . $requirement_item->id .'"> ' . $icon . ' ' . ucfirst($requirement_item->document) . '(' . ucfirst($requirement_item->document_type).')' . '   <span class="label label-default">' . $date_passed . '</span>' .'</li>';
+				echo '<li style="margin-top: 5px" data-type="' . $type. '" data-document="' . ucfirst($requirement_item->document). '" data-applicant_id="' . $id . '" data-requirement_id="' . $requirement_item->id .'"> '. '<input type="checkbox" style="width: 20px;" class="chkbox">' . $icon . ' ' . ucfirst($requirement_item->document) . '(' . ucfirst($requirement_item->document_type).')' . '   <span class="label label-default">' . $date_passed . '</span>' .'</li>';
 
 				}
 			 }
@@ -87,6 +101,69 @@
 
 		    <hr>
 		    	@endforeach
+
+		    	<div style="margin-top: 15px">
+		    		<img src="http://localhost/phpmyadmin/themes/pmahomme/img/arrow_ltr.png"> <span style="font-size: 12px;"> <input type="checkbox" class="checkall"> Check all</span>   <span style="margin-left: 20px; color: #FF9966; font-size: 12px;"> With selected: </span> <span style="font-size: 12px;"> <a href="#" class="btn btn-sn btn-default submit-checked" style="padding: 1px 34px !important;">Submit</a></span>
+		    	</div>
 		  </div>
 		</div>
 	</div>
+
+	<div class="demo"></div>
+<script type="text/javascript">
+
+(function(){
+
+	setTimeout(function() {
+			
+
+			// Checks all checkbox
+			$('.checkall').on('click', function() {
+				$(':checkbox.chkbox').prop('checked', this.checked);
+			});
+
+			// Trigger action to checked requirements
+			$('.submit-checked').on('click', function(e) {
+				
+				var content = "You selected this items to update: <br>";
+				var requirementsContainer = [];
+				var tempArray = [];
+
+				// Reset storage requirements
+				localStorage.setItem('requirements', '');
+
+				// Loop through each checked checkbox
+				($(':checkbox.chkbox:checked').parent()).each(function(i) {
+					
+					if ($(this).data('type') == 'pass') {
+						content += '<li class="list-item">' + '<span class="label label-success">ADD</span><span>' + $(this).data('document') +'</span>' +'</li>';	
+					} else {
+						content += '<li class="list-item">' + '<span class="label label-danger">REMOVE</span><span>' + $(this).data('document') +'</span>' +'</li>';							
+					}
+					
+					requirementsContainer[i] = { 'action' : $(this).data('type'),
+					                             'requirement_id' : $(this).data('requirement_id') };
+
+
+				});
+
+				if ($(':checkbox.chkbox:checked').parent().length > 0 ) {
+
+					localStorage.setItem('requirements', JSON.stringify(requirementsContainer) );
+
+        		    $('#myModalLabel').html('Employee Requirement');
+	   	            $('#requirement-modal-multiple').modal('show');
+					$('.requirement-modal').html(content);					
+				}
+
+				e.preventDefault();
+			});
+
+			// Process the selected items
+			// Still, Server side code not yet implemented.
+
+	}, 1000);
+
+})();
+
+</script>

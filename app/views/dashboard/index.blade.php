@@ -29,6 +29,19 @@ $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', da
                                  ->get();
 
 
+
+// Employment Progress
+$employment_progress = DB::table('employees')->select( DB::raw('COUNT(*) as count'), DB::raw('YEAR(date_hired) as year') )
+                                             ->groupBy(DB::raw('YEAR(date_hired)'))
+                                             ->get();
+
+foreach($employment_progress as $i => $ep) { 
+  # code...
+    $ep_headers[$i] = $ep->year; 
+    $ep_values[$i] = $ep->count;
+}
+
+$ep_values[0] = 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,6 +58,10 @@ $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', da
     @include('layout.navigation')
 
     <style type="text/css">
+
+      body {
+        overflow-x: hidden;
+      }
       .legend {
 
         border: 1px solid #AAA;
@@ -246,7 +263,7 @@ $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', da
                 </div><!--/panel-->
               
                 <div class="panel panel-default">
-                  <div class="panel-heading"><div class="panel-title">Engagement</div></div>
+                  <div class="panel-heading"><div class="panel-title">Employment growth</div></div>
                   <div class="panel-body">  
                 
                   <canvas id="myChart" width="350" height="300"></canvas>  
@@ -301,7 +318,7 @@ $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', da
       var ctx = document.getElementById("myChart").getContext("2d");
       
       var data = {
-          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          labels: {{ json_encode($ep_headers) }},
           datasets: [
               {
                   label: "My First dataset",
@@ -309,20 +326,12 @@ $holidays = DB::table('holidays')->where(DB::raw('MONTH(holiday_date)'), '=', da
                   strokeColor: "rgba(220,220,220,0.8)",
                   highlightFill: "rgba(220,220,220,0.75)",
                   highlightStroke: "rgba(220,220,220,1)",
-                  data: [65, 59, 80, 81, 56, 55, 40]
-              },
-              {
-                  label: "My Second dataset",
-                  fillColor: "rgba(151,187,205,0.5)",
-                  strokeColor: "rgba(151,187,205,0.8)",
-                  highlightFill: "rgba(151,187,205,0.75)",
-                  highlightStroke: "rgba(151,187,205,1)",
-                  data: [28, 48, 40, 19, 86, 27, 90]
+                  data: {{ json_encode($ep_values) }}
               }
-          ]
+                        ]
       };
 
-      var myBarChart = new Chart(ctx).Bar(data);
+      var myBarChart = new Chart(ctx).Line(data);
     </script>
 
     <script type="text/javascript">

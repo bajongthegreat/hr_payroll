@@ -18,8 +18,8 @@ class EmployeesController extends BaseController {
 	protected $limit = 10;
 
 
-	protected $fields_to_use_on_search = ['firstname','lastname','middlename','employee_work_id', 'name_extension'];
-	protected $fields_to_use_on_listings = ['firstname','lastname','middlename','employee_work_id','position_id','employment_status','membership_status','name_extension'];
+	protected $fields_to_use_on_search = ['firstname','lastname','middlename','employee_work_id', 'name_extension', 'sss_id'];
+	protected $fields_to_use_on_listings = ['firstname','lastname','middlename','employee_work_id','position_id','employment_status','membership_status','name_extension', 'date_hired'];
 
 
 	protected $custom_message = ['messages' => ['sss_id.regex' => 'SSS ID must have a format of XX-XXXXXXX-X (2-7-1)' ,
@@ -84,6 +84,7 @@ class EmployeesController extends BaseController {
 		
 		// Checks if an array key "src" exists in $_POST variable
 		if (Input::has('src')) {
+
 
 			$src = Input::get('src');
 
@@ -203,7 +204,8 @@ class EmployeesController extends BaseController {
 			
 				
 			})->leftJoin('positions', 'positions.id', '=', 'employees.position_id')
-			  ->select('employees.*', 'positions.name as position_name', DB::raw('(SELECT name FROM departments WHERE departments.id = positions.department_id) as department_name') );
+			  ->select('employees.*', 'positions.name as position_name', DB::raw('(SELECT name FROM departments WHERE departments.id = positions.department_id) as department_name') )
+			  ->orderBy('created_at', 'desc');
 	}
 
 	/**

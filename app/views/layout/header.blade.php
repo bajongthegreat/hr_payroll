@@ -1,4 +1,4 @@
-    <title>Tibud Cooperative HR and Payroll @yield('title')</title>
+    <title>{{ Config::get('company.name.full')}} HR and Payroll @yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="<?php echo URL::to('img/favicon.ico'); ?>">
      <style type="text/css">

@@ -77,11 +77,7 @@
       @foreach($leaves as $leave)
      
       <tr>
-        <td><a href="{{ action('LeavesController@show', $leave->id) }}?work_id={{$leave->employee->employee_work_id}}"><span class="label label-default">View</span></a></td>
-
-        <td>{{$leave->employee->employee_work_id}}</td>
-        <td>{{ucfirst($leave->employee->lastname)}}, {{ ucfirst($leave->employee->firstname) }}</td>
-
+     
         <td>From ({{$leave->start_date}}) To ({{$leave->end_date}})</td>
         <td>{{  $helper->getLeaveType($leave->type) }}</td>
         <td>{{ $helper->getStatus($leave->status, true) }}</td>

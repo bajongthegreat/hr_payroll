@@ -62,7 +62,7 @@ class SSS_loan_paymentsController extends BaseController {
 		// Handle ajax request
 		if (Request::ajax() ) {
 			
-			$required_information = Input::only('sbr_tr_number','sbr_tr_date','amount', 'sss_loan_id');
+			$required_information = Input::only('sbr_tr_number','sbr_tr_date','amount', 'sss_loan_id', 'post_date');
 			$employee_id = Input::get('employee_id');
 
 
@@ -164,7 +164,7 @@ class SSS_loan_paymentsController extends BaseController {
 		// Handle ajax request
 		if (Request::ajax() ) {
 			
-			$required_information = Input::only('sbr_tr_number','sbr_tr_date','amount', 'sss_loan_id');
+			$required_information = Input::only('sbr_tr_number','sbr_tr_date','amount', 'sss_loan_id', 'post_date');
 
 			// Regular type of payment
 			$required_information['type'] = 'regular';

@@ -4,11 +4,12 @@ use Acme\Repositories\Employee\EmployeeRepositoryInterface;
 
 class EmployeeComposer {
 
-	protected $employment_status = [  'pending' => 'Pending',
-									  'active' => 'Active',
+	protected $employment_status = [  'active' => 'Active',
 				                      'inactive' => 'Inactive',
 				                      'resigned' => 'Resigned',
-				                      'retired' => 'Retired'];
+				                      'retired' => 'Retired',
+				                      'pending' => 'Pending',
+									  ];
 
 	protected $membership_status = [ 'applicant' => 'Applicant',
 									 'associate' => 'Associate',

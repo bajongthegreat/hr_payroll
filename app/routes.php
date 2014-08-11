@@ -51,19 +51,43 @@ Route::get('/', ['as' => 'main',function()
 
 
 
-
 Route::get('/demo', function()
 {
-		$employee_id = 1982;
+		
+		$limit = 1115;
+		$multiplier = 1;
 
-	$html = View::make('partials.biodata');
+		$alphabet = range('A', 'Z');
+		$alphabet_container = array();
 
-		$dompdf = new DOMPDF();
-		$dompdf->load_html($html);
-		$dompdf->render();
+		if ($limit > 26) {
+			$multiplier = round($limit/25);
+		}
 
-		// Use this to output to the broswer
-		return $dompdf->stream('my.pdf',array('Attachment'=> false));
+		for ($i=0; $i < $multiplier; $i++ ) {
+
+			foreach ($alphabet as $key => $letter) {
+				# code...
+
+				if ($limit < 26) {
+					if ($key == $limit) {
+						break;
+					}
+				}
+
+				// Check if alphabet container has a value
+				if (!isset($alphabet_container[$key])) {
+					$alphabet_container[$key] = $letter;
+				} else {
+					$alphabet_container[] = $alphabet_container[$i -1] . $letter; 
+				}
+			}
+
+			$limit -= 26;	
+		}
+		echo '<pre>';
+		var_dump($alphabet_container);
+
 });
 
 
@@ -205,6 +229,7 @@ Route::group(array('before' => 'auth'), function()
 	Route::get('/reports', 'ReportsController@index');
 	Route::get('/reports/employee/generate_excel_masterlist', 'ReportsController@create_employee_masterlist_excel');
 	Route::get('/reports/dpc/generate_excel', 'ReportsController@create_dpc_excel');
+	Route::get('/reports/sss_loans/generate_excel', 'ReportsController@create_sss_monthly_report');
 	
 	Route::get('/reports/employee', 'ReportsController@employee_index');
 

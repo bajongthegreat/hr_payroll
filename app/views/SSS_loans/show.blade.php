@@ -387,6 +387,17 @@
 				</div>
 
 
+        		<div class="form-group">
+						
+					{{ Form::label('post_date', 'Post date: ', array('class' => 'col-sm-4 text-right')) }}
+
+					<div class="col-sm-6">
+						{{ Form::text('post_date', Input::old('post_date'), array('class' => 'form-control', 'required') ) }}
+					</div>
+				
+				</div>
+
+
 				<div class="form-group">
 						
 					{{ Form::label('amount', 'Amount: ', array('class' => 'col-sm-4 text-right')) }}
@@ -491,6 +502,7 @@
 						var sbr_tr_date = $('#sbr_tr_date');
 						var amount = $('#amount');
 						var sss_loan_id = $('#sss_loan_id');
+						var post_date = $('#post_date');
 
 
 						$('#add_loan_payment').trigger('click');
@@ -501,6 +513,8 @@
 						sbr_tr_date.val(payment.sbr_tr_date);
 						amount.val(payment.amount);
 						sss_loan_id.val(payment.sss_loan_id);
+						sss_loan_id.val(payment.post_date);
+
 
 					}
 					console.log('without')
@@ -521,6 +535,8 @@
 			var sss_loan_id = $('#sss_loan_id').val();
 			var messageContainer = $('.message-container');
 			var employee_id = $('#employee_id').val();
+			var post_date = $("#post_date").val();
+
 			var submit = $('#submit_sss_loan_payment');
 			var submit_another = $('#submit-another-payment');
 
@@ -542,6 +558,7 @@
 					    sbr_tr_date: sbr_tr_date,
 					    sss_loan_id: sss_loan_id,
 					    employee_id: employee_id,
+					    post_date: post_date,
 				        _token: _globalObj._token,
 				        _method: form_submission_type },
 				beforeSend: function() {

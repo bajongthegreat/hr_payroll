@@ -113,7 +113,7 @@
 		 <div class="form-group pull-left">
 		 	
 
-	     	{{ Form::submit('Submit', array('class' => 'btn btn-primary ', 'id'=> 'processTableData')) }}
+	    		 	<a href="#" class="btn btn-primary" id="processTableData">Submit</a>
 	      	 {{ Form::reset('Clear', array('class' => 'btn btn-default', 'id' => 'clear')) }} 
 	      	 <div id="submitload"></div>
 	      </div>
@@ -138,6 +138,10 @@ var redirect = false;
 	(function() {
 
 		$('#processTableData').on('click', function(e) {
+
+			if (!confirm('Are you sure you want to save this data into the database?')) {
+			 	return false;
+			}
 
 			e.preventDefault();
 			var date_conducted = $('#date_conducted');

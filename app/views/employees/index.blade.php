@@ -86,7 +86,7 @@
 
   </div>
 
-
+  
 <table class="table table-hover tablesorter">
     <thead>
       <th></th>
@@ -117,6 +117,12 @@
 
 
               }
+
+              $took_pe = DB::table('employees_physical_examinations')->where('employee_id', '=', $employee->id)
+                                                                     ->where(DB::raw(' YEAR(date_conducted) '), '=', date('Y'))
+                                                                     ->count();
+              if ($took_pe > 0) $took_pe = true;
+              else $took_pe = false;
 
               // Date Hired
              if ($employee->date_hired && $employee->date_hired != "0000-00-00" && $employee->date_hired != "") {
@@ -150,12 +156,13 @@
         <td width="125px"> <a href="{{ route('employees.show', $employee->employee_work_id) }}"> <img class="img-thumbnail" src="{{ asset($photo) }}" style="width:120; height:120;"> </a></td>
         <td colspan="5">
             <div class="short-profile" style="width: 70%; float:left;">
-                  <div class="name" style="font-size: 15px; "> <strong><u>{{ $employee->lastname }}, {{ $employee->firstname}}</u> <span style="font-size:13px; font-style:italic; font-weight: normal;">{{ $birthdate or "" }}</span></strong></div>
+                  <div class="name" style="font-size: 15px; "> <strong> <u>{{ strtoupper($employee->lastname) }}, {{ strtoupper($employee->firstname)}}</u> <span style="font-size:13px; font-style:italic; font-weight: normal;">{{ $birthdate or "" }}</span></strong></div>
                     <div class="name" style="font-size: 13px"> {{ $employee->company->name }}  </div>
                     <div class="name" style="font-size: 13px"> <u>{{ ($employee->department_name != "") ? $employee->department_name : "<i>Not Assigned</i>" }}</u>  {{ ($employee->position_name != "") ? '/ <u>' . $employee->position_name  . '</u>': "" }}</div>
               <hr>
                     <div class="name" style="font-size: 13px; margin-top:5px;"> Date hired: {{ $date_hired }}</div>                  
-                    <div class="name" style="font-size: 13px; margin-top:5px;"> Status: <u>{{ ucfirst(strtolower($employee->membership_status))}}</u></div>
+                    <div class="name" style="font-size: 13px; margin-top:5px;"> Employment status: <u>{{ ucfirst(strtolower($employee->employment_status))}}</u></div>
+                    <div class="name" style="font-size: 13px; margin-top:5px;"> Membership status: <u>{{ ucfirst(strtolower($employee->membership_status))}}</u></div>
 
             </div>
 
@@ -167,6 +174,10 @@
  
               @if ($accessControl->hasAccess($uri, 'edit', $GLOBALS['_byPassRole']))
               <a href="{{ route('employees.edit', $employee->employee_work_id) }}" class="btn btn-default" style="margin: 30px 50px;">Edit Profile Information</a>
+              @endif
+
+              @if($took_pe)
+              <div class="name label label-info" style="font-size: 12px; margin-top:5px; margin-left: 50px;"> <span class="glyphicon glyphicon-check"></span> took P.E this year</div>
               @endif
             </div>
 
@@ -189,7 +200,7 @@
     
   ?>
 
-  <div> <strong>Total records found</strong>: {{ $employees->getTotal() }}</div>
+  <div> <strong>Total records found</strong>: <span class="item-count">{{ $employees->getTotal() }}</span></div>
 
   </div>
 
@@ -236,7 +247,10 @@
         success: function(data) {
         
           if (data == "1") {
-            deleteButton.closest('tr').fadeOut(255)
+            deleteButton.closest('tr').fadeOut(255);
+            var item_count = parseInt($('.item-count').html()) - 1;
+            $('.item-count').html(item_count);
+
           }
         }
       });
