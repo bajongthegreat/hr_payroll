@@ -9,7 +9,7 @@
   
 
    {{ Form::open(['method' => 'GET', 'action' => 'PositionsController@index'])}}
-  <input class="form-control " name="src" placeholder="Search an employee..." id="search" ng-model="query" value="{{ Input::get('src') }}">
+  <input class="form-control " name="src" placeholder="Search position..." id="search" ng-model="query" value="{{ Input::get('src') }}">
    {{ Form::close() }}
   </div>
 
@@ -24,6 +24,7 @@
 	<thead>
 		<th width="15%">ID</th>
 		<th width="15%">Name</th>
+		<th width="15%">Company</th>
 		<th width="15%"> Department</th>
 		<th width="50%"> Rate</th>
 		<th></th>
@@ -40,6 +41,8 @@
 
 				<td> {{ $position->id }}</td>
 				<td> {{ $position->name }}</td>
+
+				<td> {{ $position->company_name }}</td>
 				
 				<td>
 					@if (isset($position->department->name))

@@ -1,21 +1,34 @@
 <?php
 use Carbon\Carbon;
 
-App::singleton('AccessControl', function()  { 
-			return  new AccessControl(Auth::user()->id, Auth::user()->role_id);
-}); 
+
+
+/*
+|--------------------------------------------------------------------------
+| Access Role
+|--------------------------------------------------------------------------
+|
+| Here are the initialization of AccessControl class, responsible for managing user access 
+| on every page. 
+|
+*/
 
 
 if (Auth::check() ) {	
+
+	App::singleton('AccessControl', function()  { 
+		return  new AccessControl(Auth::user()->id, Auth::user()->role_id);
+	}); 
+
+	// Resolve Access Control class on IOC container
 	$acessControl = App::make('AccessControl');
+	
+	// Share global variable defaults
 	View::share('accessControl', $acessControl);
 	View::share('uri', Input::segment(1));
 	View::share('page_limit', 10);
-}
 
-
-// dd($acessControl->getRoleName(24));
-
+} 
 
 /*
 |--------------------------------------------------------------------------
@@ -54,39 +67,29 @@ Route::get('/', ['as' => 'main',function()
 Route::get('/demo', function()
 {
 		
-		$limit = 1115;
-		$multiplier = 1;
+// Create a new PHPWord Object
+$phpWord = new \PhpOffice\PhpWord\PhpWord();
 
-		$alphabet = range('A', 'Z');
-		$alphabet_container = array();
+$document = $phpWord->loadTemplate('C:\Users\JamesNormanJr\Dropbox\Thesis\Template.docx');
 
-		if ($limit > 26) {
-			$multiplier = round($limit/25);
-		}
 
-		for ($i=0; $i < $multiplier; $i++ ) {
 
-			foreach ($alphabet as $key => $letter) {
-				# code...
+// Will clone everything between ${tag} and ${/tag}, the number of times. By default, 1.
+// $document->cloneBlock('CLONEME', 3);
 
-				if ($limit < 26) {
-					if ($key == $limit) {
-						break;
-					}
-				}
+$fontStyle = array('color' => '006699', 'size' => 18, 'bold' => true);
+$document->addFontStyle('fStyle', $fontStyle);
 
-				// Check if alphabet container has a value
-				if (!isset($alphabet_container[$key])) {
-					$alphabet_container[$key] = $letter;
-				} else {
-					$alphabet_container[] = $alphabet_container[$i -1] . $letter; 
-				}
-			}
+$document->setValue('NAME', 'JAMES NORMAN MONES JR.');
+$document->setValue('SUBJECT', 'CAP123');
+$document->setValue('DAY', '24TH');
 
-			$limit -= 26;	
-		}
-		echo '<pre>';
-		var_dump($alphabet_container);
+$document->setValue('MONTH', 'MARCH');
+
+$name = 'Sample_23_TemplateBlock.docx';
+$document->saveAs($name);
+
+
 
 });
 
@@ -176,6 +179,7 @@ Route::group(array('before' => ['auth']), function()
 
 	// Applicants
 	Route::post('applicants/requirements', 'ApplicantsController@requirements');
+	Route::post('applicants/requirements_multiple', 'ApplicantsController@requirements_multiple');
 	Route::get('applicants/jsonApplicantInfo', 'ApplicantsController@jsonApplicantInfo');
 	Route::patch('applicants/jsonApplicant', 'ApplicantsController@jsonUpdateApplicant');
 	Route::resource('applicants', 'ApplicantsController');

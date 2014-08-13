@@ -370,50 +370,6 @@
 				</div>
 			</div>
 
-			<div class="form-group">
-
-				 <div class="col-sm-7">
-				 	<hr>	<!-- Seperator -->
-				 </div>
-			</div>
-
-
-			<div class="form-group">
-				{{ Form::label('annual_pe', 'Annual PE', array('class' => 'col-md-2 text-right')) }}
-
-				<div class="col-md-4">
-					<input type="checkbox" name="annual_pe" value="1">
-				</div>
-
-
-			
-			</div>
-
-			<div class="form-group">
-
-				{{ Form::label('ppe_issuance', 'P.P.E Issuace', array('class' => 'col-md-2 text-right')) }}
-
-				<div class="col-md-1">
-					<input type="checkbox" name="ppe_issuance" value="1">
-				</div>
-			</div>
-
-			
-			<div class="form-group">
-					{{ Form::label('with_r1a', 'With R-1A', array('class' => 'col-md-2 text-right')) }}
-
-				<div class="col-md-4">
-					<input type="checkbox" name="with_r1a" value="1">
-				</div>
-			</div>
-			
-
-			<div class="form-group">
-
-				 <div class="col-sm-7">
-				 	<hr>	<!-- Seperator -->
-				 </div>
-			</div>
 
 			 <div class="form-group">
 

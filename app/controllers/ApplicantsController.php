@@ -170,6 +170,47 @@ class ApplicantsController extends BaseController {
 		}
 		
 	}
+
+		public function requirements_multiple() {
+
+		$requirements = json_decode(Input::get('requirements'));
+		$date = Input::get('date');
+		$requirement_arr = [];
+
+		
+		if (is_null($requirements) ) {
+			return Response::json(['status' => 'failed',
+				                  'message' => 'Invalid requirement data.']);
+		} 
+
+		foreach ($requirements as $key => $requirement) {
+			
+		$check = $this->applicant_requirements->find($requirement->requirement_id, 'requirement_id')->where('employee_id','=', $requirement->employee_id)->get();
+		$type = $requirement->action;
+
+
+		if ($type == 'pass') {
+			
+			if (count($check) > 0) continue;
+
+			$requirement_arr[] = ($this->applicant_requirements->create(['employee_id' => $requirement->employee_id, 
+				                                           'requirement_id' => $requirement->requirement_id, 
+				                                           'date' => $date])) ? ['status' => 'success', 'id' => $requirement->requirement_id] : ['status' => 'failed', 'id' => $requirement->requirement_id];
+		
+		}
+			elseif ($type == 'remove') {
+				$requirement_arr[] = ($this->applicant_requirements->delete($requirement->requirement_id, 'requirement_id')) ? ['status' => 'success', 'id' => $requirement->requirement_id] : ['status' => 'failed', 'message' => 'removal of requirement failed.' , 'id' => $requirement->requirement_id];
+			}
+
+
+
+		}
+
+		return Response::json($requirement_arr);
+
+		
+	}
+
 	/**
 	 * Display the specified resource.
 	 *

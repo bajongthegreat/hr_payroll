@@ -24,7 +24,7 @@ class CreateMembersTable extends Migration {
 
 		Schema::create('employees', function(Blueprint $table) {
 			$table->increments('id');
-			$table->integer('position_id')->unsigned();
+			$table->integer('position_id')->unsigned()->nullable();
 		
 
 			$table->string('employee_work_id', 50)->unique()->nullable();

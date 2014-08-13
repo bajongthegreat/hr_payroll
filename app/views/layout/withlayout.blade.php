@@ -114,6 +114,7 @@ html {
       $(document).ready(function() {
                  // $('.load_time').html(Date.now()-timerStart/1000);
                  // $('#page_load_counter').show();
+                 $('.b_tooltip').tooltip();
                  console.log('Page load time:' + (Date.now()-timerStart));
              });
      </script>

@@ -92,7 +92,7 @@
 					         	
 			 		}
 
-				echo '<li style="margin-top: 5px" data-type="' . $type. '" data-document="' . ucfirst($requirement_item->document). '" data-applicant_id="' . $id . '" data-requirement_id="' . $requirement_item->id .'"> '. '<input type="checkbox" style="width: 20px;" class="chkbox">' . $icon . ' ' . ucfirst($requirement_item->document) . '(' . ucfirst($requirement_item->document_type).')' . '   <span class="label label-default">' . $date_passed . '</span>' .'</li>';
+				echo '<li style="margin-top: 5px"   data-type="' . $type. '" data-document="' . ucfirst($requirement_item->document). '" data-applicant_id="' . $id . '" data-requirement_id="' . $requirement_item->id .'"> '. '<input type="checkbox" style="width: 20px;" class="chkbox '. $type .'">' . $icon . ' ' . ucfirst($requirement_item->document) . '(' . ucfirst($requirement_item->document_type).')' . '   <span class="label label-default">' . $date_passed . '</span>' .'</li>';
 
 				}
 			 }
@@ -103,7 +103,12 @@
 		    	@endforeach
 
 		    	<div style="margin-top: 15px">
-		    		<img src="http://localhost/phpmyadmin/themes/pmahomme/img/arrow_ltr.png"> <span style="font-size: 12px;"> <input type="checkbox" class="checkall"> Check all</span>   <span style="margin-left: 20px; color: #FF9966; font-size: 12px;"> With selected: </span> <span style="font-size: 12px;"> <a href="#" class="btn btn-sn btn-default submit-checked" style="padding: 1px 34px !important;">Submit</a></span>
+		    		<img src="http://localhost/phpmyadmin/themes/pmahomme/img/arrow_ltr.png"> 
+		    		    <span style="font-size: 12px;"> <input type="checkbox" data-action="all" class="check-mgt check_all"> Check all</span>   		    		    <span style="margin-left: 60px; color: #FF9966; font-size: 12px;"> With selected: </span> <span style="font-size: 12px;"> <a href="#" class="btn btn-sn btn-default submit-checked" style="padding: 1px 34px !important;">Submit</a></span>
+
+		    		    <div style="font-size: 12px; margin-left: 40px;"> <input data-action="submitted" type="checkbox" class="check-mgt check_submit"> Check Submitted</div>
+		    		    <div style="font-size: 12px; margin-left: 40px; margin-top: 2px;"> <input data-action="not_submitted" type="checkbox" class="check-mgt check_not"> Check  Not Passed </div>
+
 		    	</div>
 		  </div>
 		</div>
@@ -115,17 +120,45 @@
 (function(){
 
 	setTimeout(function() {
-			
+			$('.check-mgt').on('click', function() {
+				var action = $(this).data('action');
 
-			// Checks all checkbox
-			$('.checkall').on('click', function() {
-				$(':checkbox.chkbox').prop('checked', this.checked);
-			});
+
+				// Reset all checkboxes
+				$(':checkbox.chkbox').prop('checked', false);
+
+				switch(action) {
+				    case 'submitted':				        
+						$(':checkbox.chkbox.remove').prop('checked', this.checked);
+		
+						$(':checkbox.check_all').prop('checked', false);
+						$(':checkbox.check_not').prop('checked', false);
+
+				        break;
+				    case 'not_submitted':
+						$(':checkbox.chkbox.pass').prop('checked', this.checked);
+		
+						$(':checkbox.check_all').prop('checked', false);
+						$(':checkbox.check_submit').prop('checked', false);
+
+				        break;
+				    default:
+
+						$(':checkbox.chkbox').prop('checked', this.checked);
+
+						$(':checkbox.check_not').prop('checked', false);
+						$(':checkbox.check_submit').prop('checked', false);
+						
+				}
+
+				console.log(action);
+			});			
+
 
 			// Trigger action to checked requirements
 			$('.submit-checked').on('click', function(e) {
 				
-				var content = "You selected this items to update: <br>";
+				var content = "You selected this items to be updated: <br>";
 				var requirementsContainer = [];
 				var tempArray = [];
 
@@ -136,13 +169,17 @@
 				($(':checkbox.chkbox:checked').parent()).each(function(i) {
 					
 					if ($(this).data('type') == 'pass') {
-						content += '<li class="list-item">' + '<span class="label label-success">ADD</span><span>' + $(this).data('document') +'</span>' +'</li>';	
+						content += '<li class="list-item">' + '<span class="label label-success">ADD</span>  <span class="requirement-label"> ' + $(this).data('document') +' <span class="requirement_' + $(this).data('requirement_id') + '"> </span>   </span>' +'</li>';	
 					} else {
-						content += '<li class="list-item">' + '<span class="label label-danger">REMOVE</span><span>' + $(this).data('document') +'</span>' +'</li>';							
+						content += '<li class="list-item">' + '<span class="label label-danger">REMOVE</span>  <span class="requirement-label"> ' + $(this).data('document') +' <span class="requirement_' + $(this).data('requirement_id') + '"> </span>   </span>' +'</li>';	
+
+						// content += '<li class="list-item">' + '<span class="label label-danger">REMOVE</span><span class="requirement_' + $(this).data('requirement_id') +'">' + $(this).data('document') +'</span>' +'</li>';							
 					}
 					
 					requirementsContainer[i] = { 'action' : $(this).data('type'),
-					                             'requirement_id' : $(this).data('requirement_id') };
+					                             'requirement_id' : $(this).data('requirement_id'),
+					                             'document' : $(this).data('document'),
+					                             'employee_id' : $(this).data('applicant_id') };
 
 
 				});
@@ -156,9 +193,58 @@
 					$('.requirement-modal').html(content);					
 				}
 
+				
+
 				e.preventDefault();
 			});
+			
+			
+	
+	
+			$('#modal_save_multiple').on('click', function() {
+				
+				if (localStorage.getItem('requirements').length == 0) {
+					alert('The required parameters are not set. Please refresh your browser.');
+					return false;
+				}
 
+				var requirements_obj = localStorage.getItem('requirements');
+				var submission_date = $('.requirement_date_m').val();
+
+				$.ajax({
+					type: 'POST',
+					data: { 
+						requirements: requirements_obj,
+						date: submission_date,
+						_token: _globalObj._token
+						 },
+					url: _globalObj._baseURL + "/" + 'applicants/requirements_multiple',
+					success: function(data) {
+
+						if (data.length > 0) {
+							for (var i = data.length - 1; i >= 0; i--) {
+	
+								var requirement = $('.requirement_' + data[i].id);
+
+								if (data[i].status == 'success') {
+									
+									requirement.html( ' <span class="glyphicon glyphicon-ok"></span>')
+								} else {
+									requirement.html( '<span class="glyphicon glyphicon-remove"></span>');
+								}
+							};
+
+							$('#modal_save_multiple').prop('disabled', true);
+
+							$('.close-refresh').on('click', function() {
+								location.reload();
+							});
+						}
+
+					}
+				});
+
+			});
 			// Process the selected items
 			// Still, Server side code not yet implemented.
 

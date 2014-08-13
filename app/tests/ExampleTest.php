@@ -9,9 +9,14 @@ class ExampleTest extends TestCase {
 	 */
 	public function testBasicExample()
 	{
-		$crawler = $this->client->request('GET', '/');
+		  $mock = Mockery::mock('Acme\Repositories\Employee\EmployeeRepositoryInterface');
+ 	        $mock->shouldReceive('all')->once();
 
-		$this->assertTrue($this->client->getResponse()->isOk());
+ 	        $this->app->instance('Acme\Repositories\Employee\EmployeeRepositoryInterface', $mock);
+ 
+  			  $this->call('GET', 'employees');
+ 
+   		   $this->assertViewHas('employees');
 	}
 
 }

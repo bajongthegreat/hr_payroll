@@ -12,6 +12,7 @@
 		  "cboden/ratchet": "0.3.*",
 		  "dompdf/dompdf": "dev-master",
 		  "phpoffice/phpword": "dev-master"
+		  ,"mockery/mockery": "dev-master@dev"
 	},
 	"autoload": {
 		"classmap": [

@@ -113,8 +113,8 @@
                   
                   $interval = date_diff($datetime1, $datetime2);
 
-                  $birthdate = '(' . $interval->format('%y') .' years old) ';
-
+                  $age = '(' . $interval->format('%y') .' years old) ';
+                  $birthdate_raw = $date->format('F m, Y');
 
               }
 
@@ -156,10 +156,11 @@
         <td width="125px"> <a href="{{ route('employees.show', $employee->employee_work_id) }}"> <img class="img-thumbnail" src="{{ asset($photo) }}" style="width:120; height:120;"> </a></td>
         <td colspan="5">
             <div class="short-profile" style="width: 70%; float:left;">
-                  <div class="name" style="font-size: 15px; "> <strong> <u>{{ strtoupper($employee->lastname) }}, {{ strtoupper($employee->firstname)}}</u> <span style="font-size:13px; font-style:italic; font-weight: normal;">{{ $birthdate or "" }}</span></strong></div>
+                  <div class="name" style="font-size: 15px; "> <strong> <u>{{ strtoupper($employee->lastname) }}, {{ strtoupper($employee->firstname)}}</u> <span  style="font-size:13px; font-style:italic; font-weight: normal;" > <span class="b_tooltip" data-toggle="tooltip" data-placement="right" title="{{ $birthdate_raw }}">{{ $age }}</span> </span></strong></div>
                     <div class="name" style="font-size: 13px"> {{ $employee->company->name }}  </div>
                     <div class="name" style="font-size: 13px"> <u>{{ ($employee->department_name != "") ? $employee->department_name : "<i>Not Assigned</i>" }}</u>  {{ ($employee->position_name != "") ? '/ <u>' . $employee->position_name  . '</u>': "" }}</div>
               <hr>
+                    <div class="name" style="font-size: 13px; margin-top:5px;"> ID: <u>{{ $employee->employee_work_id }}</u></div>                  
                     <div class="name" style="font-size: 13px; margin-top:5px;"> Date hired: {{ $date_hired }}</div>                  
                     <div class="name" style="font-size: 13px; margin-top:5px;"> Employment status: <u>{{ ucfirst(strtolower($employee->employment_status))}}</u></div>
                     <div class="name" style="font-size: 13px; margin-top:5px;"> Membership status: <u>{{ ucfirst(strtolower($employee->membership_status))}}</u></div>
