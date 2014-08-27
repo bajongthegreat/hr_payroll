@@ -11,8 +11,10 @@
 
 	           'loans' => ['icon' => 'glyphicon-th-list',
 	                        'url' => 'loans'],
-	            'DTR' => ['icon' => 'glyphicon-th-list',
-	                        'url' => 'dtr']
+	            'Daily Time Record' => ['icon' => 'glyphicon-th-list',
+	                        'url' => 'dtr'],
+	            'files' => ['icon' => 'glyphicon glyphicon-file',
+	                         'url' => 'files']
  	         ];
 
 

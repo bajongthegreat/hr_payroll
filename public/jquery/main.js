@@ -1122,6 +1122,70 @@ var dtrModule = function() {
 
 };
 
+// Build AJAX MODAL
+
+$('.ajax-modal').on('click', function(e) {
+     var href = $(this).attr('href');
+     var title = $(this).data('title');
+     var data = $(this).data();
+
+     $('#ajax-modal-form #ajax-modal-save').data('href', href);
+
+     // Load the contents from the server to the client
+     $.ajax({
+        type: 'GET',
+        url: href,
+        data: data,
+        success: function(data) {
+
+          $('#ajax-modal-form .modal-title').html(title);
+          $('#ajax-modal-form .modal-body').html(data);
+
+        }
+     });
+
+     // Show modal
+     $('#ajax-modal-form').modal('show');
+
+     e.preventDefault();
+});
+
+$('#ajax-modal-form #ajax-modal-save').on('click', function() {
+
+            var href = $(this).data('href');
+            var inputArr = {};
+            var inputs = $('#ajax-modal-form .modal-body input');
+            // var url = $('#ajax-modal-url').val();
+
+
+            $.each(inputs, function(i) {
+                inputArr[$(this).attr('name')] =  $(this).val();
+            });
+
+            console.log(inputArr);
+
+            $.ajax({
+              type: 'POST',
+              data: inputArr,
+              url: href,
+              success: function(data) {
+                var json = JSON.parse(data);
+                if (json.request_type != undefined) {
+                 $('#ajax-modal-form .modal-body').html('File is downloading. If download does not start, please try again. <br><br> If file does not download at all after trying several times, please contact the web developer.'); 
+                 location.href = json.path;
+                 
+                } else {
+                   $('#ajax-modal-form .modal-body').html(data); 
+                }
+                
+              }
+            });
+
+          });
+
+function OpenInNewTab(url) {
+  var win = window.open(url, '_blank');
+}
 // Extension
 // Disable function
 jQuery.fn.extend({

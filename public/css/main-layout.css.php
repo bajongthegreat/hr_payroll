@@ -94,6 +94,12 @@ label {
 
 /* Content Processing */
 
+.nav-icon { 
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+          box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
 .wrappedChild {
   padding: 10px 5px;
   background-color: #FFFFFF;

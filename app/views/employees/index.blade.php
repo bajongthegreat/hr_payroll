@@ -104,6 +104,8 @@
               // Birth date
               if ($employee->birthdate == '0000-00-00' || $employee->birthdate == '') {
                 // echo '<span class="label label-default">Not specified</span>';
+                $birthdate_raw = "";
+                $age = "";
               } else {
 
                 $date = new DateTime($employee->birthdate);

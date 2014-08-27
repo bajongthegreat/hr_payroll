@@ -5241,13 +5241,13 @@ a.list-group-item.active > .badge,
 }
 
 .jumbotron {
-  padding: 30px;
-  margin-bottom: 30px;
+  padding: 20px;
+  margin-bottom: 20px;
   font-size: 21px;
   font-weight: 200;
   line-height: 2.1428571435;
   color: inherit;
-  background-color: #eeeeee;
+  border: 1px solid #AAA;
 }
 
 .jumbotron h1 {
@@ -5269,8 +5269,8 @@ a.list-group-item.active > .badge,
     padding-bottom: 48px;
   }
   .container .jumbotron {
-    padding-right: 60px;
-    padding-left: 60px;
+    padding-right: 48px;
+    padding-left: 48px;
   }
   .jumbotron h1 {
     font-size: 63px;

@@ -62,32 +62,10 @@ Route::get('/', ['as' => 'main',function()
 
 
 
-
-
 Route::get('/demo', function()
 {
+
 		
-// Create a new PHPWord Object
-$phpWord = new \PhpOffice\PhpWord\PhpWord();
-
-$document = $phpWord->loadTemplate('C:\Users\JamesNormanJr\Dropbox\Thesis\Template.docx');
-
-
-
-// Will clone everything between ${tag} and ${/tag}, the number of times. By default, 1.
-// $document->cloneBlock('CLONEME', 3);
-
-$fontStyle = array('color' => '006699', 'size' => 18, 'bold' => true);
-$document->addFontStyle('fStyle', $fontStyle);
-
-$document->setValue('NAME', 'JAMES NORMAN MONES JR.');
-$document->setValue('SUBJECT', 'CAP123');
-$document->setValue('DAY', '24TH');
-
-$document->setValue('MONTH', 'MARCH');
-
-$name = 'Sample_23_TemplateBlock.docx';
-$document->saveAs($name);
 
 
 
@@ -141,6 +119,10 @@ Route::group(array('before' => 'auth'), function()
 	Route::resource('requirements', 'RequirementsController');
 
 	Route::resource('stageprocesses', 'StageProcessesController');
+
+	Route::get('/download', 'EmployeesFileController@documents');
+
+
 	
 });
 
@@ -176,6 +158,8 @@ Route::group(array('before' => ['auth']), function()
 	Route::post('promote', 'EmployeesController@promote');
 	Route::post('employees/photo', 'EmployeesPhotoController@upload');
 
+	Route::get('modals/employment_certification', 'EmployeesFileController@employment_certification_show');
+	Route::post('modals/employment_certification', 'EmployeesFileController@employment_certification_post');
 
 	// Applicants
 	Route::post('applicants/requirements', 'ApplicantsController@requirements');

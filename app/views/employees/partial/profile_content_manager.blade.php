@@ -17,6 +17,8 @@
 				@include('employees.partial.dtr');
 			@elseif ($v == 'loans')
 				@include('employees.partial.loans');
+			@elseif ($v == 'files')
+				@include('employees.partial.files');
 			@else
 				@include('partials.requirements')
 				@include('employees.partial.profile')

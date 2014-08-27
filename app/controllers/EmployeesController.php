@@ -527,6 +527,5 @@ class EmployeesController extends BaseController {
 	 return $objWriter->save('php://output');
 	}
 
-	
 
 }

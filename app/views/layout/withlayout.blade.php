@@ -82,6 +82,8 @@ html {
 
     </div><!-- /.container -->
 
+    @include('modals.ajax_modal')
+
     <footer>
         @yield('footer')
         <p class="text-center">{{ Config::get('company.name.full')}} <strong>({{ Config::get('company.name.acro')}})</strong> <br>HR and Payroll System | &copy;2014</p>

@@ -56,6 +56,29 @@ class EmployeeRepository extends RepositoryAbstract implements EmployeeRepositor
 	 		');
 	 }
 
+	 public function profile($id) {
+	 	return $this->model->where('employee_work_id', '=', $id)->leftJoin('positions', 'positions.id', '=', 'employees.position_id')
+	 	                              ->leftJoin('departments','departments.id', '=', 'positions.department_id')
+	 	                              ->select('employees.*', 'departments.name as department_name','departments.id as department_id', 'positions.name as position_name')
+	 	                              ->first();
+	 }
+
+	 public function getFullName($id) {
+	 	$employee = $this->model->where('employee_work_id', '=', $id)->first(['lastname','firstname','middlename','name_extension']);	
+
+	 	$lastname = isset($employee->lastname) ? ucfirst($employee->lastname) : '';
+	 	$middlename = isset($employee->middlename) ? ucfirst($employee->middlename) : '';
+	 	$firstname = isset($employee->firstname) ? ucfirst($employee->firstname) : '';
+
+	 	$name_extension = isset($employee->name_extension) && $employee->name_extension != 'None'  && $employee->name_extension != "" ? ucfirst($employee->name_extension) . '.' : '';
+
+	 	// return $employee;
+
+	 	return $firstname . ' ' . $middlename . ' ' . $lastname . ' ' . $name_extension;
+
+
+	 }
+
 	 /** Generates unique employee ID
 	**
 	**	@param string $start [optional]  - The starting pattern to use

@@ -70,11 +70,15 @@
 				<div class="profile-label"> <b style="margin-right: 8px">Department </b> <a href="#" class="inline-edit" style="border-bottom: 2px dashed" data-toggle="modal" data-target="#edit_position"><?php echo (isset($employee->department_name)) ? $employee->department_name : 'Not specified'; ?> </a></div>
 				<div class="profile-label"> <b style="margin-right: 30px">Position </b> <a href="#" class="inline-edit" style="border-bottom: 2px dashed" data-toggle="modal" data-target="#edit_position">{{ (isset($employee->position->name) ) ? $employee->position->name : '<span class="label label-default">Not specified</span>'}}  </a></div>
 				<hr>
+
+				<div class="profile-label"><b style="margin-right: 30px">Work History</b> <a class="btn btn-default ajax-modal" data-title="Work History" href="#">Manage</a> </div>
+
+				<hr>
 				<div class="profile-label"><span style="margin-right:15px;"> <b>DPC standing </b></span> <span class="label label-success">Good standing</span></div>
 				<?php 
 				$date = new DateTime();
 				$date = $date->format('Y-m-d');
-
+				
 				$on_leave = DB::table('leaves')->where('employee_id', '=', $employee->id)->orWhere('start_date', '=', DB::raw('CURDATE()') )
 																						 ->orWhere('end_date', '=', DB::raw('CURDATE()') )
 				                                                                         ->where('status', '=', 'Approved')->get();

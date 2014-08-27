@@ -343,7 +343,9 @@ class jamesPHPexcelWrapper {
 	}
 
 	public function save($sheet_type = "Excel2007", $location = "php://output") {
+		
 			$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, $sheet_type);
+
 			return $objWriter->save($location);
 	}
 

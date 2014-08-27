@@ -12,8 +12,8 @@ return array(
 	*/
 
 	'name' => array(
-			'full' => 'TIBUD sa Katibawasan Multi-purpose Cooperative',
-			'acro' => 'TSKMPC'
+			'full' => 'This is a demo company',
+			'acro' => 'TIADC'
 		),
 
 
@@ -42,8 +42,8 @@ return array(
 
 	'contact' => array(
 			'telephone' => '(083) 500-8467',
-			'email' => '',
-			'fax' => '',
+			'email' => 'tibudskmpc@yahoo.com',
+			'fax' => '(083) 500-8467',
 		),
 
 		/*

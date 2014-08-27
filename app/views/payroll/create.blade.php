@@ -110,10 +110,16 @@
   border-bottom-color: white;
 }
 </style>
-	<div class="page-header">
+<!-- 	<div class="page-header">
 <h1>Process Payroll</h1>
 </div>
+ -->
 
+ <div class="jumbotron">
+  <h1>Payroll Creation</h1>
+  <p>Five easy steps to follow and your payroll is done. Supports Excel and HTML output.</p>
+  <p><a class="btn btn-primary btn-lg" role="button" href="{{ action('PayrollController@index') }}">View Payroll History</a></p>
+</div>	
 	
 <div class="container">
   <ol class="track-progress" data-steps="5">
