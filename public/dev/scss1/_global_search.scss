@@ -1,0 +1,131 @@
+/* Global search form */
+
+#main_search_result a:hover {
+    background-color: #f5f5f5;  
+    color: #000;
+
+    padding: 5px 3px;
+     border-radius: 3px;
+
+      /* For Safari 3.1 to 6.0 */
+      -webkit-transition-property:width;
+      -webkit-transition-duration:1s;
+      -webkit-transition-timing-function:linear;
+      -webkit-transition-delay:2s;
+      /* Standard syntax */
+      transition-property: width;
+      transition-duration: 1s;
+      transition-timing-function: linear;
+      transition-delay: 2s;
+    }
+
+    #main_search_result a {
+      color: #000;
+      text-decoration: none;
+
+    }
+
+    .searchResultItem {
+     background-color: #ffffff;
+      margin: 4px 0; 
+   }
+
+
+    .id-container {
+      margin: 0 15px;
+    }
+
+    .resultItem{
+      margin: 5px 2px;
+      padding: 5px 2px;
+      
+      font-size: 13px;
+      /*background: #660;*/
+      color: #AAA;
+      border: 1px solid #000;
+    }
+
+    .resultItem.active {
+      background: #428bca;
+      
+    }
+
+     #main_search_result {
+
+      
+      margin-top: 3px; 
+      position:absolute; 
+      display: block;
+      min-height: 20px;
+      width: 190px;
+      
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.428571429;
+      color: #555555;
+      vertical-align: middle;
+      background-color: #ffffff;
+      background-image: none;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+              box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+      -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+              transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+
+              height:auto;
+              overflow:scroll
+
+    }
+
+    .resultContainer {
+
+      
+      margin-top: 3px; 
+      position:absolute; 
+      display: block;
+      min-height: 20px;
+      width: 92%;
+      
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.428571429;
+      color: #555555;
+      vertical-align: middle;
+      background-color: #ffffff;
+      background-image: none;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+              box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+      -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+              transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+
+    
+     
+    }
+
+
+  .resultContainer a:hover {
+    background-color: #f5f5f5;  
+    color: #000;
+
+     border-radius: 3px;
+
+      /* For Safari 3.1 to 6.0 */
+      -webkit-transition-property:width;
+      -webkit-transition-duration:1s;
+      -webkit-transition-timing-function:linear;
+      -webkit-transition-delay:2s;
+      /* Standard syntax */
+      transition-property: width;
+      transition-duration: 1s;
+      transition-timing-function: linear;
+      transition-delay: 2s;
+    }
+
+    .resultContainer a {
+      color: #000;
+      text-decoration: none;
+
+    }

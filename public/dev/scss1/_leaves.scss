@@ -1,0 +1,29 @@
+.reason {
+		margin-top: 15px;
+	}
+
+	.reason .header {
+		font-weight: bold;
+	}
+
+	.reason .body {
+		margin-top: 8px;
+		background: #EEE;
+		padding: 5px 8px;
+    	 border-radius: 3px;
+
+	}
+
+		#approvalInfo-container {
+
+		position: absolute;
+		top: 250px;
+		left: 80%;
+	}
+
+	#rejectInfo-container {
+
+		position: absolute;
+		top: 288px;
+		left: 80%;
+	}

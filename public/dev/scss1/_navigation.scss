@@ -1,0 +1,24 @@
+.nav-icon { 
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+          box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Sidebar navigation */
+.inline-edit {
+  border-bottom: 1px;
+}
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > .active > a {
+  color: #fff;
+  background-color: #428bca;
+}
+

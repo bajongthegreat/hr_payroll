@@ -236,7 +236,7 @@ class EmployeesController extends BaseController {
 		}
 
 
-		$user_data = Input::except('_method','_token','department_id');
+		$user_data = Input::except('_method','_token','department_id', 'url');
 
 
 		if (!isset($user_data['position_id']) || $user_data['position_id'] == 0) {
@@ -336,7 +336,7 @@ class EmployeesController extends BaseController {
 	}
 	public function update($id)
 	{
-		$user_data = Input::except('_method','_token','department_id');
+		$user_data = Input::except('_method','_token','department_id', 'url');
 
 
 		$user_data['ppe_issuance'] = Input::has('ppe_issuance') ? $user_data['ppe_issuance'] : 0;

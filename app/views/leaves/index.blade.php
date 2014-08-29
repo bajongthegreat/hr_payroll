@@ -40,8 +40,6 @@
 
   <h2 class="page-header"> Employee Leave Management</h2>
 
-<p>Search term: <i><u><% query %></u></i></p>
-
 
   <div class="search-container col-md-4 pull-right">
 
@@ -77,7 +75,9 @@
       @foreach($leaves as $leave)
      
       <tr>
-     
+        <td>View</td>
+        <td>{{ $leave->employee_work_id }}</td>
+        <td> {{ $leave->lastname . ', ' . $leave->firstname . ' ' . $leave->middlename[0] . '.'  }}</td>     
         <td>From ({{$leave->start_date}}) To ({{$leave->end_date}})</td>
         <td>{{  $helper->getLeaveType($leave->type) }}</td>
         <td>{{ $helper->getStatus($leave->status, true) }}</td>

@@ -13,7 +13,7 @@
 	</div>
 
 <hr>
-<input type="checkbox" name="system_default" checked> Use system defaults
+<input type="checkbox" name="system_default" id="system_default"> Use system defaults
 <hr>
 
 	{{ Form::hidden('employee_id', $employee->employee_work_id) }}
@@ -62,3 +62,4 @@
 	</div>
 
 {{ Form::close() }}
+

@@ -43,6 +43,19 @@ class EmployeesFileController extends BaseController {
         return View::make('employees.partial.employment_certification_menu', compact('fullname', 'employee'));
     }
 
+    public function retirement_certification_show() {
+        $id = Input::get('employee_id');
+
+        $fullname = $this->employees->getFullName($id);
+        $employee = $this->employees->profile($id);
+
+        if (!$employee) {
+            return 'No details specified. please try again. <br>' . '<a href="' . action('EmployeesController@index') .'">Go back</a>';
+        }
+
+        return View::make('employees.partial.employment_certification_menu', compact('fullname', 'employee'));
+    }
+
     public function employment_certification_post() {
         
 
@@ -51,31 +64,48 @@ class EmployeesFileController extends BaseController {
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
         $filepath = base_path() . "\\public\\document_templates\\" . 'active_employees.docx';
-
         $document = $phpWord->loadTemplate($filepath);
 
-        $name = Input::get('name');
+
         $id = Input::get('employee_id');
-        $department = Input::get('department');
-        $position = Input::get('position');
+
+
+        // When the user decides to use system default or not
+        if (Input::get('system_default') == 'false' ) {
+
+            $name = Input::get('name');
+            $department = Input::get('department');
+            $position = Input::get('position');
+            $date_hired = Input::get('date_hired');
+
+
+        } else {
+            
+           $employee = $this->employees->profile($id);
+
+            $name = $employee->fullname;
+            $department = $employee->department_name;
+            $position = $employee->position_name;
+            $date_hired = $employee->date_hired;
+        }
+
 
         $date_issued = new DateTime(Input::get('date_issued'));
         $day_issued = $date_issued->format('dS');
         $month_year_issued = $date_issued->format('F Y');
         
 
-        $date_hired = $this->employees->profile($id)->pluck('date_hired');
 
 
         $document->setValue('NAME', $name);
-        $document->setValue('DATE_HIRED', strtoupper($this->dateFormat($date_hired, 'F m, Y')) );
+        $document->setValue('DATE_HIRED', strtoupper($this->dateFormat($date_hired, 'F d, Y')) );
         $document->setValue('DEPARTMENT', $department);
         $document->setValue('POSITION', $position);
 
         $document->setValue('DAY_ISSUED', $day_issued);
         $document->setValue('MONTH_YEAR_ISSUED', $month_year_issued);
 
-        $file = $id . '_' .'Employment_Certificate.docx';
+        $file = $id . '_' . sha1(rand(1000,99999)). '_' .'Employment_Certificate.docx';
 
         $filepath = public_path() . '\\documents\\'  . $file;
 
@@ -97,6 +127,7 @@ class EmployeesFileController extends BaseController {
         $type = Input::get('type');
         $abs_path = '';
 
+
         switch ($type) {
             case 'document':
                 $abs_path = '\\documents\\';
@@ -107,9 +138,11 @@ class EmployeesFileController extends BaseController {
                 break;
         }
 
+        // File absolute path
         $filepath = public_path() . $abs_path     . $file;
 
-        if (file_exists(public_path() . $abs_path     . $file)) {
+        // Checks the file before making it avaiable for download
+        if (file_exists( $filepath )) {
         
         header("Content-type: application/msword");
         header("Content-Disposition: attachment; filename=$file");
@@ -118,12 +151,12 @@ class EmployeesFileController extends BaseController {
 
         readfile($filepath);
 
-            unlink($filepath);
+        // Delete the file after reading it to save disk space.
+        unlink($filepath);
           
         }
 
       
-        // return 'Hello';
     }
     protected function dateFormat($date, $format) {
         $new_date = new DateTime($date);

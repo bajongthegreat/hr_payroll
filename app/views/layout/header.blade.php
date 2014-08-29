@@ -7,17 +7,13 @@
     </style>
 
     <!-- Bootstrap -->
-    <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/css/bootstrap.css')}}" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/bootstrap-datetimepicker.min.css')}}"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('styles/pygments-manni.css')}}" />
-    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/main-layout.css.php')}}" />
-    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/bootstrapValidator.css')}}"/>
-    <link href="{{ asset('css/lightbox.css') }}" rel="stylesheet" />
-
-    <!-- <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/> -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.dataTables.css') }}">
-    <!-- <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('assets/css/bootstrap-datetimepicker.min.css')}}"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('assets/css/font.css.php')}}" />    
+    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('assets/css/main.css')}}" />
+    <link href="{{ asset('assets/css/lightbox.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.dataTables.css') }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

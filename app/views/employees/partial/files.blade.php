@@ -26,3 +26,14 @@
 
 		  </div>  <!-- End of Body -->
 		</div> <!-- End of Panel -->
+
+
+<script type="text/javascript">
+(function(){
+	setTimeout(function(){
+		$('#system_default').on('change', function() {
+		console.log("hlalsd")
+		});
+	}, 1500)
+})()
+</script>

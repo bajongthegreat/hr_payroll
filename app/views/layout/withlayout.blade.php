@@ -109,7 +109,8 @@ html {
     @yield('sub_scripts_1')
 
     <!-- HR Payroll components -->
-     <script src="{{ asset('jquery/hr_applicants.js') }}"></script>
+     <!-- // <script src="{{ asset('jquery/hr_applicants.js') }}"></script> -->
+     <script src="{{ asset('assets/js/hr_applicants.js') }}"></script>
 
      @yield('later_scripts')
      <script type="text/javascript">

@@ -56,10 +56,11 @@ class EmployeeRepository extends RepositoryAbstract implements EmployeeRepositor
 	 		');
 	 }
 
-	 public function profile($id) {
-	 	return $this->model->where('employee_work_id', '=', $id)->leftJoin('positions', 'positions.id', '=', 'employees.position_id')
+	 public function profile($id, $field = 'employee_work_id') {
+	 	return $this->model->where($field, '=', $id)->leftJoin('positions', 'positions.id', '=', 'employees.position_id')
 	 	                              ->leftJoin('departments','departments.id', '=', 'positions.department_id')
-	 	                              ->select('employees.*', 'departments.name as department_name','departments.id as department_id', 'positions.name as position_name')
+	 	                              ->select('employees.*', DB::raw(' CONCAT_WS(" ", COALESCE(employees.firstname, NULL), COALESCE(employees.middlename, NULL), COALESCE(employees.lastname, NULL), COALESCE(employees.name_extension, NULL)) as fullname ') ,
+	 	                                       'departments.name as department_name','departments.id as department_id', 'positions.name as position_name')
 	 	                              ->first();
 	 }
 

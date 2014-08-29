@@ -23,7 +23,7 @@ class LeaveRepository implements LeavableInterface {
 		if (isset($options['paginate'])) {
 			$leaves = Leave::orderBy('id', 'asc')->paginate($options['paginate']);
 		} else {
-			$leaves = Leave::with('Employee')->get();;
+			$leaves = Leave::leftJoin('employees','employees.id', '=', 'leaves.employee_id')->select('leaves.*', 'employees.firstname', 'employees.lastname', 'employees.middlename','employees.name_extension', 'employees.employee_work_id')->get();
 		}
 
 		return $leaves;
