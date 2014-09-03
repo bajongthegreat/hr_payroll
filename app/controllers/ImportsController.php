@@ -60,7 +60,7 @@ class ImportsController extends \BaseController {
 		}	
 
 		// Load the file
-		if (!$u_status = $jExcel->loadFile( $file ) ) {
+		if (!$u_status = $jExcel->loadFile( public_path() . '/' . str_replace('\\', '/', $file) ) ) {
 
 			$excelLoadStatus =  json_encode($u_status);
 		}

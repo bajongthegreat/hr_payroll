@@ -12,7 +12,7 @@ class CreateSSSLoansTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('SSS_loans', function(Blueprint $table) {
+		Schema::create('sss_loans', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('sss_id');
 			$table->date('date_issued');
@@ -32,7 +32,7 @@ class CreateSSSLoansTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('SSS_loans');
+		Schema::drop('sss_loans');
 	}
 
 }

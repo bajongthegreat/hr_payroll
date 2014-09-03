@@ -724,7 +724,7 @@ class PayrollRepository extends RepositoryAbstract implements PayrollRepositoryI
 		$__end = str_replace('-', '_', $end);
 
 		$filename = 'payroll_for_' . $__start . '_to_' . $__end;
-		$filepath = public_path() .'\\json\\' . $filename .'.json';
+		$filepath = public_path() .'/json/' . $filename .'.json';
 	
 		$fp = fopen($filepath, 'w');
 		   	  fwrite($fp, json_encode($data));

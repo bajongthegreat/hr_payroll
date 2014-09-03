@@ -12,7 +12,7 @@ class CreateDtrsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('DailyTimeRecords', function(Blueprint $table)
+		Schema::create('dailytimerecords', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->date('work_date');
@@ -44,7 +44,7 @@ class CreateDtrsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('DailyTimeRecords');
+		Schema::drop('dailytimerecords');
 	}
 
 }

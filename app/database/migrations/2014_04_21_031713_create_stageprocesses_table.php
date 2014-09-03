@@ -12,7 +12,7 @@ class CreateStageProcessesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('stageProcesses', function(Blueprint $table) {
+		Schema::create('stageprocesses', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('stage_process', 50);
 			$table->integer('parent_id')->nullable()->index()->unsigned();
@@ -28,7 +28,7 @@ class CreateStageProcessesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('stageProcesses');
+		Schema::drop('stageprocesses');
 	}
 
 }

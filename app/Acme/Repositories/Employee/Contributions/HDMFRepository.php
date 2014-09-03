@@ -4,7 +4,7 @@
 **   Date: June 2014
 **/
 
-use HDMF;
+use Hdmf;
 
 /** 
 * Idea: Since ContributableInterface specified functions almost acts the same way with others that uses this interface,
@@ -17,7 +17,7 @@ class HDMFRepository extends Contributable
 	// Get all contributions saved in the database
 	protected function getContributions()
 	{
-		return HDMF::all();
+		return Hdmf::all();
 		
 	}
 
