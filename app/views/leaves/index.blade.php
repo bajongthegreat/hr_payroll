@@ -75,7 +75,7 @@
       @foreach($leaves as $leave)
      
       <tr>
-        <td>View</td>
+        <td><a href="{{ action('LeavesController@show', $leave->id)}}" class="btn btn-default">View</a></td>
         <td>{{ $leave->employee_work_id }}</td>
         <td> {{ $leave->lastname . ', ' . $leave->firstname . ' ' . $leave->middlename[0] . '.'  }}</td>     
         <td>From ({{$leave->start_date}}) To ({{$leave->end_date}})</td>

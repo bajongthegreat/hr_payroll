@@ -36,7 +36,10 @@
           fadeOut: 'fast',
           keyEvent: 'keyup',
           fields: [''],
-          fieldTag: 'div'
+          fieldTag: 'div',
+          limit: 10,
+          itemIcon:'',
+          loaderImage: '',
 		}, options);
 
 		$(settings.containerWrapper).hide();
@@ -50,13 +53,21 @@
 			$.ajax({
 				url: settings.url,
 				type: 'GET',
-				data: { src: self.val(), output: 'json' },
+				data: { src: self.val(), output: 'json', limit:  settings.limit	},
 				beforeSend: function () {
+					
+					var loaderImage = "";
 
 					// Show/Hide result container
 					toggleContainer();
+					
 
-					$(settings.containerWrapper).html('Searching..');
+					if (settings.loaderImage != '') {
+						
+						loaderImage = '<img src="' + settings.loaderImage +'" width="24">  ';
+					}
+
+					$(settings.containerWrapper).html('<div class="text-center">' + loaderImage +'Searching..</div>');
 				},
 				success: function (data)
 				{
@@ -88,6 +99,7 @@
 		// Displays the content into the containerWrapper
 		displayContent = function(data) {
 			var finalText= "";
+
 			if (typeof data === 'object') {
 
 						// Display data to container
@@ -112,7 +124,6 @@
 							}
 							
 						});
-
 						// Display the processed content 
 						$(settings.containerWrapper).html(finalText);
 
@@ -121,11 +132,22 @@
 						// Output the html directly if not a JSON object
 						$(settings.containerWrapper).html(data);
 					}
+
+
+			if (data.length == 0) {
+				console.log(data.length);
+				var message;
+
+				message = '<div><span class="glyphicon glyphicon-exclamation-sign"></span> No data found. Please try other keywords.</div>';
+				message += '<div style="margin-top: 10px;"></div>';
+				message += '<div style="font-size:11px;">Please try this format recommended by the system:</div>';
+				message += '<div class="text-center">Lastname Firstname [Format]</div>';
+				$(settings.containerWrapper).html(message);
+			}
 		}
 
 		// Formats the string based on the specified format
 		doFormat = function (data) {
-
 			var toType = function(obj) {
 				  return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 				}
@@ -165,12 +187,27 @@
 	
 
 				 	// Construct a link
-				 	var open_link = '<a href="' + settings.url + getURI(data)  +'">',
+				 	var open_link = '<a href="' + settings.url + getURI(data)  +'" style="font-size: 14px;">',
 				 	    close_link = '</a>';
 
 				 		// The final product with a field tag and an anchor tag
 				 		// <tag><a>Label</a></tag>
-				 	 output +=openTag + open_link +  format  + close_link + closeTag;
+
+				 		var icon;
+				 	if (settings.itemIcon == '') {
+				 		icon = '';
+				 	} else {
+
+				 		if (data.image != "") {
+				 			icon = '<img src="' + data.image +'" width="40"> ';
+				 		} else {
+				 			icon = '<img src="' + settings.itemIcon +'" width="40"> ';
+				 		}
+
+				 		
+				 	}
+
+				 	 output += openTag + open_link + icon + format  + close_link + closeTag + '<div class="separator"></div>';
 
 
 				 	
@@ -215,10 +252,24 @@
 
 		// Whenever field has value, trigger the specified keyEvent in settings
 		self.on(settings.keyEvent, function(e) {
+		
+
+			if (e.keyCode == 27) {
+				$('#main_search_result').fadeOut(250);
+				return false;
+			}	
+
+			if ($(this).val().length > 2) {
+				// Begin search
+				beginSearch();	
+			}
+
+			if ($(this).val().length < 2) {
+				$('#main_search_result').fadeOut(250);
+				return false;
+			}
 			
-			
-			// Begin search
-			beginSearch(); 
+			 e.preventDefault();
 		});
 
 

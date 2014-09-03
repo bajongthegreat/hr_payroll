@@ -16,25 +16,17 @@
     </style>
 
     <!-- Bootstrap -->
-    <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">
-
-    <!-- <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/bootstrap-datetimepicker.min.css')}}"/> -->
-    <!-- <link rel="stylesheet" type="text/css" media="screen" href="{{asset('styles/pygments-manni.css')}}" /> -->
-    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/main-layout.css.php')}}" />
-    <!-- <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/bootstrapValidator.css')}}"/> -->
-    <link href="{{ asset('css/lightbox.css') }}" rel="stylesheet" />
-
-    <!-- <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/> -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.dataTables.css') }}">
-    <!-- <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet"> -->
+    <link href="{{asset('assets/css/bootstrap.css')}}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('assets/css/font.css.php')}}" />    
+    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('assets/css/app.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.dataTables.css') }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-    
+    <![endif]-->    
     <style type="text/css">
 html {
   overflow-x: scroll; /* Prevent scroll on narrow devices */
@@ -75,7 +67,7 @@ html {
 
     <footer>
         @yield('footer')
-        <p class="text-center">TIBUD sa Katibawasan Cooperative &copy;2014</p>
+        <p class="text-center"><strong>{{ Config::get('company.name.full')}} ({{ Config::get('company.name.acro')}})</strong> HR and Payroll System &copy;2014</p>
         <!-- <div id="page_load_counter" class="text-center" style="display:none;">Page generated in <span class="load_time"></span> seconds.</div> -->
       </footer>
     

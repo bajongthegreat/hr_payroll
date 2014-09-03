@@ -1,0 +1,29 @@
+{
+  "name": "hr_payroll",
+  "version": "0.0.36",
+  "description": "* Minor fix to SSS Loans -> Now can add/edit and search payments. \r * Added charts to dashboard.\r * Reworked employee listings. Now added photo and added more useful information.\r * Minor design fix on employee sidebar. \r * Added detailed view option on payroll\r * Added payroll history\r * Reworked requirements code to be more readable.\r * Loans are now ported on every employee profile for easier lookup and management.",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.8.7",
+    "gulp-jshint": "^1.8.4",
+    "gulp-concat": "^2.3.4",
+    "gulp-minify-css": "^0.3.7",
+    "gulp-watch": "^0.6.9",
+    "gulp-uglify": "^0.3.2",
+    "gulp-sass": "^0.7.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bajongthegreat/hr_payroll.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bajongthegreat/hr_payroll/issues"
+  },
+  "homepage": "https://github.com/bajongthegreat/hr_payroll"
+}

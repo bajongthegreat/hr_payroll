@@ -88,7 +88,7 @@ class EmployeeRepository extends RepositoryAbstract implements EmployeeRepositor
 	**
 	**  @return string $id
 	*/
-	public function generate_work_id($start=NULL, $end=NULL, $seperator="-")
+	public function generate_work_id($start=NULL, $end=NULL, $seperator="-", $random=true)
 	{	
 		// Checks if the first id segment must be a preset
 		if (is_null($start))
@@ -99,7 +99,23 @@ class EmployeeRepository extends RepositoryAbstract implements EmployeeRepositor
 		// Checks if the last id segment must be a preset
 		if (is_null($end))
 		{
-			$end = rand(1000,9999);
+			if ($random) {
+				$end = rand(1000,9999);
+			} else {
+
+				// Sort employee_work_id in descending order
+				// Grab the last item
+				$employee = Employee::orderBy('employee_work_id', 'desc')->take(1)->pluck('employee_work_id');
+
+				// Explode the employee_work_id by its separator "-" to make an array 
+				$work_id = explode('-', $employee);
+
+				// Grab the ending array item
+				$id_right = end($work_id);
+
+				// Increment ID
+				$end = $id_right + 1;
+			}
 		}
 
 		// Generated ID
@@ -111,7 +127,11 @@ class EmployeeRepository extends RepositoryAbstract implements EmployeeRepositor
 		// If ID already existed, run this function again
 		if (count($fetched_id) > 0)
 		{
-			$this->generate_work_id($start, $end, $seperator);
+			if (!$random) {
+				$end += 1;
+			}
+			
+			$id = $this->generate_work_id($start, $end, $seperator);
 		}
 
 

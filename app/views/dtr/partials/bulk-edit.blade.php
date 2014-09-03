@@ -250,7 +250,7 @@ var _dtrModule = new dtrModule();
 var redirect = false;
 </script>
 
-<script type="text/javascript" src="{{ asset('jquery/hr_disciplinary_actions.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/hr_disciplinary_actions.js') }}"></script>
 
 <script>
 
@@ -465,6 +465,7 @@ var redirect = false;
             var elementName = ['employee_work_id', 'time_in_am', 'time_out_am','time_in_pm', 'time_out_pm', 'total', 'remarks'];
 
             for (var j=0; j<= rowsToAdd-1; j++) {
+		            row = table.insertRow(rowCount);
 	            
 	            for (var i = 0; i <= elementName.length-1; ++i) {
 		            				
@@ -564,7 +565,6 @@ var redirect = false;
 		            	
 			           
 		            };
-		            row = table.insertRow(rowCount+1);
 		            // console.log(row);
 
             };
@@ -597,7 +597,6 @@ var redirect = false;
 
 		if (__dataToUse.length > 0) {
 			addRow('dtr_information_table_body',__dataToUse.length, []);
-			console.log(__dataToUse[0])
 			var oldDataLength = __dataToUse.length;
         	 var table = document.getElementById('dtr_information_table_body');
             var rowCount = table.rows.length;
@@ -620,12 +619,14 @@ var redirect = false;
             			// Check if it is a valid input element
             			if (element[0] != undefined) {
             				elementName = element[0].getAttribute('name');
-            				
+            				// console.log(elementName + 'for index ' + i + ' : ' + j);
+
             				// Set element value from Database
             				element[0].value = __dataToUse[i][elementName];
             			} 
 
 
+            	
 
 
             		}

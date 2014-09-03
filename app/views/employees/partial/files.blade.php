@@ -14,7 +14,7 @@
 				    <h4 class="list-group-item-heading">Employment Certificate</h4>
 				    <p class="list-group-item-text">Generates a Word document for Employment Certificate.</p>
 				  </a>
-				  <a href="#" class="list-group-item">
+				  <a href="{{ action('EmployeesFileController@retirement_certification_show') }}" class="list-group-item ajax-modal" data-title="Retirement Certificate" data-employee_id="{{ $employee->employee_work_id }}">
 				    <h4 class="list-group-item-heading">Retirement Certificate</h4>
 				    <p class="list-group-item-text">Generates a Word document for Retirement Certificate.</p>
 				  </a>	

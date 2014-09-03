@@ -336,6 +336,74 @@ function getJSONdata(obj, keyToFind) {
 // function rowCleanup(tableID) {
 
 // }
+
+
+// Not working
+// Please fix
+function __addRow(tableID, rowsToAdd, params) {
+        
+        var table = document.getElementById(tableID);
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+
+        // Get property from params object
+        var elementObj = params;
+
+          console.log('starting add row...');
+          
+           for (var j=0; j<= rowsToAdd-1; j++) {
+              
+                row = table.insertRow(j);
+                console.log('rows to add ' + rowsToAdd+ '...');
+                   
+              for(var i=0; i <= elementObj.length-1; i++) {
+            
+               // Create a new cell to insert an element 
+                var cell = row.insertCell(i);    
+
+
+
+                // Creates an element
+                var element = document.createElement(elementObj[i].type);
+
+                  // Checks if there's a class specified
+                  if (elementObj[i].hasOwnProperty('class')) {
+                    for (var cli = 0; cli < elementObj[i].class.length; cli++ ) {
+                      element.className = element.className + ' ' + elementObj[i].class[cli];
+                    }
+                  }
+
+                  if (elementObj[i].hasOwnProperty('data')) {
+                    for(var dti = 0; dti < elementObj[i].data.length; dti++) {
+                      // element.setAttr('data-' + elementObj[i].data[dti].name, elementObj[i].data[dti].value );
+                        element.setAttribute('data-name', 'hello');                      
+                    }
+                  }
+                  element.id = elementObj[i].name;
+                  element.name = elementObj[i].name;
+                  element.type = 'text';
+                // Insert the created element to cell
+                 cell.appendChild(element); 
+              }                    
+                  row = table.insertRow(rowCount+1);
+            
+            };
+
+
+      // Re-initialize forms to maintain time format
+      setTimeout(function(){
+        $('#time_in_am, #time_out_am, #time_in_pm, #time_out_pm').datetimepicker({
+          
+          use24hours: true,
+          pickTime:true,
+          pickDate: false,
+          minuteStepping:15
+          });
+
+      }, 2000);
+
+
+}
 function addRow_pe(tableID, rowsToAdd) {
 
       // Work on JSON Objects
@@ -517,6 +585,7 @@ if(typeof(type)==='undefined') {
                         // Set element value from Database
                         // console.log(elementName);
                         element[0].value = __dataToUse[i][elementName];
+                        element[0].dataset.defaultValue = __dataToUse[i][elementName];
                       } 
 
                       select  = row[i].cells[j].getElementsByTagName('select');

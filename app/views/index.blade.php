@@ -19,7 +19,7 @@
     <![endif]-->
 
 <div ng-view></div>		
-
+  Hello FROM TIBUD HRIS
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

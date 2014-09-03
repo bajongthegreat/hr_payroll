@@ -31,7 +31,6 @@
     <script src="{{ asset('js/lightbox.min.js') }}"></script>
 
     <!-- Add fancyBox -->
-    <link rel="stylesheet" href="{{ asset('css/jquery.fancybox.css?v=2.1.5') }}" type="text/css" media="screen" />
     <script type="text/javascript" src="{{ asset('js/jquery.fancybox.pack.js?v=2.1.5') }}"></script>
 
 
@@ -52,7 +51,10 @@
           idSeparator: '/',
           idField: 'employee_work_id',
           fadeOut: 'slow',
-          format: 'employee_work_id: - :lastname'
+          format: 'employee_work_id: - :lastname, :firstname',
+          itemIcon: _globalObj._baseURL + "/img/default-avatar.png",
+          limit: 10,
+          loaderImage: _globalObj.loaderImage,
       });
 
     </script>

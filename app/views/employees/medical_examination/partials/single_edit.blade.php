@@ -10,12 +10,14 @@
 		@if (Input::has('ref'))
 			{{ Form::hidden('ref', Input::get('ref')) }}
 		@endif
+
+
 				<div class="form-group">
 							
 					{{ Form::label('employee_work_id', 'Employee ID', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-4">
-						{{ Form::text('', $work_id, array('class' => 'form-control', 'required', 'disabled') ) }}
+						{{ Form::text('', $pe->employee_work_id, array('class' => 'form-control', 'required', 'disabled') ) }}
 					</div>
 
 					 {{Form::hidden('employee_id', Input::get('employee_id'))}}

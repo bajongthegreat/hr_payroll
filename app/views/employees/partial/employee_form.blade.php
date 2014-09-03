@@ -75,7 +75,7 @@
 					{{ Form::label('name_extension', 'Name Extension', array('class' => 'col-sm-2 text-right')) }}
 
 					<div class="col-sm-2">
-						{{ Form::select('name_extension', ['None' => 'None', 'Sr' => 'Sr','Jr' => 'Jr'	, 'III' => 'III', 'IV' => 'IV','V' => 'V', 'VI' => 'VI'],Input::old('name_extension'), array('class' => 'form-control') ) }}
+						{{ Form::select('name_extension', ['None' => NULL, 'Sr' => 'Sr','Jr' => 'Jr'	, 'III' => 'III', 'IV' => 'IV','V' => 'V', 'VI' => 'VI'],Input::old('name_extension'), array('class' => 'form-control') ) }}
 					</div>
 
 				</div>

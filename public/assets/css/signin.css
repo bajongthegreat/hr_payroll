@@ -2,6 +2,7 @@ body {
   padding-top: 40px;
   padding-bottom: 40px;
   background-color: #eee;
+  font-family:'Roboto',sans-serif;
 }
 
 .form-signin {
@@ -11,7 +12,7 @@ body {
 }
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 .form-signin .checkbox {
   font-weight: normal;
@@ -37,4 +38,11 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.form-signin footer {
+  text-align: center;
+}
+.form-signin .company-name {
+  margin-right: 15px;
 }

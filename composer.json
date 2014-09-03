@@ -9,11 +9,10 @@
 		 "fzaninotto/faker" : "dev-master",
 		 "stripe/stripe-php" : "dev-master",
 		  "phpoffice/phpexcel": "dev-develop",
-		  "cboden/ratchet": "0.3.*",
 		  "dompdf/dompdf": "dev-master",
 		  "phpoffice/phpword": "dev-master"
 		  ,"mockery/mockery": "dev-master@dev",
-		  "react/zmq": "0.4.*@dev"
+		  "tecnick.com/tcpdf": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

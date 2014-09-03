@@ -145,8 +145,10 @@ class UserRepository extends RepositoryAbstract implements UserRepositoryInterfa
 			$error_dump = $this->checkIfExists(array('username' => $userdata['username'],
 				                                        'email' => $userdata['email']));
 		
-			if (count($error_dump) > 0) 
-				return ['errors' => $error_dump];
+			if (count($error_dump) > 0)  {
+								return ['errors' => $error_dump];
+
+			}
 
 
 			// Create the user if no errors were found

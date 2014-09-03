@@ -12,8 +12,8 @@ return array(
 	*/
 
 	'name' => array(
-			'full' => 'This is a demo company',
-			'acro' => 'TIADC'
+			'full' => 'TIBUD sa Katibawasan Multi-Purpose Cooperative',
+			'acro' => 'TSKMPC'
 		),
 
 

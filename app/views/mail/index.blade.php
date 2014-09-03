@@ -32,20 +32,27 @@
 
     <div class="container ">
 
-     @yield('content')
+      <h1> Hello, {{ $username }}!</h1>
 
-     
+      <p>
+          Welcome to TIBUD Human Resource and Payroll Management Sytem. You are now able to use the system with this credentials:
+
+          <div>Username/Email: {{ $username}} or {{ $email }}</div>
+          <div>Password: {{ $password }}</div>
+      </p>
+
+      <p>If you have questions and suggestions regarding the system, <br>
+         please contact James Norman Mones Jr. 'bajongthegreat@gmail'</p>
 
 
+      <p>Enjoy using the system. :)</p>
+
+
+      <p>TIBUD sa Katibawasan Multi-Purpose Cooperative &copy2014 <br>
+          Developed by: James Norman Mones Jr.
+      </p>
     </div> <!-- /container -->
 
-  
-    
-
-
-
-   <!-- Main scripts -->
-    @include('layout.main_scripts')
 
   </body>
 </html>

@@ -8,10 +8,10 @@
 
     <!-- Bootstrap -->
     <link href="{{asset('assets/css/bootstrap.css')}}" rel="stylesheet">
-
+    <link rel="stylesheet" href="{{ asset('css/assets/jquery.fancybox.css?v=2.1.5') }}" type="text/css" media="screen" />
     <link rel="stylesheet" type="text/css" media="screen" href="{{asset('assets/css/bootstrap-datetimepicker.min.css')}}"/>
     <link rel="stylesheet" type="text/css" media="screen" href="{{asset('assets/css/font.css.php')}}" />    
-    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('assets/css/main.css')}}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{asset('assets/css/app.css')}}" />
     <link href="{{ asset('assets/css/lightbox.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.dataTables.css') }}">
 

@@ -257,7 +257,6 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 		if ( !$this->accessControl->hasAccess($this->default_uri, 'create', $this->byPassRoles) ) {
 				return  $this->notAccessible();		
 		}
-
 		if ( Request::ajax() )
 		{
 			return $this->SaveBulk();
@@ -306,11 +305,16 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 				return  $this->notAccessible();		
 		}
 
+
 		if (Input::get('type') != 'bulk') {
 
-			$pe = $this->physical_examinations->find($id)->first();
+			$pe = $this->physical_examinations->find($id, 'employees_physical_examinations.id')
+											     ->join('employees', 'employees.id', '=', 'employees_physical_examinations.employee_id')
+		                                         ->select('employees_physical_examinations.*', 'employees.employee_work_id', 'employees_physical_examinations.medical_findings_id as medical_findings', 'employees_physical_examinations.recommendations as recommendation')
+		                                         ->first();
 			// dd($pe);
 			$json = json_encode([]);
+			$ids_prior_update = [];
 
 
 		} else {
@@ -324,20 +328,19 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 		                                         ->select('employees_physical_examinations.*', 'employees.employee_work_id', 'employees_physical_examinations.medical_findings_id as medical_findings', 'employees_physical_examinations.recommendations as recommendation')
 		                                         ->get();
 		 $json = json_encode($pe->toArray());
-
+		 $ids_prior_update = json_encode($pe->lists('employee_work_id'));
 
 
 		} 
 
-
-		return View::make('employees.medical_examination.edit', compact(['json', 'pe']) );
+		return View::make('employees.medical_examination.edit', compact(['json', 'pe', 'ids_prior_update']) );
 		 // dd($json_data);
 	}
 
 		protected function updateBulk() {
 		// return 'Processing';
 		$examination_data = Input::get('examination_data');
-		$ids_prior_update = Input::get('ids_prior_update');
+		$ids_prior_update = json_decode(Input::get('ids_prior_update'));
 
 		$decoded_examination_data = json_decode($examination_data);
 
@@ -351,7 +354,6 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 		$jobs = [];
 		$duplications = [];
 		$not_included = [];
-
 		if (count($decoded_examination_data) == 0 ) return false;
 		else {
 
@@ -394,8 +396,14 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 					
 					// Check for duplication first					
 					if (!in_array($data->employee_work_id, $jobs)) {
-			
-						$status = $this->physical_examinations->find($id, 'employee_id')->update($employee_data);		
+				
+
+					// Check if to create or delete
+					if (!in_array($data->employee_work_id, $ids_prior_update)) {
+						$status = $this->physical_examinations->create($employee_data);			
+					} else {
+						$status = $this->physical_examinations->find($id, 'employee_id')->update($employee_data);
+					}
 					
 					
 
@@ -463,8 +471,6 @@ class EmployeesMedicalExaminationsController extends \BaseController {
 		if ( !$this->accessControl->hasAccess($this->default_uri, 'edit', $this->byPassRoles) ) {
 				return  $this->notAccessible();		
 		}
-
-
 
 		if (Request::ajax() ) {
 

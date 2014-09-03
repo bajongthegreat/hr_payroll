@@ -87,7 +87,12 @@ class LeaveHelper {
 				$result = round($seconds_diff/2419200,0);
 				break;
 			case 'days':
-				$result = round($seconds_diff/86400,0);
+				if ($ts1 == $ts2) {
+					$result = 1;
+				} else {
+					$result = round($seconds_diff/86400,0);
+				}
+				
 			break;
 
 			case 'weeks':

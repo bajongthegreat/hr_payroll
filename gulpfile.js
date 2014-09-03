@@ -1,12 +1,15 @@
 var gulp = require('gulp');
-	minifyCSS = require('gulp-minify-css');
-	concat = require ('gulp-concat');
+	  minifyCSS = require('gulp-minify-css');
+	  concat = require ('gulp-concat');
 
 
 // For compressing js files
 var uglify = require('gulp-uglify');
 var watch = require('gulp-watch');
+
+// CSS
 var sass = require('gulp-sass');
+
 
 gulp.task('default', function() {
 
@@ -17,18 +20,11 @@ gulp.task('default', function() {
 
 
 // Compile and Minify CSS
-// gulp.task('minify-css', function() {
-// 	return gulp.src(['public/css/main-layout.css'])
-// 	           .pipe(concat('main.css'))
-// 	           .pipe( minifyCSS() )
-// 	           .pipe( gulp.dest('public/assets/css') );
-// });	
-
-// Rerun the task when a file changes
-// gulp.task('watch', function() {
-//   gulp.watch('public/dev/jquery/*.js');
-// });
-
+gulp.task('minify-css', function() {
+	return gulp.src(['public/dev/scss/*.css'])
+	           .pipe( minifyCSS() )
+	           .pipe( gulp.dest('public/assets/css') );
+});	
 
 // Compile and Minify JS
 gulp.task('minify-js', function() {
@@ -48,12 +44,11 @@ gulp.task('compile-chunks-minify-js', function () {
 
 // Compile Our Sass
 gulp.task('sass', function() {
-     gulp.src('public/dev/scss/*.scss')
+     gulp.src('public/dev/scss1/*.scss')
         .pipe( sass() )
         .pipe( minifyCSS() )
         .pipe(gulp.dest('public/assets/css'));
 });
-
 
 
 
@@ -75,9 +70,9 @@ gulp.task('watch', function () {
 
 
     // Watch for CSS files for changes then minify it
-    // watch({glob: 'public/css/main-layout.css'}, function(files) {
-    // 	gulp.start('minify-css')
-    // });
+    watch({glob: 'public/dev/css/*.css'}, function(files) {
+    	gulp.start('minify-css')
+    });
 
 
      

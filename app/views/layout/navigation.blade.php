@@ -64,8 +64,8 @@
           <ul class="dropdown-menu">
             <li><a href="{{ action("DTRController@index") }}"> <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;  Daily Time Record</a></li>
       
-            <li><a href="{{ action('PayrollController@create') }}">Process Payroll </a></li>
-            <li><a href="#">Loans</a></li>
+            <li><a href="{{ action('PayrollController@create') }}">Payroll Management</a></li>
+            <li><a href="{{ action('SSS_loansController@index') }}">Loans</a></li>
           </ul>
 
 
@@ -119,11 +119,11 @@
           </ul>
 
 
- <form class="navbar-form navbar-right" role="search" autocomplete="off">
+         <div class="navbar-form navbar-right" role="search" autocomplete="off">
             <input type="text" class="form-control" placeholder="Quick Lookup..." id="header_search" on>
            <div id="main_search_result" >.</div>
 
-          </form>
+          </div>
 
 
         </div><!--/.nav-collapse -->

@@ -1,0 +1,52 @@
+/* Bootstrap Extension */
+
+.form-control-static{
+  margin-top: 5px;
+}
+
+.smooth-panel-edges {
+  margin: 10px 5px;
+}
+.center-text-vertical {
+  margin-top: 5px;
+}
+
+.very-small-space {
+  margin-left: 10px;
+}
+
+.form-field-error .bottom {
+  display: block;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.panel-black {
+  border-color: #222222;
+}
+
+.panel-black > .panel-heading {
+  color: #ffffff;
+  background-color: #222222;
+  border-color: #222222;
+}
+
+.panel-black > .panel-heading + .panel-collapse .panel-body {
+  border-top-color: #222222;
+}
+
+.panel-black > .panel-heading > .dropdown .caret {
+  border-color: #ffffff transparent;
+}
+
+.panel-black > .panel-footer + .panel-collapse .panel-body {
+  border-bottom-color: #222222;
+}
+
+
+.separator {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: 0;
+  border-top: 1px solid #eeeeee;
+}

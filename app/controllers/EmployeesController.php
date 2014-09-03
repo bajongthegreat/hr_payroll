@@ -95,9 +95,9 @@ class EmployeesController extends BaseController {
 					$department_id = [ Input::get('department_id') ];
 
 
-					$employees = $this->relativeDataSearch($src, $filter_params, $this->fields_to_use_on_search, NULL, ['field' => 'departments.id', 'values' => $department_id]);
+					$employees = $this->relativeDataSearch($src, $filter_params, $this->fields_to_use_on_search, NULL, ['field' => 'departments.id', 'values' => $department_id], $limit);
 				} else {
-					$employees = $this->relativeDataSearch($src, $filter_params, $this->fields_to_use_on_search);	
+					$employees = $this->relativeDataSearch($src, $filter_params, $this->fields_to_use_on_search, NULL, [], $limit);	
 				}
 				
 			} 
@@ -158,7 +158,7 @@ class EmployeesController extends BaseController {
 					}
 	}
 
-	function relativeDataSearch($src, $filter_params, $db_field_to_use, $concat=[], $whereIn = []) {
+	function relativeDataSearch($src, $filter_params, $db_field_to_use, $concat=[], $whereIn = [], $limit = 15) {
 
 		return $this->employees->findLike($src, $db_field_to_use , ['position'], ['lastname', 'firstname'] )
 		->where('membership_status', '!=', 'applicant')->where(function($query) use ($filter_params, $src, $whereIn) {
@@ -179,7 +179,7 @@ class EmployeesController extends BaseController {
 		        	
 				
 				})->leftJoin('positions', 'positions.id', '=', 'employees.position_id')
-			  ->select('employees.*', 'positions.name as position_name', DB::raw('(SELECT name FROM departments WHERE departments.id = positions.department_id) as department_name') );
+			  ->select('employees.*', 'positions.name as position_name', DB::raw('(SELECT name FROM departments WHERE departments.id = positions.department_id) as department_name') )->take($limit);
 	}
 
 
@@ -237,7 +237,7 @@ class EmployeesController extends BaseController {
 
 
 		$user_data = Input::except('_method','_token','department_id', 'url');
-
+		
 
 		if (!isset($user_data['position_id']) || $user_data['position_id'] == 0) {
 			return Redirect::action('EmployeesController@create',[ '#errors'])->withInput()->withErrors(['Please select company first then choose your department and work assignment.']);
@@ -250,7 +250,7 @@ class EmployeesController extends BaseController {
 		}
 
 		// Generate the ID of employee
-		$user_data['employee_work_id'] = (isset($user_data['employee_work_id']) && strlen($user_data['employee_work_id']) > 0) ? $user_data['employee_work_id'] : $this->employees->generate_work_id('9520'); 
+		$user_data['employee_work_id'] = (isset($user_data['employee_work_id']) && strlen($user_data['employee_work_id']) > 0) ? $user_data['employee_work_id'] : $this->employees->generate_work_id('9520', NULL, '-', false); 
 
 		// Register employee	
 		$employee = $this->employees->create( $user_data );
@@ -338,6 +338,7 @@ class EmployeesController extends BaseController {
 	{
 		$user_data = Input::except('_method','_token','department_id', 'url');
 
+		dd($user_data);
 
 		$user_data['ppe_issuance'] = Input::has('ppe_issuance') ? $user_data['ppe_issuance'] : 0;
 		$user_data['with_r1a'] = Input::has('with_r1a') ? $user_data['with_r1a'] : 0;

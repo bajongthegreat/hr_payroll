@@ -16,23 +16,39 @@
 			    
 			    <table class="table table-striped">
 				  	<thead>
-				  		<th>Date</th>
+				  		<th width="27%" class="text-center">Date</th><!-- 
 				  		<th>Medical Establishment</th>
 				  		<th>Medical Findings</th>
 				  		<th>Recommendation</th>
-				  		<th>Remarks</th>
+				  		<th>Remarks</th> -->
+				  		<td></td>
 				  	</thead>
 
 				  	<tbody>
 				  		@foreach($medical_exams as $exams)
 
+				  		<?php 
+				  			$date = new DateTime($exams->date_conducted);
+				  		?>
+
 				  			<tr data-employee_id="{{ $employee_id }}" data-medical_id="{{ $exams->id }}">
-				  				<td data-conversion_type="text" data-conversion_name="date_conducted">{{$exams->date_conducted }}</td>
-				  				<td data-conversion_type="select" data-conversion_param="?get=medical_establishments" data-conversion_name="medical_establishment_id" >{{ $exams->establishment }}</td>
-				  				<td data-conversion_type="select" data-conversion_param="?get=medical_findings" data-conversion_name="medical_findings_id">{{ ($exams->medical_findings == NULL)  ? '<span class="label label-default">None</span>' : $exams->medical_findings}}</td>
-				  				<td data-conversion_type="select" data-conversion_param="?get=recommendations" data-conversion_name="recommendations">{{ $exams->recommendations }}</td>
-				  				<td data-conversion_type="text" data-conversion_name="remarks"> {{ ($exams->remarks != "") ? $exams->remarks : "N/A" }} </td>
-				  				<td data-conversion_type="submit"><a href="#" class="edit_medical"><span class="glyphicon glyphicon-pencil"></span></a> </td>
+				  				<td data-conversion_type="text" data-conversion_name="date_conducted" class="text-center">{{ $date->format('F m, Y') }}</td>
+				  				<td colspan="5">
+				  					  <div class="short-profile" style="width: 70%; float:left;">
+						                  <div class="name" style="font-size: 13px; "> <strong>Took exam at</strong>: <u>{{ $exams->establishment}}</u></div>
+						                  <div class="name" style="font-size: 13px; "> <strong>Result</strong>: {{ $exams->medical_findings == NULL ? 'Does not  have any medical issues found.' : $exams->medical_findings}}</div>  
+						                  <div class="name" style="font-size: 13px; "> <strong>Recommendation</strong>: {{ $exams->recommendations == 'Unfit to work' ? 'Not advisable to work.' : 'Fit to work'}}</div>  
+						                  <hr>
+						                  <div class="name" style="font-size: 13px; "> <strong>Remarks</strong>: {{ $exams->remarks != ""  ? $exams->remarks :  'No remarks given.'}}</div>  
+						                  
+						            </div>
+				  				</td>
+				  				<td><a href="{{ action('EmployeesMedicalExaminationsController@edit', $exams->id) }}" class="btn btn-default">Edit</a></td>
+				  				<!-- <td data-conversion_type="select" data-conversion_param="?get=medical_establishments" data-conversion_name="medical_establishment_id" >{{ $exams->establishment }}</td> -->
+				  				<!-- <td data-conversion_type="select" data-conversion_param="?get=medical_findings" data-conversion_name="medical_findings_id">{{ ($exams->medical_findings == NULL)  ? '<span class="label label-default">None</span>' : $exams->medical_findings}}</td> -->
+				  				<!-- <td data-conversion_type="select" data-conversion_param="?get=recommendations" data-conversion_name="recommendations">{{ $exams->recommendations }}</td> -->
+				  				<!-- <td data-conversion_type="text" data-conversion_name="remarks"> {{ ($exams->remarks != "") ? $exams->remarks : "N/A" }} </td> -->
+				  				<!-- <td data-conversion_type="submit"><a href="#" class="edit_medical"><span class="glyphicon glyphicon-pencil"></span></a> </td> -->
 				  			</tr>
 				  		@endforeach
 				 

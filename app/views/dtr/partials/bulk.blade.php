@@ -241,7 +241,7 @@ var __dayShiftHoursAM = [],
 
     var redirect = false;
 </script>
-<script type="text/javascript" src="{{ asset('jquery/hr_disciplinary_actions.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/hr_disciplinary_actions.js') }}"></script>
 
 <script>
 

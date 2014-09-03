@@ -1,0 +1,164 @@
+/* SCSS Variables */
+$min-width: 860px;
+$ideal-edges: 5px;
+
+
+/* SCSS Defaults */
+@mixin transition($scope, $time, $type) {
+	-webkit-transition: $scope $time $type;
+	-moz-transition: $scope $time $type;
+	-o-transition: $scope $time $type;
+	-ms-transition: $scope $time $type;
+	transition: $scope $time $type;
+}
+
+@mixin border-shadow() {
+	 -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+/* Global Settings */
+
+body {
+	padding-top: 40px;
+  min-width: $min-width;  
+   font-family: "Roboto", sans-serif;
+	
+}
+.__more_violations_parent {
+  cursor: pointer;
+}
+
+.required {
+  font-size: 11px;
+  color: red;
+}
+
+footer {
+	 padding: 30px 5px;
+   	 margin-left: 8%;
+}
+
+  a {
+    text-decoration: none !important;
+  }
+
+
+
+label {
+  color: #7d7d7d;
+  padding-top: 5px;
+}
+
+.label {
+  font-family: Trebuchet MS, Arial;
+  
+}
+
+._totalhours {
+  margin-top: 10px;
+  text-align: center;
+}
+
+
+
+ @media (min-width: 800px) {
+    .logout {
+      display: none;
+    }
+  }
+
+/* SSS Loans Template */
+
+.summary-title {
+  border-bottom: 1px solid #aaa;
+  font-weight:bold;
+}
+
+/* Content Processing */
+
+.wrappedChild {
+  padding: 10px 5px;
+  background-color: #FFFFFF;
+  border: 1px solid #e3e3e3;
+  border-radius: 2px;
+
+  @include border-shadow();
+}
+
+.page-header-def {
+  padding-bottom: 9px;
+  border-bottom: 1px solid #eeeeee;
+
+
+}
+
+/* App default styles */
+@import 'app-specific';
+
+
+
+
+.content-center {
+  width: 100%;
+   max-width: 800px; 
+   margin: 0 auto; 
+}
+
+.loading {
+  padding: 2px;
+  width: 30px;
+  font-size: 12pt;
+  font-style: italic;
+} 
+
+.clickableRow{
+  cursor:pointer;
+}
+
+.page-header {
+   font-family: "Roboto", sans-serif !important;
+   color: #003366 !important;
+
+}
+
+    .jmChecked {
+      border: 1px solid #cccccc;
+      height: 10px;
+      border-radius: 3px;
+    }
+		
+    .logout {
+      display: none;
+    }
+		.bs-table {
+		  width: 40%;
+		}
+    .defdiv{
+      margin-top: 25px;
+    }
+    .ajaxload{
+      height: 36px;
+    }
+
+
+
+/* Navigation */
+@import 'navigation';
+
+/* Global search*/
+@import 'global_search';
+
+/* Employee Segment for CSS */
+@import 'employees';
+
+/* Leaves CSS*/
+@import 'leaves';
+	
+/* Bootstrap Extensions */
+@import 'bootstrap-extension';
+
+
+/* Viewports */
+@import 'view-port-management.scss';
+

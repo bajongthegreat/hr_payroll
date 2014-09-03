@@ -464,8 +464,7 @@ class DTRController extends \BaseController {
 
 			} else {
 
-				unset($value->employee_work_id);
-
+			
 
 				// Create
 				if ($this->daily_time_records->create( (array) $employee_data)) {
@@ -477,6 +476,9 @@ class DTRController extends \BaseController {
 
 				$employee_data['employee_id'] = $value->employee_work_id;
 				$json_employee_data[] = $employee_data;
+
+					unset($value->employee_work_id);
+
 			}
 
 		}

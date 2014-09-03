@@ -130,13 +130,16 @@ var __panelsToToggle  = [];
 var __rowsToDisplay  = 10;
 var resultContainer = $('.resultContainer');
 var redirect = false;
+var ids_prior_update = {{ json_encode($ids_prior_update) }}
+
 </script>
-<script type="text/javascript" src="{{ asset('jquery/hr_disciplinary_actions.js') }}"></script>
+
+<script type="text/javascript" src="{{ asset('assets/js/hr_disciplinary_actions.js') }}"></script>
 
 <script>
 
 	(function() {
-
+		
 		$('#processTableData').on('click', function(e) {
 
 			if (!confirm('Are you sure you want to save this data into the database?')) {
@@ -195,14 +198,15 @@ var redirect = false;
 			// Send the processed data into our database
 			$.ajax({
 					'type': 'PATCH',
-					'url': _globalObj._baseURL + '/employees/medical_examinations',
+					'url': _globalObj._baseURL + '/employees/medical_examinations/bulk',
 					'data' : { examination_data: JSON.stringify(tableData), 
 						       medical_establishment: $('#medical_establishment').val(), 
 						       date_conducted: $('#date_conducted').val(),
-						       _token: _globalObj._token },
+						       _token: _globalObj._token,
+						       ids_prior_update: ids_prior_update },
 					success: function(data) {
 							output = data;
-							
+
 							if (output != undefined) {
 
 								$('input').prop('disabled', true);
@@ -466,9 +470,15 @@ var redirect = false;
 		
 
 		$(document).on('keyup', '.searcheable', function(){
-			
-			if ($(this).val().length > 1) {
-				_searchEmployee($(this).val(), $(this));		
+			var defaultValue = $(this).data('defaultValue');
+
+			if ($(this).val().length > 2) {
+				_searchEmployee($(this).val(), $(this));	
+				
+				// Value is changed
+				if ($(this).val() != defaultValue) {
+					
+				}
 			} else {
 				$('.resultContainer').remove();	
 			}
@@ -490,9 +500,6 @@ var redirect = false;
 			e.preventDefault();
 		});
 
-		// $(document).on('blur', '.searcheable', function() {
-		// 	$('.resultContainer').remove();
-		// });
 
 
 		

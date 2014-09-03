@@ -103,7 +103,7 @@
 		    	@endforeach
 
 		    	<div style="margin-top: 15px">
-		    		<img src="http://localhost/phpmyadmin/themes/pmahomme/img/arrow_ltr.png"> 
+		    		<img src="{{ asset('/img/arrow_ltr.png')}}"> 
 		    		    <span style="font-size: 12px;"> <input type="checkbox" data-action="all" class="check-mgt check_all"> Check all</span>   		    		    <span style="margin-left: 60px; color: #FF9966; font-size: 12px;"> With selected: </span> <span style="font-size: 12px;"> <a href="#" class="btn btn-sn btn-default submit-checked" style="padding: 1px 34px !important;">Submit</a></span>
 
 		    		    <div style="font-size: 12px; margin-left: 40px;"> <input data-action="submitted" type="checkbox" class="check-mgt check_submit"> Check Submitted</div>

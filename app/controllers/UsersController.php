@@ -137,8 +137,15 @@ class UsersController extends BaseController {
 		// Trigger a create method
 		//Event::fire('user.create');
 
-		// Check if there's an error while user is being created
-		if (isset($new_user['errors'])) return Redirect::back()->withInput()->with('errors', $new_user['errors']);
+		// Send Email
+		if (Input::has('send_mail')) {
+	
+			Mail::send('mail.index', $user_data, function($message) use ($user_data) {
+			    $message->to($user_data['email'],'<' . $user_data['username'] . '>')->subject('Welcome to TIBUD HR and Payroll System!');
+			});
+
+		}
+		
 		
 			
 		return Redirect::to('users');
