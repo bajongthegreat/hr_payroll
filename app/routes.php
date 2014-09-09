@@ -54,6 +54,10 @@ Route::get('/', ['as' => 'main',function()
 	                                 ->where(DB::raw('( TIMESTAMPDIFF(YEAR, disciplinary_actions.violation_date , CURDATE() ) )') , '>', 'violations.period_before_reset')
 	                                 ->update(['deleted_at' => Carbon::now() ]);
 
+
+
+
+
 	return Redirect::to('dashboard');
 
 }]);

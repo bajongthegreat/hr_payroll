@@ -7,7 +7,7 @@
 @section('content')
 
 <div class="page-header">
-<h1>Leave Information <a  href="{{ action('LeavesController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a> <span class="pull-right edit-button"> <a  href="{{ action('LeavesController@edit', $leave->id) }}#employee={{ Input::get('work_id') }}" class="btn btn-default "><span class="glyphicon glyphicon-edit"></span >  Edit Leave Information</a> </span>
+<h1>Leave Information <a  href="{{ action('LeavesController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-chevron-left"></span >  Go Back</a> <span class="pull-right edit-button"> <a  href="{{ action('LeavesController@edit', $leave->id) }}#employee={{ $leave->employee->employee_work_id }}" class="btn btn-default "><span class="glyphicon glyphicon-edit"></span >  Edit Leave Information</a> </span>
 </h1>
 
 
