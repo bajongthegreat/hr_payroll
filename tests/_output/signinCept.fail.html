@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+   <!-- Styles and Other configs -->
+   <title>TIBUD sa Katibawasan Multi-Purpose Cooperative HR and Payroll </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="http://shop.dev/img/favicon.ico">
+     <style type="text/css">
+    
+  
+    </style>
+
+    <!-- Bootstrap -->
+    <link href="http://shop.dev/assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://shop.dev/css/assets/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <link rel="stylesheet" type="text/css" media="screen" href="http://shop.dev/assets/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="http://shop.dev/assets/css/font.css.php" />    
+    <link rel="stylesheet" type="text/css" media="screen" href="http://shop.dev/assets/css/app.css" />
+    <link href="http://shop.dev/assets/css/lightbox.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="http://shop.dev/assets/css/jquery.dataTables.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand nav-icon" href="/"> <img src="http://shop.dev/img/logo.png"  height="24" width="24" class=""> TSKMPC</a>
+        </div>
+
+
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+
+
+            <!-- <li class="active"> 
+              <a href="http://shop.dev/admin"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+             -->
+              <li class="dropdown">
+
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> Files <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+             <li><a href="http://shop.dev/users"><span class="glyphicon glyphicon-user"></span>  Users</a></li>
+            
+                         <!-- <li><a href="http://shop.dev/companies"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Companies</a></li> -->
+
+            <li><a href="http://shop.dev/departments"><span class="glyphicon glyphicon glyphicon-book"></span>&nbsp;&nbsp;Department</a></li>
+            <li><a href="http://shop.dev/positions"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;&nbsp;Position</a></li>
+            <li><a href="http://shop.dev/holidays"><span class="glyphicon glyphicon-calendar"></span>&nbsp;&nbsp;Holidays</a></li>
+            <li><a href="http://shop.dev/stageprocesses"><span class="glyphicon glyphicon-picture"></span>&nbsp;&nbsp;Stage Process</a></li>
+            <li><a href="http://shop.dev/requirements"><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Requirements</a></li>
+
+            <li><a href="http://shop.dev/violations"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;Violations</a></li>
+            
+            <li><a href="http://shop.dev/payroll/rates"> <span class="glyphicon glyphicon-tags"></span> &nbsp; Rates</a></li>
+
+
+            <li><a href="http://shop.dev/sss">SSS Contribution table</a></li>
+            <li><a href="http://shop.dev/philhealths">Phihealth Contribution table</a></li>
+            <li><a href="http://shop.dev/hdmf">HDMF Contribution table</a></li>
+          </ul>
+
+           
+           
+            <li class="dropdown">
+
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-dashboard"></span> HR <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://shop.dev/applicants"><img src="http://shop.dev/img/icons/32x32/user-2.png" width="16"> Applicant Management</a></li>
+            <li><a href="http://shop.dev/employees"><img src="http://shop.dev/img/icons/32x32/user-card.png" width="16"> Employee Management</a></li>
+            <li><a href="http://shop.dev/employees/disciplinary_actions"><img src="http://shop.dev/img/icons/32x32/address-book.png" width="16"> DPC Management</a></li>
+            <li><a href="http://shop.dev/employees/medical_examinations"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;Physical Examinations</a></li>
+            <li><a href="http://shop.dev/leaves"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Leaves Management</a></li>
+            <!-- <li><a href="#">Loans</a></li> -->
+          </ul>
+
+
+
+           <li class="dropdown">
+
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>  Payroll <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://shop.dev/payroll/dtr"> <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;  Daily Time Record</a></li>
+      
+            <li><a href="http://shop.dev/payroll/create">Payroll Management</a></li>
+            <li><a href="http://shop.dev/sss_loans">Loans</a></li>
+          </ul>
+
+
+            </li>
+              
+
+
+           <li class="dropdown">
+
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>  Reports <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://shop.dev/reports/employee"> <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;  Employee</a></li>
+      
+            <li><a href="http://shop.dev/payroll/create">Process Payroll </a></li>
+            <li><a href="#">Loans</a></li>
+          </ul>
+
+
+            </li>
+
+
+
+            </ul>
+          
+               <ul class="nav navbar-nav navbar-right hidden-sm">
+
+             <li class=" dropdown" >
+        
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">admin@example.com <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                 <li><a href="http://shop.dev/import"><span class="glyphicon glyphicon-import"></span>  Importation</a></li>          
+                 <li class="divider"></li>
+
+                 <li><a href="http://shop.dev/users"><span class="glyphicon glyphicon-user"></span>  Users</a></li>
+                 <li><a href="http://shop.dev/users/1/edit"><span class="glyphicon glyphicon-lock"></span>  Change Password</a></li>
+
+
+                 <li class="divider"></li>
+                 <li><a href="#users"><span class="glyphicon glyphicon-wrench"></span>  Settings</a></li> 
+                                <li> <a href="http://shop.dev/logout"><span class="glyphicon glyphicon-off"></span>  Logout</a> </li>
+                            
+              </ul>
+
+            </li>
+         
+
+
+          
+          </ul>
+
+
+         <div class="navbar-form navbar-right" role="search" autocomplete="off">
+            <input type="text" class="form-control" placeholder="Quick Lookup..." id="header_search" on>
+           <div id="main_search_result" >.</div>
+
+          </div>
+
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    <style type="text/css">
+
+      body {
+        overflow-x: hidden;
+      }
+      .legend {
+
+        border: 1px solid #AAA;
+      }
+    </style>
+    <script type="text/javascript">
+      var pe_count = 4;
+      var violator_count = 1;
+      var leave_count = 1;
+    </script>
+<br><br>   
+    <!-- Main -->
+<div class="container">
+<div class="row">
+  <div class="col-md-3">
+      <!-- Left -->
+      <h3>Currently showing</h3>
+      <hr>
+      <ul class="nav nav-pills nav-stacked">
+        <li class="nav-header"></li>
+        <li class="active"><a href="#" title="HR report">HR report</a></li>
+        
+      </ul>
+
+      <br><br>
+       <h3>Quick Start</h3>
+                      <hr>
+      <div class="panel">
+                    
+                  <div class="panel-content">
+                    
+                      <div class="btn-group btn-group-justified">
+                        <a href="http://shop.dev/employees/disciplinary_actions" class="btn btn-primary col-sm-3">
+                          <i class="glyphicon glyphicon-cloud"></i>
+                          <p>DPC</p>
+                        </a>
+                        <a href="http://shop.dev/employees/medical_examinations" class="btn btn-primary col-sm-3">
+                          <i class="glyphicon glyphicon-plus"></i>
+                          <p>P.E</p>
+                        </a>
+                        <a href=" http://shop.dev/leaves" class="btn btn-primary col-sm-3">
+                          <i class="glyphicon glyphicon-cog"></i>
+                          <p>Leaves</p>
+                        </a>
+                        <a href=" http://shop.dev/employees" class="btn btn-primary col-sm-3">
+                          <i class="glyphicon glyphicon-question-sign"></i>
+                          <p>Emp</p>
+                        </a>
+                      </div>
+                  </div><!--/panel content-->
+              </div><!--/panel-->
+              
+
+    </div><!-- /span-3 -->
+    <div class="col-md-9">
+        <!-- Right -->
+        
+        <h3><span class="glyphicon glyphicon-dashboard"></span> My Dashboard</h3>  
+             
+        <hr>
+      
+    <div class="row">
+          <div class="col-md-6">
+        <div class="well"><strong>On Leave</strong> <span class="badge pull-right"> 0</span></div>
+        <div class="well"><strong>Suspended</strong> <span class="badge pull-right">0</span></div>
+              
+                
+              
+              <div class="panel panel-default">
+                  <div class="panel-heading">Employee Summary</div>
+  
+                  <div class="container">
+                      <div class="row top-down-margin-5">
+                        <span class="col-md-3"> New </span>
+                        <span class="col-md-3"> <span class="badge">8</span></span>
+                      </div>
+
+                      <div class="row top-down-margin-5">
+                        <span class="col-md-3"> Total employees</span>
+                        <span class="col-md-3"> <span class="badge">9853</span></span>
+                      </div>
+                      
+                      <div class="row top-down-margin-5">
+                          <span class="col-md-4">
+                            <hr>
+                          </span>
+                      </div>
+
+                      <canvas id="hr_summary" width="350" height="200"></canvas>  
+                     
+
+                    <div class="legend text-center" style="max-width: 365px; padding: 5px;">                           
+                      <div class="row top-down-margin-5" style="margin-left: 10px">
+                        <span class="col-md-5 text-right"> <span style="background: #F7464A;"></span> Who took P.E</span>
+                        <span class="col-md-5"> <span class="badge">4</span> </span>
+                      </div>
+
+                      <div class="row top-down-margin-5" style="margin-left: 10px">
+                        <span style="background:#46BFBD; " class="col-md-5 text-right"> Violated a rule</span>
+                        <span class="col-md-5"> <span class="badge">1</span> </span>
+                      </div>
+
+                      <div class="row top-down-margin-5" style="margin-left: 10px ">
+                        <span style="background: #FDB45C;" class="col-md-5 text-right"> Filed a leave</span>
+                        <span  class="col-md-5"> <span class="badge">1</span> </span>
+                      </div>
+
+                      </div>
+
+                      <br>
+                  </div>
+
+               </div><!--/panel-->
+              
+              
+              <div class="panel panel-default hidden" >
+                  <div class="panel-heading">Charts</div>
+                  <div class="panel-body"><img src="http://www.wired.com/playbook/wp-content/uploads/2012/08/data-tracking-run-chart.jpg" class="img-responsive"></div>
+              </div><!--/panel-->
+              
+            </div>
+          <div class="col-md-6">
+        <div class="panel panel-default">
+                  <div class="panel-heading">Events (Current Month)</div>
+                  <div class="panel-body">
+                    <div class="container">
+                     
+                      <div class="top-down-margin-5">
+                          <span >No holidays for this month.</span>
+                      </div>
+                                        </div>
+                  </div>
+                </div>
+              
+                <div class="panel panel-default hidden">
+                  <div class="panel-heading">
+                        <div class="panel-title">
+                        <i class="glyphicon glyphicon-chevron-up chevron"></i>
+                      <i class="glyphicon glyphicon-wrench pull-right"></i>
+                        Form
+                        </div>
+                  </div>
+                  <div class="panel-body">
+
+                      <form class="form form-vertical">
+                       
+                        <div class="control-group">
+                          <label>Name</label>
+                          <div class="controls">
+                           <input type="text" class="form-control" placeholder="Enter Name">
+                          </div>
+                        </div>      
+                        
+                        <div class="control-group">
+                          <label>Label</label>
+                          <div class="controls">
+                           <input type="password" class="form-control" placeholder="Password">
+                          
+                          </div>
+                        </div>   
+                        
+                        <div class="control-group">
+                          <label>Text</label>
+                          <div class="controls">
+                            <textarea class="form-control"></textarea>
+                          </div>
+                        </div> 
+                             
+                        <div class="control-group">
+                          <label>Select</label>
+                          <div class="controls">
+                             <select class="form-control"><option>options</option></select>
+                          </div>
+                        </div>    
+                        
+                        <div class="control-group">
+                            <label></label>
+                          <div class="controls">
+                          <button type="submit" class="btn btn-primary">
+                              Post
+                            </button>
+                          </div>
+                        </div>   
+                        
+                      </form>
+                
+                
+                  </div><!--/panel content-->
+                </div><!--/panel-->
+              
+                <div class="panel panel-default">
+                  <div class="panel-heading"><div class="panel-title">Employment growth</div></div>
+                  <div class="panel-body">  
+                
+                  <canvas id="myChart" width="350" height="300"></canvas>  
+                  
+                  </div>
+               </div><!--/panel-->
+              
+              
+                <i class="icon-bar-chart icon-3x"></i>
+                <i class="icon-plus icon-3x"></i>
+                <i class="icon-facebook icon-3x"></i>
+                <i class="icon-beaker icon-3x"></i>
+                <i class="icon-twitter icon-3x"></i>
+                
+              
+      </div><!--/col-span-6-->
+     
+      </div><!--/row-->
+    </div><!--/col-span-9-->
+</div>
+</div>
+<!-- /Main -->
+
+<footer><strong>TIBUD sa Katibaasan Multi-Purpose Cooperative (TSKMPC)</strong> HR & Payroll System | &copy 2014</footer>
+
+<div class="modal" id="addWidgetModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Add Widget</h4>
+      </div>
+      <div class="modal-body">
+        <p>Add a widget stuff here..</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" class="btn btn-primary">Save changes</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dalog -->
+</div><!-- /.modal -->
+
+
+    <!-- Main scripts -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://shop.dev/js/jquery-1.10.2.js"></script>
+    <script src="http://shop.dev/assets/js/main.js"></script>
+   <script src="http://shop.dev/assets/js/sub-scripts.js"></script>
+
+    <script type="text/javascript">
+      var mainLink = "http://shop.dev/"; 
+      var employeeLink = "http://shop.dev/employees";
+      var hrApp = new myApp(mainLink);
+
+     var _globalObj = {"_token":"Gc1h97Q4L1QS82Wq9RhMuen6t7bnDQDxSMOR6nL7","_baseURL":"http:\/\/shop.dev","loaderImage":"http:\/\/shop.dev\/img\/loading.gif"}
+
+
+
+    </script>
+
+
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://shop.dev/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://shop.dev/js/moment.min.js"></script>
+    <script type="text/javascript" src="http://shop.dev/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="http://shop.dev/js/bootstrapValidator.js"></script>
+    <script src="http://shop.dev/js/lightbox.min.js"></script>
+
+    <!-- Add fancyBox -->
+    <script type="text/javascript" src="http://shop.dev/js/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+    <!-- Custom plugins by James Mones -->
+
+    <script type="text/javascript" src="http://shop.dev/assets/js/jmfileupload.js"></script>
+    <script src="http://shop.dev/assets/js/jmsearcheable.js"></script>
+
+     <script src="http://shop.dev/assets/js/employeeProfileSearcher.js"></script>
+     <script type="text/javascript" src="http://shop.dev/js/jquery.dataTables.js"></script> 
+
+    <script type="text/javascript">
+
+   $('#header_search').jmSearcheable({
+          containerWrapper: '#main_search_result',
+          url:  employeeLink,
+          urlWithID: true,
+          idSeparator: '/',
+          idField: 'employee_work_id',
+          fadeOut: 'slow',
+          format: 'employee_work_id: - :lastname, :firstname',
+          itemIcon: _globalObj._baseURL + "/img/default-avatar.png",
+          limit: 10,
+          loaderImage: _globalObj.loaderImage,
+      });
+
+    </script>
+    <script type="text/javascript" src="http://shop.dev/js/Chart.min.js"></script>
+
+    <script type="text/javascript">
+      // Get the context of the canvas element we want to Select
+      var ctx = document.getElementById("myChart").getContext("2d");
+      
+      var data = {
+          labels: [0,1986,1994,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2681],
+          datasets: [
+              {
+                  label: "My First dataset",
+                  fillColor: "rgba(220,220,220,0.5)",
+                  strokeColor: "rgba(220,220,220,0.8)",
+                  highlightFill: "rgba(220,220,220,0.75)",
+                  highlightStroke: "rgba(220,220,220,1)",
+                  data: [0,1,8,48,36,50,10,54,90,188,104,168,928,662,634,198,1310,1554,512,575,502,384,1]              }
+                        ]
+      };
+
+      var myBarChart = new Chart(ctx).Line(data);
+    </script>
+
+    <script type="text/javascript">
+      // Get the context of the canvas element we want to Select
+      var pie = document.getElementById("hr_summary").getContext("2d");
+    
+    var _data = [
+        {
+            value: pe_count,
+            color:"#F7464A",
+            highlight: "#FF5A5E",
+            label: "Who took P.E"
+        },
+        {
+            value: violator_count,
+            color: "#46BFBD",
+            highlight: "#5AD3D1",
+            label: "Violated a rule"
+        },
+        {
+            value: leave_count,
+            color: "#FDB45C",
+            highlight: "#FFC870",
+            label: "Filed a leave"
+        }
+    ];
+
+    // For a pie chart
+    var myPieChart = new Chart(pie).Pie(_data);
+
+    </script>
+
+  </body>
+</html>

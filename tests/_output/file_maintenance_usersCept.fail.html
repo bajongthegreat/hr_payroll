@@ -1,0 +1,375 @@
+<script type="text/javascript">
+            var timerStart = Date.now();
+</script>
+
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <!-- Styles and other configs -->
+    <title>TIBUD sa Katibawasan Multi-Purpose Cooperative HR and Payroll </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="http://shop.dev/img/favicon.ico">
+     <style type="text/css">
+    
+  
+    </style>
+
+    <!-- Bootstrap -->
+    <link href="http://shop.dev/assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://shop.dev/css/assets/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <link rel="stylesheet" type="text/css" media="screen" href="http://shop.dev/assets/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="http://shop.dev/assets/css/font.css.php" />    
+    <link rel="stylesheet" type="text/css" media="screen" href="http://shop.dev/assets/css/app.css" />
+    <link href="http://shop.dev/assets/css/lightbox.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="http://shop.dev/assets/css/jquery.dataTables.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+html {
+  overflow-x: scroll; /* Prevent scroll on narrow devices */
+}
+        </style>
+
+    
+
+    ;
+  </head>
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand nav-icon" href="/"> <img src="http://shop.dev/img/logo.png"  height="24" width="24" class=""> TSKMPC</a>
+        </div>
+
+
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+
+
+            <!-- <li class="active"> 
+              <a href="http://shop.dev/admin"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+             -->
+              <li class="dropdown">
+
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> Files <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+             <li><a href="http://shop.dev/users"><span class="glyphicon glyphicon-user"></span>  Users</a></li>
+            
+                         <!-- <li><a href="http://shop.dev/companies"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Companies</a></li> -->
+
+            <li><a href="http://shop.dev/departments"><span class="glyphicon glyphicon glyphicon-book"></span>&nbsp;&nbsp;Department</a></li>
+            <li><a href="http://shop.dev/positions"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;&nbsp;Position</a></li>
+            <li><a href="http://shop.dev/holidays"><span class="glyphicon glyphicon-calendar"></span>&nbsp;&nbsp;Holidays</a></li>
+            <li><a href="http://shop.dev/stageprocesses"><span class="glyphicon glyphicon-picture"></span>&nbsp;&nbsp;Stage Process</a></li>
+            <li><a href="http://shop.dev/requirements"><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Requirements</a></li>
+
+            <li><a href="http://shop.dev/violations"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;Violations</a></li>
+            
+            <li><a href="http://shop.dev/payroll/rates"> <span class="glyphicon glyphicon-tags"></span> &nbsp; Rates</a></li>
+
+
+            <li><a href="http://shop.dev/sss">SSS Contribution table</a></li>
+            <li><a href="http://shop.dev/philhealths">Phihealth Contribution table</a></li>
+            <li><a href="http://shop.dev/hdmf">HDMF Contribution table</a></li>
+          </ul>
+
+           
+           
+            <li class="dropdown">
+
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-dashboard"></span> HR <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://shop.dev/applicants"><img src="http://shop.dev/img/icons/32x32/user-2.png" width="16"> Applicant Management</a></li>
+            <li><a href="http://shop.dev/employees"><img src="http://shop.dev/img/icons/32x32/user-card.png" width="16"> Employee Management</a></li>
+            <li><a href="http://shop.dev/employees/disciplinary_actions"><img src="http://shop.dev/img/icons/32x32/address-book.png" width="16"> DPC Management</a></li>
+            <li><a href="http://shop.dev/employees/medical_examinations"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;Physical Examinations</a></li>
+            <li><a href="http://shop.dev/leaves"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;Leaves Management</a></li>
+            <!-- <li><a href="#">Loans</a></li> -->
+          </ul>
+
+
+
+           <li class="dropdown">
+
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>  Payroll <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://shop.dev/payroll/dtr"> <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;  Daily Time Record</a></li>
+      
+            <li><a href="http://shop.dev/payroll/create">Payroll Management</a></li>
+            <li><a href="http://shop.dev/sss_loans">Loans</a></li>
+          </ul>
+
+
+            </li>
+              
+
+
+           <li class="dropdown">
+
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>  Reports <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://shop.dev/reports/employee"> <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;  Employee</a></li>
+      
+            <li><a href="http://shop.dev/payroll/create">Process Payroll </a></li>
+            <li><a href="#">Loans</a></li>
+          </ul>
+
+
+            </li>
+
+
+
+            </ul>
+          
+               <ul class="nav navbar-nav navbar-right hidden-sm">
+
+             <li class=" dropdown" >
+        
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">admin@example.com <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                 <li><a href="http://shop.dev/import"><span class="glyphicon glyphicon-import"></span>  Importation</a></li>          
+                 <li class="divider"></li>
+
+                 <li><a href="http://shop.dev/users"><span class="glyphicon glyphicon-user"></span>  Users</a></li>
+                 <li><a href="http://shop.dev/users/1/edit"><span class="glyphicon glyphicon-lock"></span>  Change Password</a></li>
+
+
+                 <li class="divider"></li>
+                 <li><a href="#users"><span class="glyphicon glyphicon-wrench"></span>  Settings</a></li> 
+                                <li> <a href="http://shop.dev/logout"><span class="glyphicon glyphicon-off"></span>  Logout</a> </li>
+                            
+              </ul>
+
+            </li>
+         
+
+
+          
+          </ul>
+
+
+         <div class="navbar-form navbar-right" role="search" autocomplete="off">
+            <input type="text" class="form-control" placeholder="Quick Lookup..." id="header_search" on>
+           <div id="main_search_result" >.</div>
+
+          </div>
+
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    
+    
+    <div class="container">
+
+          <!-- Angular view templating -->
+          <div class="content" ng-view>
+
+            <noscript> 
+              <br>
+              <br>
+              <div  class="alert alert-danger">
+                <h3 style="text-align:center;"><span class="glyphicon glyphicon-warning-sign"></span>  In order for the system to run, please turn on your Javascript. </h3>
+
+                    <div class="well">
+                      <h4> For Google chrome browsers: </h4>
+
+                      <div>
+                        <li>Right click, select "View page Info" </li>
+                        <li>Under permissions, move your cursor Javascript</li>
+                        <li>Click the caret, it is labeled "Allowed by default" or "Blocked by you"</li>
+                        <li>Choose Global default.</li>
+                        <li>Refresh your browser.</li>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </noscript>             
+
+            <!-- TODO -->
+
+<!--             <div style="border: 1px solid #000;">
+                
+                <div style="margin: 15px 5px;">
+                  <div style="font-size:16px; margin-bottom: 5px;">TODO</div>
+                      <span style="margin-bottom: 5px;">Build reports for:</span>
+                      <ul>
+                        <li>Employee Profile</li>
+                        <li>Employee Masterlist ->  <span class="label label-success">Excel done</span></li>
+                        <li>SSS Loan - Monthly Report</li>
+                        <li>DTR report - (per employee)</li>
+                        <li>DTR report - (per position)</li>
+                        <li>DTR report - (per department)</li>
+
+                      </ul>
+                </div>
+
+            </div>
+ -->
+          		
+<div class="content-center">
+<h3 class="page-header">
+Create user
+</h3>
+
+	<form method="POST" action="http://shop.dev/users" accept-charset="UTF-8" class="form-horizontal" role="form"><input name="_token" type="hidden" value="ub5OPofXDroDuZ0QIcVGkrU7QBEGe7rLkqg3K0JI">
+	<div class="form-group">
+		<label for="username" class="col-sm-2 control-label">Username</label>		 <div class="col-sm-10">
+		<input class="form-control" name="username" type="text" id="username">		 </div>
+	</div>
+
+	<div class="form-group">
+		<label for="email" class="col-sm-2 control-label">Email</label>		 <div class="col-sm-10">
+		<input class="form-control" name="email" type="text" id="email">		 </div>
+	</div>
+
+	<div class="form-group">
+		<label for="password" class="col-sm-2 control-label">Password</label>		 <div class="col-sm-10">
+		<input class="form-control" name="password" type="password" value="" id="password">		 </div>
+	</div>
+
+	<div class="form-group">
+		<label for="password_confirmation" class="col-sm-2 control-label">Confirm Password</label>		 <div class="col-sm-10">
+		<input class="form-control" name="password_confirmation" type="password" value="" id="password_confirmation">		 </div>
+	</div>
+
+
+	<div class="form-group">
+		<label for="send_mail" class="col-sm-2 control-label">Send Mail</label>		 <div class="col-sm-10">
+		<input name="send_mail" type="checkbox" value="1" id="send_mail"> Yes (Internet Required)
+		 </div>
+	</div>
+
+	<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="reset" class="btn btn-default">Reset</button>
+    </div>
+  </div>
+  
+
+</form>
+
+</div>
+
+ 
+           
+          </div>
+
+    </div><!-- /.container -->
+
+    <div class="modal fade" id="ajax-modal-form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="ajax-modal-form-label">Modal Title</h4>
+        <input type="hidden" name="url" id="ajax-modal-url">
+      </div>
+      <div class="modal-body ajax-modal-form-body ">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="ajax-modal-close" class="btn btn-default close-refresh" data-dismiss="modal">Close</button>
+        <button id="ajax-modal-save" type="button" class="btn btn-primary" data-status="save" >Accept</button>
+      </div>
+    </div>
+  </div>
+</div>
+    <footer>
+                <p class="text-center">TIBUD sa Katibawasan Multi-Purpose Cooperative <strong>(TSKMPC)</strong> <br>HR and Payroll System | &copy;2014</p>
+        <!-- <div id="page_load_counter" class="text-center" style="display:none;">Page generated in <span class="load_time"></span> seconds.</div> -->
+      </footer>
+    
+    
+
+
+
+    <!-- Main scripts -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://shop.dev/js/jquery-1.10.2.js"></script>
+    <script src="http://shop.dev/assets/js/main.js"></script>
+   <script src="http://shop.dev/assets/js/sub-scripts.js"></script>
+
+    <script type="text/javascript">
+      var mainLink = "http://shop.dev/"; 
+      var employeeLink = "http://shop.dev/employees";
+      var hrApp = new myApp(mainLink);
+
+     var _globalObj = {"_token":"ub5OPofXDroDuZ0QIcVGkrU7QBEGe7rLkqg3K0JI","_baseURL":"http:\/\/shop.dev","loaderImage":"http:\/\/shop.dev\/img\/loading.gif"}
+
+
+
+    </script>
+
+
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://shop.dev/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://shop.dev/js/moment.min.js"></script>
+    <script type="text/javascript" src="http://shop.dev/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="http://shop.dev/js/bootstrapValidator.js"></script>
+    <script src="http://shop.dev/js/lightbox.min.js"></script>
+
+    <!-- Add fancyBox -->
+    <script type="text/javascript" src="http://shop.dev/js/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+    <!-- Custom plugins by James Mones -->
+
+    <script type="text/javascript" src="http://shop.dev/assets/js/jmfileupload.js"></script>
+    <script src="http://shop.dev/assets/js/jmsearcheable.js"></script>
+
+     <script src="http://shop.dev/assets/js/employeeProfileSearcher.js"></script>
+     <script type="text/javascript" src="http://shop.dev/js/jquery.dataTables.js"></script> 
+
+    <script type="text/javascript">
+
+   $('#header_search').jmSearcheable({
+          containerWrapper: '#main_search_result',
+          url:  employeeLink,
+          urlWithID: true,
+          idSeparator: '/',
+          idField: 'employee_work_id',
+          fadeOut: 'slow',
+          format: 'employee_work_id: - :lastname, :firstname',
+          itemIcon: _globalObj._baseURL + "/img/default-avatar.png",
+          limit: 10,
+          loaderImage: _globalObj.loaderImage,
+      });
+
+    </script>
+
+    
+
+    
+
+    
+    
+    <!-- HR Payroll components -->
+     <!-- // <script src="http://shop.dev/jquery/hr_applicants.js"></script> -->
+     <script src="http://shop.dev/assets/js/hr_applicants.js"></script>
+
+          <script type="text/javascript">
+      $(document).ready(function() {
+                 // $('.load_time').html(Date.now()-timerStart/1000);
+                 // $('#page_load_counter').show();
+                 $('.b_tooltip').tooltip();
+                 console.log('Page load time:' + (Date.now()-timerStart));
+             });
+     </script>
+  </body>
+</html>
