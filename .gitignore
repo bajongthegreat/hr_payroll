@@ -9,3 +9,5 @@ Thumbs.db
 /public/json
 /public/documents
 /node_modules
+
+tests/_output/*

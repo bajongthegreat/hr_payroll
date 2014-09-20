@@ -20,7 +20,7 @@ Users List
   </div>
 
   <div class="header-buttons pull-left">
-  <a href="{{ action('UsersController@create')}}" class="btn btn-success"><span class="glyphicon glyphicon-new-window"></span> Create new Employee</a>
+  <a href="{{ action('UsersController@create')}}" class="btn btn-success"><span class="glyphicon glyphicon-new-window"></span> Create new User</a>
    <a  href="{{ action('UsersController@index') }}" class="btn btn-default "><span class="glyphicon glyphicon-refresh"></span >  Refresh</a>
 
   </div>

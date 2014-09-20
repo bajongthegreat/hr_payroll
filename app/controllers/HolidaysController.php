@@ -43,6 +43,12 @@ class HolidaysController extends BaseController {
 		$year = Input::get('year');
 
 
+		if ($year) {
+				$holidays = $this->holidays->byYear($year)->paginate(15);
+			} else {
+
+				$holidays = $this->holidays->byYear(Carbon::now()->year)->paginate(15);
+			}
 
 
 		if (Input::has('src')) {
@@ -53,14 +59,39 @@ class HolidaysController extends BaseController {
 		} 
 
 
-			if ($year) {
-				$holidays = $this->holidays->byYear($year)->paginate(15);
-			} else {
-			$holidays = $this->holidays->byYear(Carbon::now()->year)->paginate(15);
-		}
-
-
 		
+		   // Present an output specifically for fullcalendar jquery plugin
+			if (Input::has('fullcalendar') && Input::get('fullcalendar') == true) {
+
+				$start = Input::get("start");
+				$end = Input::get("end");
+
+
+
+				$holidays = DB::table('holidays')->whereBetween('holiday_date',[$start, $end])
+                                 ->get(['holiday_date', 'name']);
+
+
+            	$holidays = array_map(function($holidays) {
+
+            		$calendar_specific_arr = new StdClass;
+
+
+            		foreach ($holidays as $key => $value) {
+            			if ($key == 'holiday_date') 
+            				$calendar_specific_arr->start = $value;
+            			
+            			if ($key == 'name') 
+            				$calendar_specific_arr->title = $value;
+            		}
+
+            		return (array) $calendar_specific_arr;
+
+            	}, $holidays);
+
+
+                return Response::json($holidays);
+			}
 		
 
 		return View::make('holidays.index', compact('holidays'));

@@ -25,7 +25,8 @@
 
 
         <div class="form-group">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="login">Sign in</button>
+
     	
     	</div>
       {{ Form::close() }}

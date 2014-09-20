@@ -1,5 +1,4 @@
 /* SCSS Variables */
-$min-width: 860px;
 $ideal-edges: 5px;
 
 
@@ -20,8 +19,7 @@ $ideal-edges: 5px;
 /* Global Settings */
 
 body {
-	padding-top: 40px;
-  min-width: $min-width;  
+	padding-top: 35px;
    font-family: "Roboto", sans-serif;
 	
 }
@@ -148,6 +146,10 @@ label {
 
 /* Global search*/
 @import 'global_search';
+
+/* Global search*/
+@import 'dashboard';
+
 
 /* Employee Segment for CSS */
 @import 'employees';

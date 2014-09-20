@@ -41,8 +41,9 @@ class PositionsController extends BaseController {
 			$positions = DB::table('positions')
 			                  ->OrWhere('positions.name', 'LIKE', "%$src%")
 			                  ->OrWhere('departments.name', 'LIKE', "%$src%")
-			                  ->leftJoin('companies', 'departments.company_id', '=', 'companies.id')
 			                  ->leftJoin('departments', 'departments.id', '=' ,'positions.department_id')
+			                  
+			                  ->leftJoin('companies', 'departments.company_id', '=', 'companies.id')
 			                  ->leftJoin('employees_flat_rates', 'employees_flat_rates.id', '=', 'positions.rate_id')
 			                  ->select('positions.name', 'positions.id', 'departments.name as department', 'employees_flat_rates.rate as rate', 'companies.name as company_name');
 

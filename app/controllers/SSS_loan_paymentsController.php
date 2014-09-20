@@ -66,6 +66,7 @@ class SSS_loan_paymentsController extends BaseController {
 			$employee_id = Input::get('employee_id');
 
 
+
 			// Validate Inputs
 			if (!$this->validator->validate($required_information, NULL)) {
 				return Response::json( ['errors' => $this->validator->errors()->toArray() ]);

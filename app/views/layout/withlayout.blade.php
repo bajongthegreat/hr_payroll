@@ -9,6 +9,7 @@
     <!-- Styles and other configs -->
     @include('layout.header')
 
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/animate.css') }}">
     <style type="text/css">
 html {
   overflow-x: scroll; /* Prevent scroll on narrow devices */
@@ -27,6 +28,7 @@ html {
 
     @yield('header')
 
+    @yield('not-content')
     
     <div class="container">
 
@@ -77,18 +79,18 @@ html {
           		@yield('content')
 
  
-           
+               <footer>
+        @yield('footer')
+        <p class="text-center">{{ Config::get('company.name.full')}} <strong>({{ Config::get('company.name.acro')}})</strong> <br>HR and Payroll System | &copy;2014</p>
+        <!-- <div id="page_load_counter" class="text-center" style="display:none;">Page generated in <span class="load_time"></span> seconds.</div> -->
+      </footer>
           </div>
 
     </div><!-- /.container -->
 
     @include('modals.ajax_modal')
 
-    <footer>
-        @yield('footer')
-        <p class="text-center">{{ Config::get('company.name.full')}} <strong>({{ Config::get('company.name.acro')}})</strong> <br>HR and Payroll System | &copy;2014</p>
-        <!-- <div id="page_load_counter" class="text-center" style="display:none;">Page generated in <span class="load_time"></span> seconds.</div> -->
-      </footer>
+
     
     
 

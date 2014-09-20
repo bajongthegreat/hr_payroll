@@ -29,9 +29,11 @@
 		background-color:#fff;
 		border-width: 1px;
 		border-color: #ddd;
-		border-radius: 4px 4px 0 0;
+		border-radius: 3px;
 		box-shadow: none;
 		width: 75%;
+		padding: 15px;
+		border: 1px solid #f1f1f1s;
 	}
 
 	.box ul {
@@ -98,4 +100,10 @@
 	-webkit-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
 	-moz-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
 	box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+}
+
+
+.employee-list tr {
+	background: #FFFFFF;
+	border-radius: 5px;
 }

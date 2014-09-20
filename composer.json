@@ -12,7 +12,8 @@
 		  "dompdf/dompdf": "dev-master",
 		  "phpoffice/phpword": "dev-master"
 		  ,"mockery/mockery": "dev-master@dev",
-		  "tecnick.com/tcpdf": "dev-master"
+		  "tecnick.com/tcpdf": "dev-master",
+		"codeception/codeception": "*"
 	},
 	"autoload": {
 		"classmap": [

@@ -62,6 +62,17 @@ Route::get('/', ['as' => 'main',function()
 
 }]);
 
+Route::get('/dashboard/main', [ 'as' => 'dashboard_main',function() {
+	
+  		return View::make('dashboard.main');
+}]);
+
+
+Route::get('/dashboard/reports', [ 'as' => 'dashboard_reports',function() {
+	
+  		return View::make('dashboard.reports');
+}]);
+
 
 
 
@@ -73,58 +84,6 @@ Mail::send('index', ['name' => 'James Mones'], function($message) {
 });
 
 });
-
-
-function generate_work_id($start=NULL, $end=NULL, $seperator="-", $random=true)
-	{	
-		// Checks if the first id segment must be a preset
-		if (is_null($start))
-		{
-			$start = rand(1000,9999);
-		}
-
-		// Checks if the last id segment must be a preset
-		if (is_null($end))
-		{
-			if ($random) {
-				$end = rand(1000,9999);
-			} else {
-
-				// Sort employee_work_id in descending order
-				// Grab the last item
-				$employee = Employee::orderBy('employee_work_id', 'desc')->take(1)->pluck('employee_work_id');
-
-				// Explode the employee_work_id by its separator "-" to make an array 
-				$work_id = explode('-', $employee);
-
-				// Grab the ending array item
-				$id_right = end($work_id);
-
-				// Increment ID
-				$end = $id_right + 1;
-			}
-		}
-
-		// Generated ID
-		$id  = $start . $seperator . $end;
-	
-		// Check if that ID exist
-		$fetched_id = Employee::where('employee_work_id', '=' , $id)->lists('employee_work_id');
-
-		var_dump($fetched_id);
-
-		// If ID already existed, run this function again
-		if (count($fetched_id) > 0)
-		{
-			if (!$random) {
-				$end += 1;
-			}
-			$id = generate_work_id($start, $end, $seperator);
-		}
-
-
-		return $id;
-	}
 
 
 

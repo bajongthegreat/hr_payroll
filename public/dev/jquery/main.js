@@ -1325,3 +1325,49 @@ jQuery.fn.extend({
         return classes;
     };
 })(jQuery);
+
+
+
+(function(){
+
+  $('.dashboard-sidebar li a').on('click', function(e) {
+
+    var href = $(this).data('location');
+    var type = $(this).data('type');
+    $.ajax({
+      type: 'GET',
+      url: href,
+      beforeSend: function() {
+       $('.canHaveAjaxContent').css('opacity', 0.1);
+       $('.dashboard-main-content  .loading').fadeIn(); 
+
+       for (var i=0; i<10; i++){ 
+          if (i == 10) {
+            $('.dashboard-main-content  .loading').html('Please wait a little longer...'); 
+          }
+       }       
+             
+      },
+      success:function(data) {
+        $('.canHaveAjaxContent').html(data);
+      },
+      complete: function() {
+          $('.canHaveAjaxContent').css('opacity', 100);
+      window.location.hash = type;
+
+      $('.dashboard-main-content  .loading').fadeOut();
+
+        
+      $('#calendar').fullCalendar({
+          handleWindowResize: true,
+          changeView: 'month ',
+          events: _globalObj._baseURL + '/holidays/?fullcalendar=true',
+       });
+
+      }
+    });
+
+    e.preventDefault();
+  });
+
+})();

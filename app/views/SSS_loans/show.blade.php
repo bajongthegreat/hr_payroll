@@ -513,7 +513,7 @@
 						sbr_tr_date.val(payment.sbr_tr_date);
 						amount.val(payment.amount);
 						sss_loan_id.val(payment.sss_loan_id);
-						sss_loan_id.val(payment.post_date);
+						post_date.val(payment.post_date);
 
 
 					}

@@ -22,7 +22,7 @@ class ReportsController extends BaseController {
     public function index() {
     
 
-
+  		return View::make('dashboard.reports');
     }
 
     public function create_dpc_excel() {

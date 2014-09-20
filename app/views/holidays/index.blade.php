@@ -8,9 +8,10 @@
 
   <div class="search-container col-md-4 pull-right">
 
+   {{ Form::open(['method' => 'GET', 'action' => 'HolidaysController@index'])}}
   <input class="form-control " name="src" placeholder="Search holiday..." id="search" ng-model="query">
 
-
+  {{Form::close() }}
   </div>
 
   <div class="header-buttons pull-left">
@@ -61,6 +62,9 @@ $year= (Input::has('year')) ? Input::get('year') : Carbon::now()->year; ?>
 		@endforeach
 	</tbody>
 </table>
+
+<?php $collection = $holidays; ?>
+		@include('partials.pagination_links')
 
 @stop
 

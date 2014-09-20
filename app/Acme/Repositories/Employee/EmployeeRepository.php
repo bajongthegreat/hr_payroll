@@ -90,50 +90,37 @@ class EmployeeRepository extends RepositoryAbstract implements EmployeeRepositor
 	*/
 	public function generate_work_id($start=NULL, $end=NULL, $seperator="-", $random=true)
 	{	
-		// Checks if the first id segment must be a preset
-		if (is_null($start))
-		{
-			$start = rand(1000,9999);
+		if (is_null($start)) {
+			$applicable_id_start = [9520, 2370, 9620, 9720];
+			$start = $applicable_id_start[rand(0,3)];
 		}
 
-		// Checks if the last id segment must be a preset
-		if (is_null($end))
-		{
-			if ($random) {
-				$end = rand(1000,9999);
-			} else {
+		if (is_null($end)){
 
-				// Sort employee_work_id in descending order
-				// Grab the last item
-				$employee = Employee::orderBy('employee_work_id', 'desc')->take(1)->pluck('employee_work_id');
-
-				// Explode the employee_work_id by its separator "-" to make an array 
-				$work_id = explode('-', $employee);
-
-				// Grab the ending array item
-				$id_right = end($work_id);
-
-				// Increment ID
-				$end = $id_right + 1;
+			if ($random == true) {
+				$end = rand(1000, 9999);
 			}
-		}
+			else {
 
-		// Generated ID
-		$id  = $start . $seperator . $end;
-	
-		// Check if that ID exist
-		$fetched_id = Employee::where('employee_work_id', '=' , $id)->lists('employee_work_id');
-
-		// If ID already existed, run this function again
-		if (count($fetched_id) > 0)
-		{
-			if (!$random) {
-				$end += 1;
+				$last_id = Employee::orderBy('employee_work_id', 'desc')->take(1)->pluck('employee_work_id');
+				
+				$last_id = explode('-', $last_id);
+				
+				$end = end($last_id);
 			}
-			
-			$id = $this->generate_work_id($start, $end, $seperator);
+
 		}
 
+			$id = $start . $seperator . $end;
+
+			while (true) {
+				
+				if (Employee::where('employee_work_id', '=', $id)->count() == 1) {
+					$id = $start . $seperator . ($end + 1);					
+				} else {
+					break;
+				}
+			}
 
 		return $id;
 	}

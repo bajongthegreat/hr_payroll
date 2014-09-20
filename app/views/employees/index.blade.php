@@ -87,13 +87,9 @@
   </div>
 
   
-<table class="table table-hover tablesorter">
+<table class="table table-hover tablesorter employee-list">
     <thead>
-      <th></th>
-      <!-- Image -->
-      <th></th> 
-      <th></th>
-
+  
     </thead>
 
     <tbody>
